@@ -1,9 +1,16 @@
-Package: Rcosmo
-Title: R Cosmological CMB analysis
+Package: cmbstat
+Title: R Cosmic Microwave Background Data Analysis
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: Statistical analysis of Cosmic Microwave Background data on a sphere
+Authors@R: person("Daniel", "Fryer", email = "daniel-fryer@live.com.au", role = c("aut", "cre"))
+Description: Statistical analysis of Cosmic Microwave Background data on a sphere.
+    More description needs to be included on indented lines like this.
 Depends: R (>= 3.4.0)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+    ggvis (>= 0.2),
+    dplyr (>= 0.3.0.1)
+Suggests:
+    ggplot2,
+    spatstat

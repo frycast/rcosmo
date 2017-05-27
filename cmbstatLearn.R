@@ -6,7 +6,6 @@
 # click func in code, press F2, press 'CTRL + .' then start typing the name.     find function in packages and R/ directory, show code
 # CTRL + F9                                                                      back - and open closed tab
 
-
 # USEFUL COMMANDS (STRUCTURE AND R/) ----------------------------------------
 library(devtools)                    # loads and attaches devtools to search path (devtools::<method> can automatically load without attaching)
 library(testthat)
@@ -39,6 +38,7 @@ library(roxygen2)
 #on.exit(setwd(old), add = TRUE)          # restore old working directory when function exits
 
 #default.stringsAsFactors()               # return global option default for stringsAsFactors (careful using functions that assume the user has some default e.g. read.csv())
+
 
 # .onAttach <- function(libname, pkgname) {         #.onAttach can alter the landscape when a package is attached
 #   packageStartupMessage("Welcome to my package")

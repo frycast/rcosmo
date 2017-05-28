@@ -4,6 +4,9 @@
   + Method for importing data (including polarisations?)
   + Method for subsetting polygonal subarea of sky.
   + Calculate area given a subset of sky (from HEALPix pixel sizes).
+  
+## Suggestions
+  + Provide HEALPix projection onto 2D surface. [See here.](http://sufoo.c.ooco.jp/program/healpix.html)
 
 ## Notes on plank maps 
   + Source: http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html

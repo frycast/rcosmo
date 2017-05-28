@@ -7,6 +7,16 @@
   
 ## Suggestions
   + Provide HEALPix projection onto 2D surface. [See here.](http://sufoo.c.ooco.jp/program/healpix.html)
+  + Provide class *skywin* to hold polygonal sky subarea:
+    + *summary(skywin)* returns area and boundary information.
+  + Provide options: (1) longitude and latitude in degree, (2) longitude and co-latitude in radians. [See 'lonlat' here.](http://healpy.readthedocs.io/en/latest/generated/healpy.pixelfunc.pix2ang.html#healpy.pixelfunc.pix2ang)
+    + | Place     | Latitude  | Colatitude  | 
+      | --------- | --------- | ----------- |
+      | Nth Pole  | 90&deg;   | 0&deg;      |
+      | Equator   | 0&deg;    | 90&deg;     |
+      | Sth Pole  | -90&deg;  | 180&deg;    |
+      
+      
 
 ## Notes on plank maps 
   + Source: http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html

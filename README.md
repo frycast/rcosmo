@@ -34,7 +34,9 @@
 ## Useful links
   + [Data analysis methods for CMB](http://iopscience.iop.org/article/10.1088/0034-4885/70/6/R02/meta)
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)
+  + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   + [HEALPix information page](http://healpix.sourceforge.net/)
+  + [NASA HEALPix information page](http://healpix.jpl.nasa.gov/index.shtml)
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
@@ -44,7 +46,7 @@
     + [misc astro functions (e.g. see angSep function)](https://cran.r-project.org/web/packages/astroFns/index.html)
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
-  + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   
-## Notes on analysis
+## Methods to look into more
   + > Standard operations of numerical analysis which one might wish to execute on the sphere include convolutions with local and  global kernels, Fourier analysis with spherical harmonics and power spectrum estimation, wavelet decomposition, nearest-neighbour searches, topological analysis, including searches for extrema or zero-crossings, computing Minkowski functionals, extraction of patches and finite differencing for solving partial differential equations. [Source: HEALPix doc.](http://healpix.sourceforge.net/html/intronode3.htm)
+  + [Pixel window functions.](http://healpix.jpl.nasa.gov/html/intronode14.htm)

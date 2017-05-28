@@ -7,7 +7,7 @@
 
 ## Notes on plank maps 
   + Source: http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html
-  + All Sky Maps are in HEALPix format, with Nside 1024 or 2048, in Galactic coordinates, and nested ordering. 
+  + All Sky Maps are in HEALPix format, with Nside 1024 or 2048, in Galactic coordinates, and NESTED ordering. 
   + Signal given in units of Kcmb for 30-353 GHz (microwave is in this band).
   + Unpolarized maps have 2 planes: I_Stokes (intensity) and TMASK.
   + Polarized maps have 5 planes: I_Stokes (intensity), Q_Stokes and U_Stokes (linear polarization), PMASK and TMASK.

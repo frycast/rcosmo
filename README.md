@@ -25,3 +25,5 @@
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
+  + [Journal of Statistical Software](https://www.jstatsoft.org)
+  + [The R Journal](https://journal.r-project.org)

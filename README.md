@@ -15,6 +15,7 @@
       | Nth Pole  | 90&deg;   | 0&deg;      |
       | Equator   | 0&deg;    | 90&deg;     |
       | Sth Pole  | -90&deg;  | 180&deg;    |
+  + Provide common intensity unit conversions (K_CMB <-> K_RJ <-> MJy/sr). [See here.](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/Article/View/181/20/what-are-the-intensity-units-of-the-planck-all-sky-maps-and-how-do-i-convert-between-them)
       
       
 
@@ -37,6 +38,7 @@
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   + [HEALPix information page](http://healpix.sourceforge.net/)
   + [NASA HEALPix information page](http://healpix.jpl.nasa.gov/index.shtml)
+  + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)

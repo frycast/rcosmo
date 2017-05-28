@@ -25,5 +25,12 @@
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
+    + [FITS file manipulation](http://cran.us.r-project.org/web/packages/astro/index.html)
+    + [Spherical plotting](https://cran.r-project.org/web/packages/sphereplot/)
+    + [FITSio](https://cran.r-project.org/web/packages/FITSio/index.html)
+    + [misc astro functions (e.g. see angSep function)](https://cran.r-project.org/web/packages/astroFns/index.html)
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
+  
+## Notes on analysis
+  + > Standard operations of numerical analysis which one might wish to execute on the sphere include convolutions with local and  global kernels, Fourier analysis with spherical harmonics and power spectrum estimation, wavelet decomposition, nearest-neighbour searches, topological analysis, including searches for extrema or zero-crossings, computing Minkowski functionals, extraction of patches and finite differencing for solving partial differential equations. [Source: HEALPix doc.](http://healpix.sourceforge.net/html/intronode3.htm)

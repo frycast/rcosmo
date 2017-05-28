@@ -20,7 +20,7 @@
 
 ## Notes on plank maps 
   + Source: http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html
-  + All Sky Maps are in HEALPix format, with Nside 1024 or 2048, in Galactic coordinates, and NESTED ordering. 
+  + All Sky Maps are in [HEALPix](http://healpix.sourceforge.net/html/intro.htm) format, with [Nside](http://healpix.sourceforge.net/html/intronode4.htm) 1024 or 2048, in Galactic coordinates, and [NESTED](http://healpix.sourceforge.net/html/intronode4.htm) ordering. 
   + Signal given in units of Kcmb for 30-353 GHz (microwave is in this band).
   + Unpolarized maps have 2 planes: I_Stokes (intensity) and TMASK.
   + Polarized maps have 5 planes: I_Stokes (intensity), Q_Stokes and U_Stokes (linear polarization), PMASK and TMASK.
@@ -44,6 +44,7 @@
     + [misc astro functions (e.g. see angSep function)](https://cran.r-project.org/web/packages/astroFns/index.html)
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
+  + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   
 ## Notes on analysis
   + > Standard operations of numerical analysis which one might wish to execute on the sphere include convolutions with local and  global kernels, Fourier analysis with spherical harmonics and power spectrum estimation, wavelet decomposition, nearest-neighbour searches, topological analysis, including searches for extrema or zero-crossings, computing Minkowski functionals, extraction of patches and finite differencing for solving partial differential equations. [Source: HEALPix doc.](http://healpix.sourceforge.net/html/intronode3.htm)

@@ -4,6 +4,9 @@
   + Method for importing data (including polarisations?)
   + Method for subsetting polygonal subarea of sky.
   + Calculate area given a subset of sky (from HEALPix pixel sizes).
+    + [Done in python.](http://healpy.readthedocs.io/en/latest/generated/healpy.query_polygon.html?highlight=polygon)
+  + Triangulation of sphere.
+    + [Test to know if a vector is inside a spherical triangle.](https://math.stackexchange.com/questions/1175362/test-to-know-if-a-vector-is-inside-a-spherical-triangle)
   
 ## Suggestions
   + Provide HEALPix projection onto 2D surface. [See here.](http://sufoo.c.ooco.jp/program/healpix.html)
@@ -47,6 +50,7 @@
   + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
+  + [HEALPix C subroutines](http://healpix.sourceforge.net/html/csub.htm)
   + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
     + [FITS file manipulation](http://cran.us.r-project.org/web/packages/astro/index.html)
     + [Spherical plotting](https://cran.r-project.org/web/packages/sphereplot/)

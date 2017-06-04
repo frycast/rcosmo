@@ -6,8 +6,10 @@
 # click func in code, press F2, press 'CTRL + .' then start typing the name.     find function in packages and R/ directory, show code
 # CTRL + F9                                                                      back - and open closed tab
 # CTRL + SHIFT + D                                                               convert roxygen comments to .Rd files
-# CTRL + SHIFT + B                                                               build & reload package (slow but thorough)
+# CTRL + SHIFT + B                                                               build & reload package (slow but thorough) (doesn't 'load all')
 # CTRL + SHIFT + /                                                               wrap comments so they are less than 80 char per line
+# CTRL + SHIFT + K                                                               knit vignette
+# CTRL + SHIFT + T                                                               test code with testthat
 
 # USEFUL COMMANDS (STRUCTURE AND R/) ----------------------------------------
 library(devtools)                    # loads and attaches devtools to search path (devtools::<method> can automatically load without attaching)
@@ -106,6 +108,41 @@ library(roxygen2)
 # USEFUL COMMANDS (DOCUMENTATION) -----------------------------------------
 # devtools::document()        convert roxygen comments to .Rd files.
 
+
+
+# USEFUL COMMANDS (VIGNETTES) ---------------------------------------------
+
+#devtools::build()                  #rebuilds package including vignettes
+
+#devtools::install_github(build_vignettes = TRUE)    #installs and builds all vignettes and install all suggested packages
+
+#browseVignettes()
+#browseVignettes("packagename")
+
+#devtools::use_vignette("my-vignette")
+
+#knitr::opts_chunk$set(              # run this from a knitr block in vignette to set options for all blocks.
+#  opt1 = val1,
+#  opt2 = val2
+#)
+#
+#OPTIONS
+#eval = FALSE
+#echo = FALSE
+#results = "hide"
+#warning = FALSE
+#error = TRUE, purl = FALSE
+#collapse = TRUE
+#results = 'asis'
+#fig.show = "hold"
+#fig.width = 5, fig.height = 5
+
+
+
+
+# USEFUL COMMANDS (TESTING) -----------------------------------------------
+
+# devtools::use_testthat()               set up package for using testthat
 
 #  ------------------------------------------------------------------------
 devtools::use_build_ignore("cmbstatLearn")

@@ -11,13 +11,15 @@ sum(..., na.rm = TRUE)
 \arguments{
 \item{...}{Numeric, complex or logical vectors.}
 
-\item{na.rm}{A logical scalar. Should missing values (including NaN) be removed?}
+\item{na.rm}{A logical scalar. Should missing values (including NaN) be
+removed?}
 }
 \value{
-If all inputs are integer and logical, then the output
-  will be an integer. If integer overflow
-  \url{http://en.wikipedia.org.wiki/Integer_overflow}  occurs, the output
-  will be NA with a warning. Otherwise it will be length-one numeric or complex vector.
+If all inputs are integer and logical, then the output will be an
+  integer. If integer overflow
+  \url{http://en.wikipedia.org.wiki/Integer_overflow} occurs, the output will
+  be NA with a warning. Otherwise it will be length-one numeric or complex
+  vector.
 
   Zero-length vectors have sum 0 by definition.
 }
@@ -30,8 +32,7 @@ This is a generic function: methods can be defined for it directly or via the
 \code{...} should be unnamed, and dispatch is on the first argument.
 }
 \section{Practice Section}{
-
-  Just adding this text to see what roxygen does.
+ Just adding this text to see what roxygen does.
 }
 
 \examples{

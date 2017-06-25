@@ -47,6 +47,7 @@
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
+  + [Original HEALPix paper](http://cosmocoffee.info/viewtopic.php?t=64)
   + [HEALPix information page](http://healpix.sourceforge.net/)
   + [NASA HEALPix information page](http://healpix.jpl.nasa.gov/index.shtml)
   + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)

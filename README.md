@@ -48,6 +48,7 @@
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
   + [Original HEALPix paper](http://cosmocoffee.info/viewtopic.php?t=64)
+  + [An errata and notes on original HEALPix paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)
   + [HEALPix information page](http://healpix.sourceforge.net/)
   + [NASA HEALPix information page](http://healpix.jpl.nasa.gov/index.shtml)
   + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)

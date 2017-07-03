@@ -46,6 +46,7 @@
   + [Data analysis methods for CMB](http://iopscience.iop.org/article/10.1088/0034-4885/70/6/R02/meta)
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
+  + [Free software for viewing FITS files](https://heasarc.gsfc.nasa.gov/ftools/fv/fv_download.html)
   + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
   + [Original HEALPix paper](http://cosmocoffee.info/viewtopic.php?t=64)
   + [An errata and notes on original HEALPix paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)

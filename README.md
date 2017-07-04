@@ -57,6 +57,7 @@
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [HEALPix C subroutines](http://healpix.sourceforge.net/html/csub.htm)
   + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
+    + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
     + [FITS file manipulation](http://cran.us.r-project.org/web/packages/astro/index.html)
     + [Spherical plotting](https://cran.r-project.org/web/packages/sphereplot/)
     + [FITSio](https://cran.r-project.org/web/packages/FITSio/index.html)

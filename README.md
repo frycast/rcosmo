@@ -87,6 +87,6 @@
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
   
-## Methods to look into more
+## Vague suggestions
   + > "Standard operations of numerical analysis which one might wish to execute on the sphere include convolutions with local and  global kernels, Fourier analysis with spherical harmonics and power spectrum estimation, wavelet decomposition, nearest-neighbour searches, topological analysis, including searches for extrema or zero-crossings, computing Minkowski functionals, extraction of patches and finite differencing for solving partial differential equations." [Source: HEALPix doc.](http://healpix.sourceforge.net/html/intronode3.htm)
   + [Pixel window functions.](http://healpix.jpl.nasa.gov/html/intronode14.htm)

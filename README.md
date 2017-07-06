@@ -67,8 +67,8 @@
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [HEALPix C subroutines](http://healpix.sourceforge.net/html/csub.htm)
 ### R packages for spherical stats
-  + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
   + See details on the following [here]()
+    + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
     + [SpherWave](http://dasan.sejong.ac.kr/~dhkim/main/research/pub/SpherWaveR.pdf)
     + [CircNNTSR](https://cran.r-project.org/web/packages/CircNNTSR/index.html)
     + [sphereplot](https://cran.r-project.org/web/packages/sphereplot/)

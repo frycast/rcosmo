@@ -49,15 +49,15 @@
     >  'SMICA' indicates SMICA pipeline (others: COMMANDER, NILC, SEVEM).
     
 ## Useful links
-### Related papers and wikis
+#### Related papers and wikis
   + [Data analysis methods for CMB](http://iopscience.iop.org/article/10.1088/0034-4885/70/6/R02/meta)
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
   + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)
-### Related software and apps
+#### Related software and apps
   + [Google Sky with CMB overlay](https://www.google.com.au/sky/)
   + [Free software for viewing FITS files](https://heasarc.gsfc.nasa.gov/ftools/fv/fv_download.html)
-### HEALPix
+#### HEALPix
   + [Original HEALPix paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513) and [discussion](http://cosmocoffee.info/viewtopic.php?t=64).
   + [An important errata and notes on original HEALPix paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)
   + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
@@ -66,8 +66,8 @@
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [HEALPix C subroutines](http://healpix.sourceforge.net/html/csub.htm)
-### R packages for spherical stats
-  + See details on the following [here]()
+#### R packages for spherical stats
+  + See more details on all the following packages [here](https://github.com/VidaliLama/cmbstat/blob/master/PackagesForSphericalDataAnalytics.pdf)
     + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
     + [SpherWave](http://dasan.sejong.ac.kr/~dhkim/main/research/pub/SpherWaveR.pdf)
     + [CircNNTSR](https://cran.r-project.org/web/packages/CircNNTSR/index.html)
@@ -83,7 +83,7 @@
     + [SphericalCubature](https://cran.r-project.org/web/packages/SphericalCubature/index.html)
     + [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html)
     + [circular](https://cran.r-project.org/web/packages/circular/index.html)
-### Journals for submission
+#### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
   

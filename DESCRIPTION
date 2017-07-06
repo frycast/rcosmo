@@ -1,4 +1,4 @@
-Package: cmbstat
+Package: rcosmo
 Title: R Cosmic Microwave Background Data Analysis
 Version: 0.0.0.9000
 Authors@R: person("Daniel", "Fryer", email = "daniel-fryer@live.com.au", role = c("aut", "cre"))

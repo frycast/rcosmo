@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 Package: rcosmo
-=======
 Package: cmbstat
 URL: https://github.com/VidaliLama/cmbstat
 BugReports: https://github.com/VidaliLama/cmbstat/issues
->>>>>>> 1650d066c403886ec4d2a9d007951774b952e3d9
 Title: R Cosmic Microwave Background Data Analysis
 Version: 0.0.0.9000
 Authors@R: as.person(c(

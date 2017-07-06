@@ -1,5 +1,4 @@
 Package: rcosmo
-Package: cmbstat
 URL: https://github.com/VidaliLama/cmbstat
 BugReports: https://github.com/VidaliLama/cmbstat/issues
 Title: R Cosmic Microwave Background Data Analysis
@@ -18,10 +17,13 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     dplyr (>= 0.3.0.1),
-    ggplot2
+    ggplot2,
+    FITSio,
+    Rcpp
 Suggests:
     knitr,
     rmarkdown,
     testthat
+LinkingTo: Rcpp
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

@@ -1,8 +1,11 @@
+# LEARNING RESOURCE: http://r-pkgs.had.co.nz/intro.html
+
 
 # USEFUL HOTKEYS ----------------------------------------------------------
 
 # ALT + SHIFT + K                                                                hotkeys
-# CTRL + SHIFT + L                                                               load all, run all, and save all open files
+# CTRL + SHIFT + L                                                               load all, run all, and save all open files i.e., devtools::load_all()
+# CTRL + .                                                                       start typing function or file name to navigate to it
 # click func in code, press F2, press 'CTRL + .' then start typing the name.     find function in packages and R/ directory, show code
 # CTRL + F9                                                                      back - and open closed tab
 
@@ -149,5 +152,4 @@ library(roxygen2)
 # devtools::use_testthat()               set up package for using testthat
 
 #  ------------------------------------------------------------------------
-devtools::use_build_ignore("cmbstatLearn")
 

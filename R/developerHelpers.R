@@ -1,4 +1,4 @@
-#' Tabular Function For Rcosmo Developers
+#' Tabular Function For rcosmo Developers
 #'
 #' Turns an R data frame into the correct format for a roxygen2 table.
 #'

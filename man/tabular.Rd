@@ -2,7 +2,7 @@
 % Please edit documentation in R/developerHelpers.R
 \name{tabular}
 \alias{tabular}
-\title{Tabular Function For cmbstat Developers}
+\title{Tabular Function For Rcosmo Developers}
 \usage{
 tabular(df, ...)
 }

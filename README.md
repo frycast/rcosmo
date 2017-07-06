@@ -1,17 +1,23 @@
 # CMBstat project
 
 ## Next steps
-  + Method for importing data (including polarisations?)
   + Method for subsetting polygonal subarea of sky.
   + Calculate area given a subset of sky (from HEALPix pixel sizes).
-    + [Done in python.](http://healpy.readthedocs.io/en/latest/generated/healpy.query_polygon.html?highlight=polygon)
+    + [Example from python.](http://healpy.readthedocs.io/en/latest/generated/healpy.query_polygon.html?highlight=polygon)
   + Triangulation of sphere.
     + [Test to know if a vector is inside a spherical triangle.](https://math.stackexchange.com/questions/1175362/test-to-know-if-a-vector-is-inside-a-spherical-triangle)
-  + What to do with the polarisation data (Q_STOKES, U_STOKES)?
+  + What to do with the polarisation data (Q_STOKES, U_STOKES).
     + [Details here: Scroll to 'Polarisation Convention / Internal Convention'](http://healpix.sourceforge.net/html/intronode6.htm)
+  + Sample mean, variance and higher moments (need normalising factor with area)
+  + Sample covariance and variogram (assume Gaussianity and homogeneity):
+  
+    <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{1}{\&hash;\text{terms&space;in&space;sum}}\sum_{t_1&space;\in&space;S^2}\sum_{\{d(t_1,t_2)&space;=&space;r\}}&space;X(t_1)X(t_2)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{1}{\&hash;\text{terms&space;in&space;sum}}\sum_{t_1&space;\in&space;S^2}\sum_{\{d(t_1,t_2)&space;=&space;r\}}&space;X(t_1)X(t_2)" title="\frac{1}{\#\text{terms in sum}}\sum_{t_1 \in S^2}\sum_{\{d(t_1,t_2) = r\}} X(t_1)X(t_2)" /></a>
+    
+  + Kriging (e.g. for equatorial region with milky way interference)
+  + 2D projection [Mollweide view](https://en.wikipedia.org/wiki/Mollweide_projection)
   
 ## Suggestions
-  + Provide HEALPix projection onto 2D surface. [See here.](http://sufoo.c.ooco.jp/program/healpix.html)
+  + Provide 2D HEALPix projection. [See here](http://sufoo.c.ooco.jp/program/healpix.html) and Figure 5 from [this paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513).
   + Provide class *skywin* to hold polygonal sky window (like *owin* in [spatstat](https://cran.r-project.org/web/packages/spatstat/index.html) package):
     + Make *summary(skywin)* return area and boundary information
   + Provide class *cmbDataFrame* that also holds Nside, units, coordinate system, ordering scheme, etc. 
@@ -30,7 +36,7 @@
       
 
 ## Notes on Planck maps 
-  + Source: http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html
+  + [Source of maps](http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html).
   + All Sky Maps are in [HEALPix](http://healpix.sourceforge.net/html/intro.htm) format, with [Nside](http://healpix.sourceforge.net/html/intronode4.htm) 1024 or 2048, in Galactic coordinates, and [NESTED](http://healpix.sourceforge.net/html/intronode4.htm) ordering. [Source.](http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/)
   + Signal given in units of [Kcmb](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/Article/View/181/20/what-are-the-intensity-units-of-the-planck-all-sky-maps-and-how-do-i-convert-between-them) for 30-353 GHz (microwave is in this band).
   + Unpolarized maps have 2 planes: I_Stokes (intensity) and TMASK.
@@ -43,26 +49,41 @@
     >  'SMICA' indicates SMICA pipeline (others: COMMANDER, NILC, SEVEM).
     
 ## Useful links
+### Related papers and wikis
   + [Data analysis methods for CMB](http://iopscience.iop.org/article/10.1088/0034-4885/70/6/R02/meta)
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)
+  + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)
+### Related software and apps
   + [Google Sky with CMB overlay](https://www.google.com.au/sky/)
   + [Free software for viewing FITS files](https://heasarc.gsfc.nasa.gov/ftools/fv/fv_download.html)
+### HEALPix
+  + [Original HEALPix paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513) and [discussion](http://cosmocoffee.info/viewtopic.php?t=64).
+  + [An important errata and notes on original HEALPix paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)
   + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
-  + [Original HEALPix paper](http://cosmocoffee.info/viewtopic.php?t=64)
-  + [An errata and notes on original HEALPix paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)
   + [HEALPix information page](http://healpix.sourceforge.net/)
   + [NASA HEALPix information page](http://healpix.jpl.nasa.gov/index.shtml)
-  + [NASA Planck knowledge base](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/List/Index/20/planck)
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [HEALPix C subroutines](http://healpix.sourceforge.net/html/csub.htm)
-  + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
-    + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
-    + [FITS file manipulation](http://cran.us.r-project.org/web/packages/astro/index.html)
-    + [Spherical plotting](https://cran.r-project.org/web/packages/sphereplot/)
-    + [FITSio](https://cran.r-project.org/web/packages/FITSio/index.html)
-    + [misc astro functions (e.g. see angSep function)](https://cran.r-project.org/web/packages/astroFns/index.html)
+### R packages for spherical stats
+  + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
+  + See details on the following [here]()
+    + [SpherWave](http://dasan.sejong.ac.kr/~dhkim/main/research/pub/SpherWaveR.pdf)
+    + [CircNNTSR](https://cran.r-project.org/web/packages/CircNNTSR/index.html)
+    + [sphereplot](https://cran.r-project.org/web/packages/sphereplot/)
+    + [VecStatGraphs3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)
+    + [CRAN packages in R for astronomy](https://asaip.psu.edu/forums/software-forum/459833927)
+      + [astro](http://cran.us.r-project.org/web/packages/astro/index.html).
+      + [FITSio](https://cran.r-project.org/web/packages/FITSio/index.html).
+      + [astroFns](https://cran.r-project.org/web/packages/astroFns/index.html).
+      + more...
+    + [sm](https://cran.r-project.org/web/packages/sm/index.html)
+    + [Directional](https://cran.r-project.org/web/packages/Directional/index.html)
+    + [SphericalCubature](https://cran.r-project.org/web/packages/SphericalCubature/index.html)
+    + [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html)
+    + [circular](https://cran.r-project.org/web/packages/circular/index.html)
+### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
   

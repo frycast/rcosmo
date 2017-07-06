@@ -1,4 +1,4 @@
-#' Tabular Function For cmbstat Developers
+#' Tabular Function For Rcosmo Developers
 #'
 #' Turns an R data frame into the correct format for a roxygen2 table.
 #'

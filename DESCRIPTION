@@ -6,12 +6,10 @@ Title: R Cosmic Microwave Background Data Analysis
 Version: 0.0.0.9000
 Authors@R: as.person(c(
     "Daniel Fryer <daniel-fryer@live.com.au> [aut, cre]",
-    "Yuguang Wang <Y.Wang@latrobe.edu.au> [aut, cre]",
-    "Andriy Olenko <A.Olenko@latrobe.edu.au> [aut, cre]",
-    "Ming Li <Ming.Li@latrobe.edu.au> [aut, cre]"
+    "Yuguang Wang <Y.Wang@latrobe.edu.au> [aut]",
+    "Andriy Olenko <A.Olenko@latrobe.edu.au> [aut]",
+    "Ming Li <Ming.Li@latrobe.edu.au> [aut]"
   ))
-
-person("Daniel", "Fryer", email = "daniel-fryer@live.com.au", role = c("aut", "cre"))
 Description: Statistical analysis of Cosmic Microwave Background data on a sphere.
     More description needs to be included on indented lines like this.
 Depends: R (>= 3.4.0)
@@ -19,8 +17,11 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    ggvis (>= 0.2),
-    dplyr (>= 0.3.0.1)
+    dplyr (>= 0.3.0.1),
+    ggplot2
 Suggests:
-    ggplot2,
-    spatstat
+    knitr,
+    rmarkdown,
+    testthat
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

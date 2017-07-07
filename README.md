@@ -59,7 +59,7 @@
   + [Google Sky with CMB overlay](https://www.google.com.au/sky/)
   + [Free software for viewing FITS files](https://heasarc.gsfc.nasa.gov/ftools/fv/fv_download.html)
 #### HEALPix
-  + [Original HEALPix paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513) and [discussion](http://cosmocoffee.info/viewtopic.php?t=64).
+  + [Original paper](https://arxiv.org/pdf/astro-ph/0409513.pdf) and [discussion](http://cosmocoffee.info/viewtopic.php?t=64).
   + [An important errata and notes on original HEALPix paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)
   + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
   + [HEALPix information page](http://healpix.sourceforge.net/)

@@ -61,12 +61,12 @@
 #### HEALPix
   + [Original paper](https://arxiv.org/pdf/astro-ph/0409513.pdf) and [discussion](http://cosmocoffee.info/viewtopic.php?t=64).
   + [An important errata and notes on original paper](http://blog.tiaan.com/link/2009/09/04/healpix-errata-and-additional-notes)
-  + [HEALPix license info](http://healpix.sourceforge.net/downloads.php)
-  + [HEALPix information page](http://healpix.sourceforge.net/)
-  + [NASA HEALPix information page](http://healpix.jpl.nasa.gov/index.shtml)
+  + [License info](http://healpix.sourceforge.net/downloads.php)
+  + [Information page](http://healpix.sourceforge.net/)
+  + [NASA information page](http://healpix.jpl.nasa.gov/index.shtml)
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
-  + [HEALPix C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
-  + [HEALPix C subroutines](http://healpix.sourceforge.net/html/csub.htm)
+  + [C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
+  + [C subroutines](http://healpix.sourceforge.net/html/csub.htm)
 #### R packages for spherical stats
   + See more details on all the following packages [here](https://github.com/VidaliLama/cmbstat/blob/master/PackagesForSphericalDataAnalytics.pdf)
     + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)

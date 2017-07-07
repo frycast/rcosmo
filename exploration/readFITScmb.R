@@ -1,6 +1,6 @@
 readFITScmb <- function(filename = "CMB_map_smica1024.fits") {
 
-zz <- file("CMB_map_smica1024.fits", "rb")
+zz <- file(filename, "rb")
 # The repetition is necessary:
 header <- readFITSheader(zz)
 hdr <- parseHdr(header)

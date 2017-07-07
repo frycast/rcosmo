@@ -14,7 +14,7 @@ source("readFITScmb.R")
 # cmbdatT <- readFITS("CMB_map_smica1024.fits")
 # )
 time <- system.time(
-cmbdat <- readFITScmb("CMB_map_smica1024.fits")
+cmbdat <- readFITScmb("../../CMB_map_smica1024.fits")
 )
 # Check first 10 intensity values
 # head(cmbdat$col[[1]], n = 10)
@@ -25,7 +25,7 @@ cmbdat <- readFITScmb("CMB_map_smica1024.fits")
 
 
 # TESTING RING ORDERING -------------------------------------------
-Nside <- 32
+Nside <- 2
 Npix <- 12*Nside^2
 angSphereC <- pix2angC(Nside, FALSE)
 
@@ -33,18 +33,19 @@ angSphereC <- pix2angC(Nside, FALSE)
 m <- matrix(c(angSphereC[,2], pi/2 - angSphereC[,1], rep(1,Npix)), nrow = Npix)
 mx <- sph2car(m, deg = FALSE)
 plot3d(mx, col = "blue", type = 'l', cex = 1)
-plot3d(mx, col = rnorm(Npix), cex = 30, pch = 3, add = TRUE)
+plot3d(mx, col = "blue", type = 'p', cex = 1)
 
 
 
 
 
 # TESTING NESTED ORDERING -------------------------------------------------
-Nside <- 32
+Nside <- 2
 Npix <- 12*Nside^2
 sph <- pix2angC(Nside, TRUE)
-spho <- sph[order(sph[,3],sph[,4]),]
 
+#spho <- sph[order(sph[,3],sph[,4]),]
+spho <- sph[order(sph[,3],sph[,4]),]
 
 m <- matrix(c(long = spho[,2], 
               lat = pi/2 - spho[,1], 

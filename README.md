@@ -84,6 +84,10 @@
     + [SphericalCubature](https://cran.r-project.org/web/packages/SphericalCubature/index.html)
     + [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html)
     + [circular](https://cran.r-project.org/web/packages/circular/index.html)
+#### Creating R packages and using Rcpp
+  + [Rcpp, Advanced R, book by Hadley Wickham](http://adv-r.had.co.nz/Rcpp.html#rcpp-package)
+  + [Making R packages, book by Hadley Wickham](http://r-pkgs.had.co.nz/intro.html)
+  + [Rcpp Gallery](http://gallery.rcpp.org/)
 #### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)

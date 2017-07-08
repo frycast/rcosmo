@@ -89,7 +89,7 @@
   + [Making R packages, book by Hadley Wickham](http://r-pkgs.had.co.nz/intro.html)
   + [Rcpp Gallery](http://gallery.rcpp.org/)
   + [Adding Rcpp to a package that uses roxygen2](https://ironholds.org/blog/adding-rcpp-to-an-existing-r-package-documented-with-roxygen2/)
-  + [Installing a package from a private github repo](https://github.com/jennybc/happy-git-with-r/blob/master/81_github-api-tokens.Rmd)
+  + [Installing package from private GitHub repo using PAT](https://github.com/jennybc/happy-git-with-r/blob/master/81_github-api-tokens.Rmd)
   + [R startup, Renviron details, Efficient R book](https://csgillespie.github.io/efficientR/r-startup.html)
 #### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)

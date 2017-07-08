@@ -88,6 +88,7 @@
   + [Rcpp, Advanced R, book by Hadley Wickham](http://adv-r.had.co.nz/Rcpp.html#rcpp-package)
   + [Making R packages, book by Hadley Wickham](http://r-pkgs.had.co.nz/intro.html)
   + [Rcpp Gallery](http://gallery.rcpp.org/)
+  + [Adding Rcpp to a package that uses roxygen2](https://ironholds.org/blog/adding-rcpp-to-an-existing-r-package-documented-with-roxygen2/)
 #### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)

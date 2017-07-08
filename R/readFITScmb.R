@@ -16,10 +16,10 @@ readFITScmb <- function(filename = "CMB_map_smica1024.fits") {
 
 zz <- file(filename, "rb")
 
-header <- readFITSheader(zz)
-hdr <- parseHdr(header)
-header <- readFITSheader(zz)
-hdr <- parseHdr(header)
+header <- FITSio::readFITSheader(zz)
+hdr <- FITSio::parseHdr(header)
+header <- FITSio::readFITSheader(zz)
+hdr <- FITSio::parseHdr(header)
 naxis1 <- as.numeric(hdr[which(hdr == "NAXIS1") + 1])
 naxis2 <- as.numeric(hdr[which(hdr == "NAXIS2") + 1])
 tfields <- as.numeric(hdr[which(hdr == "TFIELDS") + 1])

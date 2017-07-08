@@ -154,3 +154,8 @@ library(roxygen2)
 # USEFUL COMMANDS (Rcpp)------------------------------------------------
 
 # Rcpp::compileAttributes()          #    run every time new cpp functions are added
+
+# USEFUL COMMANDS (NAMESPACE) ---------------------------------------------
+# search() # lists all loaded packages on search path.
+
+

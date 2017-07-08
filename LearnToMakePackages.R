@@ -149,7 +149,8 @@ library(roxygen2)
 
 # USEFUL COMMANDS (TESTING) -----------------------------------------------
 
-# devtools::use_testthat()               set up package for using testthat
+# devtools::use_testthat()           #    set up package for using testthat
 
-#  ------------------------------------------------------------------------
+# USEFUL COMMANDS (Rcpp)------------------------------------------------
 
+# Rcpp::compileAttributes()          #    run every time new cpp functions are added

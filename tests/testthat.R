@@ -1,4 +1,4 @@
 library(testthat)
-library(cmbstat)
+library(rcosmo)
 
-test_check("cmbstat")
+test_check("rcosmo")

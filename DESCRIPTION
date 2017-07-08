@@ -16,10 +16,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    dplyr (>= 0.3.0.1),
-    ggplot2,
-    FITSio,
-    Rcpp
+    FITSio (>= 2.1-0),
+    Rcpp (>= 0.12.11)
 Suggests:
     knitr,
     rmarkdown,

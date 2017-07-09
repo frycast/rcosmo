@@ -92,7 +92,7 @@
   + [Installing package from private GitHub repo using PAT](https://github.com/jennybc/happy-git-with-r/blob/master/81_github-api-tokens.Rmd)
   + [R startup, Renviron details, Efficient R book](https://csgillespie.github.io/efficientR/r-startup.html)
 #### Python related packages
-  + [Astropy, editing FITS](http://www.astropy.org/astropy-tutorials/FITS-header.html)
+  + [Astropy, editing FITS](http://www.astropy.org/astropy-tutorials/FITS-header.html) and [more](http://www.astropy.org/).
   + [rpython, run python code from R](http://rpython.r-forge.r-project.org/)
 #### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)

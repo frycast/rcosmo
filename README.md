@@ -91,6 +91,7 @@
   + [Adding Rcpp to a package that uses roxygen2](https://ironholds.org/blog/adding-rcpp-to-an-existing-r-package-documented-with-roxygen2/)
   + [Installing package from private GitHub repo using PAT](https://github.com/jennybc/happy-git-with-r/blob/master/81_github-api-tokens.Rmd)
   + [R startup, Renviron details, Efficient R book](https://csgillespie.github.io/efficientR/r-startup.html)
+  + [Great R packages tutorial which includes python and C++](http://www.mjdenny.com/R_Package_Pictorial.html)
 #### Python related packages
   + [Astropy, editing FITS](http://www.astropy.org/astropy-tutorials/FITS-header.html) and [more](http://www.astropy.org/).
   + [rpython, run python code from R](http://rpython.r-forge.r-project.org/)

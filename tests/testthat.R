@@ -1,4 +1,4 @@
-library(testthat)
-library(rcosmo)
-
-test_check("rcosmo")
+# library(testthat)
+# library(rcosmo)
+#
+# test_check("rcosmo")

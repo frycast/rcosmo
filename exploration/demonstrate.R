@@ -5,8 +5,8 @@ library(sphereplot) # for sph2car()
 #help(rgl)
 library(FITSio)
 library(R.matlab) # for importing the colour map
-sourceCpp("pix2ang.cpp")
-source("readFITScmb.R")
+sourceCpp("exploration/pix2ang.cpp")
+source("exploration/readFITScmb.R")
 
 
 # TRY OUT THE NEW readFITScmb FUNCTION ------------------------------------
@@ -14,15 +14,19 @@ source("readFITScmb.R")
 # cmbdatT <- readFITS("CMB_map_smica1024.fits")
 # )
 time <- system.time(
-cmbdat <- readFITScmb("../../CMB_map_smica1024.fits")
+  cmbdat <- readFITScmb("../CMB_map_smica1024.fits")
 )
 # Check first 10 intensity values
 # head(cmbdat$col[[1]], n = 10)
 # Check last 10 intensity values
 # tail(cmbdat$col[[1]], n = 10)
-
-
-
+# TRY OUT THE SHRUNKEN CMB TEST MAP
+cmbTestMap <- readFITScmb("CMB_testmap_1024_10cols.fits")
+# Verify shrunken map matches full map
+# for (i in 1:5){
+#   cat(all.equal(head(cmbdat$col[[i]], n = 10), cmbTestMap$col[[i]]))
+#   cat(" ")
+# }
 
 # TESTING RING ORDERING -------------------------------------------
 Nside <- 2
@@ -47,8 +51,8 @@ sph <- pix2angC(Nside, TRUE)
 #spho <- sph[order(sph[,3],sph[,4]),]
 spho <- sph[order(sph[,3],sph[,4]),]
 
-m <- matrix(c(long = spho[,2], 
-              lat = pi/2 - spho[,1], 
+m <- matrix(c(long = spho[,2],
+              lat = pi/2 - spho[,1],
               r = rep(1,Npix)), nrow = Npix)
 mx <- sph2car(m, deg = FALSE)
 plot3d(mx, col = "blue", type = 'l', cex = 1)
@@ -100,9 +104,7 @@ CMBI <- data.frame(long = sph[,2], lat = pi/2 - sph[,1], I = cmbdat$col[[1]])
 # mx <- sph2car(m, deg = FALSE)
 # plot3d(mx, col = cols, cex = 30, pch = 3, add = TRUE)
 
-
 # SMALLER PLOT USING RANDOM SAMPLE (QUICKER BUT CLEAR)
-
 # Take a sample from CMBI
 sNside <- 256
 sNpix <- 12*sNside^2
@@ -124,9 +126,7 @@ bg3d("black")
 plot3d(smx, col = cols, type = "p", cex = 5, pch = 3, add = TRUE)
 # plot3d(smx, col = sCols, type = "s", cex = 5, pch = 3, add = TRUE)
 
-
 # PLOT JUST ONE BASE PIXEL
-
 Nbase <- Npix/12
 bCMBI <- CMBI[seq(1,Nbase),]
 bm <- matrix(c(bCMBI$long, bCMBI$lat, rep(1,Nbase)), nrow = Nbase)
@@ -154,3 +154,24 @@ open3d()
 bg3d("black")
 plot3d(smx, col = altCols, type = "p", cex = 5, pch = 3, add = TRUE)
 # plot3d(smx, col = sCols, type = "s", cex = 5, pch = 3, add = TRUE)
+
+
+
+
+# IMPORT/PLOT THE SIMPLE RANDOM SAMPLE CMB MAP ----------------------------
+# FOR THIS TO WORK WE WILL NEED TO EDIT THE readFITScmb FUNCTION TO
+# OPTIONALLY TAKE A VECTOR OF SAMPLE PIXEL INDICES IN PLACE OF NSIDE
+# THEN THE INDICES CAN BE PASSED INTO A SAMPLE CMB MAP COLUMN IN PYTHON
+sCMB <- readFITScmb("exploration/CMB_testmap_1024_256sample.fits")
+sNside <- 256
+sNpix <- 12*sNside^2
+sph <- pix2angC(Nside, TRUE)
+CMBI <- data.frame(long = sph[,2], lat = pi/2 - sph[,1], I = cmbdat$col[[1]])
+sm <- matrix(c(sCMBI$long, sCMBI$lat, rep(1,sNpix)), nrow = sNpix)
+smx <- sph2car(sm, deg = FALSE)
+mat <- readMat("cmbmap.mat")
+colmap <- rgb(mat$map[,1], mat$map[,2], mat$map[,3])
+cols <- colmap[cut(sCMBI$I,length(colmap))]
+open3d()
+bg3d("black")
+plot3d(smx, col = cols, type = "p", cex = 5, pch = 3, add = TRUE)

@@ -67,7 +67,7 @@
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
   + [C subroutines](http://healpix.sourceforge.net/html/csub.htm)
-#### R packages for spherical stats
+#### R packages for spherical/atro data
   + See more details on all the following packages [here](https://github.com/VidaliLama/cmbstat/blob/master/PackagesForSphericalDataAnalytics.pdf)
     + [R bindings for Google's s2: Spherical geometry](https://cran.r-project.org/web/packages/s2/index.html) and [github repo](https://github.com/spatstat/s2) and [C++ source](https://code.google.com/archive/p/s2-geometry-library/)
     + [SpherWave](http://dasan.sejong.ac.kr/~dhkim/main/research/pub/SpherWaveR.pdf)
@@ -91,6 +91,10 @@
   + [Adding Rcpp to a package that uses roxygen2](https://ironholds.org/blog/adding-rcpp-to-an-existing-r-package-documented-with-roxygen2/)
   + [Installing package from private GitHub repo using PAT](https://github.com/jennybc/happy-git-with-r/blob/master/81_github-api-tokens.Rmd)
   + [R startup, Renviron details, Efficient R book](https://csgillespie.github.io/efficientR/r-startup.html)
+  + [Great R packages tutorial which includes python and C++](http://www.mjdenny.com/R_Package_Pictorial.html)
+#### Python related packages
+  + [Astropy, editing FITS](http://www.astropy.org/astropy-tutorials/FITS-header.html) and [more](http://www.astropy.org/).
+  + [rpython, run python code from R](http://rpython.r-forge.r-project.org/)
 #### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)

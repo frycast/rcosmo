@@ -6,7 +6,9 @@
 \arguments{
 \item{Nside}{The number of cuts to a HEALPix base resolution pixel.}
 
-\item{Nest}{A boolean, TRUE if ordering scheme is NESTED and FALSE otherwise.}
+\item{Nest}{Set to TRUE for NESTED ordering scheme and FALSE for RING.}
+
+\item{spix}{Optional integer or vector of sample pixel indices.}
 }
 \description{
 Converts HEALPix pixel scheme to spherical coordinates.

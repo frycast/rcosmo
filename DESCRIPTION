@@ -11,7 +11,7 @@ Authors@R: as.person(c(
   ))
 Description: Statistical analysis of Cosmic Microwave Background data on a sphere.
     More description needs to be included on indented lines like this.
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.3.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

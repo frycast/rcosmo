@@ -60,7 +60,7 @@ cmbTestMap <- readFITScmb("CMB_testmap_1024_10cols.fits")
 # TESTING RING ORDERING -------------------------------------------
 Nside <- 2
 Npix <- 12*Nside^2
-angSphereC <- pix2angC(Nside, FALSE)
+angSphereC <- pix2angC(Nside, Nest = FALSE)
 
 # Plots of result:
 m <- matrix(c(angSphereC[,2], pi/2 - angSphereC[,1], rep(1,Npix)), nrow = Npix)
@@ -75,7 +75,7 @@ plot3d(mx, col = "blue", type = 'p', cex = 1)
 # TESTING NESTED ORDERING -------------------------------------------------
 Nside <- 2
 Npix <- 12*Nside^2
-sph <- pix2angC(Nside, TRUE)
+sph <- pix2angC(Nside)
 
 #spho <- sph[order(sph[,3],sph[,4]),]
 spho <- sph[order(sph[,3],sph[,4]),]
@@ -120,7 +120,7 @@ plot3d(tmx, col = tcols, type = 's', cex = 1)
 cmbdat <- readFITScmb("CMB_map_smica1024.fits")
 Nside <- as.numeric(cmbdat$hdr[81])
 Npix <- 12*Nside^2
-sph <- pix2angC(Nside, TRUE)
+sph <- pix2angC(Nside)
 
 # Data frame with longitude, latitude and intensity
 CMBI <- data.frame(long = sph[,2], lat = pi/2 - sph[,1], I = cmbdat$col[[1]])
@@ -192,14 +192,19 @@ plot3d(smx, col = altCols, type = "p", cex = 5, pch = 3, add = TRUE)
 # IN FUTURE WE COULD PASS THE INDICES INTO A SAMPLE CMB MAP COLUMN IN PYTHON.
 # FOR NOW WE IMPORT THE INDICES FROM A .CSV
 sCMB <- readFITScmb("exploration/CMB_testmap_1024_256sample.fits")
-spix <- read.csv("exploration/CMB_testmap_1024_256sampleIndices.csv")[,1]
-sNside <- 256
-sNpix <- 12*sNside^2
-sph <- pix2angC(sNside, TRUE, spix)
-CMBI <- data.frame(long = sph[,2], lat = pi/2 - sph[,1], I = cmbdat$col[[1]])
+spix <- read.table("exploration/CMB_testmap_1024_256sampleIndices.csv", sep = ",")[,1]
+Nside <- as.numeric(sCMB$hdr[51])
+sph <- pix2angC(Nside, spix = spix)
+# We have to reorder the data to match the sample, which is annoying
+sph <- sph[match(spix, sph[,5]),]
+# Take a look at the sample pixels with spherical coords
+head(sph, n = 10)
+tail(sph, n = 10)
+# Plotting related
+sCMBI <- data.frame(long = sph[,2], lat = pi/2 - sph[,1], I = sCMB$col[[1]])
 sm <- matrix(c(sCMBI$long, sCMBI$lat, rep(1,sNpix)), nrow = sNpix)
 smx <- sph2car(sm, deg = FALSE)
-mat <- readMat("cmbmap.mat")
+mat <- readMat("exploration/cmbmap.mat")
 colmap <- rgb(mat$map[,1], mat$map[,2], mat$map[,3])
 cols <- colmap[cut(sCMBI$I,length(colmap))]
 open3d()

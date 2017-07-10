@@ -75,11 +75,27 @@ NumericMatrix pix2angC(int Nside = 0, bool Nest = true, Rcpp::Nullable<Rcpp::Int
     }
   } else {
     IntegerVector sp(spix.get());
+    std::sort(sp.begin(),sp.end());
     N = sp.length();
     pvec = sp - 1;
+
+    // Check that spix is valid
+    if (N > Npix) {
+      throw std::invalid_argument("too many sample pixels, Nside is too small");
+    }
+    for (int spi = 0; spi < N; ++spi) {
+      if (sp[spi] > Npix || sp[spi] <= 0) {
+        throw std::invalid_argument("sample pixel is out of range");
+      }
+    }
+    for (int spi = 0; spi < N-1; ++spi) {
+      if (sp[spi] == sp[spi+1]) {
+        throw std::invalid_argument("duplicate pixel indices not allowed");
+      }
+    }
   }
 
-  NumericMatrix ang(N, 4);
+  NumericMatrix ang(N, 5);
 
   // Regional boundary pixel indices for Ring ordering scheme
   int bpiRingNP = 2*(Nside-1)*Nside - 1;
@@ -122,6 +138,7 @@ NumericMatrix pix2angC(int Nside = 0, bool Nest = true, Rcpp::Nullable<Rcpp::Int
       ang(k,1) = phi;
       ang(k,2) = i;
       ang(k,3) = j;
+      ang(k,4) = p+1;
     }
   } else {
   // Then NEST = TRUE
@@ -183,6 +200,7 @@ NumericMatrix pix2angC(int Nside = 0, bool Nest = true, Rcpp::Nullable<Rcpp::Int
             ang(k,1) = phi;
             ang(k,2) = i;
             ang(k,3) = j;
+            ang(k,4) = p+1;
             k += 1;
           }
 

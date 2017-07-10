@@ -5,13 +5,13 @@ library(sphereplot) # for sph2car()
 #help(rgl)
 library(FITSio)
 library(R.matlab) # for importing the colour map
-sourceCpp("pix2ang.cpp")
-source("readFITScmb.R")
+sourceCpp("exploration/pix2ang.cpp")
+source("exploration/readFITScmb.R")
 
 # Run tests
 # library(testthat)
 # testthat::context("Convert HEALPix to spherical coordinates and (j,i) indices")
-# 
+#
 # testthat::test_that("Output matrix is as expected for RING ordering with small Nside", {
 #   testthat::expect_equal_to_reference(pix2angC(2,FALSE), "../tests/testthat/references/pix2angRING_02.rds")
 #   testthat::expect_equal_to_reference(pix2angC(4,FALSE), "../tests/testthat/references/pix2angRING_04.rds")
@@ -19,7 +19,7 @@ source("readFITScmb.R")
 #   testthat::expect_equal_to_reference(pix2angC(16,FALSE), "../tests/testthat/references/pix2angRING_16.rds")
 #   testthat::expect_equal_to_reference(pix2angC(32,FALSE), "../tests/testthat/references/pix2angRING_32.rds")
 # })
-# 
+#
 # testthat::test_that("Output matrix is as expected for NEST ordering with small Nside", {
 #   testthat::expect_equal_to_reference(pix2angC(2,TRUE), "../tests/testthat/references/pix2angNEST_02.rds")
 #   testthat::expect_equal_to_reference(pix2angC(4,TRUE), "../tests/testthat/references/pix2angNEST_04.rds")
@@ -27,7 +27,7 @@ source("readFITScmb.R")
 #   testthat::expect_equal_to_reference(pix2angC(16,TRUE), "../tests/testthat/references/pix2angNEST_16.rds")
 #   testthat::expect_equal_to_reference(pix2angC(32,TRUE), "../tests/testthat/references/pix2angNEST_32.rds")
 # })
-# 
+#
 # testthat::test_that("Sample pixel results agree with full pixel results with small Nside", {
 #   for (Ns in c(2,4,8,16,32)){
 #     for (i in c(1,20,12*Ns^2)){
@@ -169,13 +169,14 @@ plot3d(bmx, col = cols, type = "p", cex = 5, pch = 3, add = TRUE)
 
 
 
+
+
 # TRY AN ALTERNATIVE COLOUR MAP -------------------------------------------
 library(colorspace)
 #altColmap <- diverge_hcl(256)
 #altColmap <- sequential_hcl(256, c = 0, power = 2.2)
 #altColmap <- heat_hcl(256, c = c(80, 30), l = c(30, 90), power = c(1/5, 1.3))
 altColmap <- rainbow_hcl(256, start = 1, end = 240)
-
 
 #Plot
 altCols <- altColmap[cut(sCMBI$I,length(altColmap))] # partition the colour map
@@ -188,14 +189,13 @@ plot3d(smx, col = altCols, type = "p", cex = 5, pch = 3, add = TRUE)
 
 
 # IMPORT/PLOT THE SIMPLE RANDOM SAMPLE CMB MAP ----------------------------
-# FOR THIS TO WORK WE WILL NEED TO EDIT THE readFITScmb FUNCTION TO
-# OPTIONALLY TAKE A VECTOR OF SAMPLE PIXEL INDICES IN PLACE OF NSIDE
-# THEN THE INDICES CAN BE PASSED INTO A SAMPLE CMB MAP COLUMN IN PYTHON
-sCMB <- readFITScmb("CMB_testmap_1024_256sample.fits")
-spix <- read.csv("CMB_testmap_1024_256sampleIndices.csv")
+# IN FUTURE WE COULD PASS THE INDICES INTO A SAMPLE CMB MAP COLUMN IN PYTHON.
+# FOR NOW WE IMPORT THE INDICES FROM A .CSV
+sCMB <- readFITScmb("exploration/CMB_testmap_1024_256sample.fits")
+spix <- read.csv("exploration/CMB_testmap_1024_256sampleIndices.csv")[,1]
 sNside <- 256
 sNpix <- 12*sNside^2
-sph <- pix2angC(Nside, TRUE)
+sph <- pix2angC(sNside, TRUE, spix)
 CMBI <- data.frame(long = sph[,2], lat = pi/2 - sph[,1], I = cmbdat$col[[1]])
 sm <- matrix(c(sCMBI$long, sCMBI$lat, rep(1,sNpix)), nrow = sNpix)
 smx <- sph2car(sm, deg = FALSE)

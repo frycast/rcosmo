@@ -5,8 +5,37 @@ library(sphereplot) # for sph2car()
 #help(rgl)
 library(FITSio)
 library(R.matlab) # for importing the colour map
-sourceCpp("exploration/pix2ang.cpp")
-source("exploration/readFITScmb.R")
+sourceCpp("pix2ang.cpp")
+source("readFITScmb.R")
+
+# Run tests
+# library(testthat)
+# testthat::context("Convert HEALPix to spherical coordinates and (j,i) indices")
+# 
+# testthat::test_that("Output matrix is as expected for RING ordering with small Nside", {
+#   testthat::expect_equal_to_reference(pix2angC(2,FALSE), "../tests/testthat/references/pix2angRING_02.rds")
+#   testthat::expect_equal_to_reference(pix2angC(4,FALSE), "../tests/testthat/references/pix2angRING_04.rds")
+#   testthat::expect_equal_to_reference(pix2angC(8,FALSE), "../tests/testthat/references/pix2angRING_08.rds")
+#   testthat::expect_equal_to_reference(pix2angC(16,FALSE), "../tests/testthat/references/pix2angRING_16.rds")
+#   testthat::expect_equal_to_reference(pix2angC(32,FALSE), "../tests/testthat/references/pix2angRING_32.rds")
+# })
+# 
+# testthat::test_that("Output matrix is as expected for NEST ordering with small Nside", {
+#   testthat::expect_equal_to_reference(pix2angC(2,TRUE), "../tests/testthat/references/pix2angNEST_02.rds")
+#   testthat::expect_equal_to_reference(pix2angC(4,TRUE), "../tests/testthat/references/pix2angNEST_04.rds")
+#   testthat::expect_equal_to_reference(pix2angC(8,TRUE), "../tests/testthat/references/pix2angNEST_08.rds")
+#   testthat::expect_equal_to_reference(pix2angC(16,TRUE), "../tests/testthat/references/pix2angNEST_16.rds")
+#   testthat::expect_equal_to_reference(pix2angC(32,TRUE), "../tests/testthat/references/pix2angNEST_32.rds")
+# })
+# 
+# testthat::test_that("Sample pixel results agree with full pixel results with small Nside", {
+#   for (Ns in c(2,4,8,16,32)){
+#     for (i in c(1,20,12*Ns^2)){
+#       eval(bquote(testthat::expect_equal(pix2angC(.(Ns),TRUE,.(i))[1,],pix2angC(.(Ns),TRUE)[.(i),])))
+#       eval(bquote(testthat::expect_equal(pix2angC(.(Ns),FALSE,.(i))[1,],pix2angC(.(Ns),FALSE)[.(i),])))
+#     }
+#   }
+# })
 
 
 # TRY OUT THE NEW readFITScmb FUNCTION ------------------------------------
@@ -162,7 +191,8 @@ plot3d(smx, col = altCols, type = "p", cex = 5, pch = 3, add = TRUE)
 # FOR THIS TO WORK WE WILL NEED TO EDIT THE readFITScmb FUNCTION TO
 # OPTIONALLY TAKE A VECTOR OF SAMPLE PIXEL INDICES IN PLACE OF NSIDE
 # THEN THE INDICES CAN BE PASSED INTO A SAMPLE CMB MAP COLUMN IN PYTHON
-sCMB <- readFITScmb("exploration/CMB_testmap_1024_256sample.fits")
+sCMB <- readFITScmb("CMB_testmap_1024_256sample.fits")
+spix <- read.csv("CMB_testmap_1024_256sampleIndices.csv")
 sNside <- 256
 sNpix <- 12*sNside^2
 sph <- pix2angC(Nside, TRUE)

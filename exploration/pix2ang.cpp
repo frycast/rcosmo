@@ -41,22 +41,38 @@ int BinToDec(std::string number)
 
 
 // [[Rcpp::export]]
-NumericMatrix pix2angC(int Nside, bool Nest) {
+NumericMatrix pix2angC(int Nside = 0, bool Nest = true, Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue){
   int Npix = 12*Nside*Nside;
-  NumericMatrix ang(Npix, 4); // Only set to 4 for debugging to give i, j
+  double z = 0;
+  double phi = 0;
+  int i = 0;
+  int j = 0;
+  IntegerVector pvec;
+  int p;
+  int N;
+  
+  if (spix.isNull()) {
+    N = Npix;
+    pvec = IntegerVector(Npix);
+    for (int p = 0; p < Npix; ++p){
+      pvec[p] = p;
+    }
+  } else {
+    IntegerVector sp(spix.get());
+    N = sp.length();
+    pvec = sp - 1;
+  }
+  
+  NumericMatrix ang(N, 4);
   
   // Regional boundary pixel indices for Ring ordering scheme
   int bpiRingNP = 2*(Nside-1)*Nside - 1;
   int bpiRingNE = (Nside + 1)*4*Nside + bpiRingNP;
   int bpiRingSE = Nside*Nside*4 + bpiRingNE;
-  
-  double z = 0;
-  double phi = 0;
-  int i = 0;
-  int j = 0;
 
-  if (Nest == FALSE){
-    for (int p = 0; p < Npix; ++p){
+  if (Nest == false){
+    for (int k = 0; k < N; ++k){
+      p = pvec[k];
       
       if (p <= bpiRingNP){ // North Polar pixel
         
@@ -86,16 +102,19 @@ NumericMatrix pix2angC(int Nside, bool Nest) {
         
       }
       
-      ang(p,0) = acos(z);
-      ang(p,1) = phi;
-      ang(p,2) = i; 
-      ang(p,3) = j;
+      ang(k,0) = acos(z);
+      ang(k,1) = phi;
+      ang(k,2) = i; 
+      ang(k,3) = j;
     }
   } else { 
   // Then NEST = TRUE
     int p = 0;
+    int k = 0;
+    
     // Iterate through base resolution pixels
     for (int f = 0; f <= 11; ++f){
+      
         // Iterate through pixels nested in f
         for (int pp = 0; pp < Nside*Nside; ++pp) {
           double F1 = floor(f/4.0) + 2;
@@ -105,9 +124,9 @@ NumericMatrix pix2angC(int Nside, bool Nest) {
           std::string bin = DecToBin(pp);
           std::string xbin = "";
           std::string ybin = "";
-          for (int k = bin.length() - 1; k >= 1; k -= 2) {
-            xbin.insert(0,1,bin[k]);
-            ybin.insert(0,1,bin[k-1]);
+          for (int l = bin.length() - 1; l >= 1; l -= 2) {
+            xbin.insert(0,1,bin[l]);
+            ybin.insert(0,1,bin[l-1]);
           }
           if (bin.length() % 2 == 1){
             xbin.insert(0,1,bin[0]);
@@ -142,15 +161,19 @@ NumericMatrix pix2angC(int Nside, bool Nest) {
             
           }
         
-        ang(p,0) = acos(z);
-        ang(p,1) = phi;
-        ang(p,2) = i; 
-        ang(p,3) = j;
-        p += 1;
+          // In case spix is not null we only add the sample pixels
+          if (p == pvec[k]) {
+            ang(k,0) = acos(z);
+            ang(k,1) = phi;
+            ang(k,2) = i; 
+            ang(k,3) = j;
+            k += 1;
+          }
+          
+          p += 1;
         }
     }
     
   }
-  
   return ang;
 }

@@ -95,6 +95,8 @@
 #### Python related packages
   + [Astropy, editing FITS](http://www.astropy.org/astropy-tutorials/FITS-header.html) and [more](http://www.astropy.org/).
   + [rpython, run python code from R](http://rpython.r-forge.r-project.org/)
+  + [rpy2-R in Python](https://rpy2.bitbucket.io/)
+  + [Jupyter with the IR Kernel: Using R with Jupyter Notebooks](http://blog.revolutionanalytics.com/2015/09/using-r-with-jupyter-notebooks.html)
 #### Journals for submission
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)

@@ -20,15 +20,18 @@ lonWrap <- function(lon) {
 
 
 
-# TRY THE CMBDataFrame CONSTRUCTOR ---------------------------------------
+# TRY THE CMBDataFrame CONSTRUCTOR and plotCMB function ------------------------------------
 
-#Method 1: Read the data while constructing the CMBDataFrame
-df <- CMBDataFrame()
+# Method 1: Read the data from FITS and construct the CMBDataFrame
+df <- CMBDataFrame("../CMB_map_smica1024.fits")
 
-#Method 2: Read the data first, then construct the CMBDataFrame
-cmbdat <- readFITScmb("../../CMB_map_smica1024.fits")
-#We'll just take the sample pixels 1,2 and 3
-df <- CMBDataFrame(CMBData = cmbdat, spix = 1:20)
+# Method 2: Read the data first, then construct the CMBDataFrame
+cmbdat <- readFITScmb("../CMB_map_smica1024.fits")
+# We'll just take the sample pixels 1,2 and 3
+df <- CMBDataFrame(CMBData = cmbdat, spix = c(2,4,6))
+# Alternatively specify a sample size for a random sample
+df2 <- CMBDataFrame(CMBData = cmbdat, sampleSize = 800000)
+plotCMB(df2)
 
 #Plotting with sample pixels
 Nside <- 1024     # specify the Nside parameter of the CMB map

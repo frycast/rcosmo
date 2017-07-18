@@ -10,6 +10,11 @@
 
 \item{spix}{Optional integer or vector of sample pixel indices.}
 }
+\value{
+A matrix with columns theta and phi (in that order). 
+Theta (in [0,pi]) is the colatitude in radians measured from the North Pole 
+and phi (in [0, 2*pi]) is the longitude in radians measured Eastward.
+}
 \description{
 Converts HEALPix pixel scheme to spherical coordinates.
 }

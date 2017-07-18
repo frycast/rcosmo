@@ -1,3 +1,7 @@
+//THIS SHOULD BE IMPROVED BY NOT NEEDING TO GENERATE ALL COORDINATES WHEN ONLY A HANDFUL ARE REQUIRED
+// I.E. WHEN SPIX IS SPECIFIED.
+
+
 //Includes/namespaces
 #include <Rcpp.h>
 #include <bitset>
@@ -15,8 +19,8 @@ using namespace Rcpp;
 //'@details
 //'This is a place holder
 //'
-//'@return A matrix with columns theta and phi (in that order). 
-//' Theta (in [0,pi]) is the colatitude in radians measured from the North Pole 
+//'@return A matrix with columns theta and phi (in that order).
+//' Theta (in [0,pi]) is the colatitude in radians measured from the North Pole
 //' and phi (in [0, 2*pi]) is the longitude in radians measured Eastward.
 //'
 //'@name pix2angC
@@ -62,8 +66,8 @@ int BinToDec(std::string number)
 
 //' @export
 // [[Rcpp::export]]
-NumericMatrix pix2angC(int Nside = 0, 
-                       bool Nest = true, 
+NumericMatrix pix2angC(int Nside = 0,
+                       bool Nest = true,
                        Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue){
   int Npix = 12*Nside*Nside;
   double z = 0;
@@ -216,6 +220,6 @@ NumericMatrix pix2angC(int Nside = 0,
     }
 
   }
-  
+
   return ang;
 }

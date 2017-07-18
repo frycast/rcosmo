@@ -13,6 +13,8 @@
 #'
 #'@export
 readFITScmb <- function(filename = "CMB_map_smica1024.fits") {
+cat("Reading data from FITS file...")
+cat("\n")
 
 zz <- file(filename, "rb")
 

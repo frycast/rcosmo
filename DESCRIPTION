@@ -18,7 +18,8 @@ LazyData: true
 Imports:
     FITSio (>= 2.1-0),
     Rcpp (>= 0.12.11),
-    sphereplot (>= 1.5)
+    sphereplot (>= 1.5),
+    rgl
 Suggests:
     knitr,
     rmarkdown,

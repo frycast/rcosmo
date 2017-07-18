@@ -14,6 +14,11 @@ using namespace Rcpp;
 //'
 //'@details
 //'This is a place holder
+//'
+//'@return A matrix with columns theta and phi (in that order). 
+//' Theta (in [0,pi]) is the colatitude in radians measured from the North Pole 
+//' and phi (in [0, 2*pi]) is the longitude in radians measured Eastward.
+//'
 //'@name pix2angC
 
 
@@ -57,7 +62,9 @@ int BinToDec(std::string number)
 
 //' @export
 // [[Rcpp::export]]
-NumericMatrix pix2angC(int Nside = 0, bool Nest = true, Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue){
+NumericMatrix pix2angC(int Nside = 0, 
+                       bool Nest = true, 
+                       Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue){
   int Npix = 12*Nside*Nside;
   double z = 0;
   double phi = 0;
@@ -209,5 +216,6 @@ NumericMatrix pix2angC(int Nside = 0, bool Nest = true, Rcpp::Nullable<Rcpp::Int
     }
 
   }
+  
   return ang;
 }

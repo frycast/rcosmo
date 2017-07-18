@@ -1,12 +1,107 @@
-#rm(list=ls())
+rm(list=ls())
 library(Rcpp)
 library(rgl)
 library(sphereplot) # for sph2car()
 #help(rgl)
 library(FITSio)
 library(R.matlab) # for importing the colour map
-sourceCpp("exploration/pix2ang.cpp")
-source("exploration/readFITScmb.R")
+library(geosphere)
+sourceCpp("pix2ang.cpp")
+sourceCpp("distGeo.cpp")
+sourceCpp("nestIndex.cpp")
+source("readFITScmb.R")
+source("CMBDataFrame.R")
+# Function takes longitude in [0,2pi] and transforms it
+# to longitude in [-pi,pi]
+lonWrap <- function(lon) {
+  (lon + 180) %% 360 - 180
+}
+
+
+
+
+# TRY THE CMBDataFrame CONSTRUCTOR ---------------------------------------
+
+#Method 1: Read the data while constructing the CMBDataFrame
+df <- CMBDataFrame()
+
+#Method 2: Read the data first, then construct the CMBDataFrame
+cmbdat <- readFITScmb("../../CMB_map_smica1024.fits")
+#We'll just take the sample pixels 1,2 and 3
+df <- CMBDataFrame(CMBData = cmbdat, spix = 1:20)
+
+#Plotting with sample pixels
+Nside <- 1024     # specify the Nside parameter of the CMB map
+N <- 12*256^2     # specify the number of sample pixels
+spix <- sample(seq(1,12*Nside^2),N)
+df <- CMBDataFrame(CMBData = cmbdat, spix = spix)
+#Now make the plot:
+sm <- matrix(c(df$long, df$lat, rep(1,N)), nrow = N)
+smx <- sph2car(sm, deg = FALSE)
+mat <- readMat("cmbmap.mat")
+colmap <- rgb(mat$map[,1], mat$map[,2], mat$map[,3])
+cols <- colmap[cut(df$I,length(colmap))]
+open3d()
+bg3d("black")
+plot3d(smx, col = cols, type = "p", cex = 5, pch = 3, add = TRUE)
+
+
+
+
+
+
+# TRY THE GEOSPHERE PACKAGE  ----------------------------------------------
+LA <- c(-118.40, 33.95)
+NY <- c(-73.78, 40.63)
+MELB <- c(144.96,-37.81)
+data(wrld)
+plot(wrld, type='l')
+gc <- greatCircle(LA, NY)
+gc2 <- greatCircle(MELB,NY)
+lines(gc, lwd=2, col='blue')
+lines(gc2, lwd=2, col='blue')
+gci <- gcIntermediate(LA, NY)
+gci2 <- gcIntermediate(MELB, NY, breakAtDateLine = TRUE)
+lines(gci, lwd=4, col='green')
+lines(gci2[[1]], lwd=4, col='red')
+lines(gci2[[2]], lwd=4, col='red')
+points(rbind(LA, NY), col='red', pch=20, cex=2)
+
+mp <- midPoint(MELB, NY)
+points(mp, col = 'blue', pch=20, cex=2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# TRY THE distGeo FUNCTION ------------------------------------------------
+
+Nside <- 256
+sph <- pix2angC(Nside)
+lon <- sph[,2]
+lat <- pi/2 - sph[,1]
+dists <- distGeo(matrix(c(0,0), nrow = 1), cbind(lon, lat))
+
+
+LA <- c(-118.40, 33.95)
+NY <- c(-73.78, 40.63)
+onCirc <- sph[which(onGreatCircle(LA,NY, sph[,1:2])),][,1:2]
+
+Npix <- length(onCirc)/2
+m <- matrix(c(onCirc[,2], pi/2 - onCirc[,1], rep(1,Npix)), nrow = Npix)
+mx <- sph2car(m, deg = FALSE)
+plot3d(mx, col = "blue", type = 'p', cex = 2, add = TRUE)
+
+
 
 # Run tests
 # library(testthat)
@@ -191,8 +286,8 @@ plot3d(smx, col = altCols, type = "p", cex = 5, pch = 3, add = TRUE)
 # IMPORT/PLOT THE SIMPLE RANDOM SAMPLE CMB MAP ----------------------------
 # IN FUTURE WE COULD PASS THE INDICES INTO A SAMPLE CMB MAP COLUMN IN PYTHON.
 # FOR NOW WE IMPORT THE INDICES FROM A .CSV
-sCMB <- readFITScmb("exploration/CMB_testmap_1024_256sample.fits")
-spix <- read.table("exploration/CMB_testmap_1024_256sampleIndices.csv", sep = ",")[,1]
+sCMB <- readFITScmb("CMB_testmap_1024_256sample.fits")
+spix <- read.table("CMB_testmap_1024_256sampleIndices.csv", sep = ",")[,1]
 Nside <- as.numeric(sCMB$hdr[51])
 sph <- pix2angC(Nside, spix = spix)
 # We have to reorder the data to match the sample, which is annoying

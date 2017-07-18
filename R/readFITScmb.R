@@ -6,12 +6,12 @@
 #'   When it works, \code{readFITScmb} is much faster than \code{readFITS}.
 #'   However, \code{readFITS} is more general and so is more likely to work.
 #'
-#' @param filename The path to the fits file.
-#' @return A list containing the intensity (I), polarisation (Q, U), PMASK, TMASK and metadata.
-#' @examples
+#'@param filename The path to the fits file.
+#'@return A list containing the intensity (I), polarisation (Q, U), PMASK, TMASK and metadata.
+#'@examples
 #'   readFITScmb("CMB_map_smica1024.fits")
 #'
-
+#'@export
 readFITScmb <- function(filename = "CMB_map_smica1024.fits") {
 
 zz <- file(filename, "rb")

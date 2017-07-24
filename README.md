@@ -1,4 +1,4 @@
-# CMBstat project
+# rcosmo project
 
 ## Next steps
   + Investigate R packages [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html) and [VecStatGraph3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)

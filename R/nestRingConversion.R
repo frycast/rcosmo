@@ -5,8 +5,7 @@
 #' @param CMBDataFrame A CMB data frame containing a full sky CMB map
 #' in RING HEALPix order.
 #' @return This is a place holder
-ring2nest <- function(CMBdataFrame = cmbdf){
-  
+ring2nest <- function(cmbdf){
   # Complete this using nestIndex.cpp
   # The first step is to create the CMBDataFrame class which has
   # an attribute that can be set to RING or NEST and another

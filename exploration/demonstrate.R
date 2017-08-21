@@ -290,7 +290,7 @@ plot3d(smx, col = altCols, type = "p", cex = 5, pch = 3, add = TRUE)
 # IN FUTURE WE COULD PASS THE INDICES INTO A SAMPLE CMB MAP COLUMN IN PYTHON.
 # FOR NOW WE IMPORT THE INDICES FROM A .CSV
 sCMB <- readFITScmb("CMB_testmap_1024_256sample.fits")
-spix <- read.table("CMB_testmap_1024_256sampleIndices.csv", sep = ",")[,1]
+spix <- read.table("exploration/CMB_testmap_1024_256sampleIndices.csv", sep = ",")[,1]
 Nside <- as.numeric(sCMB$hdr[51])
 sph <- pix2angC(Nside, spix = spix)
 # We have to reorder the data to match the sample, which is annoying

@@ -1,4 +1,6 @@
-# FUNCTIONS HERE WILL NOT BE MADE DIRECTLY AVAILABLE TO PACKAGE USERS
+
+
+# THE REMAINING FUNCTIONS SHOULD NOT BE MADE AVAILABLE TO PACKAGE USERS
 
 # Function takes longitude in [0,2pi] and transforms it
 # to longitude in [-pi,pi]

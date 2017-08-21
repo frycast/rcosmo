@@ -15,13 +15,18 @@ using namespace Rcpp;
 //'@param Nside The number of cuts to a HEALPix base resolution pixel.
 //'@param Nest Set to TRUE for NESTED ordering scheme and FALSE for RING.
 //'@param spix Optional integer or vector of sample pixel indices.
+//'@param cartesian Set to FALSE to output spherical coordinates
+//'or else TRUE for cartesian.
 //'
 //'@details
 //'This is a place holder
 //'
-//'@return A matrix with columns theta and phi (in that order).
-//' Theta (in [0,pi]) is the colatitude in radians measured from the North Pole
-//' and phi (in [0, 2*pi]) is the longitude in radians measured Eastward.
+//'@return A matrix with columns theta and phi (in that order), or 
+//' x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude 
+//' in radians measured from the North Pole and phi (in [0, 2*pi]) 
+//' is the longitude in radians measured Eastward. The remaining 3 columns
+//' returned are i, j, and p which represent the HEALPix ring index, 
+//' pixel-in-ring index, and pixel index respectively.
 //'
 //'@name pix2angC
 
@@ -68,7 +73,8 @@ int BinToDec(std::string number)
 // [[Rcpp::export]]
 NumericMatrix pix2angC(int Nside = 0,
                        bool Nest = true,
-                       Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue){
+                       Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue,
+                       bool cartesian = false){
   int Npix = 12*Nside*Nside;
   double z = 0;
   double phi = 0;
@@ -106,8 +112,19 @@ NumericMatrix pix2angC(int Nside = 0,
     }
   }
 
-  NumericMatrix ang(N, 5);
-
+  NumericMatrix ang(N,5);
+  NumericMatrix car(N,6);
+  NumericMatrix * out;
+  
+  if (cartesian == false)
+  {
+    out = &ang;
+  }
+  else
+  {
+    out = &car;
+  }
+  
   // Regional boundary pixel indices for Ring ordering scheme
   int bpiRingNP = 2*(Nside-1)*Nside - 1;
   int bpiRingNE = (Nside + 1)*4*Nside + bpiRingNP;
@@ -220,6 +237,25 @@ NumericMatrix pix2angC(int Nside = 0,
     }
 
   }
+  
+  // Convert everything to cartesian if required
+  if (cartesian == true)
+  {
+    for (int k = 0; k < N; k++)
+    {
+      double tempTheta = ang(k,0);
+      double tempPhi = ang(k,1);
+      int tempi = ang(k,2);
+      int tempj = ang(k,3);
+      int tempp = ang(k,4);
+      car(k,0) = cos(tempPhi)*sin(tempTheta);
+      car(k,1) = sin(tempPhi)*sin(tempTheta);
+      car(k,2) = cos(tempTheta);
+      car(k,3) = tempi;
+      car(k,4) = tempj;
+      car(k,5) = tempp;
+    }
+  }
 
-  return ang;
+  return *out;
 }

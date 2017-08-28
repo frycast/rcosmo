@@ -1,12 +1,12 @@
 #' Nest to Ring
-#' 
+#'
 #' \code{nest2ring} computes the Pix index in the ring order from the Pix index Pix
 #' in the nest order at nSide.
-#' 
+#'
 #' @param nSide is the Nside for HEALPix.
 #'
 #' @param Pix is the set or subset of Pix indices at nSide.
-#' 
+#'
 #' @return the output is the corresponding set of Pix in the ring order.
 #'
 #' @example
@@ -26,7 +26,7 @@ mkpix2xy <- function() {
     #  pix2$x  - pix index for x
     #
     #  pix2$y  - pix index for y
-    
+
     nSide <- 1024
     pix2x <- matrix(rep(nSide,0),ncol=nSide)
     pix2y <- matrix(rep(nSide,0),ncol=nSide)
@@ -36,7 +36,7 @@ mkpix2xy <- function() {
       iy <- 0
       # bit position in x and y
       ip <- 1
-      while (!(jpix==0)) {
+      while ( !(jpix==0) ) {
         # bit value in kpix, for ix
         id <- jpix %% 2
         jpix <- trunc(jpix/2)
@@ -53,12 +53,12 @@ mkpix2xy <- function() {
       # kpix in 0:31
       pix2y[kpix+1] <- iy
     }
-    
+
     pix2 <- list(x=pix2x,y=pix2y)
-    
+
     return(pix2)
   }
-  
+
 ## initialisations
 ipnest <- Pix - 1
 
@@ -76,7 +76,7 @@ pix2y <- pix2$y
 
 # number of pixels in a face
 npface <- nSide^2
-nl4 <- 4*nSide 
+nl4 <- 4*nSide
 
 ## find the face number
 # face number in 0:11
@@ -90,14 +90,14 @@ iy <- 0
 scalemlv <- 1
 ismax <- 4
 
-n1 <- 1024 
+n1 <- 1024
 for (i in 0:ismax) {
   ip_low <- ipf %% n1
   ix <- trunc(ix + scalemlv*pix2x[ip_low+1])
   iy <- trunc(iy + scalemlv*pix2y[ip_low+1])
   scalemlv <- scalemlv*32
   ipf   <- trunc(ipf/n1)
-} 
+}
 ix <- trunc(ix + scalemlv*pix2x[ipf+1])
 iy <- trunc(iy + scalemlv*pix2y[ipf+1])
 

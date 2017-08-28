@@ -59,13 +59,13 @@ scMask <- !(eqMask | ncMask)
 
 # initialisation
 nh = length(hPix);
-z <- matrix(0,1,nh)
-phi <- matrix(0,1,nh)
-hDelta_Phi <- matrix(0,1,nh)
-z_nv <- matrix(0,1,nh)
-z_sv <- matrix(0,1,nh)
-phi_nv <- matrix(0,1,nh)
-phi_sv <- matrix(0,1,nh)
+z <- rep(0,nh)
+phi <- rep(0,nh)
+hDelta_Phi <- rep(0,nh)
+z_nv <- rep(0,nh)
+z_sv <- rep(0,nh)
+phi_nv <- rep(0,nh)
+phi_sv <- rep(0,nh)
 
 # North polar cap
 if (any(ncMask)) {
@@ -106,13 +106,9 @@ phi[scMask] <- (iPhi - 0.5)*pi/(2*iRing)
 sth <- sqrt(1-z^2)
 
 ## Pixel centers
-# transpose to a column vector
-sth <- t(sth)
-phi <- t(phi) 
-hp <- matrix(0,3,nh)
-hp[1,] <- sth*cos(phi)
-hp[2,] <- sth*sin(phi)
-hp[3,] <- z
+hp <- data.frame( x = sth*cos(phi),
+                  y = sth*sin(phi),
+                  z = z)
 
 return(hp)
 }

@@ -4,7 +4,7 @@
 \alias{ring2nest}
 \title{Convert from RING to NEST ordering scheme}
 \usage{
-ring2nest(CMBdataFrame = cmbdf)
+ring2nest(cmbdf)
 }
 \arguments{
 \item{CMBDataFrame}{A CMB data frame containing a full sky CMB map

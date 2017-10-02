@@ -9,11 +9,17 @@
 \item{Nest}{Set to TRUE for NESTED ordering scheme and FALSE for RING.}
 
 \item{spix}{Optional integer or vector of sample pixel indices.}
+
+\item{cartesian}{Set to FALSE to output spherical coordinates
+or else TRUE for cartesian.}
 }
 \value{
-A matrix with columns theta and phi (in that order). 
-Theta (in [0,pi]) is the colatitude in radians measured from the North Pole 
-and phi (in [0, 2*pi]) is the longitude in radians measured Eastward.
+A matrix with columns theta and phi (in that order), or 
+x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude 
+in radians measured from the North Pole and phi (in [0, 2*pi]) 
+is the longitude in radians measured Eastward. The remaining 3 columns
+returned are i, j, and p which represent the HEALPix ring index, 
+pixel-in-ring index, and pixel index respectively.
 }
 \description{
 Converts HEALPix pixel scheme to spherical coordinates.

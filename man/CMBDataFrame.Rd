@@ -29,6 +29,7 @@ will be taken from CMBData}
 \value{
 A data frame whose columns contain the pixel center coordinates (longitude, lattitude)
 or (x,y,z), CMB intensities (I), and optionally polarisation (Q,U) and masks (TMASK, PMASK).
+The row.names attribute of the resulting CMB Data Frame contains HEALPix indices.
 }
 \description{
 The function \code{CMBDataFrame} creates CMB Data Frames. These are a special type of
@@ -36,12 +37,26 @@ The function \code{CMBDataFrame} creates CMB Data Frames. These are a special ty
 coordinate system, and Nside parameter.
 }
 \examples{
-##Method 1: Read the data while constructing the CMBDataFrame
-df <- CMBDataFrame()
+## Method 1: Read the data while constructing the CMBDataFrame
+df <- CMBDataFrame("CMB_map_smica1024.fits")
 
-##Method 2: Read the data first, then construct the CMBDataFrame
+## Method 2: Read the data first separately using readFITScmb
 cmbdat <- readFITScmb("../../CMB_map_smica1024.fits")
-##We'll just take the sample pixels 1,2 and 3
-df <- CMBDataFrame(CMBData = cmbdat, spix = c(1,2,3))
+
+# Specify a sample size for a random sample
+df2 <- CMBDataFrame(CMBData = cmbdat, sampleSize = 800000)
+plotCMB(df2)
+
+# Specify a vector of pixel indices to keep, using spix
+df3 <- CMBDataFrame(CMBData = cmbdat, spix = c(2,4,6))
+
+# Take a look at the attributes
+attributes(df2)$Nside
+attributes(df2)$coords
+attributes(df2)$ordering
+# The row.names attribute contains HEALPix pixel indices
+attributes(df3)$row.names
+head(attributes(df2)$row.names, n = 10)
+head(attributes(df)$row.names, n = 10)
 
 }

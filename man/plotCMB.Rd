@@ -16,6 +16,7 @@ A plot of the CMB data.
 This function produces a plot from a CMB Data Frame.
 }
 \examples{
-##This is a place holder.
+df <- CMBDataFrame("CMB_map_smica1024.fits", sampleSize = 800000)
+plotCMB(df)
 
 }

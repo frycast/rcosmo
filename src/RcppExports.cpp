@@ -6,21 +6,22 @@
 using namespace Rcpp;
 
 // pix2angC
-NumericMatrix pix2angC(int Nside, bool Nest, Rcpp::Nullable<Rcpp::IntegerVector> spix);
-RcppExport SEXP rcosmo_pix2angC(SEXP NsideSEXP, SEXP NestSEXP, SEXP spixSEXP) {
+NumericMatrix pix2angC(int Nside, bool Nest, Rcpp::Nullable<Rcpp::IntegerVector> spix, bool cartesian);
+RcppExport SEXP _rcosmo_pix2angC(SEXP NsideSEXP, SEXP NestSEXP, SEXP spixSEXP, SEXP cartesianSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type Nside(NsideSEXP);
     Rcpp::traits::input_parameter< bool >::type Nest(NestSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type spix(spixSEXP);
-    rcpp_result_gen = Rcpp::wrap(pix2angC(Nside, Nest, spix));
+    Rcpp::traits::input_parameter< bool >::type cartesian(cartesianSEXP);
+    rcpp_result_gen = Rcpp::wrap(pix2angC(Nside, Nest, spix, cartesian));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"rcosmo_pix2angC", (DL_FUNC) &rcosmo_pix2angC, 3},
+    {"_rcosmo_pix2angC", (DL_FUNC) &_rcosmo_pix2angC, 4},
     {NULL, NULL, 0}
 };
 

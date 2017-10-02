@@ -66,6 +66,7 @@
   + [NASA information page](http://healpix.jpl.nasa.gov/index.shtml)
   + [healpy (python) documentation page](http://healpy.readthedocs.io/en/latest/index.html)
   + [C++ documentation](http://healpix.sourceforge.net/html/Healpix_cxx/index.html)
+  + [Installing HEALPix (NASA)](https://healpix.jpl.nasa.gov/html/install.htm)
   + [C subroutines](http://healpix.sourceforge.net/html/csub.htm)
 #### R packages for spherical/atro data
   + See more details on all the following packages [here](https://github.com/VidaliLama/cmbstat/blob/master/PackagesForSphericalDataAnalytics.pdf)

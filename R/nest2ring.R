@@ -1,4 +1,4 @@
-#' Nest to Ring
+#' Nest to Ring.
 #'
 #' \code{nest2ring} computes the Pix index in the ring order from the Pix index Pix
 #' in the nest order at nSide.

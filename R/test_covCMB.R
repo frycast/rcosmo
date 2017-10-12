@@ -19,7 +19,7 @@ fi_fits  <- "CMB_map_smica1024.fits"
 
 df <- CMBDataFrame(CMBData = fi_fits, coords = "HEALPix", ordering = "nested")
 
-Trdf <- covCMB(df = df, rmin = 0, rmax = 0, Nr = 1, Nside = 1024, N_x_vec = 10)
+Trdf <- covCMB(df = df, rmin = 0, rmax = 0.1, Nr = 10, Nside = 1024, N_x_vec = 10)
 
 print(" ****************************************** ")
 print(" Plot Covariance for CMB of radius")

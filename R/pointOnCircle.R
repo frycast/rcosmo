@@ -4,12 +4,12 @@
 #
 # Properties of a circle on a unit sphere -----------------------
 # Suppose circle has center (theta1, phi1)
-# and suppose a point (theta2, phi2) lies 
+# and suppose a point (theta2, phi2) lies
 # on the circle. Then,
 # Radius of Associated Planar Circle = sin(r) (proof: translate to north pole, then r = theta).
 # Circumpherence = 2*pi*sin(r)
 # Radius (r) = arccos( cos(theta1)cos(theta2) + sin(theta1)sin(theta2)cos(phi1 - phi2) )
-# 
+#
 # ---------------------------------------------------------------
 #
 ## ALGORITHM
@@ -23,7 +23,7 @@
 
 library(sphereplot)
 library(Rcpp)
-source("pix2vec.R")
+#source("pix2vec.R")
 
 
 pointOnCircle <- function(Nside = 16, radius = 0.2, center = c(1,0.7))
@@ -34,7 +34,7 @@ C_xyz <- c(cos(center[2])*sin(center[1]), # Cartesian
            cos(center[1]))
 
 # DEFINE MINIMUM SAMPLE DISTANCE
-N <- 5*Nside      # COME UP WITH GOOD FORMULA FOR N (NOT THIS SAMPLE ONE)           
+N <- 5*Nside      # COME UP WITH GOOD FORMULA FOR N (NOT THIS SAMPLE ONE)
 eps <- 2*pi/N
 
 # MAKE THE SAMPLE POINTS IN SPHERICAL THEN CONVERT TO CARTESIAN

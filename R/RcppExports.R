@@ -27,6 +27,6 @@ NULL
 
 #' @export
 pix2angC <- function(Nside = 0L, Nest = TRUE, spix = NULL, cartesian = FALSE) {
-    .Call('_rcosmo_pix2angC', PACKAGE = 'rcosmo', Nside, Nest, spix, cartesian)
+    .Call('rcosmo_pix2angC', PACKAGE = 'rcosmo', Nside, Nest, spix, cartesian)
 }
 

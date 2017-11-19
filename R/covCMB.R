@@ -1,19 +1,19 @@
 #' Covariance for CMB
-#' 
+#'
 #' The function \code{covCMB} computes the covariance for CMB.
-#' 
+#'
 #' @param rmin,rmax are the minimum and maximum of radii.
 #' @param Nr is the number of radii in between rmin and rmax for which covariance of CMB is evalueated.
 #' @param Nside is the Nside for which the HEALPix points are used.
 #' @param N_x_vec is the number of points x for each radius, the number of points y for each
 #' is 2^(ceil(log2((sqrt(N_x_vec))))) which is equivalent to sqrt(N_x_vec).
-#' 
+#'
 #' @return the output is the data frame of radius r and the covariance Tcov.
-#' 
+#'
 #' @examples
 #' # compute the covariance of CMB at Nside = 1024 and radii between 10^(-6) and pi-10^(-6) with 10 radii
 #' covCMB(rmin = 10^(-6), rmax = pi-10^(-6), Nr = 10, Nside = 1024, N_x_vec = 10)
-#' 
+#'
 #' @export
 covCMB <- function(df = CMBDataFrame(CMBData = "CMB_map_smica1024.fits", coords = "HEALPix", ordering = "nested"), rmin = 10^(-6), rmax = pi-10^(-6), Nr = 10, Nside = 1024, N_x_vec = 10){
 
@@ -66,6 +66,7 @@ for(r_i in 1:Nr){
   r  <- r_vec[r_i] # radius
   print(paste0("  - compute covariance for radius ",round(r,digits = 5)))
 
+  if (r!=0) {
   T_yx  <- c(rep(0,N_x_vec))
   for(i_pix_x  in 1:N_x_vec) {
     pix_x  <- pix_x_vec[i_pix_x]
@@ -76,11 +77,11 @@ for(r_i in 1:Nr){
     x_sph_1 <- ca2sph(matrix(c(x$x,x$y,x$z), ncol = 3, byrow = TRUE))
     x_sph <- c(x_sph_1$theta,x_sph_1$phi)
     y <- pointOnCircle(Nside = N_y, radius = r, center = x_sph)
-    cat(paste("\ni_pix_x: ", i_pix_x, "\n"))
-    cat("---------------------------------------------------------\n")
-    cat(paste("\nOn circle    : ", round(y,10), "\nCircle center: ", round(x,10),"\n"))
-    cat("\n---------------------------------------------------------\n")
-    
+    # cat(paste("\ni_pix_x: ", i_pix_x, "\n"))
+    # cat("---------------------------------------------------------\n")
+    # cat(paste("\nOn circle    : ", round(y,10), "\nCircle center: ", round(x,10),"\n"))
+    # cat("\n---------------------------------------------------------\n")
+
     N_y_1 <- dim(y)[1]
     yhp_y  <- c(rep(0,N_y_1))
     pix_y  <- c(rep(0,N_y_1))
@@ -99,7 +100,12 @@ for(r_i in 1:Nr){
 
 # compute the average over all points x
   T_r[r_i]  <- sum(T_yx)/N_x_vec
-  
+  }
+  if (r==0) {
+    T_x_1 <- T_I[pix_x_vec]
+    T_r[r_i]  <- sum(T_x_1*T_x_1)/N_x_vec
+  }
+
   print(paste0("  - Tcov: ",T_r[r_i]))
 
 # print(paste0("  == Running time: #.4f",t))

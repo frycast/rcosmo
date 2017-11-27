@@ -86,6 +86,7 @@
     + [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html)
     + [circular](https://cran.r-project.org/web/packages/circular/index.html)
 #### Creating R packages and using Rcpp
+  + [S4 Generics in 15 Pages, More or Less](https://www.stat.auckland.ac.nz/S-Workshop/Gentleman/S4Objects.pdf)
   + [Rcpp, Advanced R, book by Hadley Wickham](http://adv-r.had.co.nz/Rcpp.html#rcpp-package)
   + [Making R packages, book by Hadley Wickham](http://r-pkgs.had.co.nz/intro.html)
   + [Rcpp Gallery](http://gallery.rcpp.org/)

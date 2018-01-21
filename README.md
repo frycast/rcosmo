@@ -1,6 +1,8 @@
 # rcosmo project
 
 ## Next steps
+  + Create as.CMBDataFrame() function that can take a data.frame with HEALPix indices, intensities, etc
+  and add all attributes such as Nside
   + Investigate R packages [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html) and [VecStatGraph3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)
   + Method for subsetting polygonal subarea of sky.
   + Calculate area given a subset of sky (from HEALPix pixel sizes).

@@ -1,6 +1,8 @@
 # rcosmo project
 
 ## Next steps
+  + Create as.CMBDataFrame() function that can take a data.frame with HEALPix indices, intensities, etc
+  and add all attributes such as Nside
   + Investigate R packages [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html) and [VecStatGraph3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)
   + Method for subsetting polygonal subarea of sky.
   + Calculate area given a subset of sky (from HEALPix pixel sizes).
@@ -37,6 +39,8 @@
       
 
 ## Notes on Planck maps 
+  + [official plank colourmap](https://github.com/zonca/paperplots/raw/master/data/Planck_Parchment_RGB.txt)
+  + [style guide plots](https://github.com/zonca/paperplots)
   + [Source of maps](http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html).
   + All Sky Maps are in [HEALPix](http://healpix.sourceforge.net/html/intro.htm) format, with [Nside](http://healpix.sourceforge.net/html/intronode4.htm) 1024 or 2048, in Galactic coordinates, and [NESTED](http://healpix.sourceforge.net/html/intronode4.htm) ordering. [Source.](http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/)
   + Signal given in units of [Kcmb](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/Article/View/181/20/what-are-the-intensity-units-of-the-planck-all-sky-maps-and-how-do-i-convert-between-them) for 30-353 GHz (microwave is in this band).
@@ -86,6 +90,7 @@
     + [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html)
     + [circular](https://cran.r-project.org/web/packages/circular/index.html)
 #### Creating R packages and using Rcpp
+  + [S4 Generics in 15 Pages, More or Less](https://www.stat.auckland.ac.nz/S-Workshop/Gentleman/S4Objects.pdf)
   + [Rcpp, Advanced R, book by Hadley Wickham](http://adv-r.had.co.nz/Rcpp.html#rcpp-package)
   + [Making R packages, book by Hadley Wickham](http://r-pkgs.had.co.nz/intro.html)
   + [Rcpp Gallery](http://gallery.rcpp.org/)

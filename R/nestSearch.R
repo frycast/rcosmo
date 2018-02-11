@@ -1,53 +1,41 @@
 #' Nest Search
 #'
-#' The function \code{nestSearch} computes the nearest HEALPix point at given level
-#' to a point on S^2.
+#' Finds the closest HEALPix pixel center to a given \code{target} point,
+#' specified in cartesian coordinates, using an efficient nested search
+#' algorithm. HEALPix indices are all assumed to be in the "nested"
+#' ordering scheme.
 #'
-#' @param tp is a row vector of target point in Cartesian coordinates on S^2
+#' @param target is a vector of Cartesian coordinates for the target
+#' point on S^2
 #' @param Nside is the Nside for which the HEALPix points are searched for
 #'
-#' @return the output is the HEALPix index only if \code{index_only} TRUE,
-#' the output is the list of the HEALPix index and Cartesian coordinates of
-#' the HEALPix point closest to \code{tp} if \code{index_only} FALSE.
+#' @return if \code{index_only} TRUE then the output will be a HEALPix index.
+#' If \code{index_only} FALSE then the output is the list containing the HEALPix index
+#' and Cartesian coordinate vector of the HEALPix point closest to \code{tp}.
 #'
 #' @examples
 #' # Find the pix index and Cartesian coordinates of the HEALPix point
-#' # at Nside closest to the target point tp
-#' tp <- c(0,0,1)
-#' h <- nestSearch(tp,Nside=2048,index_only=FALSE,plot_points=TRUE)
-#' cat("Closest HEALPix point to (",tp,") at Nside = 2048 is (",h$p,")")
+#' # at Nside closest to the target point c(0,0,1)
+#' h <- nestSearch(c(0,0,1),Nside=1024,index_only=FALSE, plot_points=TRUE )
+#' cat("Closest HEALPix point to (0,0,1) at Nside = 1024 is (",h$xyz,")")
 #'
 #' @export
-nestSearch <- function(tp = c(0,0,1), Nside = 1024, index_only = TRUE){
+nestSearch <- function(target = c(0,0,1), Nside = 16,
+                       index.only = TRUE,
+                       j = c(min(3,log2(Nside)),
+                             min(7,log2(Nside)),
+                             log2(Nside)) )
+{
+  j <- c(0,j)
+  for ( i in 2:length(j) )
+  {
+    h <- nest_search( target, j2=j[i], j1=j[i-1], pix.j1 = h$pix)
+  }
 
-  # # load functions
-  # source("nest_search.R")
-
-## multifractal measure for CMB data at level i
-# search for the HEALPix point (subregion) closest to tp at level j_1
-j_1 <- 3;
-h_1 <- nest_search(tp=tp,j_2=j_1,j_1=-1,pix_1=0)
-hp_1 <- h_1$p
-pix_1 <- h_1$ind
-
-# search for the HEALPix point closest to tp in level j_2 in the subregion
-# found at level j_1
-j_2 <- 7
-h_2 <- nest_search(tp=tp,j_2=j_2,j_1=j_1,pix_1=pix_1)
-hp_2 <- h_2$p
-pix_2 <- h_2$ind
-
-# search for the HEALPix point closest to tp in level j_3 in the subregion
-# found at level j_2
-j_3 <- log2(Nside)
-h_3 <- nest_search(tp=tp,j_2=j_3,j_1=j_2,pix_1=pix_2)
-hp_3 <- h_3$p
-pix_3 <- h_3$ind
-
-if (index_only==TRUE) {
-  return(pix_3)
-}
-else {
-  h <- list(p=hp_3,ind=pix_3)
-}
+  if (index.only==TRUE) {
+    return(h$pix)
+  }
+  else {
+    return(list( xyz=h$xyz, pix=h$pix ))
+  }
 }

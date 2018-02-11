@@ -8,7 +8,7 @@
 #' add(1,1)
 #' add(10,1)
 #' \dontrun{add(1,2,3)}
-add <- function(x,y) {
+add2 <- function(x,y) {
  x + y
 }
 
@@ -46,21 +46,21 @@ add <- function(x,y) {
 #'   and this link in the \code{\link{stats}} package: \code{\link[stats]{var}}
 #'
 #'   and my cool URL \url{www.sciencestems.com}.
-sum <- function(..., na.rm = TRUE) {}
+sum2 <- function(..., na.rm = TRUE) {}
 
 
 #' The Foo Function
 #'
 #' @param a This is the first argument
-foo <- function(a) a + 10
+foo2 <- function(a) a + 10
 
 
 #' The Bar Function
 #'
 #' @param b This is the second argument
 #' @inheritParams foo
-bar <- function(a,b) {
-  foo(a)*b
+bar2 <- function(a,b) {
+  foo2(a)*b
 }
 
 

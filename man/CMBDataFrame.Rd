@@ -4,59 +4,76 @@
 \alias{CMBDataFrame}
 \title{CMB Data Frames}
 \usage{
-CMBDataFrame(CMBData = "../../CMB_map_smica1024.fits", coords = "spherical",
-  includePolar = FALSE, includeMasks = FALSE, spix = NULL,
-  sampleSize = NULL, Nside = NULL, ordering = NULL)
+CMBDataFrame(CMBData, coords, window, include.polar = FALSE,
+  include.masks = FALSE, spix, sample.size, nside, ordering, intensities)
 }
 \arguments{
-\item{CMBData}{can be the output of readFITScmb or it can be a string location of FITS file.}
+\item{CMBData}{can be a string location of FITS file,
+another CMBDataFrame, or nothing.}
 
-\item{coords}{can be "spherical," "HEALPix" or "cartesian". If "healpix" then spix must be NULL.}
+\item{coords}{can be "spherical," "cartesian", or unspecified (HEALPix only).}
 
-\item{includePolar}{TRUE if polarisation data is required, otherwise FALSE}
+\item{window}{optional \code{\link{CMBWindow}} object that specifies a
+spherical polygon within which to subset the full sky CMB data}
 
-\item{includeMasks}{TRUE if TMASK and PMASK are required, otherwise FALSE}
+\item{include.polar}{TRUE if polarisation data is required, otherwise FALSE}
 
-\item{spix}{a vector of sample pixel indices}
+\item{include.masks}{TRUE if TMASK and PMASK are required, otherwise FALSE}
 
-\item{sampleSize}{if a positive integer is given a simple random sample of size sampleSize
-will be taken from CMBData}
+\item{spix}{optional vector of sample pixel indices or a path to a file
+containing comma delimited sample pixel indices. The ordering scheme is
+given by \code{ordering}. If \code{ordering} is unspecified then
+CMBData must be either a CMBDataFrame or a FITS file and the ordering
+scheme is then assumed to match that of CMBData.}
 
-\item{Nside}{optionally specify the Nside parameter manually}
+\item{sample.size}{if a positive integer is given, a simple random
+sample of size equal to sample.size will be taken from CMBData. If
+spix is specified then \code{sample.size} must be unspecified.}
 
-\item{ordering}{optionally specify the HEALPix ordering scheme (RING or NESTED) manually}
+\item{nside}{optionally specify the nside parameter manually
+(usually 1024 or 2048)}
+
+\item{ordering}{specifies the desired HEALPix ordering scheme
+("ring" or "nested") for the output CMBDataFrame.
+If \code{ordering} is unspecified then the ordering
+scheme will be taken from the CMBData object, which must then be
+either a CMBDataFrame or a path to a FITS file. This parameter also specifies
+the ordering scheme of \code{spix}.}
+
+\item{intensities}{a vector of intensities to be included
+if \code{CMBData} is unspecified. Note that \code{length(intensities)}
+must equal \eqn{12*nside^2} if spix and
+sample.size are unspecified, otherwise \code{length(intensities)}
+must equal \code{length(spix)} or \code{length(sample.size)}}
 }
 \value{
-A data frame whose columns contain the pixel center coordinates (longitude, lattitude)
-or (x,y,z), CMB intensities (I), and optionally polarisation (Q,U) and masks (TMASK, PMASK).
-The row.names attribute of the resulting CMB Data Frame contains HEALPix indices.
+A data frame whose columns contain the pixel center coordinates
+(longitude, lattitude) or (x,y,z), CMB intensities (I), and
+optionally polarisation (Q,U) and masks (TMASK, PMASK).
+The row.names attribute of the resulting CMB Data Frame contains
+HEALPix indices.
 }
 \description{
-The function \code{CMBDataFrame} creates CMB Data Frames. These are a special type of
-\link{data.frame} that carry extra information about the HEALPix ordering scheme,
-coordinate system, and Nside parameter.
+The function \code{CMBDataFrame} creates CMB Data Frames. These are
+a special type of \link{data.frame} that carry extra information
+about the HEALPix ordering scheme, coordinate system, and nside parameter.
 }
 \examples{
 ## Method 1: Read the data while constructing the CMBDataFrame
 df <- CMBDataFrame("CMB_map_smica1024.fits")
 
-## Method 2: Read the data first separately using readFITScmb
-cmbdat <- readFITScmb("../../CMB_map_smica1024.fits")
-
 # Specify a sample size for a random sample
-df2 <- CMBDataFrame(CMBData = cmbdat, sampleSize = 800000)
-plotCMB(df2)
+df.sample <- CMBDataFrame(df, sample.size = 800000)
+plot(df.sample)
 
 # Specify a vector of pixel indices to keep, using spix
-df3 <- CMBDataFrame(CMBData = cmbdat, spix = c(2,4,6))
+df.subset <- CMBDataFrame(df, spix = c(2,4,6))
 
-# Take a look at the attributes
-attributes(df2)$Nside
-attributes(df2)$coords
-attributes(df2)$ordering
-# The row.names attribute contains HEALPix pixel indices
-attributes(df3)$row.names
-head(attributes(df2)$row.names, n = 10)
-head(attributes(df)$row.names, n = 10)
+# Take a look at the summary
+summary(df)
+
+# Access HEALPix pixel indices using pix function
+# (these are stored in the row.names attribute)
+pix(df)
 
 }

@@ -21,68 +21,64 @@
 # 4. Return the h in data frame.
 
 
-library(sphereplot)
-library(Rcpp)
-#source("pix2vec.R")
-
 
 pointOnCircle <- function(Nside = 16, radius = 0.2, center = c(1,0.7))
 {
+  # DEFINE MINIMUM SAMPLE DISTANCE
+  N <- 5*Nside      # COME UP WITH GOOD FORMULA FOR N (NOT THIS SAMPLE ONE)
+  eps <- 2*pi/N
 
-C_xyz <- c(cos(center[2])*sin(center[1]), # Cartesian
-           sin(center[2])*sin(center[1]),
-           cos(center[1]))
+  # MAKE THE SAMPLE POINTS IN SPHERICAL THEN CONVERT TO CARTESIAN
+  # AT NORTH POLE (unrotated)
+  north.sph <- matrix(c( rep(radius,N),
+                         seq(0,2*pi-eps,eps)
+                       ),
+                      nrow = N, ncol = 2)
 
-# DEFINE MINIMUM SAMPLE DISTANCE
-N <- 5*Nside      # COME UP WITH GOOD FORMULA FOR N (NOT THIS SAMPLE ONE)
-eps <- 2*pi/N
+  north.xyz <- matrix(c( cos(north.sph[,2])*sin(north.sph[,1]), # Cartesian.
+                         sin(north.sph[,2])*sin(north.sph[,1]),
+                         rep(cos(north.sph[1,1]),N)
+                       ),
+                      nrow = N, ncol = 3)
 
-# MAKE THE SAMPLE POINTS IN SPHERICAL THEN CONVERT TO CARTESIAN
-# AT NORTH POLE (unrotated)
-p_sph <- matrix(c( rep(radius,N),
-                   seq(0,2*pi-eps,eps)
-), nrow = N, ncol = 2)
-p_xyz <- matrix(c(cos(p_sph[,2])*sin(p_sph[,1]), # Cartesian.
-                   sin(p_sph[,2])*sin(p_sph[,1]),
-                   rep(cos(p_sph[1,1]),N)
-), nrow = N, ncol = 3)
+  # TRANSLATE THE SAMPLE POINTS
+  # Using Rodrigues' Rotation Formula
+  I <- diag(c(1,1,1))
+  # 1. Rotate about y axis by theta according to Right Hand Rule.
+  Ky <- matrix( c(0,0,1,
+                  0,0,0,
+                  -1,0,0), nrow = 3, byrow = TRUE)
+  Ry <- I + sin(center[1])*Ky + (1-cos(center[1]))*Ky%*%Ky #Rodrigues' Formula.
+  py <- t(Ry%*%t(north.xyz))
 
-# JUST FOR VISUALISATION
-# Healpix grid for reference
-Npix <- 12*Nside^2
-mx <- pix2vec(Nside, order_ring = TRUE)
+  # 2. Rotate about z axis by phi according to Right Hand Rule.
+  Kz <- matrix( c(0,-1,0,
+                  1, 0,0,
+                  0, 0,0), nrow = 3, byrow = TRUE)
+  Rz <- I + sin(center[2])*Kz + (1-cos(center[2]))*Kz%*%Kz #Rodrigues' Formula.
+  pyz <- t(Rz%*%t(py))
 
+  ###-------- JUST FOR VISUALISATION ----------###
+  ## Healpix grid for reference
+  # library(rgl)
+  # Npix <- 12*Nside^2
+  # mx <- pix2vec(Nside, order_ring = TRUE)
+  # center.xyz <- c(cos(center[2])*sin(center[1]), # Cartesian
+  #                 sin(center[2])*sin(center[1]),
+  #                 cos(center[1]))
+  ## plot
+  # rgl::open3d()
+  # rgl::bg3d("black")
+  # rgl::plot3d(mx, col = "gray", type = 'p', pch = "e", cex = 1)
+  # rgl::plot3d(north.xyz, col = "yellow", type = 'p', cex = 1, add = TRUE)
+  # rgl::plot3d(center.xyz[1],center.xyz[2],center.xyz[3], col = "red", cex = 1, add = TRUE)
+  # rgl::plot3d(-center.xyz[1],-center.xyz[2],-center.xyz[3], col = "red", cex = 1, add = TRUE)
+  # C_line <- matrix(c(center.xyz,-center.xyz), nrow = 2, ncol = 3, byrow = TRUE)
+  # rgl::plot3d(C_line, type = 'l', col = "red", cex = 1, add = TRUE)
+  # rgl::plot3d(py, col = "green", add = TRUE)
+  # rgl::plot3d(pyz, col = "purple", add = TRUE)
+  ###------------------------------------------###
 
-# TRANSLATE THE SAMPLE POINTS
-# Using Rodrigues' Rotation Formula
-I <- diag(c(1,1,1))
-# 1. Rotate about y axis by theta according to Right Hand Rule.
-Ky <- matrix( c(0,0,1,
-                0,0,0,
-                -1,0,0), nrow = 3, byrow = TRUE)
-Ry <- I + sin(center[1])*Ky + (1-cos(center[1]))*Ky%*%Ky #Rodrigues' Formula.
-py <- t(Ry%*%t(p_xyz))
-
-# 2. Rotate about z axis by phi according to Right Hand Rule.
-Kz <- matrix( c(0,-1,0,
-                1, 0,0,
-                0, 0,0), nrow = 3, byrow = TRUE)
-Rz <- I + sin(center[2])*Kz + (1-cos(center[2]))*Kz%*%Kz #Rodrigues' Formula.
-pyz <- t(Rz%*%t(py))
-
-# # plot
-# open3d()
-# bg3d("black")
-# plot3d(mx, col = "gray", type = 'p', pch = "e", cex = 1)
-# plot3d(p_xyz, col = "yellow", type = 'p', cex = 1, add = TRUE)
-# plot3d(C_xyz[1],C_xyz[2],C_xyz[3], col = "red", cex = 1, add = TRUE)
-# plot3d(-C_xyz[1],-C_xyz[2],-C_xyz[3], col = "red", cex = 1, add = TRUE)
-# C_line <- matrix(c(C_xyz,-C_xyz), nrow = 2, ncol = 3, byrow = TRUE)
-# plot3d(C_line, type = 'l', col = "red", cex = 1, add = TRUE)
-# plot3d(py, col = "green", add = TRUE)
-# plot3d(pyz, col = "purple", add = TRUE)
-
-
-# TO DO: NEST SEARCH TO FIND CLOSEST HEALPIX
-return(pyz)
+  # TO DO: NEST SEARCH TO FIND CLOSEST HEALPIX
+  return(pyz)
 }

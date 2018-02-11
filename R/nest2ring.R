@@ -1,22 +1,21 @@
 #' Nest to Ring.
 #'
-#' \code{nest2ring} computes the Pix index in the ring order from the Pix index Pix
-#' in the nest order at nSide.
+#' \code{nest2ring} converts HEALPix pixel indices in the 'ring' ordering scheme to
+#' HEALPix pixel indices in the 'nest' ordering scheme.
 #'
-#' @param nSide is the Nside for HEALPix.
+#' @param nSide is the HEALPix Nside parameter.
+#' @param Pix is a vector or matrix of HEALPix pixel indices, in the 'nest' ordering scheme.
 #'
-#' @param Pix is the set or subset of Pix indices at nSide.
+#' @return the output is a vector or matrix of HEALPix pixel indices in the 'ring' ordering scheme.
 #'
-#' @return the output is the corresponding set of Pix in the ring order.
-#'
-#' @example
+#' @examples
 #' # compute HEALPix indices in the ring order of the set Pix given in the nest order at Nside
 #' Nside <- 8
 #' Pix <-c(1,2,23)
 #' nest2ring(Nside,Pix)
 #'
 #' @export
-nest2ring <- function(nSide,Pix) {
+nest2ring <- function(nSide, Pix) {
 
 ## initialisations
 ipnest <- Pix - 1
@@ -130,7 +129,7 @@ mkpix2xy <- function() {
   #  pix2$x  - pix index for x
   #
   #  pix2$y  - pix index for y
-  
+
   nSide <- 1024
   pix2x <- matrix(rep(nSide,0),ncol=nSide)
   pix2y <- matrix(rep(nSide,0),ncol=nSide)
@@ -157,8 +156,8 @@ mkpix2xy <- function() {
     # kpix in 0:31
     pix2y[kpix+1] <- iy
   }
-  
+
   pix2 <- list(x=pix2x,y=pix2y)
-  
+
   return(pix2)
 }

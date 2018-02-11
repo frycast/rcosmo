@@ -1,0 +1,14 @@
+
+
+# install.packages("CodeDepends")
+# source("https://bioconductor.org/biocLite.R")
+# biocLite("graph")
+# biocLite("Rgraphviz")
+# library(CodeDepends)
+# library(Rgraphviz)
+# library(rcosmo)
+gg <- makeCallGraph("package:rcosmo")
+gg <- layoutGraph(gg, layoutType = "circo")
+graph.par(list(nodes = list(fontsize=55)))
+X11()
+renderGraph(gg)

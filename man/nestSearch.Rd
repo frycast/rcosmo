@@ -4,27 +4,30 @@
 \alias{nestSearch}
 \title{Nest Search}
 \usage{
-nestSearch(tp, Nside, index_only, plot_points)
+nestSearch(target = c(0, 0, 1), Nside = 16, index.only = TRUE,
+  j = c(min(3, log2(Nside)), min(7, log2(Nside)), log2(Nside)))
 }
 \arguments{
-\item{tp}{is a row vector of target point in Cartesian coordinates on S^2}
+\item{target}{is a vector of Cartesian coordinates for the target
+point on S^2}
 
 \item{Nside}{is the Nside for which the HEALPix points are searched for}
 }
 \value{
-the output is the HEALPix index only if \code{index_only} TRUE,
-the output is the list of the HEALPix index and Cartesian coordinates of
-the HEALPix point closest to \code{tp} if \code{index_only} FALSE.
+if \code{index_only} TRUE then the output will be a HEALPix index.
+If \code{index_only} FALSE then the output is the list containing the HEALPix index
+and Cartesian coordinate vector of the HEALPix point closest to \code{tp}.
 }
 \description{
-The function \code{nestSearch} computes the nearest HEALPix point at given level 
-to a point on S^2.
+Finds the closest HEALPix pixel center to a given \code{target} point,
+specified in cartesian coordinates, using an efficient nested search
+algorithm. HEALPix indices are all assumed to be in the "nested"
+ordering scheme.
 }
 \examples{
-# Find the pix index and Cartesian coordinates of the HEALPix point 
-# at Nside closest to the target point tp
-tp <- c(0,0,1)
-h <- nestSearch(tp,Nside=2048,index_only=FALSE,plot_points=TRUE)
-cat("Closest HEALPix point to (",tp,") at Nside = 2048 is (",h$p,")")
+# Find the pix index and Cartesian coordinates of the HEALPix point
+# at Nside closest to the target point c(0,0,1)
+h <- nestSearch(c(0,0,1),Nside=1024,index_only=FALSE, plot_points=TRUE )
+cat("Closest HEALPix point to (0,0,1) at Nside = 1024 is (",h$xyz,")")
 
 }

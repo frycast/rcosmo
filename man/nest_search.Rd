@@ -4,28 +4,45 @@
 \alias{nest_search}
 \title{nest_search}
 \usage{
-nest_search(tp, j_2, j_1, pix_1, plot_points)
+nest_search(target, j2, j1 = 0, pix.j1 = 0)
 }
 \arguments{
-\item{tp}{is the target point on S^2 in spherical coordinates.}
+\item{target}{is the target point on S^2 in spherical coordinates.}
 
-\item{j_2}{is the high level.}
+\item{j2}{is the upper resolution.}
 
-\item{j_1}{is the low level.}
+\item{j1}{is the lower resolution, with j1 < j2.}
 
-\item{ind_1}{is the initial pix index at level j_1 (in which box to search).}
+\item{pix.j1}{is the initial pix index at resolution j1,
+i.e., the j1-level pixel to search in. If \code{pix.j1 = 0} then
+all pixels will be searched (slow).}
 }
 \value{
-the output is the list of the Cartesian coordinates and the index
-of HEALPix point closest to the target point \code{tp}. That is,
-   \code{h$p} is the HEALPix point closest to tp in level j_2 in the subregion
-          ind_1 found at level j_1. 
-   \code{h$ind} is the pix index of poitn hp at level j_2.
+A list containing the Cartesian coordinates, \code{xyz},
+and the HEALPix pixel index, \code{pix}, of the closest HEALPix
+pixel center to the target point, \code{target}, at resolution j2
 }
 \description{
-\code{nest_search(tp,j_2,j_1,ind_1)} searches for the HEALPix point closest to tp in level j_2 in the subregion
-    found at level j_1. It emploits and requests the nested structure of HEALPix.
-    
-\code{nest_search(tp,j_2)} searches for the HEALPix point closest to tp in level
-    j_2 among all HEALPix points in level j_2.
+Search for the closest HEALPix pixel to a \code{target} point,
+where the search is restricted to within HEALPix pixel,
+\code{pix.j1}, at resolution j1. The returned value is a
+HEALPix pixel (and, optionally, the cartesian coordinates of
+its center) at resolution j2, where j2 > j1.
+}
+\details{
+j1 and j2 are HEALPix resolution parameters, i.e., \eqn{Nside = 2^j}.
+
+\code{nest_search(target, j2, j1, pix.j1)} searches within the subregion
+pix.j1, where pix.j1 is a HEALPix pixel index at resolution j1.
+The return value is the HEALPix point closest to \code{target}, at
+resolution j2.
+
+\code{nest_search(target, j2)} searches for the HEALPix point closest to
+\code{target} at resolution j2, among all HEALPix points at resolution j2.
+}
+\examples{
+# search for the HEALPix pixel center closest to North pole
+# (0,0,1) at level 3
+nest_search(target = c(0,0,1), j2 = 3, j1 = -1, plot_points=TRUE )
+
 }

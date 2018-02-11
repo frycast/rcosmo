@@ -5,3 +5,6 @@
 ^PackagesForSphericalDataAnalysis$
 ^exploration$
 ^data-raw$
+^LearnToDoDocumentation$
+^packrat/
+^\.Rprofile$

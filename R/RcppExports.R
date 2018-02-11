@@ -2,9 +2,81 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #'@title
-#'pix2angC
+#'geoDistList
 #'@description
-#'Converts HEALPix pixel scheme to spherical coordinates.
+#'Create a list of all geodesic distances between points on the unit
+#'sphere corresponding to the rows of the data.frame cmbdf.
+#'
+#'@param cmbdf a data.frame whose first 3 columns represent the cartesian
+#'coordinates x,y,z of nrow(cmbdf) points on a unit sphere.
+#'
+#'@return
+#'Let \eqn{x_i, x_j} be the points represented by row i and row j of
+#'cmbdf, where i < j, and let L denote the output list
+#'\code{L <- geoDistList(cmbdf)}. Then the distance \eqn{d(x_i,x_j)}
+#'is stored in \code{L[[i]][j-i]}.
+#'
+#'@name geoDistList
+#'
+#'@export
+geoDistList <- function(cmbdf) {
+    .Call('_rcosmo_geoDistList', PACKAGE = 'rcosmo', cmbdf)
+}
+
+#'@title
+#'distBinList
+#'@description
+#'Find all geodesic distances between points on the unit
+#'sphere corresponding to the rows of the data.frame cmbdf,
+#'then categorise these distances according to the intervals
+#'given by the breaks argument.
+#'
+#'@param cmbdf a data.frame whose first 3 columns represent the cartesian
+#'coordinates x,y,z of nrow(cmbdf) points on a unit sphere.
+#'@param breaks a vector, sorted from lowest to highest,
+#'specifying the break points for the intervals that are
+#'used to categorise the geodesic distances. The intervals are
+#'open at left and closed at right.
+#'
+#'@return
+#'Let \eqn{x_i, x_j} be the points represented by row i and row j of
+#'cmbdf, where\eqn{i < j}, and let \eqn{L} denote the output list
+#'\code{L <- distBinList(cmbdf, breaks)}. Suppose the distance
+#'\eqn{d(x_i,x_j)} falls into the \eqn{k^{th}} interval determined
+#'by \code{breaks}, then \code{L[[i]][j-i]} will hold the value \eqn{k}.
+#'
+#'@name distBinList
+#'
+#'@export
+distBinList <- function(cmbdf, breaks) {
+    .Call('_rcosmo_distBinList', PACKAGE = 'rcosmo', cmbdf, breaks)
+}
+
+#'@title
+#'covCMB_internal1
+#'
+#'@name covCMB_internal1
+#'
+#'@export
+covCMB_internal1 <- function(cmbdf, breaks) {
+    .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
+}
+
+#'@title
+#'covCMB_internal2
+#'
+#'@name covCMB_internal2
+#'
+#'@export
+covCMB_internal2 <- function(cmbdf, nbin) {
+    .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, nbin)
+}
+
+#'@title
+#'pix2coords
+#'@description
+#'Converts HEALPix pixel scheme to spherical or
+#'Cartesian coordinates.
 #'
 #'@param Nside The number of cuts to a HEALPix base resolution pixel.
 #'@param Nest Set to TRUE for NESTED ordering scheme and FALSE for RING.
@@ -15,18 +87,18 @@
 #'@details
 #'This is a place holder
 #'
-#'@return A matrix with columns theta and phi (in that order), or 
-#' x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude 
-#' in radians measured from the North Pole and phi (in [0, 2*pi]) 
+#'@return A matrix with columns theta and phi (in that order), or
+#' x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude
+#' in radians measured from the North Pole and phi (in [0, 2*pi])
 #' is the longitude in radians measured Eastward. The remaining 3 columns
-#' returned are i, j, and p which represent the HEALPix ring index, 
+#' returned are i, j, and p which represent the HEALPix ring index,
 #' pixel-in-ring index, and pixel index respectively.
 #'
-#'@name pix2angC
+#'@name pix2coords
 NULL
 
 #' @export
-pix2angC <- function(Nside = 0L, Nest = TRUE, spix = NULL, cartesian = FALSE) {
-    .Call('rcosmo_pix2angC', PACKAGE = 'rcosmo', Nside, Nest, spix, cartesian)
+pix2coords <- function(Nside = 0L, Nest = TRUE, spix = NULL, cartesian = FALSE) {
+    .Call('_rcosmo_pix2coords', PACKAGE = 'rcosmo', Nside, Nest, spix, cartesian)
 }
 

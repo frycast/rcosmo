@@ -4,21 +4,39 @@
 \alias{pix2vec}
 \title{pix2vec}
 \usage{
-pix2vec(nSide, order_ring, Pix)
+pix2vec(Nside = 16, order = "ring", spix = 0)
 }
 \arguments{
-\item{nSide}{is the Nside of the HEALPix points.}
+\item{Nside}{is the Nside of the HEALPix points.}
 
-\item{order_ring}{TRUE if the HEALPix order is in the ring order; 
-FALSE if in the nested order.}
+\item{order}{specifies the ordering scheme used for the input
+pixels \code{spix}. If \code{order = "nested"} then the input
+pixels are converted to ring ordering. If \code{order = "ring"}
+then no conversion is done.}
 
-\item{Pix}{is the set of Pix index.}
+\item{spix}{is a vector of one or more pixel indices whose ordering
+scheme is given by \code{order} and whose Nside parameter is given
+by \code{Nside}. If spix = 0 then all pixel indices at
+\code{Nside} will be used.}
 }
 \value{
-output is a 3 by length(Pix) matrix of Cartesian coordinates (x,y,z)' of HEALPix points
-           at nSide at Pix index in the specified order.
+Output is a data.frame with \code{length(spix)} rows, or
+\eqn{12*Nside^2} rows if \code{spix = 0},
+and 3 columns of Cartesian coordinates (x,y,z) of HEALPix points
+at \code{Nside} in ring ordering scheme.
 }
 \description{
-\code{pix2vec} computes the Cartesian cooridinates of the HEALPix points 
-   at Pix index at nSide in the specified order.
+Compute the Cartesian cooridinates of the HEALPix points
+at indices \code{spix} at \code{Nside} in the specified
+ordering scheme.
+}
+\examples{
+# Taking all HEALPix points at Nside = 8, using ring order.
+pix2vec(Nside = 8, order = "ring")
+
+# Compute the HEALPix points in Cartesian coordinates at Nside = 8,
+# in nested ordering scheme, at the indices from spix
+Pix <- c(1,2,23)
+pix2vec(Nside = 8, order = "nested", spix = Pix)
+
 }

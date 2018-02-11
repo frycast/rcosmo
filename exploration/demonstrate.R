@@ -1,4 +1,470 @@
 rm(list=ls())
+library(microbenchmark)
+library(sphereplot)
+library(pryr)
+library(Rcpp)
+library(rcosmo)
+library(tidyverse)
+
+dfunc <- haversineDist
+max.dist <- 0
+for ( i in 1:(nrow(win) - 1) )
+{
+  for ( j in (i+1):nrow(win) )
+  {
+    dist <- as.numeric(dfunc(win[i,], win[j,]))
+    if ( dist > max.dist ) max.dist <- dist
+  }
+}
+
+
+
+#####################################################################
+######### DEMONSTRATE covCMB ########################################
+#####################################################################
+
+### Using simulated data
+## Set parameters
+ns <- 256 # 256
+num.bins <- 10 # 10
+
+cmbdf <- CMBDataFrame(nside = ns, coords = "cartesian",
+                      ordering = "nested",
+                      intensities = rnorm(12*ns^2))
+### NOTE: IN FUTURE WE CAN GET max.dist FROM CMBWindow
+## With sample.size = 100,000 this took 4.2 minutes
+system.time({
+  C1 <- covCMB(cmbdf, max.dist = pi, sample.size = 100000)
+})
+## With sample.size = 100,000 this took 5.8 minutes
+system.time({
+  C2 <- covCMB(cmbdf, sample.size = 100000)
+})
+
+
+
+### Using CMB full sky data
+cmbdf.sky <- CMBDataFrame("../CMB_map_smica1024.fits",
+                          coords = "cartesian")
+## This took about half an hour (untimed)
+#C3 <- covCMB(cmbdf.sky, max.dist = pi, num.bins = 10, sample.size = 200000)
+#write.csv(C3, "covCMB_fullsky_ns1024_s200000")
+plot(cmbdf.sky, sample.size = 200000)
+C3 <- read.csv("exploration/covCMB_fullsky_ns1024_s200000.csv")
+plot(0:10, C, type = 'b')
+
+
+
+
+### Using a 'square' window
+cmbdf.sky.sph <- CMBDataFrame("../CMB_map_smica1024.fits",
+                              coords = "spherical")
+## Annoying way to do this because CMBWindow class is incomplete
+cmbdf.square <- cmbdf.sky.sph[  cmbdf.sky.sph$lat  <= 1
+                              & cmbdf.sky.sph$lat  >= 0
+                              & cmbdf.sky.sph$long <= 1
+                              & cmbdf.sky.sph$long >= 0,]
+
+## Annoying coversions because coords<- function unfinished
+df.square.xyz <- as.data.frame(sph2car(cmbdf.square$long,
+                                          cmbdf.square$lat,
+                                       deg = FALSE))
+df.square.xyz <- data.frame(df.square.xyz, I = cmbdf.square$I)
+
+df.square.xyz <- as.CMBDataFrame(df.square.xyz, nside = 1024,
+                                 coords = "cartesian",
+                                 ordering = ordering(cmbdf.sky.sph))
+## Plot of the square
+plot(cmbdf.sky.sph, sample.size = 80000)
+rgl::plot3d(df.square.xyz[,1:3], col = 'blue', type = 'p',
+            size = 1.6, pch = 3, add = TRUE)
+## Get covariance (note that max.dist is unspecified)
+## this took 5 minutes
+# system.time({
+#   C4 <- covCMB(df.square.xyz, num.bins = 20,
+#               sample.size = 100000)
+# })
+# write.csv(C4, "exploration/covCMB_square_ns1024_s100000.csv")
+C4 <-  read.csv("exploration/covCMB_square_ns1024_s100000.csv")[,2]
+## Correlation plot
+plot(0:20, C4/C4[1], type = 'b')
+
+
+
+
+### Using a smaller 'square' window
+cmbdf.square.small <- cmbdf.sky.sph[  cmbdf.sky.sph$lat  <= 0.6
+                                    & cmbdf.sky.sph$lat  >= 0.5
+                                    & cmbdf.sky.sph$long <= 0.1
+                                    & cmbdf.sky.sph$long >= 0,]
+df.square.small.xyz <- as.data.frame(sph2car(cmbdf.square.small$long,
+                                       cmbdf.square.small$lat,
+                                       deg = FALSE))
+df.square.small.xyz <- data.frame(df.square.small.xyz,
+                                  I = cmbdf.square.small$I)
+## Plot of the square
+plot(cmbdf.sky.sph, sample.size = 80000)
+rgl::plot3d(df.square.small.xyz[,1:3], col = 'blue', type = 'p',
+            size = 2.5, pch = 3, add = TRUE)
+## Dodgy way to add class and attributes because we dont have
+## as.CMBDataFrame function yet
+class(df.square.small.xyz) <- c("CMBDataFrame", "data.frame")
+attr(df.square.small.xyz, "coords") <- "cartesian"
+## Get covariance (note that the full data set is used)
+## this took 5 seconds
+system.time({
+  C5 <- covCMB(df.square.small.xyz, num.bins = 20)
+})
+## Correlation plot
+plot(0:20, C5/C5[1], type = 'b')
+
+
+
+
+########## BENCHMARK THE DIFFERENT APPROACHES TO covCMB ############
+########## ALSO CONTAINS VALUABLE TEST FOR TESTTHAT ################
+
+## Set parameters
+ns <- 1
+num.bins <- 10
+
+cmbdf <- CMBDataFrame(nside = ns, coords = "cartesian", ordering = "nested",
+                      intensities = rnorm(12*ns^2))
+
+## Method 1 (covCMB_internal2, max.dist is unknown)
+f1 <- function(cmbdf, num.bins)
+{
+  return(covCMB_internal2(cmbdf, num.bins))
+}
+
+## Method 3 (covCMB_internal1, max.dist is known to be pi)
+f2 <- function(cmbdf, num.bins, max.dist = pi)
+{
+  cut.points <- seq(0, max.dist, length.out = num.bins+1)
+  return(covCMB_internal1(cmbdf, cut.points))
+}
+
+## Method 3 (relying on R, max.dist is unknown)
+f3 <- function(cmbdf, num.bins)
+{
+  dists <- rcosmo::geoDistList(cmbdf)
+  max.dist <- max(sapply(dists, max))
+  cut.points <- seq(0, max.dist, length.out = num.bins+1)
+  dists.bins <- lapply(dists, findInterval, vec = cut.points,
+                       left.open = TRUE)
+  C <- vector(mode = "numeric", length = num.bins + 1)
+  B <- vector(mode = "numeric", length = num.bins + 1)
+  for (i in 1:length(dists.bins)) {
+    for (j in 1:length(dists.bins[[i]])) {
+
+      b <- dists.bins[[i]][j]
+      C[b+1] <- C[b+1] + cmbdf[i,"I"]*cmbdf[j+i,"I"]
+      B[b+1] <- B[b+1] + 1
+    }
+  }
+
+  for (i in 1:nrow(cmbdf))
+  {
+    C[1] = C[1] +  cmbdf[i,"I"]*cmbdf[i,"I"]
+  }
+  B[1] = nrow(cmbdf)
+
+  return(C/B)
+}
+
+
+## Method 4 (relying on R, max.dist is known to be pi)
+f4 <- function(cmbdf, num.bins, max.dist = pi)
+{
+  cut.points <- seq(0, max.dist, length.out = num.bins+1)
+  dists.bins <- distBinList(cmbdf, cut.points)
+  C <- vector(mode = "numeric", length = num.bins + 1)
+  B <- vector(mode = "numeric", length = num.bins + 1)
+  for (i in 1:length(dists.bins)) {
+    for (j in 1:length(dists.bins[[i]])) {
+
+      b <- dists.bins[[i]][j]
+      C[b+1] <- C[b+1] + cmbdf[i,"I"]*cmbdf[j+i,"I"]
+      B[b+1] <- B[b+1] + 1
+    }
+  }
+
+  for (i in 1:nrow(cmbdf))
+  {
+    C[1] = C[1] +  cmbdf[i,"I"]*cmbdf[i,"I"]
+  }
+  B[1] = nrow(cmbdf)
+
+  return(C/B)
+}
+
+## Benchmarking
+microbenchmark(C1 <- f1(cmbdf, num.bins), C2 <- f2(cmbdf, num.bins),
+               C3 <- f3(cmbdf, num.bins), C4 <- f4(cmbdf, num.bins))
+
+## Check results are identical
+identical(C1, C2)
+identical(C2, C3)
+identical(C3, C4)
+
+
+
+
+
+
+
+
+
+
+######### EXPLAIN WHY max(dist, -1) WILL BE USED IN geoDistList #####
+
+## Remove the max(dist, -1) line from geoDistList before running this:
+dists <- rcosmo::geoDistList(cmbdf)
+num.nans <- sum(sapply(sapply(dists, is.nan), sum))
+num.nans
+for ( i in 1:num.nans )
+{
+  this.nan <- which(sapply(sapply(dists, is.nan), sum) == 1)[i]
+  index <- c(this.nan, this.nan + which( is.nan(dists[[this.nan]])))
+  cat("Result: ", sum(cmbdf[index[1],1:3]*cmbdf[index[2],1:3]), "\n\n")
+}
+## Show Nans being produced:
+# acos(sum(cmbdf[index[1],1:3]*cmbdf[index[2],1:3]))
+
+
+
+
+
+
+
+
+
+
+######### DEMONSTRATION OF SPEED INCREASE FROM Rcpp #################
+
+# R version (using list)
+f <- function(cmbdf)
+{
+  dists <- list()
+  n <- nrow(cmbdf)
+
+  for ( i in 1:(n-1) ) {
+    #cat("i: ", i, "\n")
+
+    dists[[i]] <- vector(mode = "numeric", length = n-i)
+
+    for ( j in (i+1):n ) {
+
+      # Distances d are stored as d(xi, xj) = dists[[i]][j-i] (where i < j)
+      dists[[i]][j-i] <- geoDist(cmbdf[i, c("x","y","z")],
+                                 cmbdf[j, c("x","y","z")])
+
+    }
+  }
+
+  return(dists)
+}
+
+# Test
+library(microbenchmark)
+cmbdf <- CMBDataFrame(nside = 1, coords = "cartesian",
+                      ordering = "nested")
+mb <- microbenchmark(f(cmbdf),           # R version
+                     geoDistList(cmbdf)) # C++ rcosmo version
+# C++ function is about 2500 times faster
+summary(mb)$mean[1]/summary(mb)$mean[2]
+
+
+
+
+
+
+
+
+
+########### Calculation of geoDistList output size in GB ##############
+
+## Specify n:
+n <- 50000
+## Else specify nside:
+# nside <- 256
+# n <- 12*nside^2
+## Most of the space is consumed by the sum_{k=1}^{n-1} k doubles
+## which take up 8 bytes of space each. When integers are used as
+## with distBinList these are 4 bytes so space is halved.
+num.doubles <- n*(n-1)/2
+rough.size <- (num.doubles*8 + (n-1)*8)/1000000000
+rough.size # n = 50,000 gives ~10GB list!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################################################################
+######################### CMBDataFrame DEMONSTRATION ##########################################
+###############################################################################################
+
+library(rcosmo)
+library(magrittr)
+library(sphereplot)
+library(rcosmo)
+
+# Example 1
+df <- CMBDataFrame(nside = 16, ordering = "ring")
+class(df)
+plot(df)
+
+# Example 2
+df <- CMBDataFrame(nside = 16, ordering = "nested",
+                   intensities = rnorm(12*16^2),
+                   coords = "cartesian")
+plot(df)
+
+# Example 3
+sky <- CMBDataFrame(CMBData = "../CMB_map_smica1024.fits")
+sky_sample <- sampleCMB(sky, sampleSize = 1000000)
+plot(sky_sample)
+
+# Example 4 (same effect as example 3)
+sky_sample2 <- CMBDataFrame(df, sampleSize = 1000000, ordering = "ring",
+                            coords = "cartesian")
+plot(sky_sample2)
+
+
+sky
+summary(df)
+summary(sky)
+
+ordering(df)
+ordering(df) <- "ring"
+ordering(df, newOrdering = "ring")
+
+coords(df)
+coords(df) <- "cartesian"
+coords(df, newCoords = "cartesian")
+
+head(pix(df))
+#pix(df) <- some_vector
+nside(df)
+
+
+ls("package:rcosmo")
+lsf.str("package:rcosmo")
+
+
+
+
+
+
+
+
+########################################################################
+############### ATTEMPTED POINT IN POLYGON DEMO ########################
+########################################################################
+
+
+# BOUNDARY POINT FINDER FUNCTION
+# Works by rotating the two vertices of each line to the equator before sampling, then rotating back
+polygon_boundary <- function( vertices_xyz, eps = 0.001 )
+{
+  rows <- nrow(vertices_xyz)
+  if(rows < 3){
+    stop("Polygon must have at least 3 vertices.");
+  }
+  #vertices_xyz_cycled <- rbind(vertices_xyz[2:nrow(vertices_xyz),], vertices_xyz[1,])
+
+  boundary_points <- data.frame()
+  for ( row in 1:rows )
+  {
+    #Geodesic is the shortest distance between two_points
+    two_points <- rbind(vertices_xyz[row,], vertices_xyz[1 + (row %% rows),])
+    normal_vector <- vector_cross(two_points[1,], two_points[2,])
+    two_points_rotated <- rodrigues(as.matrix(normal_vector)[1,], c(0,0,1), two_points)
+    two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitudes are both 0
+
+    line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
+    line <- as.data.frame( sph2car( long = line_longitudes,
+                                    lat = rep(0,length(line_longitudes)),
+                                    deg = FALSE ) )
+
+    line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
+    names(line_rotated_back) <- c("x","y","z")
+    boundary_points <- rbind(boundary_points, line_rotated_back)
+  }
+  boundary_points
+}
+
+source("exploration/rodrigues.R")
+
+vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+plot3d(vertices_xyz, col = 'red', type = 'p', size = 12, pch = 2, add = TRUE)
+
+polygon_boundary_points_xyz <- polygon_boundary( vertices_xyz, 0.001 )
+plot3d(polygon_boundary_points_xyz, col = 'red', type = 'p', size = 3.2, pch = 3, add = TRUE)
+polygon_boundary_points <- as.data.frame( car2sph(polygon_boundary_points_xyz$x,
+                                                  polygon_boundary_points_xyz$y,
+                                                  polygon_boundary_points_xyz$z,
+                                                  deg = FALSE)[,c("long","lat")] )
+
+# Get ALL HEALPix points in the square
+df_square <- df[  df$lat  <= max(vertices_sph$lat)  & df$lat  >= min(vertices_sph$lat)
+                  & df$long <= max(vertices_sph$long) & df$long >= min(vertices_sph$long),]
+df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+plot3d(df_square_xyz, col = 'blue', type = 'p', size = 1.6, pch = 3, add = TRUE)
+
+
+head(polygon_boundary_points)
+df_square
+
+
+### THIS SECTION ONLY USEFUL IF THE SAMPLE SIZE IS SMALL I.E. NOT DENSE IN SKY ###
+# Round latitudes to some tolerance based on eps then split into lists by latitude
+eps <- 0.001
+digits <- ceiling(log10(1/eps) + 1)
+polygon_boundary_points$lat <- round(polygon_boundary_points$lat, digits)
+polygon_boundary_points_split <- split(polygon_boundary_points, polygon_boundary_points$lat)
+polygon_boundary_lats <- as.numeric(names(polygon_boundary_points_split))
+# Get isolatitude values from the square
+isolats_in_square <- unique(df_square$lat)
+# For each latitude in the polygon, find the nearest isolat in the square
+for ( polylat in polygon_boundary_lats )
+{
+  polygon_boundary_points_split[[as.character(polylat)]]$lat <-
+    isolats_in_square[ which.min(abs(isolats_in_square - polylat)) ]
+}
+# Bind the list pack together
+library(data.table)
+polygon_boundary_points <- rbindlist(polygon_boundary_points_split) #faster than do.call("rbind",...)
+# Plot result to check sanity
+polygon_boundary_points_xyz <- as.data.frame(sph2car(
+  polygon_boundary_points$long,
+  polygon_boundary_points$lat,
+  deg = FALSE))
+plot3d(polygon_boundary_points_xyz, col = 'yellow', type = 'p', size = 5, pch = 3, add = TRUE)
+#-----------------------------------------------------------------------------------
+
+
+
+
+
+###############################################################################################
+####################################### OLD DEMONSTRATION CODE ################################
+###############################################################################################
+
+
+rm(list=ls())
+library(rcosmo)
 library(Rcpp)
 library(rgl)
 library(sphereplot) # for sph2car()
@@ -16,6 +482,390 @@ source("CMBDataFrame.R")
 lonWrap <- function(lon) {
   (lon + 180) %% 360 - 180
 }
+
+
+
+
+
+
+
+
+
+
+
+
+##### PLAN (TO DO) #####
+# Select only the points on the square that lie on the planes that
+# define the geodesics, since they are already on the sphere they
+# must lie on the geodesics. Also, they already must lie on the
+# correct isolatitude rings. Then figure out how to cut off the excess.
+vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+df_square <- df[  df$lat  <= max(vertices_sph$lat)  & df$lat  >= min(vertices_sph$lat)
+                  & df$long <= max(vertices_sph$long) & df$long >= min(vertices_sph$long),]
+df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+plot3d(df_square_xyz, col = 'blue', type = 'p', size = 3.3, pch = 3, add = TRUE)
+
+vertices <- nrow(vertices_xyz)
+boundary_points <- data.frame()
+for ( point in 1:nrow(df_square_xyz) )
+{
+  p <- df_square_xyz[point,]
+  for ( vertex in 1:vertices )
+  {
+
+    # two_points <- rbind(vertices_xyz[vertex,],
+    #                     vertices_xyz[1 + (vertex %% vertices),])
+
+    # if (u x v) dot p = 0
+    # if ( isTRUE(all.equal(sum(vector_cross(two_points[1,], two_points[2,])*p), 0)) )
+    # {
+    #   boundary_points <- rbind(boundary_points, p)
+    #   break
+    # }
+  }
+}
+names(boundary_points) <- c("x","y","z")
+plot3d(boundary_points, col = 'green', type = 'p', size = 7, pch = 3, add = TRUE)
+
+
+
+# POINT IN POLYGON --------------------------------------------------------
+
+# Import data
+df <- CMBDataFrame("../CMB_map_smica1024.fits", sampleSize = 100000)
+plotCMB(df) # Currently if the file is in nested and the user specifies ordering = ring
+            # then CMBDataFrame doesnt automatically
+            # convert to ring, so we should add that (or at least throw a warning)
+
+# TEST LATEST -------------------------------------------------------------
+# Trying to find polygon edge pixels
+source("exploration/rodrigues.R") # Rodrigues and vector_cross
+
+# BOUNDARY POINT FINDER FUNCTION
+# Works by rotating the two vertices of each line to the equator before sampling, then rotating back
+polygon_boundary <- function( vertices_xyz, eps = 0.001 )
+{
+  rows <- nrow(vertices_xyz)
+  if(rows < 3){
+    stop("Polygon must have at least 3 vertices.");
+  }
+  #vertices_xyz_cycled <- rbind(vertices_xyz[2:nrow(vertices_xyz),], vertices_xyz[1,])
+
+  boundary_points <- data.frame()
+  for ( row in 1:rows )
+  {
+    #Geodesic is the shortest distance between two_points
+    two_points <- rbind(vertices_xyz[row,], vertices_xyz[1 + (row %% rows),])
+    normal_vector <- vector_cross(two_points[1,], two_points[2,])
+    two_points_rotated <- rodrigues(as.matrix(normal_vector)[1,], c(0,0,1), two_points)
+    two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitudes are both 0
+
+    line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
+    line <- as.data.frame( sph2car( long = line_longitudes,
+                                    lat = rep(0,length(line_longitudes)),
+                                    deg = FALSE ) )
+
+    line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
+    names(line_rotated_back) <- c("x","y","z")
+    boundary_points <- rbind(boundary_points, line_rotated_back)
+  }
+  boundary_points
+}
+
+# Use boundary point finder function to find some boundary points for a polygon
+vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+plot3d(vertices_xyz, col = 'red', type = 'p', size = 15, pch = 3, add = TRUE)
+polygon_boundary_points_xyz <- polygon_boundary( vertices_xyz, 0.001 )
+plot3d(polygon_boundary_points_xyz, col = 'red', type = 'p', size = 3.2, pch = 3, add = TRUE)
+polygon_boundary_points <- as.data.frame( car2sph(polygon_boundary_points_xyz$x,
+                                                  polygon_boundary_points_xyz$y,
+                                                  polygon_boundary_points_xyz$z,
+                                                  deg = FALSE)[,c("long","lat")] )
+
+
+
+
+# Get a plane through two of the points for comparison geodesic
+two_points <- sph2car(c(1,0), c(0.5,1), deg = FALSE)
+normal_vector <- vector_cross(two_points[1,], two_points[2,])
+planes3d(normal_vector[1], normal_vector[2], normal_vector[3]) # Geodesic should follow this plane
+
+
+# Select square with lowest to highest both lat and long, plot it
+df_square <- df[  df$lat  <= max(vertices_sph$lat)  & df$lat  >= min(vertices_sph$lat)
+                & df$long <= max(vertices_sph$long) & df$long >= min(vertices_sph$long),]
+df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+row.names(df_square_xyz) <- row.names(df_square) # This is important! sph2car ditches the row names
+plot3d(df_square_xyz, col = 'blue', type = 'p', size = 3.3, pch = 3, add = TRUE)
+
+
+head(polygon_boundary_points)
+head(df_square)
+
+
+#############################################################################################
+### THIS SECTION ONLY USEFUL IF THE SAMPLE SIZE IS SMALL I.E. NOT DENSE IN SKY ###
+# Round latitudes to some tolerance based on eps then split into lists by latitude
+eps <- 0.001
+digits <- ceiling(log10(1/eps) + 1)
+polygon_boundary_points$lat <- round(polygon_boundary_points$lat, digits)
+polygon_boundary_points_split <- split(polygon_boundary_points, polygon_boundary_points$lat)
+polygon_boundary_lats <- as.numeric(names(polygon_boundary_points_split))
+# Get isolatitude values from the square
+isolats_in_square <- unique(df_square$lat)
+# For each latitude in the polygon, find the nearest isolat in the square
+for ( polylat in polygon_boundary_lats )
+{
+  polygon_boundary_points_split[[as.character(polylat)]]$lat <-
+    isolats_in_square[ which.min(abs(isolats_in_square - polylat)) ]
+}
+# Bind the list pack together
+library(data.table)
+polygon_boundary_points <- rbindlist(polygon_boundary_points_split) #faster than do.call("rbind",...)
+# Plot result to check sanity
+polygon_boundary_points_xyz <- as.data.frame(sph2car(
+  polygon_boundary_points$long,
+  polygon_boundary_points$lat,
+  deg = FALSE))
+plot3d(polygon_boundary_points_xyz, col = 'yellow', type = 'p', size = 5, pch = 3, add = TRUE)
+################################################################################################
+
+#loop through all points in the square using a raycasting algorithm
+rows <- nrow(df_square)
+for ( row in 1:rows )
+{
+  inside <- "unknown"
+  # If we are at the start of an isolat ring
+  if ( row > 1
+     & df_square$lat[row] != df_square$lat[row-1] )
+  {
+    # Check if we start inside a polygon
+
+  }
+}
+
+
+rows <- nrow(df_square)
+thislat <- df_square$lat[1]
+inside <- "unknown"
+count <- 0
+for ( row in 1:rows )
+{
+  prevlat <- thislat
+  thislat <- df_square$lat[row]
+
+  # We are at the start of an isolat ring if...
+  if ( thislat != prevlat )
+  {
+    inside <- "unknown"
+  }
+
+  if ( thislat  )
+
+}
+
+
+
+
+
+
+# OLD / WORK IN PROGRESS --------------------------------------------------------
+
+
+# Parametric form for great circle joining u,v is ucos(t) + wsin(t)
+# where w = (u x v) x u, since then u, w are orthonormal vectors in the plane of the circle
+vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+u <- vertices_xyz[1,]
+v <- vertices_xyz[2,]
+w <- vector_cross(vector_cross(u,v),u)
+w <- w/sqrt(sum(w^2))
+t <- seq(0,pi/2,0.01)
+u <- matrix(as.numeric(u), byrow = TRUE, ncol = 3, nrow = length(t))
+w <- matrix(as.numeric(w), byrow = TRUE, ncol = 3, nrow = length(t))
+great_circ_uv <- u*cos(t) + w*sin(t)
+plot3d(great_circ_uv, col = 'blue', type = 'p', size = 3.2, pch = 3, add = TRUE)
+
+
+# Specify the polygon in spherical, convert to cartesian, plot it
+polygon_sph <- data.frame( long = c(0.2, 0.4, 0.4, 0.2, 0.2), lat = c(0.2,0.2,0.4,0.4, 0.2) )
+polygon_xyz <- as.data.frame(sph2car(polygon_sph$long, polygon_sph$lat, deg = FALSE))
+plot3d(polygon_xyz, col = 'white', type = 'l', size = 20, cex = 30, pch = 3, add = TRUE)
+
+# These are the high/low-est lat/long of the polygon vertices
+highest_lat <- max(polygon_sph$lat)
+lowest_lat <- min(polygon_sph$lat)
+highest_long <- max(polygon_sph$long)
+lowest_long <- min(polygon_sph$long)
+
+# Select the strip from lowest to highest lat, plot it
+df_strip <- df[df$lat < highest_lat & df$lat > lowest_lat, ]
+df_strip_xyz <- as.data.frame(sph2car(df_strip$long, df_strip$lat, deg = FALSE))
+plot3d(df_strip_xyz, col = 'green', type = 'p', size = 7, cex = 30, pch = 3, add = TRUE)
+
+# Select strip with lowest to highest both lat and long, plot it
+df_square <- df[df$lat <= highest_lat & df$lat >= lowest_lat & df$long <= highest_long & df$long >= lowest_long,]
+df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+plot3d(df_square_xyz, col = 'blue', type = 'p', size = 8, pch = 3, add = TRUE)
+
+# Stereographic projection of the spherical polygon vecrtices and contents
+df_plane <- data.frame(x = df_square_xyz$x/(1 - df_square_xyz$z),
+                       y = df_square_xyz$y/(1 - df_square_xyz$z),
+                       z = rep(1, dim(df_square_xyz)[1]) )
+polygon_plane <- data.frame(x = polygon_xyz$x/(1-polygon_xyz$z),
+                            y = polygon_xyz$y/(1-polygon_xyz$z),
+                            z = rep(1, dim(polygon_xyz)[1]) )
+plot3d(df_plane, col = 'blue', type = 'p', size = 8, pch = 3)
+plot3d(polygon_plane, col = 'yellow', type = 'l', size = 8, pch = 3, add = TRUE)
+
+# Trying to find polygon edge pixels
+library(Rcpp)
+sourceCpp("exploration/distGeo.cpp") # For segment distances to determine tolerance
+
+# Just draw one line for practice
+distGeo(as.matrix(data.frame(x = 1, y = 1)), as.matrix(data.frame(x = 1, y = 1)))
+eps <- 0.001
+dist <- distGeo(as.matrix(data.frame(long = 0.2, lat = 0.2)),
+                as.matrix(data.frame(long = 0.4, lat = 0.4)) )
+n <- dist/eps
+
+line <- data.frame(long = c(seq(0.2,0.4, length.out = n)),
+                   lat = c(seq(0.2,0.4, length.out = n)) )
+line_xyz <- as.data.frame(sph2car(line$long, line$lat, deg = FALSE))
+plot3d(line_xyz, col = 'green', type = 'p', size = 10, pch = 3, add = TRUE)
+
+## Sample simple polygon boundary
+polygon_sph <- polygon_sph[1:(nrow(polygon_sph)-1),] # We no longer need the extra (0.2,0.2) row
+# BOUNDARY POINT FINDER FUNCTION
+polygon_boundary <- function( vertices_sph, eps = 0.001 )
+{
+  vertices_sph_rot <- rbind(vertices_sph[2:nrow(vertices_sph),], vertices_sph[1,])
+  dist <- distGeo(as.matrix(vertices_sph), as.matrix(vertices_sph_rot))
+
+  boundary_points <- data.frame()
+  for ( row in 1:nrow(vertices_sph) )
+  {
+    n <- dist[row]/eps
+    line <- data.frame(long = seq(vertices_sph$long[row], vertices_sph_rot$long[row], length.out = n),
+                       lat = seq(vertices_sph$lat[row], vertices_sph_rot$lat[row], length.out = n) )
+    boundary_points <- rbind(boundary_points, line)
+  }
+
+  boundary_points
+}
+# Plot now
+polygon_points <- polygon_boundary( polygon_sph )
+polygon_points_xyz <- as.data.frame(sph2car(polygon_points$long, polygon_points$lat, deg = FALSE))
+plot3d(polygon_points_xyz, col = 'red', type = 'p', size = 10, pch = 3, add = TRUE)
+
+#Try it with a more complicated polygon
+polygon_sph2 <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
+polygon_points2 <- polygon_boundary( polygon_sph2 )
+polygon_points_xyz2 <- as.data.frame(sph2car(polygon_points2$long, polygon_points2$lat, deg = FALSE))
+plot3d(polygon_points_xyz2, col = 'red', type = 'p', size = 5, pch = 3, add = TRUE)
+
+## Check that my lines are geodesics
+# FUNCTION FOR CROSS PRODUCT AND RODRIGUES FORMULA
+source("exploration/rodrigues.R")
+# Test: Check the Rodrigues function translates polygon to north pole
+poly_rot_check <- rodrigues(a = sph2car(0,1, deg = FALSE),
+                            b = c(0,0,1),
+                            polygon_points_xyz2)
+plot3d(poly_rot_check, col = 'red', type = 'p', size = 7, pch = 3, add = TRUE)
+
+# Get points grid on geodesic between two points (long, lat) = (1,0.5) and (0,1)
+two_points <- sph2car(c(1,0), c(0.5,1), deg = FALSE)
+plot3d(two_points, col = 'yellow', type = 'p', size = 20, pch = 3, add = TRUE)
+normal_vector <- vector_cross(two_points[1,], two_points[2,])
+planes3d(normal_vector[1], normal_vector[2], normal_vector[3]) # Geodesic should follow this plane
+two_points_rot <- rodrigues(normal_vector, c(0,0,1), two_points)
+two_points_rot_long <- atan2(two_points_rot[,2],two_points_rot[,1])
+
+# Distance between two points should be preserved during rotation
+p1 <- two_points[1,]; p2 <- two_points[2,]
+theta <- acos( sum(p1*p2) / ( sqrt(sum(p1 * p1)) * sqrt(sum(p2 * p2)) ) )
+all.equal(two_points_rot_long[2] - two_points_rot_long[1], theta) # Checks out
+# Distance between two points should agree with distGeo
+distGeo(matrix(c(1,0.5), ncol = 2), matrix(c(0,1), ncol = 2)) # DOES NOT AGREE!! ERROR IN DIST GEO!!
+# Luckily distGeo is not needed anymore:
+# NEW BOUNDARY POINT FINDER FUNCTION
+# BOUNDARY POINT FINDER FUNCTION
+# Works by rotating the two vertices of each line to the equator before sampling, then rotating back
+polygon_boundary <- function( vertices_xyz, eps = 0.001 )
+{
+  rows <- nrow(vertices_xyz)
+  if(rows < 3){
+    stop("Polygon must have at least 3 vertices.");
+  }
+  #vertices_xyz_cycled <- rbind(vertices_xyz[2:nrow(vertices_xyz),], vertices_xyz[1,])
+
+  boundary_points <- data.frame()
+  for ( row in 1:rows )
+  {
+    cat(paste("row = ", row))
+    two_points <- rbind(vertices_xyz[row,], vertices_xyz[1 + (row %% rows),])
+    normal_vector <- vector_cross(two_points[1,], two_points[2,])
+    two_points_rotated <- rodrigues(as.matrix(normal_vector)[1,], c(0,0,1), two_points)
+    two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitudes are both 0
+
+    line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
+    line <- as.data.frame( sph2car( long = line_longitudes,
+                                    lat = rep(0,length(line_longitudes)),
+                                    deg = FALSE ) )
+
+    line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
+    names(line_rotated_back) <- c("x","y","z")
+    boundary_points <- rbind(boundary_points, line_rotated_back)
+  }
+
+  boundary_points
+}
+
+boundary_points <- data.frame()
+
+vertices_xyz2 <- as.data.frame(sph2car(polygon_sph2$long, polygon_sph2$lat, deg = FALSE))
+plot3d(vertices_xyz2, col = 'red', type = 'p', size = 20, pch = 3, add = TRUE)
+polygon_boundary_points <- polygon_boundary( vertices_xyz2 )
+plot3d(polygon_boundary_points, col = 'red', type = 'p', size = 5, pch = 3, add = TRUE)
+
+rows <- nrow(vertices_xyz2)
+two_points <- rbind(vertices_xyz2[2,], vertices_xyz2[1 + (2 %% rows),])
+normal_vector <- vector_cross(two_points[1,], two_points[2,])
+two_points_rotated <- rodrigues(as.matrix(normal_vector)[1,], c(0,0,1), two_points)
+two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitudes are both 0
+line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
+
+line <- sph2car( long = line_longitudes,
+                        lat = rep(0,length(line_longitudes)),
+                        deg = FALSE )
+line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
+names(line_rotated_back) <- c("x","y","z")
+
+boundary_points <- rbind(boundary_points, line_rotated_back)
+
+# a <- normal_vector
+# b <- c(0,0,1)
+# norm_a <- sqrt(sum(a * a))
+# norm_b <- sqrt(sum(b * b))
+# !isTRUE( all.equal(a/norm_a, b/norm_b, check.attributes = FALSE) )
+# {
+#   k <- vector_cross(a,b)
+#   k <- k/sqrt(sum(k^2)) # normalised k
+#   K <- matrix( c( 0   , -k[3], k[2],
+#                   k[3], 0    , -k[1],
+#                   -k[2], k[1] , 0    ), nrow = 3, byrow = TRUE)
+#   theta <- acos( sum(a*b) / ( norm_a*norm_b ) ) # The angle between a and b
+#   I <- diag(c(1,1,1))
+#   R <- I + sin(theta)*K + (1-cos(theta))*K%*%K #Rodrigues' Formula.
+#   p_xyz <- t(R%*%t(p_xyz))
+# }
+
+p_xyz
+
+two_points_rotated <- rodrigues(normal_vector, c(0,0,1), two_points)
+
 
 
 
@@ -194,7 +1044,6 @@ plot3d(mx, col = "red", cex = 30, pch = 3)
 #library(plotrix)
 tNside <- 32
 tNpix <- 12*tNside^2
-
 tI <- seq(-1e5,1e5,length.out = tNpix) #rnorm(Npix,0,1e5)
 #cols <- color.scale(I, cs1=seq(1,0,0), cs2=seq(1,1,0), cs3=c(0,1,0)) #cs1=1, cs2=1, cs3=c(0,1,0)
 tpalette <- colorRampPalette(c("blue","red"))(tNpix)

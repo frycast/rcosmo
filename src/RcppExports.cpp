@@ -5,9 +5,56 @@
 
 using namespace Rcpp;
 
-// pix2angC
-NumericMatrix pix2angC(int Nside, bool Nest, Rcpp::Nullable<Rcpp::IntegerVector> spix, bool cartesian);
-RcppExport SEXP rcosmo_pix2angC(SEXP NsideSEXP, SEXP NestSEXP, SEXP spixSEXP, SEXP cartesianSEXP) {
+// geoDistList
+Rcpp::List geoDistList(Rcpp::DataFrame cmbdf);
+RcppExport SEXP _rcosmo_geoDistList(SEXP cmbdfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    rcpp_result_gen = Rcpp::wrap(geoDistList(cmbdf));
+    return rcpp_result_gen;
+END_RCPP
+}
+// distBinList
+Rcpp::List distBinList(Rcpp::DataFrame cmbdf, NumericVector breaks);
+RcppExport SEXP _rcosmo_distBinList(SEXP cmbdfSEXP, SEXP breaksSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(distBinList(cmbdf, breaks));
+    return rcpp_result_gen;
+END_RCPP
+}
+// covCMB_internal1
+NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks);
+RcppExport SEXP _rcosmo_covCMB_internal1(SEXP cmbdfSEXP, SEXP breaksSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal1(cmbdf, breaks));
+    return rcpp_result_gen;
+END_RCPP
+}
+// covCMB_internal2
+NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, int nbin);
+RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP nbinSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< int >::type nbin(nbinSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal2(cmbdf, nbin));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pix2coords
+NumericMatrix pix2coords(int Nside, bool Nest, Rcpp::Nullable<Rcpp::IntegerVector> spix, bool cartesian);
+RcppExport SEXP _rcosmo_pix2coords(SEXP NsideSEXP, SEXP NestSEXP, SEXP spixSEXP, SEXP cartesianSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -15,13 +62,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type Nest(NestSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type spix(spixSEXP);
     Rcpp::traits::input_parameter< bool >::type cartesian(cartesianSEXP);
-    rcpp_result_gen = Rcpp::wrap(pix2angC(Nside, Nest, spix, cartesian));
+    rcpp_result_gen = Rcpp::wrap(pix2coords(Nside, Nest, spix, cartesian));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"rcosmo_pix2angC", (DL_FUNC) &rcosmo_pix2angC, 4},
+    {"_rcosmo_geoDistList", (DL_FUNC) &_rcosmo_geoDistList, 1},
+    {"_rcosmo_distBinList", (DL_FUNC) &_rcosmo_distBinList, 2},
+    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
+    {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
+    {"_rcosmo_pix2coords", (DL_FUNC) &_rcosmo_pix2coords, 4},
     {NULL, NULL, 0}
 };
 

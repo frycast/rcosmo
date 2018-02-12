@@ -73,6 +73,35 @@ covCMB_internal2 <- function(cmbdf, nbin) {
 }
 
 #'@title
+#'car2sph
+#'
+#'@param df a data.frame with columns labelled x, y and z
+#'
+#'@return a data.frame with columns lat and long for latitude and
+#'longitude
+#'
+#'@name car2sph
+#'
+#'@export
+car2sph <- function(df) {
+    .Call('_rcosmo_car2sph', PACKAGE = 'rcosmo', df)
+}
+
+#'@title
+#'sph2car
+#'
+#'@param df a data.frame with columns labelled \code{lat} and \code{long}
+#'
+#'@return a data.frame with columns x, y, z (cartesian coordinates)
+#'
+#'@name sph2car
+#'
+#'@export
+sph2car <- function(df) {
+    .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
+}
+
+#'@title
 #'pix2coords
 #'@description
 #'Converts HEALPix pixel scheme to spherical or

@@ -1,3 +1,38 @@
+
+
+#'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
+#'
+#'@param cmbdf a \code{\link{CMBDataFrame}}
+#'@param win a \code{\link{CMBWindow}}
+#'
+#'@return a \code{\link{CMBDataFrame}} which is restricted to the
+#'region of the sky specified by \code{win}
+#'
+#'@examples
+#'
+#'@export
+subWindow <- function(cmbdf, win)
+{
+  if ( !is.CMBDataFrame(cmbdf) ) {
+    stop(gettextf("'%s' is not a CMBDataFrame", deparse(substitute(cmbdf))))
+  }
+
+  if ( !is.CMBWindow(win) ) {
+    stop(gettextf("'%s' is not a CMBWindow", deparse(substitute(win))))
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
 #' HEALPix pixel indices from CMBDataFrame
 #'
 #' This function returns the vector of HEALPix pixel indices from a CMBDataFrame
@@ -143,73 +178,6 @@ nside <- function( cmbdf )
 
 
 
-#' Coordinate system from a CMBDataFrame
-#'
-#' This function returns the coordinate system used in a CMBDataFrame.
-#' The coordinate system is either "cartesian" or "spherical"
-#'
-#' If a new coordinate system is specified, using e.g. new.coords = "spherical", the
-#' coordinate system of the CMBDataFrame will be converted.
-#'
-#'@param cmbdf a CMB Data Frame.
-#'@param new.ordering specifies the new coordinate system ("spherical" or "cartesian")
-#'if a change of coordinate system is desired.
-#'
-#'@return
-#' The name of the coordinate system that is used in the CMBDataFrame
-#'
-#'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
-#' coords(df)
-#' coords(df, new.coords = "cartesian")
-#'
-#'@export
-coords <- function( cmbdf, new.coords )
-{
-  # Check that argument is a CMBDF
-  if ( !is.CMBDataFrame(cmbdf) )
-  {
-    stop("Argument must be a CMBDataFrame")
-  }
-
-  # If new.coords argument is missing then return the coordinate type
-  if ( missing(new.coords) )
-  {
-    return(attr(cmbdf, "coords"))
-  }
-  else
-  {
-    new.coords <- as.character(tolower(new.coords))
-
-    # Make sure that new.coords doesn't match current coords
-    if ( attr(cmbdf, "coords") == new.coords )
-    {
-      # Nothing to do
-    }
-    else if ( new.coords == "spherical" )
-    {
-      cat("Converting to spherical coordinates...\n")
-      # Convert to spherical
-      cat("Conversion not completed as this function is under development\n")
-    }
-    else if ( new.coords == "cartesian" )
-    {
-      cat("Converting to cartesian coordinates...\n")
-      # Convert to cartesian
-      cat("Conversion not completed as this function is under development\n")
-    }
-  }
-}
-
-
-
-#' Assign new coordinate system to CMBDataFrame
-#' @export
-`coords<-` <- function(cmbdf,...,value) {
-  coords(cmbdf, new.coords = value)
-  cmbdf
-}
-
 
 
 
@@ -282,14 +250,14 @@ as.CMBDataFrame <- function(df, coords, ordering, nside)
 {
   if ( !is.data.frame(df) ) {
 
-    stop(gettextf("'%s' is not a data.frame", deparse(substitute(x))))
+    stop(gettextf("'%s' is not a data.frame", deparse(substitute(df))))
 
   }
 
   if ( !("I"  %in% names(df) ) ) {
 
     stop(gettextf("'%s' does not have a column named 'I' for intensities",
-                  deparse(substitute(x))))
+                  deparse(substitute(df))))
 
   }
 

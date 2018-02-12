@@ -112,7 +112,7 @@ CMBDataFrame <- function(CMBData,
   if (!missing(spix)) {
     try(if(any(spix %% 1 != 0))
       stop("Sample pixel indices must be integers"))
-    try(if(length(intensities) != 0 && length(intensities) != length(spix))
+    try(if(!missing(intensities) && length(intensities) != length(spix))
       stop("Intensities parameter must have same length as spix parameter"))
     try(if(!missing(sample.size))
       stop("At least one of spix or sample.size should be unspecified"))
@@ -123,7 +123,7 @@ CMBDataFrame <- function(CMBData,
   if (!missing(sample.size)) {
     try(if(!missing(spix))
       stop("At least one of spix or sample.size should be unspecified"))
-    try(if(length(intensities) != 0
+    try(if(!missing(intensities)
            && length(intensities) != length(sample.size))
       stop(paste("Intensities parameter must have",
            "same length as sample.size parameter")))

@@ -6,16 +6,20 @@ library(Rcpp)
 library(rcosmo)
 library(tidyverse)
 
-dfunc <- haversineDist
-max.dist <- 0
-for ( i in 1:(nrow(win) - 1) )
-{
-  for ( j in (i+1):nrow(win) )
-  {
-    dist <- as.numeric(dfunc(win[i,], win[j,]))
-    if ( dist > max.dist ) max.dist <- dist
-  }
-}
+#####################################################################
+######### DEMONSTRATE CMBWindow #####################################
+#####################################################################
+
+win <- CMBWindow(lat = c(0,0,0), long = c(1,2,3))
+area(win)
+maxDist(win)
+coords(win)
+coords(win) <- "cartesian"
+win
+
+win <- CMBWindow(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+coords(win) <- "spherical"
+win
 
 
 
@@ -332,11 +336,11 @@ plot(df)
 
 # Example 3
 sky <- CMBDataFrame(CMBData = "../CMB_map_smica1024.fits")
-sky_sample <- sampleCMB(sky, sampleSize = 1000000)
+sky_sample <- sampleCMB(sky, sample.size = 1000000)
 plot(sky_sample)
 
 # Example 4 (same effect as example 3)
-sky_sample2 <- CMBDataFrame(df, sampleSize = 1000000, ordering = "ring",
+sky_sample2 <- CMBDataFrame(df, sample.size = 1000000, ordering = "ring",
                             coords = "cartesian")
 plot(sky_sample2)
 

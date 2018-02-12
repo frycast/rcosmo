@@ -4,17 +4,14 @@
 \alias{CMBDataFrame}
 \title{CMB Data Frames}
 \usage{
-CMBDataFrame(CMBData, coords, window, include.polar = FALSE,
-  include.masks = FALSE, spix, sample.size, nside, ordering, intensities)
+CMBDataFrame(CMBData, coords, include.polar = FALSE, include.masks = FALSE,
+  spix, sample.size, nside, ordering, intensities)
 }
 \arguments{
 \item{CMBData}{can be a string location of FITS file,
 another CMBDataFrame, or nothing.}
 
 \item{coords}{can be "spherical," "cartesian", or unspecified (HEALPix only).}
-
-\item{window}{optional \code{\link{CMBWindow}} object that specifies a
-spherical polygon within which to subset the full sky CMB data}
 
 \item{include.polar}{TRUE if polarisation data is required, otherwise FALSE}
 
@@ -45,6 +42,9 @@ if \code{CMBData} is unspecified. Note that \code{length(intensities)}
 must equal \eqn{12*nside^2} if spix and
 sample.size are unspecified, otherwise \code{length(intensities)}
 must equal \code{length(spix)} or \code{length(sample.size)}}
+
+\item{window}{optional \code{\link{CMBWindow}} object that specifies a
+spherical polygon within which to subset the full sky CMB data}
 }
 \value{
 A data frame whose columns contain the pixel center coordinates

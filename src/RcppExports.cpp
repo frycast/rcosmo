@@ -52,6 +52,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// car2sph
+DataFrame car2sph(DataFrame df);
+RcppExport SEXP _rcosmo_car2sph(SEXP dfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    rcpp_result_gen = Rcpp::wrap(car2sph(df));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sph2car
+DataFrame sph2car(DataFrame df);
+RcppExport SEXP _rcosmo_sph2car(SEXP dfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    rcpp_result_gen = Rcpp::wrap(sph2car(df));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pix2coords
 NumericMatrix pix2coords(int Nside, bool Nest, Rcpp::Nullable<Rcpp::IntegerVector> spix, bool cartesian);
 RcppExport SEXP _rcosmo_pix2coords(SEXP NsideSEXP, SEXP NestSEXP, SEXP spixSEXP, SEXP cartesianSEXP) {
@@ -72,6 +94,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_distBinList", (DL_FUNC) &_rcosmo_distBinList, 2},
     {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
     {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
+    {"_rcosmo_car2sph", (DL_FUNC) &_rcosmo_car2sph, 1},
+    {"_rcosmo_sph2car", (DL_FUNC) &_rcosmo_sph2car, 1},
     {"_rcosmo_pix2coords", (DL_FUNC) &_rcosmo_pix2coords, 4},
     {NULL, NULL, 0}
 };

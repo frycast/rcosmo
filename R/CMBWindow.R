@@ -98,7 +98,6 @@ CMBWindow <- function(...) {
     }
   }
 
-
   # Calculate the area of the spherical polygon
   area <- sphericalArea(window.xyz)
 
@@ -110,6 +109,12 @@ CMBWindow <- function(...) {
 
   return(window)
 }
+
+
+
+
+
+
 
 
 ## HELPER FUNCTION to calculate area of spherical polygon

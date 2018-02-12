@@ -9,10 +9,11 @@ CMBWindow(...)
 \arguments{
 \item{...}{arguments that must be labelled either x, y, z
 (cartesian) or lat, long (spherical).
-Alternatively single data.frame may be passed in with columns labelled
+Alternatively, a single data.frame may be passed in with columns labelled
 x, y, z or lat, long.
 The rows correspond to clockwise ordered
 vertices defining a spherical polygon on the surface of the unit sphere.
+There must be at least 3 rows (i.e., spherical bigons are excluded).
 'Clockwise' is understood from a perspective outside the sphere looking
 in towards the origin.}
 }
@@ -26,5 +27,6 @@ Add description here
 Add further details here
 }
 \examples{
+win <- CMBWindow(lat = c(0,1,2), long = c(0.5, 1.2))
 
 }

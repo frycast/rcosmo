@@ -39,41 +39,6 @@ haversineDist <- function(p1,p2) {
 
 
 
-
-#' Convert from spherical to cartesian
-#'
-#' @param p a point in latitude and longitude \code{c(lat, long)} or
-#' a data.frame containing columns lat and long
-#'
-#' @return the cartesian coordinates of p
-#'
-#' @export
-sph2car <- function(p)
-{
-  if ( is.data.frame(p) ) {
-
-    df <- data.frame(lat = p$lat, long = p$long)
-    car <- apply(df, 1, sph2car_helper)
-    car <- as.data.frame(t(car))
-    names(car) <- c("x", "y", "z")
-
-    return(car)
-
-  } else {
-    return(sph2car_helper(p))
-  }
-}
-
-sph2car_helper <- function(p)
-{
-  theta <- pi/2 - p[1]
-  return(c(sin(theta)*cos(p[2]),
-           sin(theta)*sin(p[2]),
-           cos(theta)))
-}
-
-
-
 ## HELPER FUNCTION, CROSS PRODUCT
 vector_cross <- function(a, b) {
   if(length(a)!=3 || length(b)!=3){

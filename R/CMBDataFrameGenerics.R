@@ -1,4 +1,103 @@
 
+#' Coordinate system from a CMBDataFrame
+#'
+#' This function returns the coordinate system used in a CMBDataFrame.
+#' The coordinate system is either "cartesian" or "spherical"
+#'
+#' If a new coordinate system is specified, using e.g. new.coords = "spherical", the
+#' coordinate system of the CMBDataFrame will be converted.
+#'
+#'@param cmbdf a CMBDataFrame.
+#'@param new.coords specifies the new coordinate system ("spherical" or "cartesian")
+#'if a change of coordinate system is desired.
+#'
+#'@return
+#' If new.coords is unspecified, then the name of the coordinate system
+#' of \code{cmbdf} is returned. Otherwise a new CMBDataFrame is returned
+#' equivalent to \code{cmbdf} but having the desired change of coordinates
+#'
+#'@examples
+#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+#' coords(df)
+#' coords(df, new.coords = "cartesian")
+#'
+#'@export
+coords.CMBDataFrame <- function( cmbdf, new.coords )
+{
+  # If new.coords argument is missing then return the coordinate type
+  if ( missing(new.coords) )
+  {
+    return(attr(cmbdf, "coords"))
+  }
+  else
+  {
+    new.coords <- as.character(tolower(new.coords))
+
+    # Make sure that new.coords doesn't match current coords
+    if ( !is.null(attr(cmbdf, "coords"))
+         && attr(cmbdf, "coords") == new.coords )
+    {
+      # Nothing to do
+    }
+    else if ( new.coords == "spherical" )
+    {
+      # Convert to spherical
+      n <- ncol(cmbdf)
+      other.names <- names(cmbdf)[-c(which(names(cmbdf) == "x"),
+                                     which(names(cmbdf) == "y"),
+                                     which(names(cmbdf) == "z"))]
+
+      xyz <- cmbdf[,c("x", "y", "z")]
+      others <- cmbdf[, other.names]
+
+      cmbdf[,1:2] <- car2sph(xyz)
+      cmbdf[,3:(n-1)] <- others
+      cmbdf[,n] <- NULL
+      names(cmbdf) <- c("lat", "long", other.names)
+    }
+    else if ( new.coords == "cartesian" )
+    {
+      # convert to cartesian
+
+      n <- ncol(cmbdf)
+      other.names <- names(cmbdf)[-c(which(names(cmbdf) == "lat"),
+                                     which(names(cmbdf) == "long"))]
+
+      sph <- cmbdf[,c("lat", "long")]
+      others <- cmbdf[, other.names]
+
+      cmbdf[,1:3] <- sph2car(sph)
+      cmbdf[,4:(n+1)] <- others
+      names(cmbdf) <- c("x","y","z", other.names)
+    }
+
+    attr(cmbdf, "coords") <- new.coords
+    return(cmbdf)
+  }
+}
+
+
+
+#' Assign new coordinate system to CMBDataFrame
+#' @export
+`coords<-.CMBDataFrame` <- function(cmbdf,...,value) {
+  value <- tolower(value)
+  if (coords(cmbdf) == value)
+  {
+
+    return(cmbdf)
+  } else {
+
+    return(coords(cmbdf, new.coords = value))
+  }
+}
+
+
+
+
+
+
+
 
 #### CURRENTLY THE DATA USED IN THE PLOT FUNCTION IS TOO LARGE FOR CRAN ##
 #' Plot CMB Data
@@ -50,6 +149,10 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size, ...)
 
     warning(paste("(development stage) the colour map used was not",
             "generated for nside = 2048"))
+  } else {
+
+    cols <- "blue"
+
   }
 
   coords <- coords(cmbdf)
@@ -71,6 +174,13 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size, ...)
   rgl::plot3d(cmbdf_xyz, col = cols, type = "p", cex = 5,
               pch = 3, box = FALSE, axes = FALSE, add = add)
 }
+
+
+
+
+
+
+
 
 
 #' Summarise CMB Data
@@ -104,11 +214,20 @@ summary.CMBDataFrame <- function(cmbdf)
 }
 
 
+
+
+
+
+
+
+
+
 #' Print CMB Data
 #'
 #' This function neatly prints the contents of a CMB Data Frame.
 #'
 #'@param cmbdf a CMB Data Frame.
+#'@param ... arguments passed to \code{\link{print.tbl_df}}
 #'
 #'@return
 #'Prints contents of the CMB data frame to the console.
@@ -119,9 +238,9 @@ summary.CMBDataFrame <- function(cmbdf)
 #' df
 #'
 #'@export
-print.CMBDataFrame <- function(cmbdf)
+print.CMBDataFrame <- function(cmbdf,...)
 {
-  print(tibble::as.tibble(cmbdf))
+  print(tibble::as.tibble(cmbdf),...)
 }
 
 

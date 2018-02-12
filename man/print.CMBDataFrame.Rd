@@ -4,10 +4,12 @@
 \alias{print.CMBDataFrame}
 \title{Print CMB Data}
 \usage{
-\method{print}{CMBDataFrame}(cmbdf)
+\method{print}{CMBDataFrame}(cmbdf, ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame.}
+
+\item{...}{arguments passed to \code{\link{print.tbl_df}}}
 }
 \value{
 Prints contents of the CMB data frame to the console.

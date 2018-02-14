@@ -4,23 +4,37 @@
 \alias{window}
 \title{Window attribute of \code{\link{CMBDataFrame}}}
 \usage{
-window(cmbdf)
+window(cmbdf, new.window)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}
+
+\item{new.window}{optionally specify a new window, in which case a
+new CMBDataFrame is returned whose CMBWindow is new.window}
 }
 \value{
-The window attribute of cmbdf
+The window attribute of cmbdf or, if new.window is specified, a
+new CMBDataFrame.
 }
 \description{
-This function returns the \code{\link{CMBWindow}} attribute of a
-CMBDataFrame. The return value is NULL if the window is full sky
+When new.window is unspecified this function returns the
+\code{\link{CMBWindow}} attribute of a
+CMBDataFrame. The return value is NULL if the window is full sky.
+When new.window is specified this function instead returns
+a new CMBDataFrame whose CMBWindow attribute is new.window
 }
 \examples{
 cmbdf <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested")
+
+## Create a new CMBDataFrame with a window
 win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-window(cmbdf) <- win
+cmbdf.win <- window(cmbdf, new.window = win)
+plot(cmbdf.win)
+window(cmbdf.win)
+
+## Change the window of an existing CMBDataFrame
+window(cmbdf) <- CMBWindow(theta = rep(0.1, 10),
+                           phi = seq(0, 9*2*pi/10, length.out = 10))
 plot(cmbdf)
-window(cmbdf)
 
 }

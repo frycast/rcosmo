@@ -95,6 +95,7 @@
 #'@export
 CMBDataFrame <- function(CMBData,
                          coords,
+                         window,
                          include.polar = FALSE,
                          include.masks = FALSE,
                          spix,
@@ -104,6 +105,11 @@ CMBDataFrame <- function(CMBData,
                          intensities) {
 
   ### --- PREPARATION AND CHECKING ARGUMENTS ARE VALID --- ###
+
+  if ( !missing(window) && !is.CMBWindow(window) )
+  {
+    stop("'window' argument must be a CMBWindow")
+  }
 
   # If spix is a string then assume it is a path to file:
   if (!missing(spix) && is.character(spix)) {
@@ -415,6 +421,11 @@ CMBDataFrame <- function(CMBData,
 
     stop("CMBData must be a CMBDataFrame, a path to a FITS file, or unspecified")
 
+  }
+
+  if ( !missing(window) )
+  {
+    window(cmbdf) <- window
   }
 
   return(cmbdf)

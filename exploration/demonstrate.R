@@ -10,12 +10,40 @@ library(tidyverse)
 ######### DEMONSTRATE subWindow #####################################
 #####################################################################
 
-win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-cmbdf <- CMBDataFrame(nside = 32, ordering = "nested", coords = "spherical")
-window(cmbdf) <- win
-plot(cmbdf)
+## Example1: Simple convex window
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+cmbdf <- CMBDataFrame(nside = 128, ordering = "nested", coords = "cartesian")
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1)
+plot(win1)
+
+## Example2: Note the use of 'rev' function here:
+win2 <- CMBWindow(theta = rep(pi/3, 10),
+                  phi = rev(seq(0,9*2*pi/10, length.out = 10)))
+cmbdf.win2 <- window(cmbdf, new.window = win2)
+plot(cmbdf.win2)
+plot(win2)
+
+
+## Example3: Like Example2 but without 'rev' (doesn't work!)
+win2 <- CMBWindow(theta = rep(pi/3, 10),
+                  phi = seq(0,9*2*pi/10, length.out = 10))
+cmbdf.win2 <- window(cmbdf, new.window = win2)
+plot(cmbdf.win2)
+plot(win2)
+
+
+## Example4: Here is a non-convex window that doesn't work yet
+win4 <- CMBWindow( theta = c(pi/2, pi/2, pi/4, pi/4, 0 ),
+                   phi   = c(   0,    1,    1,  0.5, 0 ) )
+cmbdf.win4 <- window(cmbdf, new.window = win4)
+plot(cmbdf.win4)
+plot(win3)
+
 
 # Comparison with pure R function
+library(Rcpp)
+sourceCpp("src/CMBDataFrameHelpers.cpp")
 cmbdf.win <- subWindow(cmbdf, win)
 cmbdf.win2 <- subWindow2(cmbdf, win)
 
@@ -27,10 +55,6 @@ plot(cmbdf.win2)
 # The C++ version is about 300 times faster
 cmbdf <- CMBDataFrame(nside = 16, ordering = "nested", coords = "spherical")
 microbenchmark(subWindow(cmbdf, win), subWindow2(cmbdf, win))
-
-
-library(Rcpp)
-sourceCpp("src/CMBDataFrameHelpers.cpp")
 
 
 #####################################################################
@@ -372,13 +396,13 @@ plot(df)
 
 # Example 3
 sky <- CMBDataFrame(CMBData = "../CMB_map_smica1024.fits")
-sky_sample <- sampleCMB(sky, sample.size = 1000000)
-plot(sky_sample)
+sky.sample <- sampleCMB(sky, sample.size = 1000000)
+plot(sky.sample)
 
 # Example 4 (same effect as example 3)
-sky_sample2 <- CMBDataFrame(df, sample.size = 1000000, ordering = "ring",
+sky.sample2 <- CMBDataFrame(df, sample.size = 1000000, ordering = "ring",
                             coords = "cartesian")
-plot(sky_sample2)
+plot(sky.sample2)
 
 
 sky
@@ -415,47 +439,54 @@ lsf.str("package:rcosmo")
 
 # BOUNDARY POINT FINDER FUNCTION
 # Works by rotating the two vertices of each line to the equator before sampling, then rotating back
-polygon_boundary <- function( vertices_xyz, eps = 0.001 )
+polygonBoundary <- function( vertices.xyz, eps = 0.001 )
 {
-  rows <- nrow(vertices_xyz)
+  rows <- nrow(vertices.xyz)
   if(rows < 3){
     stop("Polygon must have at least 3 vertices.");
   }
   #vertices_xyz_cycled <- rbind(vertices_xyz[2:nrow(vertices_xyz),], vertices_xyz[1,])
 
-  boundary_points <- data.frame()
+  boundary <- data.frame()
   for ( row in 1:rows )
   {
     #Geodesic is the shortest distance between two_points
-    two_points <- rbind(vertices_xyz[row,], vertices_xyz[1 + (row %% rows),])
-    normal_vector <- vector_cross(two_points[1,], two_points[2,])
-    two_points_rotated <- rodrigues(as.matrix(normal_vector)[1,], c(0,0,1), two_points)
-    two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitudes are both 0
+    V1 <- vertices.xyz[row,]
+    V2 <- vertices.xyz[1 + (row %% rows),]
 
-    line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
-    line <- as.data.frame( sph2car( long = line_longitudes,
-                                    lat = rep(0,length(line_longitudes)),
-                                    deg = FALSE ) )
+    normal <- vector_cross(V1, V2)
+    rotated <- rodrigues(as.matrix(normal)[1,], c(0,0,1), rbind(V1,V2))
 
-    line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
-    names(line_rotated_back) <- c("x","y","z")
-    boundary_points <- rbind(boundary_points, line_rotated_back)
+    two.longitudes <- atan2(rotated[,2], rotated[,1]) # latitudes are both pi/2
+
+    line.longitudes <- seq(two.longitudes[1], two.longitudes[2], by = eps)
+    line <- data.frame(phi = line.longitudes, theta = rep(pi/2,length(line.longitudes)))
+    line <- sph2car( line )
+
+    line.rotated <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal)[1,], line))
+    names(line.rotated) <- c("x","y","z")
+    boundary <- rbind(boundary, line.rotated)
   }
-  boundary_points
+  boundary
 }
 
-source("exploration/rodrigues.R")
+## TEST BOUNDARY POINT FINDER FUNCTION
+cmbdf <- CMBDataFrame(nside = 16, ordering = "ring",
+                      coords = "cartesian")
+plot(cmbdf)
 
-vertices_sph <- data.frame( phi = c(0, 1, 1, 0.5, 1, 0), theta = c(0, 0, 0.2, 0.2, 0.5, 1) )
-vertices_xyz <- as.data.frame(sph2car(vertices_sph$phi, vertices_sph$theta, deg = FALSE))
-plot3d(vertices_xyz, col = 'red', type = 'p', size = 12, pch = 2, add = TRUE)
+vertices.sph <- data.frame( theta = c(pi/2, pi/2, pi/4, pi/4, 0 ),
+                            phi   = c(   0,    1,    1,  0.5, 0 ) )
+vertices.xyz <- sph2car(vertices.sph)
+rgl::plot3d(vertices.xyz, col = 'red', type = 'p', size = 12, pch = 2, add = TRUE)
 
-polygon_boundary_points_xyz <- polygon_boundary( vertices_xyz, 0.001 )
-plot3d(polygon_boundary_points_xyz, col = 'red', type = 'p', size = 3.2, pch = 3, add = TRUE)
-polygon_boundary_points <- as.data.frame( car2sph(polygon_boundary_points_xyz$x,
-                                                  polygon_boundary_points_xyz$y,
-                                                  polygon_boundary_points_xyz$z,
-                                                  deg = FALSE)[,c("phi","theta")] )
+boundary.xyz <- polygonBoundary( vertices.xyz, 0.001 )
+rgl::plot3d( boundary.xyz, col = 'red', type = 'p', size = 3.2, pch = 3, add = TRUE)
+boundary <- car2sph(boundary.xyz)
+
+
+
+######## THE REST OF THIS CODE HASN'T BEEN UPDATED AND PROBABLY DOESN'T WORK
 
 # Get ALL HEALPix points in the square
 df_square <- df[  df$theta  <= max(vertices_sph$theta)  & df$theta  >= min(vertices_sph$theta)

@@ -7,12 +7,12 @@
 subWindow(cmbdf, win)
 }
 \arguments{
-\item{cmbdf}{a \code{\link{CMBDataFrame}}}
+\item{cmbdf}{a CMBDataFrame}
 
-\item{win}{a \code{\link{CMBWindow}}}
+\item{win}{a CMBWindow}
 }
 \value{
-a \code{\link{CMBDataFrame}} which is restricted to the
+a CMBDataFrame which is restricted to the
 region of the sky specified by \code{win}
 }
 \description{

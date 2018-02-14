@@ -2,10 +2,10 @@
 % Please edit documentation in R/CMBDataFrameHelpers.R
 \name{window<-}
 \alias{window<-}
-\title{Assign a new CMBWindow to a CMBDataFrame}
+\title{Assign a new \code{\link{CMBWindow}} to a \code{\link{CMBDataFrame}}}
 \usage{
 window(cmbdf, ...) <- value
 }
 \description{
-Assign a new CMBWindow to a CMBDataFrame
+Assign a new \code{\link{CMBWindow}} to a \code{\link{CMBDataFrame}}
 }

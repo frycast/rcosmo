@@ -4,16 +4,37 @@
 \alias{plot.CMBDataFrame}
 \title{Plot CMB Data}
 \usage{
-\method{plot}{CMBDataFrame}(cmbdf, add = FALSE, sample.size, ...)
+\method{plot}{CMBDataFrame}(cmbdf, add = FALSE, sample.size, type = "p",
+  size = 1, box = FALSE, axes = FALSE, aspect = FALSE, back.col, ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame with either spherical or cartesian coordinates.}
 
-\item{add}{if TRUE then this plot will be added to any existing plot}
+\item{add}{if TRUE then this plot will be added to any existing plot.
+Note that if \code{back.col} (see below) is specified then a new plot
+window will be opened and \code{add = TRUE} will have no effect}
 
 \item{sample.size}{optionally specifies the size of a simple random
 sample to take before plotting. This can make the plot less
 computationally intensive}
+
+\item{type}{a single character indicating the type of item to plot.
+Supported types are: 'p' for points, 's' for spheres, 'l' for lines,
+'h' for line segments from z = 0, and 'n' for nothing.}
+
+\item{size}{the size of plotted points}
+
+\item{box}{whether to draw a box}
+
+\item{axes}{whether to draw axes}
+
+\item{aspect}{either a logical indicating whether to adjust the
+aspect ratio, or a new ratio.}
+
+\item{back.col}{optionally specifies the background colour of
+the plot. This argument is passed to rgl::bg3d.}
+
+\item{...}{arguments passed to rgl::plot3d}
 }
 \value{
 A plot of the CMB data

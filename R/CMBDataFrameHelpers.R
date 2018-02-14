@@ -115,28 +115,52 @@ subWindow2 <- function(cmbdf, win)
 
 #' Window attribute of \code{\link{CMBDataFrame}}
 #'
-#' This function returns the \code{\link{CMBWindow}} attribute of a
-#' CMBDataFrame. The return value is NULL if the window is full sky
+#' When new.window is unspecified this function returns the
+#' \code{\link{CMBWindow}} attribute of a
+#' CMBDataFrame. The return value is NULL if the window is full sky.
+#' When new.window is specified this function instead returns
+#' a new CMBDataFrame whose CMBWindow attribute is new.window
 #'
 #'@param cmbdf a CMBDataFrame.
+#'@param new.window optionally specify a new window, in which case a
+#'new CMBDataFrame is returned whose CMBWindow is new.window
 #'
 #'@return
-#' The window attribute of cmbdf
+#' The window attribute of cmbdf or, if new.window is specified, a
+#' new CMBDataFrame.
 #'
 #'@examples
 #' cmbdf <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested")
+#'
+#' ## Create a new CMBDataFrame with a window
 #' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' window(cmbdf) <- win
+#' cmbdf.win <- window(cmbdf, new.window = win)
+#' plot(cmbdf.win)
+#' window(cmbdf.win)
+#'
+#' ## Change the window of an existing CMBDataFrame
+#' window(cmbdf) <- CMBWindow(theta = rep(0.1, 10),
+#'                            phi = seq(0, 9*2*pi/10, length.out = 10))
 #' plot(cmbdf)
-#' window(cmbdf)
 #'
 #'@export
-window <- function(cmbdf)
+window <- function(cmbdf, new.window)
 {
-  # Check that argument is a CMBDF
+  # Check that argument is a CMBWindow
   if ( !is.CMBDataFrame(cmbdf) )
   {
-    stop("Argument must be a CMBDataFrame")
+    stop("Argument 'cmbdf' must be a CMBDataFrame")
+  }
+
+  if ( !missing(new.window) )
+  {
+    # Check that argument is a CMBWindow
+    if ( !is.CMBWindow(new.window) )
+    {
+      stop("Argument 'new.window' be a CMBWindow")
+    }
+
+    return(subWindow(cmbdf, new.window))
   }
 
   return(attr(cmbdf, "window"))
@@ -167,21 +191,25 @@ window <- function(cmbdf)
 
 
 
-#' HEALPix pixel indices from CMBDataFrame
+#' HEALPix pixel indices from \code{\link{CMBDataFrame}}
 #'
-#' This function returns the vector of HEALPix pixel indices from a CMBDataFrame
+#' If new.pix is unspecified then this function returns the vector of
+#' HEALPix pixel indices from a CMBDataFrame. If new.pix is specified then
+#' this function returns a new CMBDataFrame with pixel indices new.pix
 #'
-#'@param cmbdf a CMB Data Frame.
+#'@param cmbdf a CMBDataFrame.
+#'@param new.pix optional vector of pixel indices
 #'
 #'@return
-#' The vector of HEALPix pixel indices
+#' The vector of HEALPix pixel indices or, if new.pix is specified,
+#' a new CMBDataFrame.
 #'
 #'@examples
 #' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
 #' pix(df)
 #'
 #'@export
-pix <- function(cmbdf)
+pix <- function(cmbdf, new.pix)
 {
   # Check that argument is a CMBDF
   if ( !is.CMBDataFrame(cmbdf) )
@@ -189,7 +217,13 @@ pix <- function(cmbdf)
     stop("Argument must be a CMBDataFrame")
   }
 
-  as.numeric( row.names(cmbdf) )
+  if ( !missing(new.pix) )
+  {
+    row.names(cmbdf) <- new.pix
+    return(cmbdf)
+  }
+
+  return(as.numeric( row.names(cmbdf) ))
 }
 
 
@@ -203,6 +237,7 @@ pix <- function(cmbdf)
   {
     stop("Argument must be a CMBDataFrame")
   }
+
   row.names(cmbdf) <- value
   cmbdf
 }

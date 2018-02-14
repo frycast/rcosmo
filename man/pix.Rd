@@ -2,18 +2,23 @@
 % Please edit documentation in R/CMBDataFrameHelpers.R
 \name{pix}
 \alias{pix}
-\title{HEALPix pixel indices from CMBDataFrame}
+\title{HEALPix pixel indices from \code{\link{CMBDataFrame}}}
 \usage{
-pix(cmbdf)
+pix(cmbdf, new.pix)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{cmbdf}{a CMBDataFrame.}
+
+\item{new.pix}{optional vector of pixel indices}
 }
 \value{
-The vector of HEALPix pixel indices
+The vector of HEALPix pixel indices or, if new.pix is specified,
+a new CMBDataFrame.
 }
 \description{
-This function returns the vector of HEALPix pixel indices from a CMBDataFrame
+If new.pix is unspecified then this function returns the vector of
+HEALPix pixel indices from a CMBDataFrame. If new.pix is specified then
+this function returns a new CMBDataFrame with pixel indices new.pix
 }
 \examples{
 df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)

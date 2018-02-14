@@ -8,9 +8,9 @@ CMBWindow(...)
 }
 \arguments{
 \item{...}{arguments that must be labelled either x, y, z
-(cartesian) or lat, long (spherical).
+(cartesian) or theta, phi (spherical, colatitude and latitude respectively).
 Alternatively, a single data.frame may be passed in with columns labelled
-x, y, z or lat, long.
+x, y, z or theta, phi.
 The rows correspond to clockwise ordered
 vertices defining a spherical polygon on the surface of the unit sphere.
 There must be at least 3 rows (i.e., spherical bigons are excluded).
@@ -27,6 +27,6 @@ Add description here
 Add further details here
 }
 \examples{
-win <- CMBWindow(lat = c(0,1,2), long = c(0.5, 1.2))
+win <- CMBWindow(theta = c(0,1,2), phi = c(0.5, 1.2))
 
 }

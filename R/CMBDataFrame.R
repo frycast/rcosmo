@@ -67,7 +67,9 @@
 #'
 #'@return
 #'A data frame whose columns contain the pixel center coordinates
-#'(longitude, lattitude) or (x,y,z), CMB intensities (I), and
+#'theta, phi (meaning colatitude in range \eqn{[0,pi]} and longitude
+#'in range \eqn{[0,2pi)} respectively)
+#'or (x,y,z), CMB intensities (I), and
 #'optionally polarisation (Q,U) and masks (TMASK, PMASK).
 #'The row.names attribute of the resulting CMB Data Frame contains
 #'HEALPix indices.
@@ -224,7 +226,7 @@ CMBDataFrame <- function(CMBData,
 
       # Put the coordinates in a data.frame
       if (coords == "spherical"){
-        cmbdf <- data.frame(long = coordinates[,2], lat = pi/2 - coordinates[,1])
+        cmbdf <- data.frame(theta = coordinates[,1], phi = coordinates[,2])
       } else {
         cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
       }
@@ -379,7 +381,7 @@ CMBDataFrame <- function(CMBData,
 
       # Put the coordinates in a data.frame
       if (coords == "spherical"){
-        cmbdf <- data.frame(long = coordinates[,2], lat = pi/2 - coordinates[,1])
+        cmbdf <- data.frame(theta = coordinates[,1], phi = coordinates[,2])
       } else {
         cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
       }

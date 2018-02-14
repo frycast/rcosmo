@@ -2,10 +2,10 @@
 
 #'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
 #'
-#'@param cmbdf a \code{\link{CMBDataFrame}}
-#'@param win a \code{\link{CMBWindow}}
+#'@param cmbdf a CMBDataFrame
+#'@param win a CMBWindow
 #'
-#'@return a \code{\link{CMBDataFrame}} which is restricted to the
+#'@return a CMBDataFrame which is restricted to the
 #'region of the sky specified by \code{win}
 #'
 #'@examples
@@ -21,12 +21,146 @@ subWindow <- function(cmbdf, win)
     stop(gettextf("'%s' is not a CMBWindow", deparse(substitute(win))))
   }
 
+  # df.sq <- cmbdf[ df$theta <= max(vertices_sph$theta) & df$theta  >= min(vertices_sph$theta)
+  #               & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
+
+  old.coords.win <- coords(win)
+  old.coords.cmbdf <- coords(cmbdf)
+
+  if ( old.coords.win  == "spherical" )
+  {
+    coords(win) <- "cartesian"
+  }
+
+  if ( old.coords.cmbdf == "spherical" )
+  {
+    coords(cmbdf) <- "cartesian"
+  }
+
+  # All the work is done by pointInPolygon: src/CMBDataFrameHelpers.cpp
+  cmbdf.new <- cmbdf[pointInPolygon(cmbdf[,c("x","y","z")], win),]
+
+  if ( old.coords.win == "spherical" )
+  {
+    coords(win) <- "spherical"
+  }
+
+  if ( old.coords.cmbdf == "spherical" )
+  {
+    coords(cmbdf.new) <- "spherical"
+  }
+
+  attr(cmbdf.new, "window") <- win
+
+  return(cmbdf.new)
+}
+
+
+
+
+## THIS IS JUST HERE FOR COMPARISON WITH subWindow AND SHOULD BE DELETED
+subWindow2 <- function(cmbdf, win)
+{
+  if ( !is.CMBDataFrame(cmbdf) ) {
+    stop(gettextf("'%s' is not a CMBDataFrame", deparse(substitute(cmbdf))))
+  }
+
+  if ( !is.CMBWindow(win) ) {
+    stop(gettextf("'%s' is not a CMBWindow", deparse(substitute(win))))
+  }
+
+  # df.sq <- cmbdf[ df$theta <= max(vertices_sph$theta) & df$theta  >= min(vertices_sph$theta)
+  #               & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
+
+  if ( coords(win) == "spherical" )
+  {
+    coords(win) <- "cartesian"
+  }
+
+  if ( coords(cmbdf) == "spherical" )
+  {
+    coords(cmbdf) <- "cartesian"
+  }
+
+  n <- nrow(cmbdf)
+  keep <- rep(TRUE, n)
+  k <- nrow(win)
+  for (b in 1:n)
+  {
+    #cat("b: ", b, "\n")
+    for (v in 1:k)
+    {
+      #cat("v: ", v, "\n")
+      V1 <- as.numeric(win[v,])
+      V2 <- as.numeric(win[v %% k + 1,]) # i + 1 (cyclic)
+
+      m <- matrix(c(cmbdf[b,c("x","y","z")],V1,V2), nrow = 3)
+      if ( det(m) < 0 )
+      {
+        keep[b] <- FALSE
+        break
+      }
+    }
+  }
+
+  cmbdf.new <- cmbdf[keep,]
+
+  return(cmbdf.new)
 }
 
 
 
 
 
+
+#' Window attribute of \code{\link{CMBDataFrame}}
+#'
+#' This function returns the \code{\link{CMBWindow}} attribute of a
+#' CMBDataFrame. The return value is NULL if the window is full sky
+#'
+#'@param cmbdf a CMBDataFrame.
+#'
+#'@return
+#' The window attribute of cmbdf
+#'
+#'@examples
+#' cmbdf <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested")
+#' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' window(cmbdf) <- win
+#' plot(cmbdf)
+#' window(cmbdf)
+#'
+#'@export
+window <- function(cmbdf)
+{
+  # Check that argument is a CMBDF
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+
+  return(attr(cmbdf, "window"))
+}
+
+
+
+
+#' Assign a new \code{\link{CMBWindow}} to a \code{\link{CMBDataFrame}}
+#'@export
+`window<-` <- function(cmbdf,...,value)
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument 'cmbdf' to 'window(cmbdf)' must be a CMBDataFrame")
+  }
+
+  if ( !is.CMBWindow(value) )
+  {
+    stop("Argument 'win' to 'window(cmbdf) <- win' must be a CMBWindow")
+  }
+
+  return(subWindow(cmbdf, value))
+}
 
 
 
@@ -57,6 +191,9 @@ pix <- function(cmbdf)
 
   as.numeric( row.names(cmbdf) )
 }
+
+
+
 
 
 #' Assign new pixel indices to a CMBDataFrame
@@ -238,7 +375,8 @@ is.CMBDataFrame <- function(cmbdf)
 #' @param df Any data.frame with a column labelled "I" for intensities
 #' @param coords specifies the coordinate system to be "spherical",
 #' "cartesian" or unspecified (HEALPix only). If "spherical" then df
-#' must have columns named "lat" and "lon". If "cartesian" then df
+#' must have columns named "theta" and "phi" (colatitude and longitude
+#' respectively). If "cartesian" then df
 #' must have columns named "x", "y", and "z"
 #' @param ordering specifies the ordering scheme ("ring" or "nested")
 #' @param nside specifies the Nside parameter
@@ -270,7 +408,7 @@ as.CMBDataFrame <- function(df, coords, ordering, nside)
 
     if ( missing(coords) ) {
 
-      if ( any(c("lat", "lon", "x", "y", "z") %in% names(df) ) ) {
+      if ( any(c("theta", "phi", "x", "y", "z") %in% names(df) ) ) {
         warning("coords was unspecified and so coordinates
                 were set to HEALPix only")
       }
@@ -281,13 +419,13 @@ as.CMBDataFrame <- function(df, coords, ordering, nside)
       coords <- tolower(coords)
 
       if ( coords == "spherical"
-        && !("lat" %in% names(df)
-        &&   "lon" %in% names(df)) ) {
+        && !("theta" %in% names(df)
+        &&   "phi" %in% names(df)) ) {
         stop(gettextf("Since coords = spherical, '%s' must have
                       column names %s and %s",
                       deparse(substitute(df)),
-                      dQuote("lat"),
-                      dQuote("lon")))
+                      dQuote("theta"),
+                      dQuote("phi")))
       }
 
       if ( coords == "cartesian"

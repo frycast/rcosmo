@@ -7,7 +7,8 @@
 sph2car(df)
 }
 \arguments{
-\item{df}{a data.frame with columns labelled \code{lat} and \code{long}}
+\item{df}{a data.frame with columns labelled \code{theta} and \code{phi}
+for colatitude and longitude respectively}
 }
 \value{
 a data.frame with columns x, y, z (cartesian coordinates)

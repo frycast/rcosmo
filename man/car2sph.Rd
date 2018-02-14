@@ -10,6 +10,6 @@ car2sph(df)
 \item{df}{a data.frame with columns labelled x, y and z}
 }
 \value{
-a data.frame with columns lat and long for latitude and
-longitude
+a data.frame with columns theta and phi for colatitude and
+longitude in ranges \eqn{[0,pi]} and \eqn{[0,2pi]} respectively
 }

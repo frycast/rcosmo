@@ -2,14 +2,14 @@
 using namespace Rcpp;
 
 
-// Note Some values returned differ from Yu Guang's version (below) by 2pi
+
 //'@title
 //'car2sph
 //'
 //'@param df a data.frame with columns labelled x, y and z
 //'
-//'@return a data.frame with columns lat and long for latitude and
-//'longitude
+//'@return a data.frame with columns theta and phi for colatitude and
+//'longitude in ranges \eqn{[0,pi]} and \eqn{[0,2pi]} respectively
 //'
 //'@name car2sph
 //'
@@ -21,19 +21,27 @@ DataFrame car2sph(DataFrame df) {
   NumericVector x = df["x"];
   NumericVector y = df["y"];
   NumericVector z = df["z"];
-  NumericVector lat(n);
-  NumericVector lon(n);
+  NumericVector theta(n);
+  NumericVector phi(n);
 
   for ( int i = 0; i < n; i++ )
   {
 
-    lat[i] = M_PI/2.0 - acos(z[i]);
-    lon[i] = std::atan2(y[i],x[i]);
+    theta[i] = acos(z[i]);
+    double phi_i = std::atan2(y[i],x[i]);
+    if ( phi_i < 0 )
+    {
+      phi[i] = 2*M_PI + phi_i;
+    }
+    else
+    {
+      phi[i] = phi_i;
+    }
 
   }
 
-  DataFrame sph = DataFrame::create( Named("lat") = lat,
-                                     Named("long") = lon);
+  DataFrame sph = DataFrame::create( Named("theta") = theta,
+                                     Named("phi") = phi);
 
   return sph;
 
@@ -46,18 +54,18 @@ DataFrame car2sph(DataFrame df) {
 //   NumericVector x = df["x"];
 //   NumericVector y = df["y"];
 //   NumericVector z = df["z"];
-//   NumericVector lat(n);
-//   NumericVector lon(n);
+//   NumericVector theta(n);
+//   NumericVector phi(n);
 //
 //   for ( int i = 0; i < n; i++ )
 //   {
-//     // Latitude
-//     lat[i] = M_PI/2.0 - acos(z[i]);
+//     // colatitude
+//     theta[i] = M_PI/2.0 - acos(z[i]);
 //
 //     // Longitude
 //     if ( z[i] == 1 || z[i] == -1 )
 //     {
-//       lon[i] = 0;
+//       phi[i] = 0;
 //     }
 //     else
 //     {
@@ -66,19 +74,19 @@ DataFrame car2sph(DataFrame df) {
 //
 //       if ( y[i] >= 0 )
 //       {
-//         lon[i] = acos(t);
+//         phi[i] = acos(t);
 //       }
 //       else
 //       {
-//         lon[i] = 2*M_PI - acos(t);
+//         phi[i] = 2*M_PI - acos(t);
 //       }
 //
 //     }
 //
 //   }
 //
-//   DataFrame sph = DataFrame::create( Named("lat") = lat,
-//                                      Named("long") = lon);
+//   DataFrame sph = DataFrame::create( Named("theta") = theta,
+//                                      Named("phi") = phi);
 //
 //   return sph;
 //
@@ -92,7 +100,8 @@ DataFrame car2sph(DataFrame df) {
 //'@title
 //'sph2car
 //'
-//'@param df a data.frame with columns labelled \code{lat} and \code{long}
+//'@param df a data.frame with columns labelled \code{theta} and \code{phi}
+//'for colatitude and longitude respectively
 //'
 //'@return a data.frame with columns x, y, z (cartesian coordinates)
 //'
@@ -103,18 +112,17 @@ DataFrame car2sph(DataFrame df) {
 DataFrame sph2car(DataFrame df) {
 
   int n = df.nrow();
-  NumericVector lat = df["lat"];
-  NumericVector lon = df["long"];
+  NumericVector theta = df["theta"];
+  NumericVector phi = df["phi"];
   NumericVector x(n);
   NumericVector y(n);
   NumericVector z(n);
 
   for ( int i = 0; i < n; i++ )
   {
-    double theta = M_PI/2 - lat[i];
-    x[i] = sin(theta)*cos(lon[i]);
-    y[i] = sin(theta)*sin(lon[i]);
-    z[i] = cos(theta);
+    x[i] = sin(theta[i])*cos(phi[i]);
+    y[i] = sin(theta[i])*sin(phi[i]);
+    z[i] = cos(theta[i]);
   }
 
   DataFrame xyz = DataFrame::create( Named("x") = x,

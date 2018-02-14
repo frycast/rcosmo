@@ -2,6 +2,24 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #'@title
+#'pointInPolygon
+#'
+#'@param df a data.frame with columns x, y, z for cartesian coordinates.
+#'The rows represent points on the surface of a unit sphere
+#'@param win a data.frame with columns x, y, z for cartesian coordinates.
+#'The rows represent clockwise oriented vertices of a spherical polygon.
+#'
+#'@return a logical vector indicated which rows of \code{df}
+#'lie within the spherical polygon determined by \code{win}
+#'
+#'@name pointInPolygon
+#'
+#'@export
+pointInPolygon <- function(df, win) {
+    .Call('_rcosmo_pointInPolygon', PACKAGE = 'rcosmo', df, win)
+}
+
+#'@title
 #'geoDistList
 #'@description
 #'Create a list of all geodesic distances between points on the unit
@@ -77,8 +95,8 @@ covCMB_internal2 <- function(cmbdf, nbin) {
 #'
 #'@param df a data.frame with columns labelled x, y and z
 #'
-#'@return a data.frame with columns lat and long for latitude and
-#'longitude
+#'@return a data.frame with columns theta and phi for colatitude and
+#'longitude in ranges \eqn{[0,pi]} and \eqn{[0,2pi]} respectively
 #'
 #'@name car2sph
 #'
@@ -90,7 +108,8 @@ car2sph <- function(df) {
 #'@title
 #'sph2car
 #'
-#'@param df a data.frame with columns labelled \code{lat} and \code{long}
+#'@param df a data.frame with columns labelled \code{theta} and \code{phi}
+#'for colatitude and longitude respectively
 #'
 #'@return a data.frame with columns x, y, z (cartesian coordinates)
 #'

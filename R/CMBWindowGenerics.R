@@ -45,7 +45,7 @@ coords.CMBWindow <- function( win, new.coords )
     {
       # Convert to spherical
       win[,1:2] <- car2sph(win)
-      names(win) <- c("lat", "long")
+      names(win) <- c("theta", "phi")
       win[,3] <- NULL
       attr(win, "coords") <- "spherical"
     }

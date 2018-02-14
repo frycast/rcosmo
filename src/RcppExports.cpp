@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// pointInPolygon
+LogicalVector pointInPolygon(DataFrame df, DataFrame win);
+RcppExport SEXP _rcosmo_pointInPolygon(SEXP dfSEXP, SEXP winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
+    rcpp_result_gen = Rcpp::wrap(pointInPolygon(df, win));
+    return rcpp_result_gen;
+END_RCPP
+}
 // geoDistList
 Rcpp::List geoDistList(Rcpp::DataFrame cmbdf);
 RcppExport SEXP _rcosmo_geoDistList(SEXP cmbdfSEXP) {
@@ -90,6 +102,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rcosmo_pointInPolygon", (DL_FUNC) &_rcosmo_pointInPolygon, 2},
     {"_rcosmo_geoDistList", (DL_FUNC) &_rcosmo_geoDistList, 1},
     {"_rcosmo_distBinList", (DL_FUNC) &_rcosmo_distBinList, 2},
     {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},

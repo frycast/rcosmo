@@ -7,10 +7,37 @@ library(rcosmo)
 library(tidyverse)
 
 #####################################################################
+######### DEMONSTRATE subWindow #####################################
+#####################################################################
+
+win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+cmbdf <- CMBDataFrame(nside = 32, ordering = "nested", coords = "spherical")
+window(cmbdf) <- win
+plot(cmbdf)
+
+# Comparison with pure R function
+cmbdf.win <- subWindow(cmbdf, win)
+cmbdf.win2 <- subWindow2(cmbdf, win)
+
+# They aren't equal but it looks like the R version has the problem
+all.equal(cmbdf.win, cmbdf.win2)
+plot(cmbdf.win)
+plot(cmbdf.win2)
+
+# The C++ version is about 300 times faster
+cmbdf <- CMBDataFrame(nside = 16, ordering = "nested", coords = "spherical")
+microbenchmark(subWindow(cmbdf, win), subWindow2(cmbdf, win))
+
+
+library(Rcpp)
+sourceCpp("src/CMBDataFrameHelpers.cpp")
+
+
+#####################################################################
 ######### DEMONSTRATE CMBWindow #####################################
 #####################################################################
 
-win <- CMBWindow(lat = c(0,0,0), long = c(1,2,3))
+win <- CMBWindow(theta = c(1,2,3), phi = c(0,0,0))
 area(win)
 maxDist(win)
 coords(win)
@@ -20,6 +47,19 @@ win
 win <- CMBWindow(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
 coords(win) <- "spherical"
 win
+
+
+#####################################################################
+######### DEMONSTRATE car2sph and sph2car ###########################
+#####################################################################
+
+df <- data.frame(theta = c(1,2,3), phi = c(0,0,0))
+df
+df.xyz <- sph2car(df)
+df <- car2sph(df.xyz)
+df
+df.xyz <- data.frame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+df <- car2sph(df.xyz)
 
 
 
@@ -64,15 +104,13 @@ plot(0:10, C, type = 'b')
 cmbdf.sky.sph <- CMBDataFrame("../CMB_map_smica1024.fits",
                               coords = "spherical")
 ## Annoying way to do this because CMBWindow class is incomplete
-cmbdf.square <- cmbdf.sky.sph[  cmbdf.sky.sph$lat  <= 1
-                              & cmbdf.sky.sph$lat  >= 0
-                              & cmbdf.sky.sph$long <= 1
-                              & cmbdf.sky.sph$long >= 0,]
+cmbdf.square <- cmbdf.sky.sph[  cmbdf.sky.sph$theta  <= 1
+                              & cmbdf.sky.sph$theta  >= 0
+                              & cmbdf.sky.sph$phi <= 1
+                              & cmbdf.sky.sph$phi >= 0,]
 
 ## Annoying coversions because coords<- function unfinished
-df.square.xyz <- as.data.frame(sph2car(cmbdf.square$long,
-                                          cmbdf.square$lat,
-                                       deg = FALSE))
+df.square.xyz <- sph2car(cmbdf.sky.sph)
 df.square.xyz <- data.frame(df.square.xyz, I = cmbdf.square$I)
 
 df.square.xyz <- as.CMBDataFrame(df.square.xyz, nside = 1024,
@@ -97,13 +135,11 @@ plot(0:20, C4/C4[1], type = 'b')
 
 
 ### Using a smaller 'square' window
-cmbdf.square.small <- cmbdf.sky.sph[  cmbdf.sky.sph$lat  <= 0.6
-                                    & cmbdf.sky.sph$lat  >= 0.5
-                                    & cmbdf.sky.sph$long <= 0.1
-                                    & cmbdf.sky.sph$long >= 0,]
-df.square.small.xyz <- as.data.frame(sph2car(cmbdf.square.small$long,
-                                       cmbdf.square.small$lat,
-                                       deg = FALSE))
+cmbdf.square.small <- cmbdf.sky.sph[  cmbdf.sky.sph$theta  <= 0.6
+                                    & cmbdf.sky.sph$theta  >= 0.5
+                                    & cmbdf.sky.sph$phi <= 0.1
+                                    & cmbdf.sky.sph$phi >= 0,]
+df.square.small.xyz <- sph2car(cmbdf.square.small)
 df.square.small.xyz <- data.frame(df.square.small.xyz,
                                   I = cmbdf.square.small$I)
 ## Plot of the square
@@ -373,7 +409,7 @@ lsf.str("package:rcosmo")
 
 
 ########################################################################
-############### ATTEMPTED POINT IN POLYGON DEMO ########################
+############### OLD ATTEMPTED POINT IN POLYGON DEMO ####################
 ########################################################################
 
 
@@ -410,8 +446,8 @@ polygon_boundary <- function( vertices_xyz, eps = 0.001 )
 
 source("exploration/rodrigues.R")
 
-vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
-vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+vertices_sph <- data.frame( phi = c(0, 1, 1, 0.5, 1, 0), theta = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$phi, vertices_sph$theta, deg = FALSE))
 plot3d(vertices_xyz, col = 'red', type = 'p', size = 12, pch = 2, add = TRUE)
 
 polygon_boundary_points_xyz <- polygon_boundary( vertices_xyz, 0.001 )
@@ -419,12 +455,12 @@ plot3d(polygon_boundary_points_xyz, col = 'red', type = 'p', size = 3.2, pch = 3
 polygon_boundary_points <- as.data.frame( car2sph(polygon_boundary_points_xyz$x,
                                                   polygon_boundary_points_xyz$y,
                                                   polygon_boundary_points_xyz$z,
-                                                  deg = FALSE)[,c("long","lat")] )
+                                                  deg = FALSE)[,c("phi","theta")] )
 
 # Get ALL HEALPix points in the square
-df_square <- df[  df$lat  <= max(vertices_sph$lat)  & df$lat  >= min(vertices_sph$lat)
-                  & df$long <= max(vertices_sph$long) & df$long >= min(vertices_sph$long),]
-df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+df_square <- df[  df$theta  <= max(vertices_sph$theta)  & df$theta  >= min(vertices_sph$theta)
+                  & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
+df_square_xyz <- as.data.frame(sph2car(df_square$phi, df_square$theta, deg = FALSE))
 plot3d(df_square_xyz, col = 'blue', type = 'p', size = 1.6, pch = 3, add = TRUE)
 
 
@@ -436,15 +472,15 @@ df_square
 # Round latitudes to some tolerance based on eps then split into lists by latitude
 eps <- 0.001
 digits <- ceiling(log10(1/eps) + 1)
-polygon_boundary_points$lat <- round(polygon_boundary_points$lat, digits)
-polygon_boundary_points_split <- split(polygon_boundary_points, polygon_boundary_points$lat)
+polygon_boundary_points$theta <- round(polygon_boundary_points$theta, digits)
+polygon_boundary_points_split <- split(polygon_boundary_points, polygon_boundary_points$theta)
 polygon_boundary_lats <- as.numeric(names(polygon_boundary_points_split))
 # Get isolatitude values from the square
-isolats_in_square <- unique(df_square$lat)
+isolats_in_square <- unique(df_square$theta)
 # For each latitude in the polygon, find the nearest isolat in the square
 for ( polylat in polygon_boundary_lats )
 {
-  polygon_boundary_points_split[[as.character(polylat)]]$lat <-
+  polygon_boundary_points_split[[as.character(polylat)]]$theta <-
     isolats_in_square[ which.min(abs(isolats_in_square - polylat)) ]
 }
 # Bind the list pack together
@@ -452,8 +488,8 @@ library(data.table)
 polygon_boundary_points <- rbindlist(polygon_boundary_points_split) #faster than do.call("rbind",...)
 # Plot result to check sanity
 polygon_boundary_points_xyz <- as.data.frame(sph2car(
-  polygon_boundary_points$long,
-  polygon_boundary_points$lat,
+  polygon_boundary_points$phi,
+  polygon_boundary_points$theta,
   deg = FALSE))
 plot3d(polygon_boundary_points_xyz, col = 'yellow', type = 'p', size = 5, pch = 3, add = TRUE)
 #-----------------------------------------------------------------------------------
@@ -503,11 +539,11 @@ lonWrap <- function(lon) {
 # define the geodesics, since they are already on the sphere they
 # must lie on the geodesics. Also, they already must lie on the
 # correct isolatitude rings. Then figure out how to cut off the excess.
-vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
-vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
-df_square <- df[  df$lat  <= max(vertices_sph$lat)  & df$lat  >= min(vertices_sph$lat)
-                  & df$long <= max(vertices_sph$long) & df$long >= min(vertices_sph$long),]
-df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+vertices_sph <- data.frame( phi = c(0, 1, 1, 0.5, 1, 0), theta = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$phi, vertices_sph$theta, deg = FALSE))
+df_square <- df[  df$theta  <= max(vertices_sph$theta)  & df$theta  >= min(vertices_sph$theta)
+                  & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
+df_square_xyz <- as.data.frame(sph2car(df_square$phi, df_square$theta, deg = FALSE))
 plot3d(df_square_xyz, col = 'blue', type = 'p', size = 3.3, pch = 3, add = TRUE)
 
 vertices <- nrow(vertices_xyz)
@@ -566,8 +602,8 @@ polygon_boundary <- function( vertices_xyz, eps = 0.001 )
     two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitudes are both 0
 
     line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
-    line <- as.data.frame( sph2car( long = line_longitudes,
-                                    lat = rep(0,length(line_longitudes)),
+    line <- as.data.frame( sph2car( phi = line_longitudes,
+                                    theta = rep(0,length(line_longitudes)),
                                     deg = FALSE ) )
 
     line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
@@ -578,15 +614,15 @@ polygon_boundary <- function( vertices_xyz, eps = 0.001 )
 }
 
 # Use boundary point finder function to find some boundary points for a polygon
-vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
-vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+vertices_sph <- data.frame( phi = c(0, 1, 1, 0.5, 1, 0), theta = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$phi, vertices_sph$theta, deg = FALSE))
 plot3d(vertices_xyz, col = 'red', type = 'p', size = 15, pch = 3, add = TRUE)
 polygon_boundary_points_xyz <- polygon_boundary( vertices_xyz, 0.001 )
 plot3d(polygon_boundary_points_xyz, col = 'red', type = 'p', size = 3.2, pch = 3, add = TRUE)
 polygon_boundary_points <- as.data.frame( car2sph(polygon_boundary_points_xyz$x,
                                                   polygon_boundary_points_xyz$y,
                                                   polygon_boundary_points_xyz$z,
-                                                  deg = FALSE)[,c("long","lat")] )
+                                                  deg = FALSE)[,c("phi","theta")] )
 
 
 
@@ -597,10 +633,10 @@ normal_vector <- vector_cross(two_points[1,], two_points[2,])
 planes3d(normal_vector[1], normal_vector[2], normal_vector[3]) # Geodesic should follow this plane
 
 
-# Select square with lowest to highest both lat and long, plot it
-df_square <- df[  df$lat  <= max(vertices_sph$lat)  & df$lat  >= min(vertices_sph$lat)
-                & df$long <= max(vertices_sph$long) & df$long >= min(vertices_sph$long),]
-df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+# Select square with lowest to highest both theta and long, plot it
+df_square <- df[  df$theta  <= max(vertices_sph$theta)  & df$theta  >= min(vertices_sph$theta)
+                & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
+df_square_xyz <- as.data.frame(sph2car(df_square$phi, df_square$theta, deg = FALSE))
 row.names(df_square_xyz) <- row.names(df_square) # This is important! sph2car ditches the row names
 plot3d(df_square_xyz, col = 'blue', type = 'p', size = 3.3, pch = 3, add = TRUE)
 
@@ -614,15 +650,15 @@ head(df_square)
 # Round latitudes to some tolerance based on eps then split into lists by latitude
 eps <- 0.001
 digits <- ceiling(log10(1/eps) + 1)
-polygon_boundary_points$lat <- round(polygon_boundary_points$lat, digits)
-polygon_boundary_points_split <- split(polygon_boundary_points, polygon_boundary_points$lat)
+polygon_boundary_points$theta <- round(polygon_boundary_points$theta, digits)
+polygon_boundary_points_split <- split(polygon_boundary_points, polygon_boundary_points$theta)
 polygon_boundary_lats <- as.numeric(names(polygon_boundary_points_split))
 # Get isolatitude values from the square
-isolats_in_square <- unique(df_square$lat)
+isolats_in_square <- unique(df_square$theta)
 # For each latitude in the polygon, find the nearest isolat in the square
 for ( polylat in polygon_boundary_lats )
 {
-  polygon_boundary_points_split[[as.character(polylat)]]$lat <-
+  polygon_boundary_points_split[[as.character(polylat)]]$theta <-
     isolats_in_square[ which.min(abs(isolats_in_square - polylat)) ]
 }
 # Bind the list pack together
@@ -630,8 +666,8 @@ library(data.table)
 polygon_boundary_points <- rbindlist(polygon_boundary_points_split) #faster than do.call("rbind",...)
 # Plot result to check sanity
 polygon_boundary_points_xyz <- as.data.frame(sph2car(
-  polygon_boundary_points$long,
-  polygon_boundary_points$lat,
+  polygon_boundary_points$phi,
+  polygon_boundary_points$theta,
   deg = FALSE))
 plot3d(polygon_boundary_points_xyz, col = 'yellow', type = 'p', size = 5, pch = 3, add = TRUE)
 ################################################################################################
@@ -643,7 +679,7 @@ for ( row in 1:rows )
   inside <- "unknown"
   # If we are at the start of an isolat ring
   if ( row > 1
-     & df_square$lat[row] != df_square$lat[row-1] )
+     & df_square$theta[row] != df_square$theta[row-1] )
   {
     # Check if we start inside a polygon
 
@@ -652,13 +688,13 @@ for ( row in 1:rows )
 
 
 rows <- nrow(df_square)
-thislat <- df_square$lat[1]
+thislat <- df_square$theta[1]
 inside <- "unknown"
 count <- 0
 for ( row in 1:rows )
 {
   prevlat <- thislat
-  thislat <- df_square$lat[row]
+  thislat <- df_square$theta[row]
 
   # We are at the start of an isolat ring if...
   if ( thislat != prevlat )
@@ -680,8 +716,8 @@ for ( row in 1:rows )
 
 # Parametric form for great circle joining u,v is ucos(t) + wsin(t)
 # where w = (u x v) x u, since then u, w are orthonormal vectors in the plane of the circle
-vertices_sph <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
-vertices_xyz <- as.data.frame(sph2car(vertices_sph$long, vertices_sph$lat, deg = FALSE))
+vertices_sph <- data.frame( phi = c(0, 1, 1, 0.5, 1, 0), theta = c(0, 0, 0.2, 0.2, 0.5, 1) )
+vertices_xyz <- as.data.frame(sph2car(vertices_sph$phi, vertices_sph$theta, deg = FALSE))
 u <- vertices_xyz[1,]
 v <- vertices_xyz[2,]
 w <- vector_cross(vector_cross(u,v),u)
@@ -694,24 +730,24 @@ plot3d(great_circ_uv, col = 'blue', type = 'p', size = 3.2, pch = 3, add = TRUE)
 
 
 # Specify the polygon in spherical, convert to cartesian, plot it
-polygon_sph <- data.frame( long = c(0.2, 0.4, 0.4, 0.2, 0.2), lat = c(0.2,0.2,0.4,0.4, 0.2) )
-polygon_xyz <- as.data.frame(sph2car(polygon_sph$long, polygon_sph$lat, deg = FALSE))
+polygon_sph <- data.frame( phi = c(0.2, 0.4, 0.4, 0.2, 0.2), theta = c(0.2,0.2,0.4,0.4, 0.2) )
+polygon_xyz <- as.data.frame(sph2car(polygon_sph$phi, polygon_sph$theta, deg = FALSE))
 plot3d(polygon_xyz, col = 'white', type = 'l', size = 20, cex = 30, pch = 3, add = TRUE)
 
-# These are the high/low-est lat/long of the polygon vertices
-highest_lat <- max(polygon_sph$lat)
-lowest_lat <- min(polygon_sph$lat)
-highest_long <- max(polygon_sph$long)
-lowest_long <- min(polygon_sph$long)
+# These are the high/low-est lat/phi of the polygon vertices
+highest_lat <- max(polygon_sph$theta)
+lowest_lat <- min(polygon_sph$theta)
+highest_long <- max(polygon_sph$phi)
+lowest_long <- min(polygon_sph$phi)
 
 # Select the strip from lowest to highest lat, plot it
-df_strip <- df[df$lat < highest_lat & df$lat > lowest_lat, ]
-df_strip_xyz <- as.data.frame(sph2car(df_strip$long, df_strip$lat, deg = FALSE))
+df_strip <- df[df$theta < highest_lat & df$theta > lowest_lat, ]
+df_strip_xyz <- as.data.frame(sph2car(df_strip$phi, df_strip$theta, deg = FALSE))
 plot3d(df_strip_xyz, col = 'green', type = 'p', size = 7, cex = 30, pch = 3, add = TRUE)
 
-# Select strip with lowest to highest both lat and long, plot it
-df_square <- df[df$lat <= highest_lat & df$lat >= lowest_lat & df$long <= highest_long & df$long >= lowest_long,]
-df_square_xyz <- as.data.frame(sph2car(df_square$long, df_square$lat, deg = FALSE))
+# Select strip with lowest to highest both lat and phi, plot it
+df_square <- df[df$theta <= highest_lat & df$theta >= lowest_lat & df$phi <= highest_long & df$phi >= lowest_long,]
+df_square_xyz <- as.data.frame(sph2car(df_square$phi, df_square$theta, deg = FALSE))
 plot3d(df_square_xyz, col = 'blue', type = 'p', size = 8, pch = 3, add = TRUE)
 
 # Stereographic projection of the spherical polygon vecrtices and contents
@@ -731,13 +767,13 @@ sourceCpp("exploration/distGeo.cpp") # For segment distances to determine tolera
 # Just draw one line for practice
 distGeo(as.matrix(data.frame(x = 1, y = 1)), as.matrix(data.frame(x = 1, y = 1)))
 eps <- 0.001
-dist <- distGeo(as.matrix(data.frame(long = 0.2, lat = 0.2)),
-                as.matrix(data.frame(long = 0.4, lat = 0.4)) )
+dist <- distGeo(as.matrix(data.frame(phi = 0.2, theta = 0.2)),
+                as.matrix(data.frame(phi = 0.4, theta = 0.4)) )
 n <- dist/eps
 
-line <- data.frame(long = c(seq(0.2,0.4, length.out = n)),
-                   lat = c(seq(0.2,0.4, length.out = n)) )
-line_xyz <- as.data.frame(sph2car(line$long, line$lat, deg = FALSE))
+line <- data.frame(phi = c(seq(0.2,0.4, length.out = n)),
+                   theta = c(seq(0.2,0.4, length.out = n)) )
+line_xyz <- as.data.frame(sph2car(line$phi, line$theta, deg = FALSE))
 plot3d(line_xyz, col = 'green', type = 'p', size = 10, pch = 3, add = TRUE)
 
 ## Sample simple polygon boundary
@@ -752,8 +788,8 @@ polygon_boundary <- function( vertices_sph, eps = 0.001 )
   for ( row in 1:nrow(vertices_sph) )
   {
     n <- dist[row]/eps
-    line <- data.frame(long = seq(vertices_sph$long[row], vertices_sph_rot$long[row], length.out = n),
-                       lat = seq(vertices_sph$lat[row], vertices_sph_rot$lat[row], length.out = n) )
+    line <- data.frame(phi = seq(vertices_sph$phi[row], vertices_sph_rot$phi[row], length.out = n),
+                       theta = seq(vertices_sph$theta[row], vertices_sph_rot$theta[row], length.out = n) )
     boundary_points <- rbind(boundary_points, line)
   }
 
@@ -761,13 +797,13 @@ polygon_boundary <- function( vertices_sph, eps = 0.001 )
 }
 # Plot now
 polygon_points <- polygon_boundary( polygon_sph )
-polygon_points_xyz <- as.data.frame(sph2car(polygon_points$long, polygon_points$lat, deg = FALSE))
+polygon_points_xyz <- as.data.frame(sph2car(polygon_points$phi, polygon_points$theta, deg = FALSE))
 plot3d(polygon_points_xyz, col = 'red', type = 'p', size = 10, pch = 3, add = TRUE)
 
 #Try it with a more complicated polygon
-polygon_sph2 <- data.frame( long = c(0, 1, 1, 0.5, 1, 0), lat = c(0, 0, 0.2, 0.2, 0.5, 1) )
+polygon_sph2 <- data.frame( phi = c(0, 1, 1, 0.5, 1, 0), theta = c(0, 0, 0.2, 0.2, 0.5, 1) )
 polygon_points2 <- polygon_boundary( polygon_sph2 )
-polygon_points_xyz2 <- as.data.frame(sph2car(polygon_points2$long, polygon_points2$lat, deg = FALSE))
+polygon_points_xyz2 <- as.data.frame(sph2car(polygon_points2$phi, polygon_points2$theta, deg = FALSE))
 plot3d(polygon_points_xyz2, col = 'red', type = 'p', size = 5, pch = 3, add = TRUE)
 
 ## Check that my lines are geodesics
@@ -779,7 +815,7 @@ poly_rot_check <- rodrigues(a = sph2car(0,1, deg = FALSE),
                             polygon_points_xyz2)
 plot3d(poly_rot_check, col = 'red', type = 'p', size = 7, pch = 3, add = TRUE)
 
-# Get points grid on geodesic between two points (long, lat) = (1,0.5) and (0,1)
+# Get points grid on geodesic between two points (phi, theta) = (1,0.5) and (0,1)
 two_points <- sph2car(c(1,0), c(0.5,1), deg = FALSE)
 plot3d(two_points, col = 'yellow', type = 'p', size = 20, pch = 3, add = TRUE)
 normal_vector <- vector_cross(two_points[1,], two_points[2,])
@@ -816,7 +852,7 @@ polygon_boundary <- function( vertices_xyz, eps = 0.001 )
 
     line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
     line <- as.data.frame( sph2car( long = line_longitudes,
-                                    lat = rep(0,length(line_longitudes)),
+                                    theta = rep(0,length(line_longitudes)),
                                     deg = FALSE ) )
 
     line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
@@ -829,7 +865,7 @@ polygon_boundary <- function( vertices_xyz, eps = 0.001 )
 
 boundary_points <- data.frame()
 
-vertices_xyz2 <- as.data.frame(sph2car(polygon_sph2$long, polygon_sph2$lat, deg = FALSE))
+vertices_xyz2 <- as.data.frame(sph2car(polygon_sph2$long, polygon_sph2$theta, deg = FALSE))
 plot3d(vertices_xyz2, col = 'red', type = 'p', size = 20, pch = 3, add = TRUE)
 polygon_boundary_points <- polygon_boundary( vertices_xyz2 )
 plot3d(polygon_boundary_points, col = 'red', type = 'p', size = 5, pch = 3, add = TRUE)
@@ -842,7 +878,7 @@ two_longitudes <- atan2(two_points_rotated[,2], two_points_rotated[,1]) # latitu
 line_longitudes <- seq(two_longitudes[1], two_longitudes[2], by = eps)
 
 line <- sph2car( long = line_longitudes,
-                        lat = rep(0,length(line_longitudes)),
+                        theta = rep(0,length(line_longitudes)),
                         deg = FALSE )
 line_rotated_back <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal_vector)[1,], line))
 names(line_rotated_back) <- c("x","y","z")
@@ -893,7 +929,7 @@ N <- 12*256^2     # specify the number of sample pixels
 spix <- sample(seq(1,12*Nside^2),N)
 df <- CMBDataFrame(CMBData = cmbdat, spix = spix)
 #Now make the plot:
-sm <- matrix(c(df$long, df$lat, rep(1,N)), nrow = N)
+sm <- matrix(c(df$long, df$theta, rep(1,N)), nrow = N)
 smx <- sph2car(sm, deg = FALSE)
 mat <- readMat("cmbmap.mat")
 colmap <- rgb(mat$map[,1], mat$map[,2], mat$map[,3])

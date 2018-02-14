@@ -9,9 +9,9 @@
 #' Add further details here
 #'
 #'@param ... arguments that must be labelled either x, y, z
-#'(cartesian) or lat, long (spherical).
+#'(cartesian) or theta, phi (spherical, colatitude and latitude respectively).
 #'Alternatively, a single data.frame may be passed in with columns labelled
-#'x, y, z or lat, long.
+#'x, y, z or theta, phi.
 #'The rows correspond to clockwise ordered
 #'vertices defining a spherical polygon on the surface of the unit sphere.
 #'There must be at least 3 rows (i.e., spherical bigons are excluded).
@@ -21,20 +21,20 @@
 #'@return
 #'
 #'@examples
-#'win <- CMBWindow(lat = c(0,1,2), long = c(0.5, 1.2))
+#'win <- CMBWindow(theta = c(0,1,2), phi = c(0.5, 1.2))
 #'
 #'@export
 CMBWindow <- function(...) {
 
   args <- list(...)
 
-  # lat AND long WERE PASSED TO '...'
-  if ( all( c("lat", "long") %in% names(args) ) )
+  # theta AND phi WERE PASSED TO '...'
+  if ( all( c("theta", "phi") %in% names(args) ) )
   {
-    if (length(args) != 2) stop(paste("please only specify lat and long,",
+    if (length(args) != 2) stop(paste("please only specify theta and phi,",
                                 "extra arguments were given to '...'"))
 
-    window <- data.frame(lat = args[["lat"]], long = args[["long"]])
+    window <- data.frame(theta = args[["theta"]], phi = args[["phi"]])
     coords <- "spherical"
 
   # x, y, z WERE PASSED TO '...'
@@ -53,10 +53,10 @@ CMBWindow <- function(...) {
     if ( !is.data.frame(df) ) stop(paste("only one argument was passed to",
                                         "'...' and it was not a data.frame"))
 
-    if ( all( c("lat", "long") %in% names(df) ) ) {
+    if ( all( c("theta", "phi") %in% names(df) ) ) {
 
       coords <- "spherical"
-      window <- data.frame(lat = args[["lat"]], long = args[["long"]])
+      window <- data.frame(theta = args[["theta"]], phi = args[["phi"]])
 
     } else if ( all( c("x", "y", "z") %in% names(df) ) ) {
 
@@ -65,12 +65,12 @@ CMBWindow <- function(...) {
 
     } else {
       stop(paste("the data.frame does not have columns labelled 'x','y','z'",
-                  "or 'lat', 'long'"))
+                  "or 'theta', 'phi'"))
     }
 
   # INCORRECT ARGUMENTS PASSED TO ...
   } else {
-    stop(paste("must specify either x, y and z or lat and long.",
+    stop(paste("must specify either x, y and z or theta and phi.",
                "\nOr else pass in a data.frame containing those."))
   }
 

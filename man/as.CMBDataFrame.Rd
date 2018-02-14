@@ -11,7 +11,8 @@ as.CMBDataFrame(df, coords, ordering, nside)
 
 \item{coords}{specifies the coordinate system to be "spherical",
 "cartesian" or unspecified (HEALPix only). If "spherical" then df
-must have columns named "lat" and "lon". If "cartesian" then df
+must have columns named "theta" and "phi" (colatitude and longitude
+respectively). If "cartesian" then df
 must have columns named "x", "y", and "z"}
 
 \item{ordering}{specifies the ordering scheme ("ring" or "nested")}

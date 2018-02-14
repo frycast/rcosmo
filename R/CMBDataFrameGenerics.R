@@ -53,17 +53,17 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       cmbdf[,1:2] <- car2sph(xyz)
       cmbdf[,3:(n-1)] <- others
       cmbdf[,n] <- NULL
-      names(cmbdf) <- c("lat", "long", other.names)
+      names(cmbdf) <- c("theta", "phi", other.names)
     }
     else if ( new.coords == "cartesian" )
     {
       # convert to cartesian
 
       n <- ncol(cmbdf)
-      other.names <- names(cmbdf)[-c(which(names(cmbdf) == "lat"),
-                                     which(names(cmbdf) == "long"))]
+      other.names <- names(cmbdf)[-c(which(names(cmbdf) == "theta"),
+                                     which(names(cmbdf) == "phi"))]
 
-      sph <- cmbdf[,c("lat", "long")]
+      sph <- cmbdf[,c("theta", "phi")]
       others <- cmbdf[, other.names]
 
       cmbdf[,1:3] <- sph2car(sph)
@@ -161,17 +161,15 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size, ...)
     stop("Coordinates must be spherical or cartesian"))
 
   if (coords == "spherical") {
-    cmbdf_xyz <- as.data.frame(sphereplot::sph2car(cmbdf$long,
-                                                   cmbdf$lat,
-                                                   deg = FALSE))
+    cmbdf.xyz <- sph2car(cmbdf[,c("theta","phi")])
   } else {
     # Else coords are already cartesian
-    cmbdf_xyz <- data.frame(x = cmbdf$x, y = cmbdf$y, z = cmbdf$z)
+    cmbdf.xyz <- data.frame(x = cmbdf$x, y = cmbdf$y, z = cmbdf$z)
   }
 
   rgl::open3d()
   rgl::bg3d("black")
-  rgl::plot3d(cmbdf_xyz, col = cols, type = "p", cex = 5,
+  rgl::plot3d(cmbdf.xyz, col = cols, type = "p", cex = 5,
               pch = 3, box = FALSE, axes = FALSE, add = add)
 }
 

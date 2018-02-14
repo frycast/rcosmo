@@ -48,7 +48,9 @@ spherical polygon within which to subset the full sky CMB data}
 }
 \value{
 A data frame whose columns contain the pixel center coordinates
-(longitude, lattitude) or (x,y,z), CMB intensities (I), and
+theta, phi (meaning colatitude in range \eqn{[0,pi]} and longitude
+in range \eqn{[0,2pi)} respectively)
+or (x,y,z), CMB intensities (I), and
 optionally polarisation (Q,U) and masks (TMASK, PMASK).
 The row.names attribute of the resulting CMB Data Frame contains
 HEALPix indices.

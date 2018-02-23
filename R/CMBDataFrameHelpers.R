@@ -23,10 +23,8 @@ subWindow <- function(cmbdf, win)
     stop("'cmbdf' must be a CMBDataFrame")
   }
 
-  listOfWindows <- FALSE
   if ( !is.CMBWindow(win) ) {
 
-    listOfWindows <- TRUE
     if ( !is.list(win) )
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
@@ -37,54 +35,75 @@ subWindow <- function(cmbdf, win)
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
   }
-
-
-  # pointInPolygon will require cartesian coordinates
-  if ( listOfWindows )
+  else
   {
-    win.xyz <- lapply(win, coords, new.coords = "cartesian")
-  } else {
-    win.xyz <- coords(win, new.coords = "cartesian")
+    win <- list(win)
   }
+
+
+  # subsequent operations will require cartesian coordinates
+  win.xyz <- lapply(win, coords, new.coords = "cartesian")
   cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
 
 
-  # All the work is done by pointInPolygon: src/CMBDataFrameHelpers.cpp
-  if ( listOfWindows )
+
+  # Triangulate all non-convex polygons into lists of convex polygons,
+  # then make win.xyz into a new list of only convex polygons
+  win.conv <- list()
+  for ( w in win.xyz )
   {
-    keep <- rep(FALSE, nrow(cmbdf))
-    for ( w in win.xyz )
+    #Triangulate each w and add all triangles to win.conv
+    if ( winType(w) == "polygon" || winType(w) == "minus.polygon" )
     {
-      # union all windows
-      keep <- keep |
-        switch(winType(w),
-               polygon = pointInPolygon(cmbdf[,c("x","y","z")], w),
-               minus.polygon = !pointInPolygon(cmbdf[,c("x","y","z")], w),
-               disc = stop(paste("(development stage) subWindow not",
-                                 "implemented for discs in window list")),
-               minus.disc = stop(paste("(development stage) subWindow not",
-                                       "implemented for discs in window list")),
-               stop("Failed to determine window type using rcosmo::winType"))
+      win.conv <- append(win.conv, ifelse(assumedConvex(w), w, triangulate(w)))
+    }
+    else
+    {
+      win.conv <- append(win.conv, w)
     }
   }
-  else
-  {
-    keep <- switch(winType(win.xyz),
-                   polygon = pointInPolygon(cmbdf[,c("x","y","z")], win.xyz),
-                   minus.polygon = !pointInPolygon(cmbdf[,c("x","y","z")], win.xyz),
-                   disc = stop(paste("(development stage) subWindow not",
-                                     "implemented for discs in window list")),
-                   minus.disc = stop(paste("(development stage) subWindow not",
-                                           "implemented for discs in window list")),
-                   stop("Failed to determine window type using rcosmo::winType"))
-  }
 
+
+
+  # All the work is done by pointInConvexPolygon: src/CMBDataFrameHelpers.cpp
+
+  keep <- rep(FALSE, nrow(cmbdf))
+  for ( w in win.xyz )
+  {
+    # union all windows
+    keep <- keep |
+      switch(winType(w),
+             polygon = pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+             minus.polygon = !pointInConvexPolygon(cmbdf[,c("x","y","z")],w),
+             disc = stop(paste("(development stage) subWindow not",
+                               "implemented for discs in window list")),
+             minus.disc = stop(paste("(development stage) subWindow not",
+                                     "implemented for discs in window list")),
+             stop("Failed to determine window type using rcosmo::winType"))
+  }
 
   cmbdf.new <- cmbdf[keep,]
 
   attr(cmbdf.new, "window") <- win
 
   return(cmbdf.new)
+}
+
+## HELPER FUNCTION FOR subWindow
+triangulate <- function(win)
+{
+  win.conv <- list()
+
+  # LOOP --------- action happens here:
+    tri <- win # dummy line
+
+    # all triangles are convex and share the winType of win
+    attr(tri, "assumedConvex") <- TRUE
+    attr(tri, "winType") <- winType(win)
+    win.conv <- append(win.conv, tri)
+  # -----------------------------------
+
+  return(win.conv)
 }
 
 

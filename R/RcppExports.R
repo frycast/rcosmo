@@ -2,21 +2,22 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #'@title
-#'pointInPolygon
+#'pointInConvexPolygon
 #'
 #'@param df a data.frame with columns x, y, z for cartesian coordinates.
 #'The rows represent points on the surface of a unit sphere
 #'@param win a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent clockwise oriented vertices of a spherical polygon.
+#'The rows represent clockwise oriented vertices of a convex spherical
+#'polygon that lies entirely within one open hemisphere of the unit sphere.
 #'
 #'@return a logical vector indicated which rows of \code{df}
-#'lie within the spherical polygon determined by \code{win}
+#'lie within the spherical convex polygon determined by \code{win}
 #'
-#'@name pointInPolygon
+#'@name pointInConvexPolygon
 #'
 #'@export
-pointInPolygon <- function(df, win) {
-    .Call('_rcosmo_pointInPolygon', PACKAGE = 'rcosmo', df, win)
+pointInConvexPolygon <- function(df, win) {
+    .Call('_rcosmo_pointInConvexPolygon', PACKAGE = 'rcosmo', df, win)
 }
 
 #'@title

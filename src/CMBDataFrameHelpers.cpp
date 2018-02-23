@@ -3,21 +3,22 @@ using namespace Rcpp;
 
 
 //'@title
-//'pointInPolygon
+//'pointInConvexPolygon
 //'
 //'@param df a data.frame with columns x, y, z for cartesian coordinates.
 //'The rows represent points on the surface of a unit sphere
 //'@param win a data.frame with columns x, y, z for cartesian coordinates.
-//'The rows represent clockwise oriented vertices of a spherical polygon.
+//'The rows represent clockwise oriented vertices of a convex spherical
+//'polygon that lies entirely within one open hemisphere of the unit sphere.
 //'
 //'@return a logical vector indicated which rows of \code{df}
-//'lie within the spherical polygon determined by \code{win}
+//'lie within the spherical convex polygon determined by \code{win}
 //'
-//'@name pointInPolygon
+//'@name pointInConvexPolygon
 //'
 //'@export
 // [[Rcpp::export]]
-LogicalVector pointInPolygon(DataFrame df, DataFrame win)
+LogicalVector pointInConvexPolygon(DataFrame df, DataFrame win)
 {
   NumericVector x = df["x"];
   NumericVector y = df["y"];

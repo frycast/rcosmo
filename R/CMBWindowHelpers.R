@@ -1,3 +1,34 @@
+#'Check if a \code{\link{CMBWindow}} is assumed convex
+#'
+#'@param win a CMBWindow object
+#'@param assume.convex optionally change the assumedConvex
+#'attribute to TRUE or FALSE
+#'
+#'@export
+assumedConvex <- function(win, assume.convex)
+{
+  if ( !is.CMBWindow(win) ) stop("Argument 'win' must be a CMBWindow")
+
+  if ( !missing(assume.convex) )
+  {
+    attr(win, "assumedConvex") <- assume.convex
+
+    if ( winType(win) == "disc" || winType(win) == "minus.disc" )
+    {
+      warning(paste("Changing the assumedConvex attribute of a disc",
+                    "is strange since discs are always convex"))
+    }
+
+    return(win)
+  }
+  else
+  {
+    return(attr(win, "assumedConvex"))
+  }
+}
+
+
+
 #'Get the maximum distance between all points
 #'in a \code{\link{CMBWindow}}
 #'
@@ -59,10 +90,7 @@ polygonMaxDist <- function(win)
 #'@export
 winType <- function(win)
 {
-  if ( !is.CMBWindow(win) )
-  {
-    stop("'win' must be a CMBWindow")
-  }
+  if ( !is.CMBWindow(win) ) stop("'win' must be a CMBWindow")
 
   return(attr(win, "winType"))
 }

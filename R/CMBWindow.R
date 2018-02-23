@@ -22,6 +22,10 @@
 #'radius of the disc
 #'@param set.minus when \code{TRUE} the window will be the unit
 #'sphere minus the window specified
+#'@param assume.convex when \code{TRUE} the window is assumed to be convex
+#'resulting in a faster computation time when the window is used with functions
+#'such as \code{\link{subWindow}}. This argument is irrelevant when the window
+#'is not a polygon
 #'
 #'@return
 #'
@@ -29,7 +33,7 @@
 #'win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #'
 #'@export
-CMBWindow <- function(..., r, set.minus = FALSE) {
+CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
 
   args <- list(...)
 
@@ -107,10 +111,12 @@ CMBWindow <- function(..., r, set.minus = FALSE) {
   if ( missing(r) )
   {
     attr(window, "winType") <- ifelse(set.minus, "minus.polygon", "polygon")
+    attr(window, "assumedConvex") <- assume.convex
   }
   else
   {
     attr(window, "winType") <- ifelse(set.minus, "minus.disc", "disc")
+    attr(window, "assumedConvex") <- TRUE
   }
 
   return(window)

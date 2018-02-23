@@ -4,7 +4,7 @@
 \alias{CMBWindow}
 \title{CMBWindow}
 \usage{
-CMBWindow(..., r, set.minus = FALSE)
+CMBWindow(..., r, set.minus = FALSE, assume.convex = FALSE)
 }
 \arguments{
 \item{...}{these arguments are compulsory and must be labelled either x, y, z
@@ -17,6 +17,11 @@ radius of the disc}
 
 \item{set.minus}{when \code{TRUE} the window will be the unit
 sphere minus the window specified}
+
+\item{assume.convex}{when \code{TRUE} the window is assumed to be convex
+resulting in a faster computation time when the window is used with functions
+such as \code{\link{subWindow}}. This argument is irrelevant when the window
+is not a polygon}
 }
 \value{
 

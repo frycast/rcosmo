@@ -16,11 +16,11 @@ library(tidyverse)
 cmbdf <- CMBDataFrame(nside = 128, ordering = "nested", coords = "cartesian")
 plot(cmbdf, back.col = "black")
 
-## gnomonic projection of non-convex polygon
+## gnomonic projection of non-convex polygon onto plane z = 1
 win <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
                  theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
 cmbdf.win <- window(cmbdf, new.window = win)
-plot(cmbdf.win)
+plot(cmbdf.win, add = TRUE, col = "red", size = 2)
 
 
 ## detailed window on sparse sky (do this with nside = 1024)

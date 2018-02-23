@@ -6,18 +6,152 @@ library(Rcpp)
 library(rcosmo)
 library(tidyverse)
 
+
+
+
 #####################################################################
 ######### DEMONSTRATE subWindow #####################################
 #####################################################################
 
-## Example1: Simple convex window
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 cmbdf <- CMBDataFrame(nside = 128, ordering = "nested", coords = "cartesian")
-cmbdf.win1 <- window(cmbdf, new.window = win1)
-plot(cmbdf.win1)
-plot(win1)
+plot(cmbdf, back.col = "black")
 
-## Example2: Note the use of 'rev' function here:
+## gnomonic projection of non-convex polygon
+win <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
+                 theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
+cmbdf.win <- window(cmbdf, new.window = win)
+plot(cmbdf.win)
+
+
+## detailed window on sparse sky (do this with nside = 1024)
+win <- CMBWindow(phi = c(0, pi/4, pi/4, 0),
+                 theta = c(pi/2, pi/2, pi/4, pi/4))
+cmbdf.win <- window(cmbdf, new.window = win)
+plot(cmbdf, size = 1)
+plot(cmbdf.win, add = TRUE, size = 2, col = "red")
+
+## Example1 up-quad1 (counter-clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, size = 1.5)
+plot(win1, size = 4)
+area(win1)
+
+## Example1 up-quad1 (clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,pi/2,0))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf, col = "green")
+plot(cmbdf.win1, axes = TRUE, add = TRUE, size = 1.5)
+plot(win1, axes = TRUE)
+
+##Example1 up-quad2 (counter-clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,pi/2,pi))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "yellow")
+plot(win1, axes = TRUE)
+
+##Example1 up-quad2 (clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,pi, pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+##Example1 up-quad3 (counter-clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,pi,3*pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "red")
+plot(win1, axes = TRUE)
+
+##Example1 up-quad3 (clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,3*pi/2, pi))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+##Example1 up-quad4 (counter-clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,3*pi/2, 2*pi))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "green")
+plot(win1, axes = TRUE)
+
+##Example1 up-quad4 (clockwise):
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,2*pi, 3*pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+## Example1 down-quad1 (counter-clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "green")
+plot(win1, size = 4)
+
+## Example1 down-quad1 (clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi/2,pi), phi = c(0,pi/2,0))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+## Example1 down-quad2 (counter-clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(pi/2,pi/2, pi))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "red")
+plot(win1, axes = TRUE)
+
+## Example1 down-quad2 (clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi/2,pi), phi = c(pi/2, pi, pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+## Example1 down-quad3 (counter-clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(pi,pi,3*pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "yellow")
+plot(win1, axes = TRUE)
+
+## Example1 down-quad3 (clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi/2,pi), phi = c(pi,3*pi/2,pi))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+## Example1 down-quad4 (counter-clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(3*pi/2,3*pi/2,2*pi))
+cmbdf.win1 <- window(cmbdf, new.window = win1, col = "blue")
+plot(cmbdf.win1, axes = TRUE, add = TRUE)
+plot(win1, axes = TRUE)
+
+## Example1 down-quad4 (clockwise):
+win1 <- CMBWindow(theta = c(pi/2,pi/2,pi), phi = c(3*pi/2,2*pi,3*pi/2))
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE)
+plot(win1, axes = TRUE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Example2 (anticlockwise): north cap
+win2 <- CMBWindow(theta = rep(pi/3, 10),
+                  phi = seq(0,9*2*pi/10, length.out = 10))
+cmbdf.win2 <- window(cmbdf, new.window = win2)
+plot(cmbdf.win2)
+plot(win2)
+## Example2 (clockwise): Note the use of 'rev' function here:
 win2 <- CMBWindow(theta = rep(pi/3, 10),
                   phi = rev(seq(0,9*2*pi/10, length.out = 10)))
 cmbdf.win2 <- window(cmbdf, new.window = win2)
@@ -25,19 +159,12 @@ plot(cmbdf.win2)
 plot(win2)
 
 
-## Example3: Like Example2 but without 'rev' (doesn't work!)
-win2 <- CMBWindow(theta = rep(pi/3, 10),
-                  phi = seq(0,9*2*pi/10, length.out = 10))
-cmbdf.win2 <- window(cmbdf, new.window = win2)
-plot(cmbdf.win2)
-plot(win2)
 
-
-## Example4: Here is a non-convex window that doesn't work yet
-win4 <- CMBWindow( theta = c(pi/2, pi/2, pi/4, pi/4, 0 ),
+## Example3: non-convex window that doesn't work yet
+win3 <- CMBWindow( theta = c(pi/2, pi/2, pi/4, pi/4, 0 ),
                    phi   = c(   0,    1,    1,  0.5, 0 ) )
-cmbdf.win4 <- window(cmbdf, new.window = win4)
-plot(cmbdf.win4)
+cmbdf.win3 <- window(cmbdf, new.window = win3)
+plot(cmbdf.win3)
 plot(win3)
 
 
@@ -61,9 +188,41 @@ microbenchmark(subWindow(cmbdf, win), subWindow2(cmbdf, win))
 ######### DEMONSTRATE CMBWindow #####################################
 #####################################################################
 
-win <- CMBWindow(theta = c(1,2,3), phi = c(0,0,0))
+# disc
+win <- CMBWindow(x = 0, y = 0, z = 1, r = pi/2)
+winType(win)
+all.equal(area(win), 4*pi/2)
+
+# minus.disc
+win <- CMBWindow(x = 0, y = 0, z = 1, r = 0.5, set.minus = TRUE)
+winType(win)
+
+# minus.polygon
+win <- CMBWindow(theta = c(0,pi/2,pi/2),
+                 phi   = c(0,0   ,pi/2),
+                 set.minus = TRUE)
+winType(win)
+
+
+# anticlockwise
+win <- CMBWindow(theta = c(0,pi/2,pi/2),
+                 phi   = c(0,0   ,pi/2))
+winType(win)
 area(win)
+
+# clockwise
+win2 <- CMBWindow(theta = c(0,pi/2, pi/2),
+                  phi   = c(0,pi/2, 0  ))
+area(win2)
+
+# clockwise + anticlockwise = area of unit sphere
+area(win) + area(win2) == 4*pi
+
+# Note that maxDist does not restrict to travel within window
 maxDist(win)
+maxDist(win2)
+
+
 coords(win)
 coords(win) <- "cartesian"
 win
@@ -71,6 +230,12 @@ win
 win <- CMBWindow(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
 coords(win) <- "spherical"
 win
+
+
+# Disc window
+dwin <- CMBWindow(theta = 0, phi = 0, r = 1)
+winType(dwin)
+dwin
 
 
 #####################################################################

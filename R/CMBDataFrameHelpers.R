@@ -1,5 +1,11 @@
 
 
+
+
+
+
+
+
 #'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
 #'
 #'@param cmbdf a CMBDataFrame
@@ -14,96 +20,69 @@
 subWindow <- function(cmbdf, win)
 {
   if ( !is.CMBDataFrame(cmbdf) ) {
-    stop(gettextf("'%s' is not a CMBDataFrame", deparse(substitute(cmbdf))))
+    stop("'cmbdf' must be a CMBDataFrame")
   }
 
+  listOfWindows <- FALSE
   if ( !is.CMBWindow(win) ) {
-    stop(gettextf("'%s' is not a CMBWindow", deparse(substitute(win))))
-  }
 
-  # df.sq <- cmbdf[ df$theta <= max(vertices_sph$theta) & df$theta  >= min(vertices_sph$theta)
-  #               & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
-
-  old.coords.win <- coords(win)
-  old.coords.cmbdf <- coords(cmbdf)
-
-  if ( old.coords.win  == "spherical" )
-  {
-    coords(win) <- "cartesian"
-  }
-
-  if ( old.coords.cmbdf == "spherical" )
-  {
-    coords(cmbdf) <- "cartesian"
-  }
-
-  # All the work is done by pointInPolygon: src/CMBDataFrameHelpers.cpp
-  cmbdf.new <- cmbdf[pointInPolygon(cmbdf[,c("x","y","z")], win),]
-
-  if ( old.coords.win == "spherical" )
-  {
-    coords(win) <- "spherical"
-  }
-
-  if ( old.coords.cmbdf == "spherical" )
-  {
-    coords(cmbdf.new) <- "spherical"
-  }
-
-  attr(cmbdf.new, "window") <- win
-
-  return(cmbdf.new)
-}
-
-
-
-
-## THIS IS JUST HERE FOR COMPARISON WITH subWindow AND SHOULD BE DELETED
-subWindow2 <- function(cmbdf, win)
-{
-  if ( !is.CMBDataFrame(cmbdf) ) {
-    stop(gettextf("'%s' is not a CMBDataFrame", deparse(substitute(cmbdf))))
-  }
-
-  if ( !is.CMBWindow(win) ) {
-    stop(gettextf("'%s' is not a CMBWindow", deparse(substitute(win))))
-  }
-
-  # df.sq <- cmbdf[ df$theta <= max(vertices_sph$theta) & df$theta  >= min(vertices_sph$theta)
-  #               & df$phi <= max(vertices_sph$phi) & df$phi >= min(vertices_sph$phi),]
-
-  if ( coords(win) == "spherical" )
-  {
-    coords(win) <- "cartesian"
-  }
-
-  if ( coords(cmbdf) == "spherical" )
-  {
-    coords(cmbdf) <- "cartesian"
-  }
-
-  n <- nrow(cmbdf)
-  keep <- rep(TRUE, n)
-  k <- nrow(win)
-  for (b in 1:n)
-  {
-    #cat("b: ", b, "\n")
-    for (v in 1:k)
+    listOfWindows <- TRUE
+    if ( !is.list(win) )
     {
-      #cat("v: ", v, "\n")
-      V1 <- as.numeric(win[v,])
-      V2 <- as.numeric(win[v %% k + 1,]) # i + 1 (cyclic)
+      stop("'win' must be a CMBWindow or list of CMBWindows")
+    }
 
-      m <- matrix(c(cmbdf[b,c("x","y","z")],V1,V2), nrow = 3)
-      if ( det(m) < 0 )
-      {
-        keep[b] <- FALSE
-        break
-      }
+    if (!all(sapply(new.window, is.CMBWindow)))
+    {
+      stop("'win' must be a CMBWindow or list of CMBWindows")
     }
   }
 
+
+  # pointInPolygon will require cartesian coordinates
+  if ( listOfWindows )
+  {
+    win.xyz <- lapply(win, coords, new.coords = "cartesian")
+  } else {
+    win.xyz <- coords(win, new.coords = "cartesian")
+  }
+  cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
+
+
+  # All the work is done by pointInPolygon: src/CMBDataFrameHelpers.cpp
+  if ( listOfWindows )
+  {
+    keep <- rep(FALSE, nrow(cmbdf))
+    for ( w in win.xyz )
+    {
+      # union all windows
+      keep <- keep |
+        switch(winType(w),
+               polygon = pointInPolygon(cmbdf[,c("x","y","z")], w),
+               minus.polygon = !pointInPolygon(cmbdf[,c("x","y","z")], w),
+               disc = stop(paste("(development stage) subWindow not",
+                                 "implemented for discs in window list")),
+               minus.disc = stop(paste("(development stage) subWindow not",
+                                       "implemented for discs in window list")),
+               stop("Failed to determine window type using rcosmo::winType"))
+    }
+  }
+  else
+  {
+    keep <- switch(winType(win.xyz),
+                   polygon = pointInPolygon(cmbdf[,c("x","y","z")], win.xyz),
+                   minus.polygon = !pointInPolygon(cmbdf[,c("x","y","z")], win.xyz),
+                   disc = stop(paste("(development stage) subWindow not",
+                                     "implemented for discs in window list")),
+                   minus.disc = stop(paste("(development stage) subWindow not",
+                                           "implemented for discs in window list")),
+                   stop("Failed to determine window type using rcosmo::winType"))
+  }
+
+
   cmbdf.new <- cmbdf[keep,]
+
+  attr(cmbdf.new, "window") <- win
 
   return(cmbdf.new)
 }
@@ -146,20 +125,8 @@ subWindow2 <- function(cmbdf, win)
 #'@export
 window <- function(cmbdf, new.window)
 {
-  # Check that argument is a CMBWindow
-  if ( !is.CMBDataFrame(cmbdf) )
-  {
-    stop("Argument 'cmbdf' must be a CMBDataFrame")
-  }
-
   if ( !missing(new.window) )
   {
-    # Check that argument is a CMBWindow
-    if ( !is.CMBWindow(new.window) )
-    {
-      stop("Argument 'new.window' be a CMBWindow")
-    }
-
     return(subWindow(cmbdf, new.window))
   }
 
@@ -173,16 +140,6 @@ window <- function(cmbdf, new.window)
 #'@export
 `window<-` <- function(cmbdf,...,value)
 {
-  if ( !is.CMBDataFrame(cmbdf) )
-  {
-    stop("Argument 'cmbdf' to 'window(cmbdf)' must be a CMBDataFrame")
-  }
-
-  if ( !is.CMBWindow(value) )
-  {
-    stop("Argument 'win' to 'window(cmbdf) <- win' must be a CMBWindow")
-  }
-
   return(subWindow(cmbdf, value))
 }
 

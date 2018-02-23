@@ -4,27 +4,32 @@
 
 #' CMBWindow
 #'
-#' Add description here
+#' Create a CMBWindow: Either a polygon or a disc type
 #'
-#' Add further details here
+#'If \code{r} is unspecified then the rows of \code{...} correspond to
+#'counter-clockwise ordered vertices defining a spherical polygon
+#'on the unit sphere.
+#'In this case, there must be at least 3 rows (vertices).
+#'On the other hand,
+#'if \code{r} is specified then \code{...} must have just one row, and this
+#'row is taken to be the center of a disc of radius \code{r}
 #'
-#'@param ... arguments that must be labelled either x, y, z
-#'(cartesian) or theta, phi (spherical, colatitude and latitude respectively).
+#'@param ... these arguments are compulsory and must be labelled either x, y, z
+#'(cartesian) or theta, phi (spherical, colatitude and longitude respectively).
 #'Alternatively, a single data.frame may be passed in with columns labelled
 #'x, y, z or theta, phi.
-#'The rows correspond to clockwise ordered
-#'vertices defining a spherical polygon on the surface of the unit sphere.
-#'There must be at least 3 rows (i.e., spherical bigons are excluded).
-#''Clockwise' is understood from a perspective outside the sphere looking
-#'in towards the origin.
+#'@param r if a disc type window is required then this specifies the
+#'radius of the disc
+#'@param set.minus when \code{TRUE} the window will be the unit
+#'sphere minus the window specified
 #'
 #'@return
 #'
 #'@examples
-#'win <- CMBWindow(theta = c(0,1,2), phi = c(0.5, 1.2))
+#'win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #'
 #'@export
-CMBWindow <- function(...) {
+CMBWindow <- function(..., r, set.minus = FALSE) {
 
   args <- list(...)
 
@@ -74,38 +79,39 @@ CMBWindow <- function(...) {
                "\nOr else pass in a data.frame containing those."))
   }
 
-  if ( nrow(window) < 3 ) stop(paste("the window must have",
-                                     "at least 3 vertices"))
-
-  # Create temporary window in cartesian coordinates for dist and area
-  if ( coords == "cartesian" ) {
-
-    window.xyz <- window
-
-  } else {
-
-    window.xyz <- sph2car(window)
+  if ( missing(r) && nrow(window) < 3 )
+  {
+    stop(paste("'r' is unspecified so the window is a polygon,",
+               "but a polygonal window must have",
+                "at least 3 vertices"))
   }
 
-  # Calculate maximum distance within the spherical polygon
-  max.dist <- 0
-  for ( i in 1:(nrow(window.xyz) - 1) )
+  ## This is all we have to do for disc windows
+  if ( !missing(r) )
   {
-    for ( j in (i+1):nrow(window.xyz) )
+    if ( nrow(window) != 1 )
     {
-      dist <- geoDist(window.xyz[i,], window.xyz[j,])
-      if ( dist > max.dist ) max.dist <- dist
+      stop(paste("'r' is specified so the window is a disc,",
+                 "but a disc window must have",
+                 "just one center (one row)"))
+    }
+    else
+    {
+      window <- cbind(window, r = r)
     }
   }
-
-  # Calculate the area of the spherical polygon
-  area <- sphericalArea(window.xyz)
 
 
   class(window) <- c("CMBWindow", "data.frame")
   attr(window, "coords") <- coords
-  attr(window, "maxDist") <- as.numeric(max.dist)
-  attr(window, "area") <- area
+  if ( missing(r) )
+  {
+    attr(window, "winType") <- ifelse(set.minus, "minus.polygon", "polygon")
+  }
+  else
+  {
+    attr(window, "winType") <- ifelse(set.minus, "minus.disc", "disc")
+  }
 
   return(window)
 }
@@ -117,41 +123,4 @@ CMBWindow <- function(...) {
 
 
 
-## HELPER FUNCTION to calculate area of spherical polygon
-# win must be a data.frame in cartesian coordinates:
-sphericalArea <- function(win)
-{
-  n <- nrow(win)
 
-  # Each iteration finds the angle at vertex i + 1 (A2)
-  angles <- vector(mode = "numeric", length = n)
-  for ( i in 1:n )
-  {
-    # Get vertex coordinates
-    A1 <- as.numeric(win[ i, ])
-    A2 <- as.numeric(win[ i %% n + 1, ])     # i + 1 (cyclic)
-    A3 <- as.numeric(win[ (i+1) %% n + 1, ]) # i + 2 (cyclic)
-
-    # Calculate normal vectors to define planes through origin
-    n1 <- vector_cross(A1, A2)
-    n2 <- vector_cross(A2, A3)
-
-    # Moduli of normal vectors
-    mod.n1 <- sqrt(sum(n1*n1))
-    mod.n2 <- sqrt(sum(n2*n2))
-
-    # Angle between normal vectors is equal to angle at A2
-    theta <- acos( -sum(n1*n2)/(mod.n1*mod.n2) )
-
-    # Decide if angleat A2 is obtuse or acute using scalar triple product
-    if ( det(matrix(c(A1, A2, A3), nrow = 3)) <= 0 )
-    {
-      angles[i] <- theta
-    } else {
-      angles[i] <- 2*pi - theta
-    }
-  }
-
-  # Use Gauss-Bonnet Theorem for area of spherical polygon
-  return(sum(angles) - (n-2)*pi)
-}

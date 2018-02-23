@@ -5,7 +5,8 @@
 \title{Plot CMB Data}
 \usage{
 \method{plot}{CMBDataFrame}(cmbdf, add = FALSE, sample.size, type = "p",
-  size = 1, box = FALSE, axes = FALSE, aspect = FALSE, back.col, ...)
+  size = 1, box = FALSE, axes = FALSE, aspect = FALSE, col, back.col,
+  ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame with either spherical or cartesian coordinates.}
@@ -30,6 +31,8 @@ Supported types are: 'p' for points, 's' for spheres, 'l' for lines,
 
 \item{aspect}{either a logical indicating whether to adjust the
 aspect ratio, or a new ratio.}
+
+\item{col}{specify the colour(s) of the plotted points}
 
 \item{back.col}{optionally specifies the background colour of
 the plot. This argument is passed to rgl::bg3d.}

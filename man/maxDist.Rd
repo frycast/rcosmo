@@ -2,7 +2,8 @@
 % Please edit documentation in R/CMBWindowHelpers.R
 \name{maxDist}
 \alias{maxDist}
-\title{Get the maximum distance between any two points in a CMBWindow}
+\title{Get the maximum distance between all points
+in a \code{\link{CMBWindow}}}
 \usage{
 maxDist(win)
 }
@@ -10,5 +11,6 @@ maxDist(win)
 \item{win}{a CMBWindow object}
 }
 \description{
-Get the maximum distance between any two points in a CMBWindow
+Get the maximum distance between all points
+in a \code{\link{CMBWindow}}
 }

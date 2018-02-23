@@ -4,29 +4,36 @@
 \alias{CMBWindow}
 \title{CMBWindow}
 \usage{
-CMBWindow(...)
+CMBWindow(..., r, set.minus = FALSE)
 }
 \arguments{
-\item{...}{arguments that must be labelled either x, y, z
-(cartesian) or theta, phi (spherical, colatitude and latitude respectively).
+\item{...}{these arguments are compulsory and must be labelled either x, y, z
+(cartesian) or theta, phi (spherical, colatitude and longitude respectively).
 Alternatively, a single data.frame may be passed in with columns labelled
-x, y, z or theta, phi.
-The rows correspond to clockwise ordered
-vertices defining a spherical polygon on the surface of the unit sphere.
-There must be at least 3 rows (i.e., spherical bigons are excluded).
-'Clockwise' is understood from a perspective outside the sphere looking
-in towards the origin.}
+x, y, z or theta, phi.}
+
+\item{r}{if a disc type window is required then this specifies the
+radius of the disc}
+
+\item{set.minus}{when \code{TRUE} the window will be the unit
+sphere minus the window specified}
 }
 \value{
 
 }
 \description{
-Add description here
+Create a CMBWindow: Either a polygon or a disc type
 }
 \details{
-Add further details here
+If \code{r} is unspecified then the rows of \code{...} correspond to
+counter-clockwise ordered vertices defining a spherical polygon
+on the unit sphere.
+In this case, there must be at least 3 rows (vertices).
+On the other hand,
+if \code{r} is specified then \code{...} must have just one row, and this
+row is taken to be the center of a disc of radius \code{r}
 }
 \examples{
-win <- CMBWindow(theta = c(0,1,2), phi = c(0.5, 1.2))
+win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 
 }

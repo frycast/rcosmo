@@ -21,7 +21,7 @@
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@export
-plot.CMBWindow <- function(win, add = TRUE, type = "l",
+plot.CMBWindow <- function(win, add = TRUE, type = "p",
                            col = "red",
                            size = 2, box = FALSE,
                            axes = FALSE, aspect = FALSE,
@@ -50,7 +50,7 @@ plot.CMBWindow <- function(win, add = TRUE, type = "l",
 
 
 ## HELPER FUNCTION FOR plot.CMBWindow
-polygonBoundary <- function( vertices.xyz, eps = 0.001 )
+polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 {
   rows <- nrow(vertices.xyz)
   if(rows < 3){
@@ -66,12 +66,25 @@ polygonBoundary <- function( vertices.xyz, eps = 0.001 )
     V2 <- vertices.xyz[1 + (row %% rows),]
 
     normal <- vector_cross(V1, V2)
+    ## Rotate so that V1XV2 is moved to (0,0,1)
     rotated <- rodrigues(as.matrix(normal)[1,], c(0,0,1), rbind(V1,V2))
 
-    two.longitudes <- atan2(rotated[,2], rotated[,1]) # latitudes are both pi/2
+    two.lons <- atan2(rotated[,2], rotated[,1])
+    two.lons[two.lons < -1e-14] <- 2*pi + two.lons[two.lons < -1e-14]
 
-    line.longitudes <- seq(two.longitudes[1], two.longitudes[2], by = eps)
-    line <- data.frame(phi = line.longitudes, theta = rep(pi/2,length(line.longitudes)))
+
+    ## Always take shortest route
+    if ( two.lons[2] < two.lons[1] )
+    {
+      line.lons <- seq(two.lons[2], two.lons[1], by = eps)
+    }
+    else
+    {
+      line.lons <- seq(two.lons[1], two.lons[2], by = eps)
+    }
+
+
+    line <- data.frame(phi = line.lons, theta = rep(pi/2,length(line.lons)))
     line <- sph2car( line )
 
     line.rotated <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal)[1,], line))
@@ -80,6 +93,80 @@ polygonBoundary <- function( vertices.xyz, eps = 0.001 )
   }
   boundary
 }
+
+
+
+
+
+
+
+
+
+#' Get the spherical area of a \code{\link{CMBWindow}}
+#'
+#' @param win a CMBWindow
+#'
+#' @return Tthe spherical area inside win
+#'
+#'@export
+area.CMBWindow <- function(win)
+{
+  # Calculate the area of the spherical polygon
+  win.xyz <- coords(win, new.coords = "cartesian")
+
+  a <- switch(winType(win),
+              polygon = polygonArea(win.xyz),
+              minus.polygon = 4*pi - polygonArea(win.xyz),
+              disc = 2*pi*(1 - cos(as.numeric(win$r))),
+              minus.disc = 2*pi*(1 + cos(as.numeric(win$r))),
+              stop("Could not determine window type using rcosmo::winType"))
+
+  return(a)
+}
+
+## HELPER FUNCTION to calculate area of spherical polygon
+# win must be a data.frame in cartesian coordinates.
+# Works with counter-clockwise oriented polygons
+polygonArea <- function(win)
+{
+  n <- nrow(win)
+
+  # Each iteration finds the angle at vertex i + 1 (A2)
+  angles <- vector(mode = "numeric", length = n)
+  for ( i in 1:n )
+  {
+    # Get vertex coordinates
+    A1 <- as.numeric(win[ i, ])
+    A2 <- as.numeric(win[ i %% n + 1, ])     # i + 1 (cyclic)
+    A3 <- as.numeric(win[ (i+1) %% n + 1, ]) # i + 2 (cyclic)
+
+    # Calculate normal vectors to define planes through origin
+    n1 <- vector_cross(A1, A2)
+    n2 <- vector_cross(A2, A3)
+
+    # Moduli of normal vectors
+    mod.n1 <- sqrt(sum(n1*n1))
+    mod.n2 <- sqrt(sum(n2*n2))
+
+    # Angle between normal vectors is equal to angle at A2
+    theta <- acos( -sum(n1*n2)/(mod.n1*mod.n2) )
+
+    # Decide if angleat A2 is obtuse or acute using scalar triple product
+    # swap these for clockwise oriented polygon if desired
+    if ( det(matrix(c(A1, A2, A3), nrow = 3)) <= 0 )
+    {
+      angles[i] <- 2*pi - theta
+    } else {
+      angles[i] <- theta
+    }
+  }
+
+  # Use Gauss-Bonnet Theorem for area of spherical polygon
+  return(sum(angles) - (n-2)*pi)
+}
+
+
+
 
 
 
@@ -117,6 +204,7 @@ polygonBoundary <- function( vertices.xyz, eps = 0.001 )
 #'@export
 coords.CMBWindow <- function( win, new.coords )
 {
+
   # If new.coords argument is missing then return the coordinate type
   if ( missing(new.coords) )
   {
@@ -126,6 +214,11 @@ coords.CMBWindow <- function( win, new.coords )
   {
     new.coords <- as.character(tolower(new.coords))
 
+    if (winType(win) == "disc" || winType(win) == "minus.disc")
+    {
+      r <- win[,"r"]
+    }
+
     # Make sure that new.coords doesn't match current coords
     if ( attr(win, "coords") == new.coords )
     {
@@ -134,16 +227,19 @@ coords.CMBWindow <- function( win, new.coords )
     else if ( new.coords == "spherical" )
     {
       # Convert to spherical
-      win[,1:2] <- car2sph(win)
+      win[,1:2] <- car2sph(win[,c("x", "y", "z")])
       names(win) <- c("theta", "phi")
-      win[,3] <- NULL
+      win[,3] <- switch((winType(win) == "disc" ||
+                         winType(win) == "minus.disc") + 1, NULL, r)
       attr(win, "coords") <- "spherical"
     }
     else if ( new.coords == "cartesian" )
     {
       # Convert to cartesian
-      win[,1:3] <- sph2car(win)
+      win[,1:3] <- sph2car(win[,c("theta", "phi")])
       names(win) <- c("x", "y", "z")
+      win[,4] <- switch((winType(win) == "disc" ||
+                         winType(win) == "minus.disc") + 1, NULL, r)
       attr(win, "coords") <- "cartesian"
     }
 

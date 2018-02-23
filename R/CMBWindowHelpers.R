@@ -1,4 +1,5 @@
-#'Get the maximum distance between any two points in a CMBWindow
+#'Get the maximum distance between all points
+#'in a \code{\link{CMBWindow}}
 #'
 #'@param win a CMBWindow object
 #'
@@ -7,23 +8,65 @@ maxDist <- function(win)
 {
   if ( !is.CMBWindow(win) ) stop("Argument 'win' must be a CMBWindow")
 
-  return(attr(win, "maxDist"))
+  # Create temporary window in cartesian coordinates for dist and area
+  if ( coords(win) == "cartesian" ) {
+
+    win.xyz <- win
+
+  } else {
+
+    win.xyz <- sph2car(win)
+  }
+
+  # Calculate maximum distance
+  max.dist <- switch(winType(win),
+                     polygon = polygonMaxDist(win.xyz),
+                     minus.polygon = pi,
+                     disc = 2*as.numeric(win$r),
+                     minus.disc = pi,
+                     stop(paste("Could not determine window type",
+                                "using rcosmo::winType")))
+
+  return(max.dist)
+}
+
+## HELPER FUNCTION FOR maxDist
+polygonMaxDist <- function(win)
+{
+  max.dist <- 0
+  for ( i in 1:(nrow(win.xyz) - 1) )
+  {
+    for ( j in (i+1):nrow(win.xyz) )
+    {
+      dist <- geoDist(win.xyz[i,], win.xyz[j,])
+      if ( dist > max.dist ) max.dist <- dist
+    }
+  }
+
+  return(max.dist)
 }
 
 
-#' Get the spherical area inside a CMBWindow
+
+
+
+
+
+#'Get the type (polygon or disk) of a \code{\link{CMBWindow}}
 #'
-#' @param win a CMBWindow
-#'
-#' @return Tthe spherical area inside win
+#'@param win a CMBWindow object
 #'
 #'@export
-area <- function(win)
+winType <- function(win)
 {
-  if ( !is.CMBWindow(win) ) stop("Argument 'win' must be a CMBWindow")
+  if ( !is.CMBWindow(win) )
+  {
+    stop("'win' must be a CMBWindow")
+  }
 
-  return(attr(win, "area"))
+  return(attr(win, "winType"))
 }
+
 
 
 #' Check if an object is a CMBWindow

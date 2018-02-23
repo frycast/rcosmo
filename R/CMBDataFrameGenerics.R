@@ -1,4 +1,27 @@
 
+#' Area of a \code{\link{CMBDataFrame}}
+#'
+#' Gives the surface on the unit sphere
+#' that is encompassed by all pixels in \code{cmbdf}
+#'
+#'@param cmbdf a CMBDataFrame
+#'
+#'@return the sum of the areas of all pixels (rows) in cmbdf
+#'
+#'@export
+area.CMBDataFrame <- function(cmbdf)
+{
+  return(4*pi/(12*nside^2)*nrow(cmbdf))
+}
+
+
+
+
+
+
+
+
+
 #' Coordinate system from a CMBDataFrame
 #'
 #' This function returns the coordinate system used in a CMBDataFrame.
@@ -33,9 +56,14 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
   {
     new.coords <- as.character(tolower(new.coords))
 
+    if ( is.null(attr(cmbdf, "coords")) )
+    {
+      stop(paste("(development stage) not yet implemented",
+                 "pix2coords in coords function"))
+    }
+
     # Make sure that new.coords doesn't match current coords
-    if ( !is.null(attr(cmbdf, "coords"))
-         && attr(cmbdf, "coords") == new.coords )
+    if ( attr(cmbdf, "coords") == new.coords )
     {
       # Nothing to do
     }
@@ -81,15 +109,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #' Assign new coordinate system to CMBDataFrame
 #' @export
 `coords<-.CMBDataFrame` <- function(cmbdf,...,value) {
-  value <- tolower(value)
-  if (coords(cmbdf) == value)
-  {
-
-    return(cmbdf)
-  } else {
-
-    return(coords(cmbdf, new.coords = value))
-  }
+  return(coords(cmbdf, new.coords = value))
 }
 
 

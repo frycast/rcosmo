@@ -6,6 +6,25 @@ library(Rcpp)
 library(rcosmo)
 library(tidyverse)
 
+## FIGURING OUT HOW TO DEAL WITH MINUS POLYGONS IN subWindow
+#
+# n <- 10
+# keep.minus <- rep(TRUE, n) # for minus.polygon
+# keep.plus <- rep(FALSE, n) # for polygon
+#
+# w1.m <- c(TRUE, rep(FALSE,9))
+# w2.m <- c(FALSE, TRUE, rep(FALSE,8))
+# w3.p <- c(rep(FALSE,8), TRUE, FALSE)
+# w4.p <- c(rep(FALSE,9), TRUE)
+#
+# keep.plus <- keep.plus | w3.p
+# keep.plus <- keep.plus | w4.p
+#
+# keep.minus <- keep.minus & !w1.m
+# keep.minus <- keep.minus & !w2.m
+#
+# keep.plus & keep.minus
+
 
 
 
@@ -16,24 +35,99 @@ library(tidyverse)
 cmbdf <- CMBDataFrame(nside = 128, ordering = "nested", coords = "cartesian")
 plot(cmbdf, back.col = "black")
 
-## gnomonic projection of non-convex polygon onto plane z = 1
+
+## STAR
+df <- data.frame(theta = c(pi-pi/40, pi/2+pi/10, pi/2,
+                            pi/2-pi/10, 0, pi/2-pi/10, pi/2, pi/2+pi/10),
+                 phi = c(3*pi/2, 3*pi/2+pi/10, 0, 3*pi/2+pi/10,
+                          0, 3*pi/2-pi/10, pi+pi/40, 3*pi/2-pi/10))
+star <- CMBWindow(df)
+cmbdf.st <- window(cmbdf, star)
+plot(cmbdf, back.col = "black")
+plot(cmbdf.st, col = "red", size = 1.5, add = TRUE)
+
+
+## SPIRAL
+dt <- pi/5
+dp <- pi/16
+end <- pi + pi/20
+theta <- rev(c(2*dt, 4*dt, 4*dt, 2*dt, dt, dt, 2*dt, 3*dt,
+           3*dt, dt, 0, dt, 2*dt, end))
+phi <- rev(c(0, 6*dp, 12*dp, 14*dp, 12*dp, 7*dp, 6*dp, 9*dp,
+         5*dp, 4*dp, 8*dp, 15*dp, end, 14*dp))
+df <- data.frame(theta = theta, phi = phi)
+spiral <- CMBWindow(df)
+cmbdf.sp <- window(cmbdf, new.window = spiral)
+plot(cmbdf, back.col = "black")
+plot(cmbdf.sp, col = "red", add = TRUE, size = 1.5)
+
+## Have a look at the locations and order of the vertices
+## to check that they are anti-clockwise
+df.xyz <- rcosmo::sph2car(df)
+rgl::plot3d(df.xyz, add = TRUE, col = "yellow", size = 10)
+rgl::plot3d(df.xyz[1,], add = TRUE, col = "yellow", size = 10)
+rgl::plot3d(df.xyz[2,], add = TRUE, col = "yellow", size = 10)
+rgl::plot3d(df.xyz[7,], add = TRUE, col = "green", size = 15)
+
+
+
+
+
+
+# MOUTH
+mouth <- CMBWindow(theta = c(pi/2,pi/3,pi/2-pi/20,pi/3),
+                 phi = c(3*pi/2,3*pi/2 + pi/4, 3*pi/2, 3*pi/2 - pi/4))
+# EYE 1
+eye1 <- CMBWindow(theta = c(pi/4+0.15, pi/4+0.15, pi/4-0.1, pi/4-0.1),
+                 phi = c(3*pi/2+pi/8-0.1, 3*pi/2+pi/8+0.1, 3*pi/2+pi/8+0.1, 3*pi/2+pi/8-0.1))
+# EYE 2
+eye2 <- CMBWindow(theta = c(pi/4+0.15, pi/4+0.15, pi/4-0.1, pi/4-0.1),
+                 phi = c(3*pi/2-pi/8-0.1, 3*pi/2-pi/8+0.1, 3*pi/2-pi/8+0.1, 3*pi/2-pi/8-0.1))
+# FACE
+face <- list(mouth, eye1, eye2)
+cmbdf.face <- window(cmbdf, new.window = face)
+plot(cmbdf, back.col = "black")
+plot(cmbdf.face, col = "red", add = TRUE, size = 1.5)
+
+
+## non-convex polygon METHOD 1
 win <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
                  theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
-cmbdf.win <- window(cmbdf, new.window = win)
-plot(cmbdf.win, add = TRUE, col = "red", size = 2)
+cmbdf.wins <- window(cmbdf, new.window = win)
+plot(cmbdf.wins, col = "red", add = TRUE, size = 1)
+
+
+## non-convex polygon METHOD 2 (using triangulate explicitly)
+win <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
+                 theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
+wins <- triangulate(win)
+cmbdf.wins <- window(cmbdf, new.window = wins)
+plot(cmbdf.wins, col = "red", add = TRUE, size = 2)
+
+
+## non-convex polygon set.minus
+win <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
+                 theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20), set.minus = TRUE)
+cmbdf.wins <- window(cmbdf, new.window = wins)
+plot(cmbdf.wins, col = "red", add = TRUE, size = 2)
+
+
+## gnomonic projection of non-convex polygon onto plane z = 1
+
+      ### haven't done this yet
 
 
 ## detailed window on sparse sky (do this with nside = 1024)
 win <- CMBWindow(phi = c(0, pi/4, pi/4, 0),
                  theta = c(pi/2, pi/2, pi/4, pi/4))
 cmbdf.win <- window(cmbdf, new.window = win)
-plot(cmbdf, size = 1)
-plot(cmbdf.win, add = TRUE, size = 2, col = "red")
+plot(cmbdf)
+plot(cmbdf.win, add = TRUE, size = 1, col = "red")
 
 ## Example1 up-quad1 (counter-clockwise):
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 cmbdf.win1 <- window(cmbdf, new.window = win1)
-plot(cmbdf.win1, axes = TRUE, add = TRUE, size = 1.5)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, size = 1)
 plot(win1, size = 4)
 area(win1)
 
@@ -118,8 +212,8 @@ plot(win1, axes = TRUE)
 
 ## Example1 down-quad4 (counter-clockwise):
 win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(3*pi/2,3*pi/2,2*pi))
-cmbdf.win1 <- window(cmbdf, new.window = win1, col = "blue")
-plot(cmbdf.win1, axes = TRUE, add = TRUE)
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1, axes = TRUE, add = TRUE, col = "blue")
 plot(win1, axes = TRUE)
 
 ## Example1 down-quad4 (clockwise):

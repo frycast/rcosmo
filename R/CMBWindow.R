@@ -41,7 +41,9 @@ CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
   if ( all( c("theta", "phi") %in% names(args) ) )
   {
     if (length(args) != 2) stop(paste("please only specify theta and phi,",
-                                "extra arguments were given to '...'"))
+                                "extra arguments were given to '...'.",
+                                "The arguments given to '...' were labelled",
+                                paste(dQuote(names(args)), collapse = " and ")))
 
     window <- data.frame(theta = args[["theta"]], phi = args[["phi"]])
     coords <- "spherical"
@@ -50,10 +52,19 @@ CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
   } else if ( all( c("x", "y", "z") %in% names(args) ) ) {
 
     if (length(args) != 3) stop(paste("please only specify x, y and z,",
-                                "extra arguments were given to '...'"))
+                                "extra arguments were given to '...'.",
+                                "The arguments given to '...' were labelled",
+                                paste(dQuote(names(args)), collapse = " and ")))
 
     coords <- "cartesian"
     window <- data.frame(x = args[["x"]], y = args[["y"]], z = args[["z"]])
+
+    if ( !isTRUE(all.equal(apply(window, 1, function(x) {sum(as.numeric(x)^2)}),
+                  rep(1,nrow(window)))) )
+    {
+      warning(paste("One or more vertices in the CMBWindow",
+                      "do not lie on the unit sphere"))
+    }
 
   # A data.frame WAS PASSED TO '...'
   } else if ( length(args) == 1 ) {
@@ -65,12 +76,19 @@ CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
     if ( all( c("theta", "phi") %in% names(df) ) ) {
 
       coords <- "spherical"
-      window <- data.frame(theta = args[["theta"]], phi = args[["phi"]])
+      window <- df[,c("theta","phi")]
 
     } else if ( all( c("x", "y", "z") %in% names(df) ) ) {
 
       coords <- "cartesian"
-      window <- data.frame(x = args[["x"]], y = args[["y"]], z = args[["z"]])
+      window <- df[,c("x","y","z")]
+
+      if ( !isTRUE(all.equal(apply(window, 1, function(x) {sum(as.numeric(x)^2)}),
+                  rep(1,nrow(window)))) )
+      {
+        warning(paste("One or more vertices in the CMBWindow",
+                      "do not lie on the unit sphere"))
+      }
 
     } else {
       stop(paste("the data.frame does not have columns labelled 'x','y','z'",
@@ -80,7 +98,9 @@ CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
   # INCORRECT ARGUMENTS PASSED TO ...
   } else {
     stop(paste("must specify either x, y and z or theta and phi.",
-               "\nOr else pass in a data.frame containing those."))
+               "\nOr else pass in a data.frame containing those.",
+               "The arguments given to '...' were labelled",
+               paste(dQuote(names(args)), collapse = " and ")))
   }
 
   if ( missing(r) && nrow(window) < 3 )

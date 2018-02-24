@@ -9,14 +9,27 @@ subWindow(cmbdf, win)
 \arguments{
 \item{cmbdf}{a CMBDataFrame}
 
-\item{win}{a CMBWindow}
+\item{win}{a CMBWindow or a list of CMBWindows}
 }
 \value{
 a CMBDataFrame which is restricted to the
 region of the sky specified by \code{win}
 }
 \description{
-Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
+A single CMBWindow or a list of CMBWindows can be passed to the \code{win}
+argument
+}
+\details{
+Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
+are treated differently from other windows: Let \eqn{A} be the union of the
+interiors of all windows whose winType does not include "minus",
+and let \eqn{B} be the intersection of the exteriors of all the windows whose
+\code{winType} does include "minus". Then, the returned CMBDataFrame will
+be the intersection of the
+points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+However, if \eqn{A} (or \eqn{B}) is empty
+then the returned CMBDataFrame will instead be the intersection of \eqn{B}
+(or \eqn{A}) with \code{cmbdf}.
 }
 \examples{
 

@@ -21,7 +21,7 @@
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@export
-plot.CMBWindow <- function(win, add = TRUE, type = "p",
+plot.CMBWindow <- function(win, add = TRUE, type = "l",
                            col = "red",
                            size = 2, box = FALSE,
                            axes = FALSE, aspect = FALSE,
@@ -48,7 +48,6 @@ plot.CMBWindow <- function(win, add = TRUE, type = "p",
 
 }
 
-
 ## HELPER FUNCTION FOR plot.CMBWindow
 polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 {
@@ -67,27 +66,32 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 
     normal <- vector_cross(V1, V2)
     ## Rotate so that V1XV2 is moved to (0,0,1)
-    rotated <- rodrigues(as.matrix(normal)[1,], c(0,0,1), rbind(V1,V2))
+    rotated <- rcosmo:::rodrigues(as.matrix(normal)[1,], c(0,0,1),
+                                  rbind(V1,V2))
 
-    two.lons <- atan2(rotated[,2], rotated[,1])
-    two.lons[two.lons < -1e-14] <- 2*pi + two.lons[two.lons < -1e-14]
+    ## This atan2 function returns negative thetas which are then corrected
+    phi <- atan2(rotated[,2], rotated[,1])
+    phi[phi < -1e-14] <- 2*pi + phi[phi < -1e-14]
 
-
-    ## Always take shortest route
-    if ( two.lons[2] < two.lons[1] )
+    ## Take the shortest path
+    phi <- sort(phi)
+    if ( phi[2] - phi[1] > pi )
     {
-      line.lons <- seq(two.lons[2], two.lons[1], by = eps)
+      phi[1] <- phi[1] + 2*pi
+      phi <- sort(phi)
     }
-    else
-    {
-      line.lons <- seq(two.lons[1], two.lons[2], by = eps)
-    }
+    line.phi <- seq(phi[1], phi[2], by = eps)
 
+    ## Rotate so that all values are in [0,2*pi)
+    line.phi[line.phi >= 2*pi] <- line.phi[line.phi > 2*pi] - 2*pi
 
-    line <- data.frame(phi = line.lons, theta = rep(pi/2,length(line.lons)))
-    line <- sph2car( line )
+    line <- data.frame(phi = line.phi,
+                       theta = rep(pi/2,length(line.phi)))
+    line <- rcosmo::sph2car( line )
 
-    line.rotated <-  as.data.frame(rodrigues(c(0,0,1), as.matrix(normal)[1,], line))
+    line.rotated <-  as.data.frame(rcosmo:::rodrigues(c(0,0,1),
+                                                      as.matrix(normal)[1,],
+                                                      line))
     names(line.rotated) <- c("x","y","z")
     boundary <- rbind(boundary, line.rotated)
   }
@@ -115,8 +119,8 @@ area.CMBWindow <- function(win)
   win.xyz <- coords(win, new.coords = "cartesian")
 
   a <- switch(winType(win),
-              polygon = polygonArea(win.xyz),
-              minus.polygon = 4*pi - polygonArea(win.xyz),
+              polygon = rcosmo:::polygonArea(win.xyz),
+              minus.polygon = 4*pi - rcosmo:::polygonArea(win.xyz),
               disc = 2*pi*(1 - cos(as.numeric(win$r))),
               minus.disc = 2*pi*(1 + cos(as.numeric(win$r))),
               stop("Could not determine window type using rcosmo::winType"))

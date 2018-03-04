@@ -4,12 +4,15 @@
 \alias{subWindow}
 \title{Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}}
 \usage{
-subWindow(cmbdf, win)
+subWindow(cmbdf, win, intersect)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame}
 
 \item{win}{a CMBWindow or a list of CMBWindows}
+
+\item{intersect}{a boolean that determines
+the behaviour when \code{win} is a list (see details).}
 }
 \value{
 a CMBDataFrame which is restricted to the
@@ -24,12 +27,15 @@ Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 are treated differently from other windows: Let \eqn{A} be the union of the
 interiors of all windows whose winType does not include "minus",
 and let \eqn{B} be the intersection of the exteriors of all the windows whose
-\code{winType} does include "minus". Then, the returned CMBDataFrame will
-be the intersection of the
-points in \code{cmbdf} with \eqn{A} and \eqn{B}.
-However, if \eqn{A} (or \eqn{B}) is empty
-then the returned CMBDataFrame will instead be the intersection of \eqn{B}
-(or \eqn{A}) with \code{cmbdf}.
+\code{winType} does include "minus". Then, provided that
+\code{intersect = TRUE} (the default), the returned CMBDataFrame will
+be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
+be the intersection of the points in \code{cmbdf} with the union of
+\eqn{A} and \eqn{B}.
+Note that if \eqn{A} (resp. \eqn{B}) is empty
+then the returned CMBDataFrame will be the intersection of \eqn{B}
+(resp. \eqn{A}) with \code{cmbdf}.
 }
 \examples{
 

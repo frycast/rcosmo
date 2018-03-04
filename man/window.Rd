@@ -4,13 +4,17 @@
 \alias{window}
 \title{Window attribute of \code{\link{CMBDataFrame}}}
 \usage{
-window(cmbdf, new.window)
+window(cmbdf, new.window, intersect = TRUE)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}
 
-\item{new.window}{optionally specify a new window, in which case a
-new CMBDataFrame is returned whose CMBWindow is new.window}
+\item{new.window}{optionally specify a new window
+in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
+\code{new.window} may also be a list (see details section).}
+
+\item{intersect}{a boolean that determines
+the behaviour when \code{win} is a list (see details).}
 }
 \value{
 The window attribute of cmbdf or, if new.window is specified, a
@@ -22,6 +26,21 @@ When new.window is unspecified this function returns the
 CMBDataFrame. The return value is NULL if the window is full sky.
 When new.window is specified this function instead returns
 a new CMBDataFrame whose CMBWindow attribute is new.window
+}
+\details{
+Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
+are treated differently from other windows: Let \eqn{A} be the union of the
+interiors of all windows whose winType does not include "minus",
+and let \eqn{B} be the intersection of the exteriors of all the windows whose
+\code{winType} does include "minus". Then, provided that
+\code{intersect = TRUE} (the default), the returned CMBDataFrame will
+be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
+be the intersection of the points in \code{cmbdf} with the union of
+\eqn{A} and \eqn{B}.
+Note that if \eqn{A} (resp. \eqn{B}) is empty
+then the returned CMBDataFrame will be the intersection of \eqn{B}
+(resp. \eqn{A}) with \code{cmbdf}.
 }
 \examples{
 cmbdf <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested")

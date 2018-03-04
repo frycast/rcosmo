@@ -60,9 +60,9 @@ vector_cross <- function(a, b) {
 # This function rotates a directly to b (rotating whole sphere points p_xyz).
 rodrigues <- function(a,b,p.xyz)
 {
-  norm.a <- sqrt(sum(a * a))
-  norm.b <- sqrt(sum(b * b))
-  if ( !isTRUE( all.equal(a/norm.a, b/norm.b, check.attributes = FALSE, use.names = FALSE) ) )
+  norm.a <- as.numeric(sqrt(sum(a * a)))
+  norm.b <- as.numeric(sqrt(sum(b * b)))
+  if ( !isTRUE( all.equal(a/norm.a, b/norm.b) ) )
   {
     k <- vector_cross(a,b)
     k <- k/sqrt(sum(k^2)) # normalised k

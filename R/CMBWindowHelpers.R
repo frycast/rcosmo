@@ -209,16 +209,3 @@ winType <- function(win)
   return(attr(win, "winType"))
 }
 
-
-
-#' Check if an object is a CMBWindow
-#'
-#' @param win any object
-#'
-#' @return TRUE or FALSE depending if win is a CMBWindow
-#'
-#'@export
-is.CMBWindow <- function(win)
-{
-  return(identical(as.numeric(sum(class(win) == "CMBWindow")), 1))
-}

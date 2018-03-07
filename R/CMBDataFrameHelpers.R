@@ -142,9 +142,26 @@ subWindow <- function(cmbdf, win)
 #' When new.window is specified this function instead returns
 #' a new CMBDataFrame whose CMBWindow attribute is new.window
 #'
+#'The vector \code{intersect}
+#'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
+#'are treated differently from other windows: Let \eqn{A} be the union of the
+#'interiors of all windows whose winType does not include "minus",
+#'and let \eqn{B} be the intersection of the exteriors of all the windows whose
+#'\code{winType} does include "minus". Then, the returned CMBDataFrame will
+#'be the intersection of the
+#'points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+#'However, if \eqn{A} (or \eqn{B}) is empty
+#'then the returned CMBDataFrame will instead be the intersection of \eqn{B}
+#'(or \eqn{A}) with \code{cmbdf}.
+#'
 #'@param cmbdf a CMBDataFrame.
-#'@param new.window optionally specify a new window, in which case a
-#'new CMBDataFrame is returned whose CMBWindow is new.window
+#'@param new.window optionally specify a new window
+#'in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
+#'\code{new.window} may also be a list (see details section).
+#'@param intersect a vector of TRUE/FALSE with length equal to the length
+#'of \code{new.window}. Note that \code{new.window} must be a list for this
+#'to have an effect. This parameter overrides the default behaviour
+#'specified in the details section.
 #'
 #'@return
 #' The window attribute of cmbdf or, if new.window is specified, a
@@ -165,11 +182,18 @@ subWindow <- function(cmbdf, win)
 #' plot(cmbdf)
 #'
 #'@export
-window <- function(cmbdf, new.window)
+window <- function(cmbdf, new.window, intersect)
 {
   if ( !missing(new.window) )
   {
-    return(subWindow(cmbdf, new.window))
+    if ( !missing(intersect) )
+    {
+      return(subWindow(cmbdf, new.window, intersect))
+    }
+    else
+    {
+      return(subWindow(cmbdf, new.window))
+    }
   }
 
   return(attr(cmbdf, "window"))
@@ -386,117 +410,3 @@ sampleCMB <- function(cmbdf, sample.size)
 
 
 
-#' Check if an object is of class CMBDataFrame
-#'
-#' @param cmbdf Any R object
-#'
-#' @return TRUE if \code{cmbdf} is a CMBDataFrame, otherwise FALSE
-#'
-#' @export
-is.CMBDataFrame <- function(cmbdf)
-{
-  identical(as.numeric(sum(class(cmbdf) == "CMBDataFrame")), 1)
-}
-
-
-
-
-
-#' as.CMBDataFrame
-#'
-#' Safely converts a data.frame to a CMBDataFrame
-#'
-#' @param df Any data.frame with a column labelled "I" for intensities
-#' @param coords specifies the coordinate system to be "spherical",
-#' "cartesian" or unspecified (HEALPix only). If "spherical" then df
-#' must have columns named "theta" and "phi" (colatitude and longitude
-#' respectively). If "cartesian" then df
-#' must have columns named "x", "y", and "z"
-#' @param ordering specifies the ordering scheme ("ring" or "nested")
-#' @param nside specifies the Nside parameter
-#'
-#' @return A CMBDataFrame
-#'
-#' @export
-as.CMBDataFrame <- function(df, coords, ordering, nside)
-{
-  if ( !is.data.frame(df) ) {
-
-    stop(gettextf("'%s' is not a data.frame", deparse(substitute(df))))
-
-  }
-
-  if ( !("I"  %in% names(df) ) ) {
-
-    stop(gettextf("'%s' does not have a column named 'I' for intensities",
-                  deparse(substitute(df))))
-
-  }
-
-
-  if ( !is.CMBDataFrame(df) ) {
-  ################ df IS NOT A CMBDataFrame ####################
-
-    attr(df, "ordering") <- ordering
-    attr(df, "nside") <- nside
-
-    if ( missing(coords) ) {
-
-      if ( any(c("theta", "phi", "x", "y", "z") %in% names(df) ) ) {
-        warning("coords was unspecified and so coordinates
-                were set to HEALPix only")
-      }
-      attr(df, "coords") <- NULL
-
-    } else {
-
-      coords <- tolower(coords)
-
-      if ( coords == "spherical"
-        && !("theta" %in% names(df)
-        &&   "phi" %in% names(df)) ) {
-        stop(gettextf("Since coords = spherical, '%s' must have
-                      column names %s and %s",
-                      deparse(substitute(df)),
-                      dQuote("theta"),
-                      dQuote("phi")))
-      }
-
-      if ( coords == "cartesian"
-          && !("x" %in% names(df)
-          &&   "y" %in% names(df)
-          &&   "z" %in% names(df) ) ) {
-        stop(gettextf("Since coords = cartesian, '%s' must have
-                      column names %s, %s and %s",
-                      deparse(substitute(df)),
-                      dQuote("x"),
-                      dQuote("y"),
-                      dQuote("z")))
-      }
-
-      if (coords != "spherical" && coords != "cartesian") {
-        stop("coords must be unspecified, 'spherical' or 'cartesian'")
-      }
-      attr(df, "coords") <- coords
-
-    }
-
-  } else {
-  ################ df IS  A CMBDataFrame #######################
-
-    coords(df) <- ifelse(!missing(coords), coords, coords(df))
-    ordering(df) <- ifelse(!missing(ordering), ordering, ordering(df))
-
-    if (!missing(nside) && nside(df) != tolower(nside) ) {
-      stop(gettextf("Since '%s' is a CMBDataFrame already,
-                    nside should be unspecified or match the nside
-                    attribute of '%s'",
-                    deparse(substitute(df)),
-                    deparse(substitute(df))))
-    }
-
-  }
-
-  class(df) <- c("CMBDataFrame", "data.frame")
-  return(df)
-}

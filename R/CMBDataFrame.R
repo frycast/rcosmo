@@ -258,15 +258,15 @@ CMBDataFrame <- function(CMBData,
     if (include.polar == TRUE) {
       if (!missing(spix)) stop(paste("(development stage) include.polar must",
                                     "be FALSE if spix is specified"))
-      cmbdf$Q = CMBData$col[[2]]
-      cmbdf$U = CMBData$col[[3]]
+      cmbdf$Q <- CMBData$col[[2]]
+      cmbdf$U <- CMBData$col[[3]]
     }
 
     if (include.masks == TRUE) {
       if (!missing(spix)) stop(paste("(development stage) include.masks must",
                                      "be FALSE if spix is specified"))
-      cmbdf$TMASK = CMBData$col[[4]]
-      cmbdf$PMASK = CMBData$col[[5]]
+      cmbdf$TMASK <- CMBData$col[[4]]
+      cmbdf$PMASK <- CMBData$col[[5]]
     }
 
     message("Adding CMB Data Frame attributes...\n")

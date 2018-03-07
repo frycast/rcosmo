@@ -1,3 +1,135 @@
+#' as.CMBDataFrame
+#'
+#' Safely converts a data.frame to a CMBDataFrame
+#'
+#' @param df Any data.frame with a column labelled "I" for intensities
+#' @param coords specifies the coordinate system to be "spherical",
+#' "cartesian" or unspecified (HEALPix only). If "spherical" then df
+#' must have columns named "theta" and "phi" (colatitude and longitude
+#' respectively). If "cartesian" then df
+#' must have columns named "x", "y", and "z"
+#' @param ordering specifies the ordering scheme ("ring" or "nested")
+#' @param nside specifies the Nside parameter
+#'
+#' @return A CMBDataFrame
+#'
+#' @export
+as.CMBDataFrame <- function(df, coords, ordering, nside)
+{
+  if ( !is.data.frame(df) ) {
+
+    stop(gettextf("'%s' is not a data.frame", deparse(substitute(df))))
+
+  }
+
+  if ( !("I"  %in% names(df) ) ) {
+
+    stop(gettextf("'%s' does not have a column named 'I' for intensities",
+                  deparse(substitute(df))))
+
+  }
+
+
+  if ( !is.CMBDataFrame(df) ) {
+    ################ df IS NOT A CMBDataFrame ####################
+
+    attr(df, "ordering") <- ordering
+    attr(df, "nside") <- nside
+
+    if ( missing(coords) ) {
+
+      if ( any(c("theta", "phi", "x", "y", "z") %in% names(df) ) ) {
+        warning("coords was unspecified and so coordinates
+                were set to HEALPix only")
+      }
+      attr(df, "coords") <- NULL
+
+      } else {
+
+        coords <- tolower(coords)
+
+        if ( coords == "spherical"
+             && !("theta" %in% names(df)
+                  &&   "phi" %in% names(df)) ) {
+          stop(gettextf("Since coords = spherical, '%s' must have
+                        column names %s and %s",
+                        deparse(substitute(df)),
+                        dQuote("theta"),
+                        dQuote("phi")))
+        }
+
+        if ( coords == "cartesian"
+             && !("x" %in% names(df)
+                  &&   "y" %in% names(df)
+                  &&   "z" %in% names(df) ) ) {
+          stop(gettextf("Since coords = cartesian, '%s' must have
+                        column names %s, %s and %s",
+                        deparse(substitute(df)),
+                        dQuote("x"),
+                        dQuote("y"),
+                        dQuote("z")))
+        }
+
+        if (coords != "spherical" && coords != "cartesian") {
+          stop("coords must be unspecified, 'spherical' or 'cartesian'")
+        }
+        attr(df, "coords") <- coords
+
+      }
+
+  } else {
+    ################ df IS  A CMBDataFrame #######################
+
+    coords(df) <- ifelse(!missing(coords), coords, coords(df))
+    ordering(df) <- ifelse(!missing(ordering), ordering, ordering(df))
+
+    if (!missing(nside) && nside(df) != tolower(nside) ) {
+      stop(gettextf("Since '%s' is a CMBDataFrame already,
+                    nside should be unspecified or match the nside
+                    attribute of '%s'",
+                    deparse(substitute(df)),
+                    deparse(substitute(df))))
+    }
+
+  }
+
+  class(df) <- c("CMBDataFrame", "data.frame")
+  return(df)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' Check if an object is of class CMBDataFrame
+#'
+#' @param cmbdf Any R object
+#'
+#' @return TRUE if \code{cmbdf} is a CMBDataFrame, otherwise FALSE
+#'
+#' @export
+is.CMBDataFrame <- function(cmbdf)
+{
+  identical(as.numeric(sum(class(cmbdf) == "CMBDataFrame")), 1)
+}
+
+
+
+
+
+
 
 #' Area of a \code{\link{CMBDataFrame}}
 #'

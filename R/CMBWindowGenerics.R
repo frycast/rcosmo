@@ -273,16 +273,36 @@ coords.CMBWindow <- function( win, new.coords )
     {
       # Convert to spherical
       win[,1:2] <- rcosmo::car2sph(win[,c("x", "y", "z")])
-      names(win) <- c("theta", "phi")
-      win[,3] <- switch(rcosmo:::contains("disc", winType(win)) + 1, NULL, r)
+
+      # Add the radius if needed
+      if ( rcosmo:::contains("disc", winType(win))  )
+      {
+        win[,3] <- r
+        names(win) <- c("theta", "phi", "r")
+      }
+      else
+      {
+        names(win) <- c("theta", "phi")
+      }
+
       attr(win, "coords") <- "spherical"
     }
     else if ( new.coords == "cartesian" )
     {
       # Convert to cartesian
       win[,1:3] <- rcosmo::sph2car(win[,c("theta", "phi")])
-      names(win) <- c("x", "y", "z")
-      win[,4] <- switch(rcosmo:::contains("disc", winType(win)) + 1, NULL, r)
+
+      # Add the radius if needed
+      if ( rcosmo:::contains("disc", winType(win))  )
+      {
+        win[,4] <- r
+        names(win) <- c("x", "y", "z", "r")
+      }
+      else
+      {
+        names(win) <- c("x", "y", "z")
+      }
+
       attr(win, "coords") <- "cartesian"
     }
 

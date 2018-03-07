@@ -18,6 +18,14 @@ cmbdf <- CMBDataFrame(nside = 128, ordering = "nested",
 plot(cmbdf, back.col = "black")
 
 
+## LIST OF DISC WITH POLYGON
+win.p <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
+                  theta = c(pi/2, pi/2, pi/10, pi/10))
+plot(win.d)
+win.d <- CMBWindow(theta = 0, phi = 0, r = 0.1)
+plot(win.d)
+
+
 
 ## DISK WINDOW
 win1 <- CMBWindow(x = 1, y = 0, z = 0, r = 0.5)

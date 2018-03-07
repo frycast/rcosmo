@@ -55,3 +55,50 @@ LogicalVector pointInConvexPolygon(DataFrame df, DataFrame win)
 
   return(keep);
 }
+
+
+
+
+
+
+//'@title
+//'pointInDisc
+//'
+//'@param df a data.frame with columns x, y, z for cartesian coordinates.
+//'The rows represent points on the surface of a unit sphere
+//'@param win a data.frame with columns x, y, z for the cartesian coordinates
+//'of a point on the unit sphere, representing a disc center, and column r for
+//'the radius or that disc.
+//'
+//'@return a logical vector indicated which rows of \code{df}
+//'lie within the spherical disc determined by \code{win}
+//'
+//'@name pointInDisc
+//'
+//'@export
+// [[Rcpp::export]]
+LogicalVector pointInDisc(DataFrame df, DataFrame win)
+{
+  NumericVector x = df["x"];
+  NumericVector y = df["y"];
+  NumericVector z = df["z"];
+  double Vx = win["x"];
+  double Vy = win["y"];
+  double Vz = win["z"];
+  double Vr = win["r"];
+
+  int n = df.nrow();
+
+  LogicalVector keep(n);
+  for ( int i = 0; i < n; i++ )
+  {
+    if ( acos( Vx*x[i] + Vy*y[i] + Vz*z[i] ) <= Vr )
+    {
+      keep[i] = true;
+    }
+  }
+
+  return(keep);
+}
+
+

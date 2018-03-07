@@ -21,6 +21,25 @@ pointInConvexPolygon <- function(df, win) {
 }
 
 #'@title
+#'pointInDisc
+#'
+#'@param df a data.frame with columns x, y, z for cartesian coordinates.
+#'The rows represent points on the surface of a unit sphere
+#'@param win a data.frame with columns x, y, z for the cartesian coordinates
+#'of a point on the unit sphere, representing a disc center, and column r for
+#'the radius or that disc.
+#'
+#'@return a logical vector indicated which rows of \code{df}
+#'lie within the spherical disc determined by \code{win}
+#'
+#'@name pointInDisc
+#'
+#'@export
+pointInDisc <- function(df, win) {
+    .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
+}
+
+#'@title
 #'geoDistList
 #'@description
 #'Create a list of all geodesic distances between points on the unit

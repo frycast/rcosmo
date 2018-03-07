@@ -36,20 +36,20 @@
 #'@examples
 #'
 #'@export
-subWindow <- function(cmbdf, win, intersect)
+subWindow <- function(cmbdf, win, intersect = TRUE)
 {
-  if ( !is.CMBDataFrame(cmbdf) ) {
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) ) {
     stop("'cmbdf' must be a CMBDataFrame")
   }
 
-  if ( !is.CMBWindow(win) ) {
+  if ( !rcosmo::is.CMBWindow(win) ) {
 
     if ( !is.list(win) )
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
 
-    if (!all(sapply(win, is.CMBWindow)))
+    if (!all(sapply(win, rcosmo::is.CMBWindow)))
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
@@ -60,8 +60,8 @@ subWindow <- function(cmbdf, win, intersect)
   }
 
   # subsequent operations will require cartesian coordinates
-  win.xyz <- lapply(win, coords, new.coords = "cartesian")
-  cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
+  win.xyz <- lapply(win, rcosmo::coords, new.coords = "cartesian")
+  cmbdf.xyz <- rcosmo::coords(cmbdf, new.coords = "cartesian")
 
   # Triangulate all non-convex polygons into lists of convex polygons,
   # making win.xyz into a new list of only convex polygons
@@ -69,8 +69,7 @@ subWindow <- function(cmbdf, win, intersect)
   for ( w in win.xyz )
   {
     #Triangulate each w and add all triangles to win.conv
-    if ( (winType(w) == "polygon" || winType(w) == "minus.polygon")
-         && !assumedConvex(w))
+    if ( rcosmo:::contains("polygon", winType(w)) && !rcosmo::assumedConvex(w))
     {
         win.conv <- append(win.conv, rcosmo::triangulate(w))
     }
@@ -89,22 +88,22 @@ subWindow <- function(cmbdf, win, intersect)
   keep.m <- rep(TRUE, nrow(cmbdf))
   for ( w in win.xyz )
   {
-    switch(winType(w),
+    switch(rcosmo::winType(w),
            polygon = keep.p <- keep.p |
-             pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+             rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
            minus.polygon = keep.m <- keep.m &
-             !pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
-           disc = stop(paste("(development stage) subWindow not",
-                               "implemented for discs in window list")),
-           minus.disc = stop(paste("(development stage) subWindow not",
-                                     "implemented for discs in window list")),
-             stop("Failed to determine window type using rcosmo::winType"))
+             !rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+           disc = keep.p <- keep.p |
+             rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+           minus.disc = keep.m <- keep.m &
+             !rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+           stop("Failed to determine window type using rcosmo::winType"))
 
-    if ( winType(w) == "minus.polygon" )
+    if ( rcosmo:::contains("minus", rcosmo::winType(w)) )
     {
       exist.m <- TRUE
     }
-    if ( winType(w) == "polygon" )
+    else
     {
       exist.p <- TRUE
     }
@@ -136,31 +135,6 @@ subWindow <- function(cmbdf, win, intersect)
   return(cmbdf.new)
 }
 
-### DISUSED HELPER FUNCTIONS FOR subWindow
-# pointInside <- function(keep, cmbdf, w, intersect)
-# {
-#   if ( intersect )
-#   {
-#     return(keep & pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
-#   }
-#   else
-#   {
-#     return(keep | pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
-#   }
-# }
-#
-# ## HELPER FUNCTION FOR subWindow
-# pointOutside <- function(keep, cmbdf, w, intersect)
-# {
-#   if ( intersect )
-#   {
-#     return(keep & !pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
-#   }
-#   else
-#   {
-#     return(keep | !pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
-#   }
-# }
 
 
 
@@ -217,8 +191,8 @@ window <- function(cmbdf, new.window, intersect = TRUE)
 {
   if ( !missing(new.window) )
   {
-    return(subWindow(cmbdf = cmbdf, win = new.window,
-                     intersect = intersect))
+    return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
+                              intersect = intersect))
   }
 
   return(attr(cmbdf, "window"))
@@ -231,7 +205,7 @@ window <- function(cmbdf, new.window, intersect = TRUE)
 #'@export
 `window<-` <- function(cmbdf,...,value)
 {
-  return(subWindow(cmbdf, value))
+  return(rcosmo::subWindow(cmbdf, value))
 }
 
 
@@ -260,7 +234,7 @@ window <- function(cmbdf, new.window, intersect = TRUE)
 pix <- function(cmbdf, new.pix)
 {
   # Check that argument is a CMBDF
-  if ( !is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -281,7 +255,7 @@ pix <- function(cmbdf, new.pix)
 #' Assign new pixel indices to a CMBDataFrame
 #' @export
 `pix<-` <- function(cmbdf,...,value) {
-  if ( !is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -318,7 +292,7 @@ pix <- function(cmbdf, new.pix)
 ordering <- function( cmbdf, new.ordering )
 {
   # Check that argument is a CMBDF
-  if ( !is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -357,7 +331,7 @@ ordering <- function( cmbdf, new.ordering )
 #' Assign new ordering scheme to CMBDataFrame
 #' @export
 `ordering<-` <- function(cmbdf,...,value) {
-  ordering(cmbdf, new.ordering = value)
+  rcosmo::ordering(cmbdf, new.ordering = value)
   cmbdf
 }
 
@@ -384,7 +358,7 @@ ordering <- function( cmbdf, new.ordering )
 nside <- function( cmbdf )
 {
   # Check that argument is a CMBDF
-  if ( !is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -424,7 +398,7 @@ nside <- function( cmbdf )
 #'@export
 sampleCMB <- function(cmbdf, sample.size)
 {
-  if ( !is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }

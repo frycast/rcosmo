@@ -44,14 +44,21 @@ plot.CMBWindow <- function(win, add = TRUE, type = "l",
 {
   if ( coords(win) == "spherical" )
   {
-    coords(win) <- "cartesian"
-  } else if ( coords(win) == "cartesian" ) {
+    rcosmo::coords(win) <- "cartesian"
+  } else if ( rcosmo::coords(win) == "cartesian" ) {
     # do nothing
   } else {
    stop("'win' must be in either spherical or cartesian coordinates")
   }
 
-  boundary <- polygonBoundary( win, 0.01 )
+  if ( rcosmo:::contains("polygon", rcosmo::winType(win)) )
+  {
+    boundary <- rcosmo:::polygonBoundary(win)
+  }
+  else
+  {
+    boundary <- rcosmo:::discBoundary(win)
+  }
 
   if ( !missing(back.col) )
   {
@@ -64,13 +71,32 @@ plot.CMBWindow <- function(win, add = TRUE, type = "l",
 }
 
 ## HELPER FUNCTION FOR plot.CMBWindow
+discBoundary <- function( disc, eps = 0.01 )
+{
+  rows <- nrow(disc)
+  if (rows != 1) {
+    stop("Disc must have just 1 center point and 1 radius.");
+  }
+
+  center <- as.numeric(disc[1,c("x","y","z")])
+
+  phi <- seq(0,2*pi,by = 0.01)
+  r <- as.numeric(disc[1,"r"])
+  theta <- rep(r, length(phi))
+
+  boundary <- rcosmo::sph2car(data.frame(theta = theta, phi = phi))
+  boundary <- rcosmo:::rodrigues(c(0,0,1), center, boundary)
+
+  return(boundary)
+}
+
+## HELPER FUNCTION FOR plot.CMBWindow
 polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 {
   rows <- nrow(vertices.xyz)
   if(rows < 3){
-    stop("Polygon must have at least 3 vertices.");
+    stop("Polygon must have at least 3 vertices.")
   }
-  #vertices_xyz_cycled <- rbind(vertices_xyz[2:nrow(vertices_xyz),], vertices_xyz[1,])
 
   boundary <- data.frame()
   for ( row in 1:rows )
@@ -79,7 +105,7 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
     V1 <- vertices.xyz[row,]
     V2 <- vertices.xyz[1 + (row %% rows),]
 
-    normal <- vector_cross(V1, V2)
+    normal <- rcosmo:::vector_cross(V1, V2)
     ## Rotate so that V1XV2 is moved to (0,0,1)
     rotated <- rcosmo:::rodrigues(as.matrix(normal)[1,], c(0,0,1),
                                   rbind(V1,V2))
@@ -131,9 +157,9 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 area.CMBWindow <- function(win)
 {
   # Calculate the area of the spherical polygon
-  win.xyz <- coords(win, new.coords = "cartesian")
+  win.xyz <- rcosmo::coords(win, new.coords = "cartesian")
 
-  a <- switch(winType(win),
+  a <- switch(rcosmo::winType(win),
               polygon = rcosmo:::polygonArea(win.xyz),
               minus.polygon = 4*pi - rcosmo:::polygonArea(win.xyz),
               disc = 2*pi*(1 - cos(as.numeric(win$r))),
@@ -233,7 +259,7 @@ coords.CMBWindow <- function( win, new.coords )
   {
     new.coords <- as.character(tolower(new.coords))
 
-    if (winType(win) == "disc" || winType(win) == "minus.disc")
+    if ( rcosmo:::contains("disc", winType(win)) )
     {
       r <- win[,"r"]
     }
@@ -246,19 +272,17 @@ coords.CMBWindow <- function( win, new.coords )
     else if ( new.coords == "spherical" )
     {
       # Convert to spherical
-      win[,1:2] <- car2sph(win[,c("x", "y", "z")])
+      win[,1:2] <- rcosmo::car2sph(win[,c("x", "y", "z")])
       names(win) <- c("theta", "phi")
-      win[,3] <- switch((winType(win) == "disc" ||
-                         winType(win) == "minus.disc") + 1, NULL, r)
+      win[,3] <- switch(rcosmo:::contains("disc", winType(win)) + 1, NULL, r)
       attr(win, "coords") <- "spherical"
     }
     else if ( new.coords == "cartesian" )
     {
       # Convert to cartesian
-      win[,1:3] <- sph2car(win[,c("theta", "phi")])
+      win[,1:3] <- rcosmo::sph2car(win[,c("theta", "phi")])
       names(win) <- c("x", "y", "z")
-      win[,4] <- switch((winType(win) == "disc" ||
-                         winType(win) == "minus.disc") + 1, NULL, r)
+      win[,4] <- switch(rcosmo:::contains("disc", winType(win)) + 1, NULL, r)
       attr(win, "coords") <- "cartesian"
     }
 
@@ -273,12 +297,12 @@ coords.CMBWindow <- function( win, new.coords )
 #'@export
 `coords<-.CMBWindow` <- function(win,...,value) {
   value <- tolower(value)
-  if (coords(win) == value)
+  if (rcosmo::coords(win) == value)
   {
     return(win)
 
   } else {
 
-    return(coords(win, new.coords = value))
+    return(rcosmo::coords(win, new.coords = value))
   }
 }

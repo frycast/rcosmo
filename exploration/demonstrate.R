@@ -13,9 +13,34 @@ library(tidyverse)
 ######### DEMONSTRATE subWindow #####################################
 #####################################################################
 
-cmbdf <- CMBDataFrame(nside = 1024, ordering = "nested",
+cmbdf <- CMBDataFrame(nside = 128, ordering = "nested",
                       coords = "cartesian")
 plot(cmbdf, back.col = "black")
+
+
+
+## DISK WINDOW
+win1 <- CMBWindow(x = 1, y = 0, z = 0, r = 0.5)
+disc <- window(cmbdf, win1)
+plot(cmbdf, back.col = "black")
+plot(disc, col = "red", size = 1.2, add = TRUE)
+plot(win1, size = 1.2, col = "yellow")
+
+## MINUS.DISK WINDOW
+win2 <- CMBWindow(x = 1, y = 0, z = 0, r = 1, set.minus = TRUE)
+disc <- window(cmbdf, win2)
+plot(cmbdf, back.col = "black")
+plot(disc, col = "red", size = 1.2, add = TRUE)
+plot(win2, size = 1.2, col = "yellow")
+
+## LIST OF DISC WITH MINUS.DISC (UNION)
+discs <- window(cmbdf, list(win1, win2), intersect = FALSE) # use win1, win2 above
+plot(cmbdf, back.col = "black")
+plot(discs, col = "red", size = 1.2, add = TRUE)
+plot(win1, size = 1.2, col = "yellow")
+plot(win2, size = 1.2, col = "yellow")
+
+
 
 ## SMALL WINDOW ON SPARSE SKY
 sky <- CMBDataFrame(nside = 1024, ordering = "nested", coords = "cartesian")
@@ -46,11 +71,11 @@ win2 <- CMBWindow(phi = c(0, pi/5, pi/5, 0),
                   theta = c(pi/4, pi/4, pi/5, pi/5),
                   set.minus = TRUE)
 cmbdf.win <- window(cmbdf, new.window = list(win1, win2))
-plot(cmbdf.win)
+plot(cmbdf.win, add = TRUE, col = "red", size = 1.2)
 plot(win1, col = "yellow")
 plot(win2, col = "yellow")
 
-### list of overlapping polygons and minus.polygons (intersect = TRUE)
+### list of overlapping polygons and minus.polygons (INTERSECT)
 win1 <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
                   theta = c(pi/2, pi/2, pi/10, pi/10),
                   set.minus = FALSE)
@@ -64,7 +89,7 @@ plot(win1, col = "yellow")
 plot(win2, col = "yellow")
 
 
-### list of disjoint polygons and minus.polygons (intersect = FALSE)
+### list of disjoint polygons and minus.polygons (UNION)
 win1 <- CMBWindow(phi = c(0, pi/2, pi/2),
                   theta = c(pi/2, pi/2, 0),
                   set.minus = TRUE)

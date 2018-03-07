@@ -15,15 +15,20 @@
 #'are treated differently from other windows: Let \eqn{A} be the union of the
 #'interiors of all windows whose winType does not include "minus",
 #'and let \eqn{B} be the intersection of the exteriors of all the windows whose
-#'\code{winType} does include "minus". Then, the returned CMBDataFrame will
-#'be the intersection of the
-#'points in \code{cmbdf} with \eqn{A} and \eqn{B}.
-#'However, if \eqn{A} (or \eqn{B}) is empty
-#'then the returned CMBDataFrame will instead be the intersection of \eqn{B}
-#'(or \eqn{A}) with \code{cmbdf}.
+#'\code{winType} does include "minus". Then, provided that
+#'\code{intersect = TRUE} (the default), the returned CMBDataFrame will
+#'be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+#'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
+#'be the intersection of the points in \code{cmbdf} with the union of
+#'\eqn{A} and \eqn{B}.
+#'Note that if \eqn{A} (resp. \eqn{B}) is empty
+#'then the returned CMBDataFrame will be the intersection of \eqn{B}
+#'(resp. \eqn{A}) with \code{cmbdf}.
 #'
 #'@param cmbdf a CMBDataFrame
 #'@param win a CMBWindow or a list of CMBWindows
+#'@param intersect a boolean that determines
+#'the behaviour when \code{win} is a list (see details).
 #'
 #'@return a CMBDataFrame which is restricted to the
 #'region of the sky specified by \code{win}
@@ -31,7 +36,7 @@
 #'@examples
 #'
 #'@export
-subWindow <- function(cmbdf, win)
+subWindow <- function(cmbdf, win, intersect)
 {
   if ( !is.CMBDataFrame(cmbdf) ) {
     stop("'cmbdf' must be a CMBDataFrame")
@@ -77,51 +82,52 @@ subWindow <- function(cmbdf, win)
   win.xyz <- win.conv
 
 
-  keep.plus <- rep(FALSE, nrow(cmbdf))
-  keep.minus <- rep(TRUE, nrow(cmbdf))
+  ## pointInside happens here
+  exist.m <- FALSE
+  exist.p <- FALSE
+  keep.p <- rep(FALSE, nrow(cmbdf))
+  keep.m <- rep(TRUE, nrow(cmbdf))
   for ( w in win.xyz )
   {
     switch(winType(w),
-           polygon = keep.plus <- keep.plus |
+           polygon = keep.p <- keep.p |
              pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
-           minus.polygon = keep.minus <- keep.minus &
+           minus.polygon = keep.m <- keep.m &
              !pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
            disc = stop(paste("(development stage) subWindow not",
                                "implemented for discs in window list")),
            minus.disc = stop(paste("(development stage) subWindow not",
                                      "implemented for discs in window list")),
              stop("Failed to determine window type using rcosmo::winType"))
+
+    if ( winType(w) == "minus.polygon" )
+    {
+      exist.m <- TRUE
+    }
+    if ( winType(w) == "polygon" )
+    {
+      exist.p <- TRUE
+    }
+
   }
-  if (sum(keep.plus) == 0 )
+
+  if ( intersect && exist.p )
   {
-    cat("\nhere\n")
-    keep <- keep.minus
+    keep <- keep.m & keep.p
+  }
+  else if ( exist.m && exist.p )
+  {
+    keep <- keep.m | keep.p
+  }
+  else if ( exist.p )
+  {
+    keep <- keep.p
   }
   else
   {
-    cat("\nhere2\n")
-    cat("keep.minus: ", sum(keep.minus), ", keep.plus: ", sum(keep.plus), "\n")
-    keep <- keep.minus & keep.plus
-    cat("keep: ", sum(keep), "\n")
-    cat("nrow: ", nrow(cmbdf), "\n")
+    keep <- keep.m
   }
 
-
-
-  # # All the work is done by pointInConvexPolygon: src/CMBDataFrameHelpers.cpp
-  # keep <- rep(FALSE, nrow(cmbdf))
-  # for ( w in win.xyz )
-  # {
-  #   # union all windows
-  #   keep <- keep | switch(winType(w),
-  #            polygon = pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
-  #            minus.polygon = !keep & !pointInConvexPolygon(cmbdf[,c("x","y","z")],w),
-  #            disc = stop(paste("(development stage) subWindow not",
-  #                              "implemented for discs in window list")),
-  #            minus.disc = stop(paste("(development stage) subWindow not",
-  #                                    "implemented for discs in window list")),
-  #            stop("Failed to determine window type using rcosmo::winType"))
-  # }
 
   cmbdf.new <- cmbdf[keep,]
 
@@ -130,6 +136,31 @@ subWindow <- function(cmbdf, win)
   return(cmbdf.new)
 }
 
+### DISUSED HELPER FUNCTIONS FOR subWindow
+# pointInside <- function(keep, cmbdf, w, intersect)
+# {
+#   if ( intersect )
+#   {
+#     return(keep & pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
+#   }
+#   else
+#   {
+#     return(keep | pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
+#   }
+# }
+#
+# ## HELPER FUNCTION FOR subWindow
+# pointOutside <- function(keep, cmbdf, w, intersect)
+# {
+#   if ( intersect )
+#   {
+#     return(keep & !pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
+#   }
+#   else
+#   {
+#     return(keep | !pointInConvexPolygon(cmbdf[,c("x","y","z")], w))
+#   }
+# }
 
 
 
@@ -142,26 +173,26 @@ subWindow <- function(cmbdf, win)
 #' When new.window is specified this function instead returns
 #' a new CMBDataFrame whose CMBWindow attribute is new.window
 #'
-#'The vector \code{intersect}
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 #'are treated differently from other windows: Let \eqn{A} be the union of the
 #'interiors of all windows whose winType does not include "minus",
 #'and let \eqn{B} be the intersection of the exteriors of all the windows whose
-#'\code{winType} does include "minus". Then, the returned CMBDataFrame will
-#'be the intersection of the
-#'points in \code{cmbdf} with \eqn{A} and \eqn{B}.
-#'However, if \eqn{A} (or \eqn{B}) is empty
-#'then the returned CMBDataFrame will instead be the intersection of \eqn{B}
-#'(or \eqn{A}) with \code{cmbdf}.
+#'\code{winType} does include "minus". Then, provided that
+#'\code{intersect = TRUE} (the default), the returned CMBDataFrame will
+#'be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+#'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
+#'be the intersection of the points in \code{cmbdf} with the union of
+#'\eqn{A} and \eqn{B}.
+#'Note that if \eqn{A} (resp. \eqn{B}) is empty
+#'then the returned CMBDataFrame will be the intersection of \eqn{B}
+#'(resp. \eqn{A}) with \code{cmbdf}.
 #'
 #'@param cmbdf a CMBDataFrame.
 #'@param new.window optionally specify a new window
 #'in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
 #'\code{new.window} may also be a list (see details section).
-#'@param intersect a vector of TRUE/FALSE with length equal to the length
-#'of \code{new.window}. Note that \code{new.window} must be a list for this
-#'to have an effect. This parameter overrides the default behaviour
-#'specified in the details section.
+#'@param intersect a boolean that determines
+#'the behaviour when \code{win} is a list (see details).
 #'
 #'@return
 #' The window attribute of cmbdf or, if new.window is specified, a
@@ -182,18 +213,12 @@ subWindow <- function(cmbdf, win)
 #' plot(cmbdf)
 #'
 #'@export
-window <- function(cmbdf, new.window, intersect)
+window <- function(cmbdf, new.window, intersect = TRUE)
 {
   if ( !missing(new.window) )
   {
-    if ( !missing(intersect) )
-    {
-      return(subWindow(cmbdf, new.window, intersect))
-    }
-    else
-    {
-      return(subWindow(cmbdf, new.window))
-    }
+    return(subWindow(cmbdf = cmbdf, win = new.window,
+                     intersect = intersect))
   }
 
   return(attr(cmbdf, "window"))

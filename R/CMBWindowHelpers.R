@@ -38,11 +38,11 @@ triangulate <- function(win)
     if (i == nrow(win))
     {
       break;
-      # stop(paste("Triangulation failed. Ensure the polygon",
-      #            "is oriented counter-clockwise.",
-      #            "If you are sure the polygon is convex then",
-      #            "perhaps try assume.convex = TRUE as an",
-      #            "argument to CMBWindow"))
+      stop(paste("Triangulation failed. Ensure the polygon",
+                 "is oriented counter-clockwise.",
+                 "If you are sure the polygon is convex then",
+                 "perhaps try assume.convex = TRUE as an",
+                 "argument to CMBWindow"))
     }
 
     i.1 <- i
@@ -55,10 +55,6 @@ triangulate <- function(win)
 
     # Check if the vertex at V2 is a concave-up corner.
     tri <- matrix(c(V1,V2,V3), nrow = 3, byrow = TRUE)
-    cat("i.1: ", i.1, "\n")
-    cat("i.2: ", i.2, "\n")
-    cat("i.2: ", i.3, "\n")
-    print(tri)
     if ( det(tri) > 0 ) # V1 cross V2 dot V3
     {
       # Check if there are any vertices inside the triangle (v1,v2,v3)
@@ -79,6 +75,7 @@ triangulate <- function(win)
           break;
         }
       }
+
 
       ## If there are no vertices inside then (V1,V2,V3) is an ear
       if ( !vertex.inside )
@@ -204,7 +201,15 @@ polygonMaxDist <- function(win)
 #'@export
 winType <- function(win)
 {
-  if ( !is.CMBWindow(win) ) stop("'win' must be a CMBWindow")
+  if ( !is.CMBWindow(win) )
+  {
+    if ( !is.list(win) || !all(sapply(win, is.CMBWindow)) )
+    {
+      stop("'win' must be a CMBWindow of list of CMBWindows")
+    }
+
+    return(sapply(win, winType))
+  }
 
   return(attr(win, "winType"))
 }

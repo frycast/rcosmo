@@ -222,11 +222,11 @@ CMBDataFrame <- function(CMBData,
       # generate the coordinates from HEALPix indices
       if (missing(spix))
       {
-        coordinates <- rcosmo::pix2coords(Nside = nside, Nest = nest,
+        coordinates <- rcosmo::pix2coords(nside = nside, nest = nest,
                                           spix = NULL, cartesian = cartesian)
       } else {
 
-        coordinates <- rcosmo::pix2coords(Nside = nside, Nest = nest,
+        coordinates <- rcosmo::pix2coords(nside = nside, nest = nest,
                                           spix = spix, cartesian = cartesian)
       }
 
@@ -382,7 +382,7 @@ CMBDataFrame <- function(CMBData,
       nest <- ifelse(ordering == "nested", TRUE, FALSE)
       cartesian <- ifelse(coords == "cartesian", TRUE, FALSE)
 
-      coordinates <- rcosmo::pix2coords(Nside = nside, Nest = nest,
+      coordinates <- rcosmo::pix2coords(nside = nside, nest = nest,
                                         cartesian = cartesian)
 
       # Put the coordinates in a data.frame

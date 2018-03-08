@@ -4,7 +4,7 @@
 \alias{subWindow}
 \title{Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}}
 \usage{
-subWindow(cmbdf, win, intersect)
+subWindow(cmbdf, win, intersect = TRUE)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame}

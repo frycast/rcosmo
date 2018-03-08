@@ -140,14 +140,46 @@ sph2car <- function(df) {
     .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
 }
 
+mkpix2xyC <- function(nside = 1024L) {
+    .Call('_rcosmo_mkpix2xyC', PACKAGE = 'rcosmo', nside)
+}
+
+#' @title nest2ring
+#'
+#' @description
+#' Convert from "nested" to "ring" ordering
+#'
+#' \code{nest2ring} computes the HEALPix pixel index
+#' in the "ring" ordering scheme from the pixel index
+#' in the "nested" ordering scheme.
+#'
+#' @param nside is the HEALPix nside parameter.
+#'
+#' @param pix is the set or subset of pixel indices at nside.
+#'
+#' @return the output is the corresponding set of pixel in
+#' the ring ordering scheme.
+#'
+#' @example
+#' # compute HEALPix indices in the ring ordering scheme
+#' nside <- 8
+#' pix <-c(1,2,23)
+#' nest2ring(nside,pix)
+#'
+#' @name nest2ring
+#' @export
+nest2ring <- function(nside, pix) {
+    .Call('_rcosmo_nest2ring', PACKAGE = 'rcosmo', nside, pix)
+}
+
 #'@title
 #'pix2coords
 #'@description
 #'Converts HEALPix pixel scheme to spherical or
 #'Cartesian coordinates.
 #'
-#'@param Nside The number of cuts to a HEALPix base resolution pixel.
-#'@param Nest Set to TRUE for NESTED ordering scheme and FALSE for RING.
+#'@param nside The number of cuts to a HEALPix base resolution pixel.
+#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING.
 #'@param spix Optional integer or vector of sample pixel indices.
 #'@param cartesian Set to FALSE to output spherical coordinates
 #'or else TRUE for cartesian.
@@ -163,10 +195,9 @@ sph2car <- function(df) {
 #' pixel-in-ring index, and pixel index respectively.
 #'
 #'@name pix2coords
-NULL
-
+#'
 #' @export
-pix2coords <- function(Nside = 0L, Nest = TRUE, spix = NULL, cartesian = FALSE) {
-    .Call('_rcosmo_pix2coords', PACKAGE = 'rcosmo', Nside, Nest, spix, cartesian)
+pix2coords <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
+    .Call('_rcosmo_pix2coords', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
 }
 

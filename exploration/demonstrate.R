@@ -21,10 +21,11 @@ plot(cmbdf, back.col = "black")
 ## LIST OF DISC WITH POLYGON
 win.p <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
                   theta = c(pi/2, pi/2, pi/10, pi/10))
-plot(win.d)
+plot(win.p)
 win.d <- CMBWindow(theta = 0, phi = 0, r = 0.1)
 plot(win.d)
-
+excl <- window(cmbdf, list(win.p, win.d))
+plot(excl, size = 1.2, col = "red")
 
 
 ## DISK WINDOW
@@ -49,7 +50,7 @@ plot(win1, size = 1.2, col = "yellow")
 plot(win2, size = 1.2, col = "yellow")
 
 
-
+######### SLOW!!!!
 ## SMALL WINDOW ON SPARSE SKY
 sky <- CMBDataFrame(nside = 1024, ordering = "nested", coords = "cartesian")
 plot(sky, sample.size = 20000, back.col = "black")

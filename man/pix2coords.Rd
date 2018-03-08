@@ -3,10 +3,13 @@
 \name{pix2coords}
 \alias{pix2coords}
 \title{pix2coords}
+\usage{
+pix2coords(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE)
+}
 \arguments{
-\item{Nside}{The number of cuts to a HEALPix base resolution pixel.}
+\item{nside}{The number of cuts to a HEALPix base resolution pixel.}
 
-\item{Nest}{Set to TRUE for NESTED ordering scheme and FALSE for RING.}
+\item{nested}{Set to TRUE for NESTED ordering scheme and FALSE for RING.}
 
 \item{spix}{Optional integer or vector of sample pixel indices.}
 

@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{CMBDataFrame}(cmbdf, add = FALSE, sample.size, type = "p",
   size = 1, box = FALSE, axes = FALSE, aspect = FALSE, col, back.col,
-  ...)
+  labels, ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame with either spherical or cartesian coordinates.}
@@ -36,6 +36,11 @@ aspect ratio, or a new ratio.}
 
 \item{back.col}{optionally specifies the background colour of
 the plot. This argument is passed to rgl::bg3d.}
+
+\item{labels}{optionally specify a vector of labels to plot,
+such as words or vertex indices. If this is specified then
+\code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
+\code{length(labels)} must equal \code{nrow(cmbdf)}}
 
 \item{...}{arguments passed to rgl::plot3d}
 }

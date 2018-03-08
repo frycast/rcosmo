@@ -1,3 +1,18 @@
+
+#' plotHPBoundaries
+#'
+#' plot the HEALPix pixel boundaries at \code{nside}
+#'
+#' @param nside the HEALPix nside parameter
+#' @param eps controls the smoothness of the plot, smaller eps
+#' implies more samples
+#' @param col the colour of plotted boundary lines
+#' @param size the size of the plotted boundary lines
+#' @param ... arguments passed to \code{rgl::plot3d}
+#'
+#' @return produces a plot
+#'
+#' @export
 plotHPBoundaries <- function(nside, eps = pi/90,
                              col = "black", size = 1,  ...)
 {
@@ -67,7 +82,6 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, size = size, ...)
   }
-
 }
 
 

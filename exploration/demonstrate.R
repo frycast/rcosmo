@@ -6,6 +6,47 @@ library(Rcpp)
 library(rcosmo)
 library(tidyverse)
 
+#####################################################################
+######## DEMONSTRATE nest2ring and ring2nest ########################
+#####################################################################
+
+## This is a good test too
+pix <- 1:48
+all.equal((ring2nest(2, pix))[nest2ring(2,pix)],
+          (nest2ring(2, pix))[ring2nest(2,pix)],
+          pix)
+
+pix <- sample(1:48, 5)
+all.equal((ring2nest(2, pix))[nest2ring(2,pix)],
+          (nest2ring(2, pix))[ring2nest(2,pix)],
+          pix)
+
+nest2ring(2, 4)
+ring2nest(2, pix)
+nest2ring(2, pix)
+
+#####################################################################
+######### DEMONSTRATE HealpixBoundaries #############################
+#####################################################################
+
+# With dots
+ns <- 2
+cmbdf <- CMBDataFrame(nside = ns, ordering = "nested",
+                      coords = "spherical")
+plot(cmbdf, back.col = "black", size = 6)
+plotHPBoundaries(ns, col = "red")
+
+# With pixel indices NESTED
+cmbdf <- CMBDataFrame(nside = 2, ordering = "nested",
+                      coords = "cartesian")
+plot(cmbdf, back.col = "black", size = 5, labels = pix)
+plotHPBoundaries(2, col = "red")
+
+# With pixel indices RING
+cmbdf <- CMBDataFrame(nside = 2, ordering = "ring",
+                      coords = "cartesian")
+plot(cmbdf, back.col = "black", size = 5, labels = pix)
+plotHPBoundaries(2, col = "red")
 
 
 

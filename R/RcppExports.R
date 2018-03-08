@@ -39,6 +39,67 @@ pointInDisc <- function(df, win) {
     .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
 }
 
+mkpix2xyC <- function(nside = 1024L) {
+    .Call('_rcosmo_mkpix2xyC', PACKAGE = 'rcosmo', nside)
+}
+
+#' @title nest2ring
+#'
+#' @description
+#' Convert from "nested" to "ring" ordering
+#'
+#' \code{nest2ring} computes the HEALPix pixel index
+#' in the "ring" ordering scheme from the pixel index
+#' in the "nested" ordering scheme.
+#'
+#' @param nside is the HEALPix nside parameter.
+#'
+#' @param pix is the set or subset of pixel indices at nside.
+#'
+#' @return the output is the corresponding set of pixel in
+#' the ring ordering scheme.
+#'
+#' @example
+#' # compute HEALPix indices in the ring ordering scheme
+#' nside <- 8
+#' pix <-c(1,2,23)
+#' nest2ring(nside,pix)
+#'
+#' @name nest2ring
+#' @export
+nest2ring <- function(nside, pix) {
+    .Call('_rcosmo_nest2ring', PACKAGE = 'rcosmo', nside, pix)
+}
+
+#'@title
+#'pix2coords
+#'@description
+#'Converts HEALPix pixel scheme to spherical or
+#'Cartesian coordinates.
+#'
+#'@param nside The number of cuts to a HEALPix base resolution pixel.
+#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING.
+#'@param spix Optional integer or vector of sample pixel indices.
+#'@param cartesian Set to FALSE to output spherical coordinates
+#'or else TRUE for cartesian.
+#'
+#'@details
+#'This is a place holder
+#'
+#'@return A matrix with columns theta and phi (in that order), or
+#' x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude
+#' in radians measured from the North Pole and phi (in [0, 2*pi])
+#' is the longitude in radians measured Eastward. The remaining 3 columns
+#' returned are i, j, and p which represent the HEALPix ring index,
+#' pixel-in-ring index, and pixel index respectively.
+#'
+#'@name pix2coords
+#'
+#' @export
+pix2coords <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
+    .Call('_rcosmo_pix2coords', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
+}
+
 #'@title
 #'geoDistList
 #'@description
@@ -138,66 +199,5 @@ car2sph <- function(df) {
 #'@export
 sph2car <- function(df) {
     .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
-}
-
-mkpix2xyC <- function(nside = 1024L) {
-    .Call('_rcosmo_mkpix2xyC', PACKAGE = 'rcosmo', nside)
-}
-
-#' @title nest2ring
-#'
-#' @description
-#' Convert from "nested" to "ring" ordering
-#'
-#' \code{nest2ring} computes the HEALPix pixel index
-#' in the "ring" ordering scheme from the pixel index
-#' in the "nested" ordering scheme.
-#'
-#' @param nside is the HEALPix nside parameter.
-#'
-#' @param pix is the set or subset of pixel indices at nside.
-#'
-#' @return the output is the corresponding set of pixel in
-#' the ring ordering scheme.
-#'
-#' @example
-#' # compute HEALPix indices in the ring ordering scheme
-#' nside <- 8
-#' pix <-c(1,2,23)
-#' nest2ring(nside,pix)
-#'
-#' @name nest2ring
-#' @export
-nest2ring <- function(nside, pix) {
-    .Call('_rcosmo_nest2ring', PACKAGE = 'rcosmo', nside, pix)
-}
-
-#'@title
-#'pix2coords
-#'@description
-#'Converts HEALPix pixel scheme to spherical or
-#'Cartesian coordinates.
-#'
-#'@param nside The number of cuts to a HEALPix base resolution pixel.
-#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING.
-#'@param spix Optional integer or vector of sample pixel indices.
-#'@param cartesian Set to FALSE to output spherical coordinates
-#'or else TRUE for cartesian.
-#'
-#'@details
-#'This is a place holder
-#'
-#'@return A matrix with columns theta and phi (in that order), or
-#' x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude
-#' in radians measured from the North Pole and phi (in [0, 2*pi])
-#' is the longitude in radians measured Eastward. The remaining 3 columns
-#' returned are i, j, and p which represent the HEALPix ring index,
-#' pixel-in-ring index, and pixel index respectively.
-#'
-#'@name pix2coords
-#'
-#' @export
-pix2coords <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
-    .Call('_rcosmo_pix2coords', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
 }
 

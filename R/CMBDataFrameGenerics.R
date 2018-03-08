@@ -274,6 +274,10 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #'@param col specify the colour(s) of the plotted points
 #'@param back.col optionally specifies the background colour of
 #'the plot. This argument is passed to rgl::bg3d.
+#'@param labels optionally specify a vector of labels to plot,
+#'such as words or vertex indices. If this is specified then
+#'\code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
+#'\code{length(labels)} must equal \code{nrow(cmbdf)}
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@return
@@ -287,7 +291,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
-                              col, back.col, ...)
+                              col, back.col, labels, ...)
 {
 
   if ( !missing(sample.size) )
@@ -335,16 +339,24 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
     cmbdf.xyz <- data.frame(x = cmbdf$x, y = cmbdf$y, z = cmbdf$z)
   }
 
-
-
   ## Do the plotting
   if ( !missing(back.col) )
   {
     rgl::open3d()
     rgl::bg3d(back.col)
   }
-  rgl::plot3d(cmbdf.xyz, col = col, type = type, size = size,
-              box = box, axes = axes, add = add, aspect = aspect, ...)
+
+  if ( missing(labels) )
+  {
+    rgl::plot3d(cmbdf.xyz, col = col, type = type, size = size,
+                box = box, axes = axes, add = add, aspect = aspect, ...)
+  }
+  else
+  {
+    rgl::text3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z, labels,
+                col = col, type = type, size = size,
+                box = box, axes = axes, add = add, aspect = aspect, ...)
+  }
 }
 
 

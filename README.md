@@ -18,14 +18,7 @@ The package “rcosmo” aims address various data processing and statistical an
 
 
 ## Next steps
-  + Create as.CMBDataFrame() function that can take a data.frame with HEALPix indices, intensities, etc
-  and add all attributes such as Nside
   + Investigate R packages [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html) and [VecStatGraph3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)
-  + Method for subsetting polygonal subarea of sky.
-  + Calculate area given a subset of sky (from HEALPix pixel sizes).
-    + [Example from python.](http://healpy.readthedocs.io/en/latest/generated/healpy.query_polygon.html?highlight=polygon)
-  + Triangulation of sphere.
-    + [Test to know if a vector is inside a spherical triangle.](https://math.stackexchange.com/questions/1175362/test-to-know-if-a-vector-is-inside-a-spherical-triangle)
   + What to do with the polarisation data (Q_STOKES, U_STOKES).
     + [Details here: Scroll to 'Polarisation Convention / Internal Convention'](http://healpix.sourceforge.net/html/intronode6.htm)
   + Sample mean, variance and higher moments (need normalising factor with area)

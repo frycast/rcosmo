@@ -1,7 +1,7 @@
 # rcosmo project
 
 
-## Warning: The functions in Rcosmo are still under development and need more testing for both the effectiveness and efficiency. 
+## Warning: The functions in Rcosmo are still under development.
 ## Expected version 1 completion date is 01/07/2018. 
 ## More advanced statistical and harmonic analysis tools, such as needlets, FFT, fractional SPDE, are expected in the future version.
 

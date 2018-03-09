@@ -1,5 +1,22 @@
 # rcosmo project
 
+
+## Warning: The functions in Rcosmo are still under development and need more testing for both the effectiveness and efficiency. 
+## Expected version 1 completion date is 01/07/2018. 
+## More advanced statistical and harmonic analysis tools, such as needlets, FFT, fractional SPDE, are expected in the future version.
+
+The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from the epoch of recombination. It is the most ancient important source of data about the early universe and the key to unlocking the mysteries of the Big Bang and the structure of time and space. Spurred on by a wealth of satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation. An advanced R programming toolkit is needed to help statisticians perform CMB data analytics. 
+The package “rcosmo” aims address various data processing and statistical analysis needs for the present generation of cosmic microwave background (CMB) experiments. The current version of rcosmo covers the following functions
++	Generation of a comprehensive data frame of CMB observations, which include HEALPix indices, CMB data intensities and their
+  corresponding spherical and/or cartesian coordinates, as well as polarization data;
++	Window subsetting tools for investigating circular and (possibly non-convex) polygonal sub-regions on the sphere;
++	Fast sample covariance and variogram estimation over the whole sphere or polygonal subarea;
++	Implementation and analysis of spherical harmonics, spherical wavelets, etc;
++	Various methods for CMB map visualization, such as 3D full sky map, Mollweide projection and HEALPix boundary plotting;
++	Demonstration of the geometrical and statistical properties of the CMB, on both global and localized area of the sphere.
+  More details about the developed functions are presented with numerical examples.
+
+
 ## Next steps
   + Create as.CMBDataFrame() function that can take a data.frame with HEALPix indices, intensities, etc
   and add all attributes such as Nside

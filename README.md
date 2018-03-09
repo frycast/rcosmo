@@ -31,18 +31,10 @@ The package “rcosmo” aims address various data processing and statistical an
   
 ## Suggestions
   + Provide 2D HEALPix projection. [See here](http://sufoo.c.ooco.jp/program/healpix.html) and Figure 5 from [this paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513).
-  + Provide class *skywin* to hold polygonal sky window (like *owin* in [spatstat](https://cran.r-project.org/web/packages/spatstat/index.html) package):
-    + Make *summary(skywin)* return area and boundary information
-  + Provide class *cmbDataFrame* that also holds Nside, units, coordinate system, ordering scheme, etc. 
-    + Make *summary(cmbDataFrame)* return [number of pixels](http://healpy.readthedocs.io/en/latest/healpy_pix.html#nside-npix-resolution), area, units, coordinate system and common statistics.
-  + Provide options: (1) longitude and latitude in degree, (2) longitude and co-latitude in radians. [See 'lonlat' here.](http://healpy.readthedocs.io/en/latest/generated/healpy.pixelfunc.pix2ang.html#healpy.pixelfunc.pix2ang)
-    + | Place     | Latitude  | Colatitude  | 
-      | --------- | --------- | ----------- |
-      | Nth Pole  | 90&deg;   | 0&deg;      |
-      | Equator   | 0&deg;    | 90&deg;     |
-      | Sth Pole  | -90&deg;  | 180&deg;    |
+  + Look at [spatstat](https://cran.r-project.org/web/packages/spatstat/index.html) package):
+  + Make *summary(CMBDataFrame)* return [number of pixels](http://healpy.readthedocs.io/en/latest/healpy_pix.html#nside-npix-resolution), area, units, coordinate system and common statistics.
   + Provide common intensity unit conversions (K_CMB <-> K_RJ <-> MJy/sr). [See here.](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/Article/View/181/20/what-are-the-intensity-units-of-the-planck-all-sky-maps-and-how-do-i-convert-between-them)
-  + Provide conversion between RING and NESTED numbering schemes for *cmbDataFrame*. [See here.](http://healpy.readthedocs.io/en/latest/healpy_pix.html#conversion-between-nested-and-ring-schemes)
+  + Provide conversion between RING and NESTED numbering schemes for *CMBDataFrame*. [See here.](http://healpy.readthedocs.io/en/latest/healpy_pix.html#conversion-between-nested-and-ring-schemes)
     > "It is in the RING scheme that Fourier transforms with spherical harmonics are easy to implement.    
     >  NESTED tree structure allows one to implement efficiently all applications involving nearest-neighbour searches, and also allows for an immediate construction of the fast Haar wavelet transform" [Source.](http://healpix.sourceforge.net/html/intronode4.htm)
       

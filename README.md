@@ -22,7 +22,7 @@ The package “rcosmo” aims address various data processing and statistical an
   + What to do with the polarisation data (Q_STOKES, U_STOKES).
     + [Details here: Scroll to 'Polarisation Convention / Internal Convention'](http://healpix.sourceforge.net/html/intronode6.htm)
   + Sample mean, variance and higher moments (need normalising factor with area)
-  + Sample covariance and variogram (assume Gaussianity and homogeneity):
+  + Sample covariance and variogram (assume Gaussianity and homogeneity, don't assume isotropy):
   
     <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{1}{\&hash;\text{terms&space;in&space;sum}}\sum_{t_1&space;\in&space;S^2}\sum_{\{d(t_1,t_2)&space;=&space;r\}}&space;X(t_1)X(t_2)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{1}{\&hash;\text{terms&space;in&space;sum}}\sum_{t_1&space;\in&space;S^2}\sum_{\{d(t_1,t_2)&space;=&space;r\}}&space;X(t_1)X(t_2)" title="\frac{1}{\#\text{terms in sum}}\sum_{t_1 \in S^2}\sum_{\{d(t_1,t_2) = r\}} X(t_1)X(t_2)" /></a>
     

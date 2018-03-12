@@ -30,22 +30,24 @@ nest2ring(2, pix)
 #####################################################################
 
 # With dots
-ns <- 2
+ns <- 1
 cmbdf <- CMBDataFrame(nside = ns, ordering = "nested",
                       coords = "spherical")
 plot(cmbdf, back.col = "black", size = 6)
 plotHPBoundaries(ns, col = "red")
+plotHPBoundaries(2, col = "green")
 
+pix <- 1:48
 # With pixel indices NESTED
 cmbdf <- CMBDataFrame(nside = 2, ordering = "nested",
                       coords = "cartesian")
-plot(cmbdf, back.col = "black", size = 5, labels = pix)
+plot(cmbdf, back.col = "black", col = "yellow", size = 5, labels = pix)
 plotHPBoundaries(2, col = "red")
 
 # With pixel indices RING
 cmbdf <- CMBDataFrame(nside = 2, ordering = "ring",
                       coords = "cartesian")
-plot(cmbdf, back.col = "black", size = 5, labels = pix)
+plot(cmbdf, back.col = "black", col = "yellow", size = 5, labels = pix)
 plotHPBoundaries(2, col = "red")
 
 
@@ -70,7 +72,7 @@ plot(excl, size = 1.2, col = "red")
 
 
 ## DISK WINDOW
-win1 <- CMBWindow(x = 1, y = 0, z = 0, r = 0.5)
+win1 <- CMBWindow(x = 1, y = 0, z = 0, r = 0.5, set.minus = FALSE)
 disc <- window(cmbdf, win1)
 plot(cmbdf, back.col = "black")
 plot(disc, col = "red", size = 1.2, add = TRUE)

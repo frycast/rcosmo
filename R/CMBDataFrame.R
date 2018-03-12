@@ -1,6 +1,6 @@
 # R function for creating a CMBDataFrame
 
-# CMBData can be the output of readFITScmb or it can be a string location of FITS file.
+# CMBData can be the output of CMBReadFITS or it can be a string location of FITS file.
 
 # Coords can be "spherical," "healpix only" or "cartesian".
 
@@ -162,8 +162,7 @@ CMBDataFrame <- function(CMBData,
       stop(paste("intensities parameter must be unspecified when",
            "CMBData is a path to FITS file")))
 
-    #CMBData <- readFITScmb("../CMB_map_smica1024.fits")
-    CMBData <- readFITScmb(CMBData)
+    CMBData <- CMBReadFITS(CMBData)
 
     # Get Nside from FITS header:
     nside <- as.numeric(CMBData$hdr[which(CMBData$hdr == "NSIDE")+1])
@@ -222,11 +221,11 @@ CMBDataFrame <- function(CMBData,
       # generate the coordinates from HEALPix indices
       if (missing(spix))
       {
-        coordinates <- rcosmo::pix2coords(nside = nside, nest = nest,
+        coordinates <- rcosmo::pix2coords(nside = nside, nested = nest,
                                           spix = NULL, cartesian = cartesian)
       } else {
 
-        coordinates <- rcosmo::pix2coords(nside = nside, nest = nest,
+        coordinates <- rcosmo::pix2coords(nside = nside, nested = nest,
                                           spix = spix, cartesian = cartesian)
       }
 
@@ -382,7 +381,7 @@ CMBDataFrame <- function(CMBData,
       nest <- ifelse(ordering == "nested", TRUE, FALSE)
       cartesian <- ifelse(coords == "cartesian", TRUE, FALSE)
 
-      coordinates <- rcosmo::pix2coords(nside = nside, nest = nest,
+      coordinates <- rcosmo::pix2coords(nside = nside, nested = nest,
                                         cartesian = cartesian)
 
       # Put the coordinates in a data.frame

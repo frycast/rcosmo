@@ -122,6 +122,11 @@ assumedConvex <- function(win, assume.convex)
 
   if ( !missing(assume.convex) )
   {
+    if (!is.logical(assume.convex))
+    {
+      stop("assume.convex must be logical TRUE or FALSE")
+    }
+
     attr(win, "assumedConvex") <- assume.convex
 
     if ( winType(win) == "disc" || winType(win) == "minus.disc" )
@@ -136,6 +141,14 @@ assumedConvex <- function(win, assume.convex)
   {
     return(attr(win, "assumedConvex"))
   }
+}
+
+
+#' Change the \code{\link{assumedConvex}} boolean of a \code{\link{CMBWindow}}
+#' @export
+`assumedConvex<-` <- function(win, ..., value)
+{
+  return(assumedConvex(win, assume.convex = value))
 }
 
 
@@ -196,10 +209,17 @@ polygonMaxDist <- function(win)
 
 #'Get the type (polygon or disk) of a \code{\link{CMBWindow}}
 #'
-#'@param win a CMBWindow object
+#'@param win a \code{CMBWindow} object or a list of such
+#'@param new.type optionally specify a new type. Use this to
+#'change between "polygon" and "minus.polygon" or to change
+#'between "disc" and "minus.disc"
+#'
+#'@return If \code{new.type} is missing then the \code{winType} of win
+#'is returned. Otherwise a new window is returned with \code{winType}
+#'equal to \code{new.type}
 #'
 #'@export
-winType <- function(win)
+winType <- function(win, new.type)
 {
   if ( !is.CMBWindow(win) )
   {
@@ -211,6 +231,47 @@ winType <- function(win)
     return(sapply(win, winType))
   }
 
-  return(attr(win, "winType"))
+  if ( missing(new.type) )
+  {
+    return(attr(win, "winType"))
+  }
+  else
+  {
+    # Only change the winType if new.type is compatible
+    if ( new.type == "disc" || new.type == "minus.disc" )
+    {
+      if ( contains("disc", winType(win)) )
+      {
+        attr(win, "winType") <- new.type
+        return(win)
+      }
+      else
+      {
+        stop("cannot change from disc types to the specified new type")
+      }
+    } else if ( new.type == "polygon" || new.type == "minus.polygon" ) {
+
+      if ( contains("polygon", winType(win)) )
+      {
+        attr(win, "winType") <- new.type
+        return(win)
+      }
+      else
+      {
+        stop("cannot change from polygon types to the specified new type")
+      }
+    }
+    else
+    {
+      stop("the specified new.type is invalid")
+    }
+  }
 }
 
+
+#' Assign new \code{\link{winType}} to a \code{\link{CMBWindow}}
+#' @export
+`winType<-` <- function(win, ..., value)
+{
+  return(winType(win, new.type = value))
+}

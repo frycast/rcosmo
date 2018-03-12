@@ -4,6 +4,7 @@ library(sphereplot)
 library(pryr)
 library(Rcpp)
 library(rcosmo)
+library(Rcpp)
 library(tidyverse)
 
 #####################################################################
@@ -358,25 +359,14 @@ plot(win1, axes = TRUE)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Example2 (anticlockwise): north cap
 win2 <- CMBWindow(theta = rep(pi/3, 10),
                   phi = seq(0,9*2*pi/10, length.out = 10))
 cmbdf.win2 <- window(cmbdf, new.window = win2)
 plot(cmbdf.win2)
 plot(win2)
+
+### cLOCKWISE WINDOW EXAMPLE SHOWS THAT IT'S A GOOD IDEA TO PLOT WIN TO CHECK
 ## Example2 (clockwise): Note the use of 'rev' function here:
 win2 <- CMBWindow(theta = rep(pi/3, 10),
                   phi = rev(seq(0,9*2*pi/10, length.out = 10)))
@@ -386,7 +376,7 @@ plot(win2)
 
 
 
-## Example3: non-convex window that doesn't work yet
+## Example3: another non-convex window
 win3 <- CMBWindow( theta = c(pi/2, pi/2, pi/4, pi/4, 0 ),
                    phi   = c(   0,    1,    1,  0.5, 0 ) )
 cmbdf.win3 <- window(cmbdf, new.window = win3)
@@ -394,29 +384,15 @@ plot(cmbdf.win3)
 plot(win3)
 
 
-# Comparison with pure R function
-library(Rcpp)
-sourceCpp("src/CMBDataFrameHelpers.cpp")
-cmbdf.win <- subWindow(cmbdf, win)
-cmbdf.win2 <- subWindow2(cmbdf, win)
-
-# They aren't equal but it looks like the R version has the problem
-all.equal(cmbdf.win, cmbdf.win2)
-plot(cmbdf.win)
-plot(cmbdf.win2)
-
-# The C++ version is about 300 times faster
-cmbdf <- CMBDataFrame(nside = 16, ordering = "nested", coords = "spherical")
-microbenchmark(subWindow(cmbdf, win), subWindow2(cmbdf, win))
-
 
 #####################################################################
-######### DEMONSTRATE CMBWindow #####################################
+######### DEMONSTRATE CMBWindow attributes and helpers ##############
 #####################################################################
 
 # disc
 win <- CMBWindow(x = 0, y = 0, z = 1, r = pi/2)
 winType(win)
+area(win)
 all.equal(area(win), 4*pi/2)
 
 # minus.disc

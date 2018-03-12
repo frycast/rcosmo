@@ -4,10 +4,19 @@
 \alias{winType}
 \title{Get the type (polygon or disk) of a \code{\link{CMBWindow}}}
 \usage{
-winType(win)
+winType(win, new.type)
 }
 \arguments{
-\item{win}{a CMBWindow object}
+\item{win}{a \code{CMBWindow} object or a list of such}
+
+\item{new.type}{optionally specify a new type. Use this to
+change between "polygon" and "minus.polygon" or to change
+between "disc" and "minus.disc"}
+}
+\value{
+If \code{new.type} is missing then the \code{winType} of win
+is returned. Otherwise a new window is returned with \code{winType}
+equal to \code{new.type}
 }
 \description{
 Get the type (polygon or disk) of a \code{\link{CMBWindow}}

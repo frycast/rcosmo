@@ -279,10 +279,12 @@ coords.CMBWindow <- function( win, new.coords )
       {
         win[,3] <- r
         names(win) <- c("theta", "phi", "r")
+        win[,4] <- NULL
       }
       else
       {
         names(win) <- c("theta", "phi")
+        win[,3] <- NULL
       }
 
       attr(win, "coords") <- "spherical"

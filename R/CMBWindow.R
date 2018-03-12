@@ -76,7 +76,12 @@ CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
     if ( !is.data.frame(df) ) stop(paste("only one argument was passed to",
                                         "'...' and it was not a data.frame"))
 
-    if ( all( c("theta", "phi") %in% names(df) ) ) {
+    if ( is.CMBWindow(df) )
+    {
+
+      window <- df
+
+    } else if ( all( c("theta", "phi") %in% names(df) ) ) {
 
       coords <- "spherical"
       window <- df[,c("theta","phi")]

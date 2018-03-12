@@ -143,6 +143,8 @@ is.CMBDataFrame <- function(cmbdf)
 #'@export
 area.CMBDataFrame <- function(cmbdf)
 {
+  nside <- nside(cmbdf)
+  if ( !is.numeric(nside) ) stop("problem with cmbdf nside parameter")
   return(4*pi/(12*nside^2)*nrow(cmbdf))
 }
 
@@ -238,7 +240,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 
 
 
-#' Assign new coordinate system to CMBDataFrame
+#' Assign new \code{\link{coords}} system to \code{\link{CMBDataFrame}}
 #' @export
 `coords<-.CMBDataFrame` <- function(cmbdf,...,value) {
   return(coords(cmbdf, new.coords = value))

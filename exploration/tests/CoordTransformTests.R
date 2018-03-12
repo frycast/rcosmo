@@ -10,9 +10,7 @@ library(rcosmo)
 ### RECENT AND UP-TO DATE TESTS      #############################
 ##################################################################
 
-Nside <- 4
 
-#### TESTING pix2coord vs python
 
 ## check that rcosmo::pix2coords agrees with python results
 res <- vector(mode = "logical", length = 4)

@@ -1,12 +1,12 @@
 #' Ring to Nest.
 #'
 #' \code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme to
-#' HEALPix pixel indices in the 'nest' ordering scheme.
+#' HEALPix pixel indices in the 'nested' ordering scheme.
 #'
 #' @param nside is the HEALPix nside parameter.
-#' @param pix is a vector or matrix of HEALPix pixel indices, in the 'ring' ordering scheme.
+#' @param pix is a vector of HEALPix pixel indices, in the 'ring' ordering scheme.
 #'
-#' @return the output is a vector or matrix of HEALPix pixel indices in the 'nest' ordering scheme.
+#' @return the output is a vector of HEALPix pixel indices in the 'nested' ordering scheme.
 #'
 #' @examples
 #' # compute HEALPix indices in the ring order of the set pix given in the nest order at nside
@@ -26,8 +26,8 @@ ring2nest <- function(nside, pix) {
     print("Error in input pix index!")
   }
 
-  jrll <- matrix(c(2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4), ncol=1)
-  jpll <- matrix(c(1, 3, 5, 7, 0, 2, 4, 6, 1, 3, 5, 7), ncol=1)
+  jrll <- c(2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4)
+  jpll <- c(1, 3, 5, 7, 0, 2, 4, 6, 1, 3, 5, 7)
   pix2 <- mkxy2pix()
   x2pix <- pix2$x
   y2pix <- pix2$y
@@ -39,11 +39,11 @@ ring2nest <- function(nside, pix) {
   ncap <- nl2*(nside-1)
 
   #preallocation
-  irn <- matrix(rep(0,length(ipring)),ncol=1)
-  iphi <- matrix(rep(0,length(ipring)),ncol=1)
-  nr <- matrix(rep(0,length(ipring)),ncol=1)
-  face_num <- matrix(rep(0,length(ipring)),ncol=1)
-  kshift <- matrix(rep(0,length(ipring)),ncol=1)
+  irn <- rep(0,length(ipring))
+  iphi <- rep(0,length(ipring))
+  nr <- rep(0,length(ipring))
+  face_num <- rep(0,length(ipring))
+  kshift <- rep(0,length(ipring))
 
   ##north polar cap
   mask <- ipring<ncap
@@ -54,7 +54,7 @@ ring2nest <- function(nside, pix) {
   miphi <- mRing - 2*mirn*(mirn - 1)
   MringPhil <- correct_ring_phi(1, mirn, miphi)
   mirn <- MringPhil$irn
-  miphi <- $iphi
+  miphi <- MringPhil$iphi
   kshift[mask] <- 0
   nr[mask] <- trunc(mirn)
   face_num[mask] <- trunc(miphi/mirn)
@@ -64,9 +64,9 @@ ring2nest <- function(nside, pix) {
   ## equatorial region
   mask <- (ncap <= ipring) & (ipring < PixNum - ncap)
   mRing <- ipring[mask]
-  mip    <- trunc(mRing - ncap)
+  mip <- trunc(mRing - ncap)
   ## counted from North pole
-  mirn   <- trunc(mip/nl4) + nside;
+  mirn <- trunc(mip/nl4) + nside;
   miphi <- mip %% nl4
   kshift[mask]  <- (mirn+nside) %% 2
   nr[mask] <- nside
@@ -80,11 +80,11 @@ ring2nest <- function(nside, pix) {
 
   mface <- matrix(rep(0,length(mRing)),ncol=1)
   smask <- (mifp == mifm)
-  mface[smask] = mifp[smask] %% 4+4 # faces 4 to 7
+  mface[smask] <- mifp[smask] %% 4+4 # faces 4 to 7
   smask <- (mifp < mifm)
-  mface[smask] = trunc(mifp[smask]); # (half-)faces 0 to 3
+  mface[smask] <- trunc(mifp[smask]); # (half-)faces 0 to 3
   smask <- (mifp > mifm)
-  mface[smask] = trunc(mifp[smask]+7); #(half-)faces 8 to 11
+  mface[smask] <- trunc(mifp[smask]+7); #(half-)faces 8 to 11
   face_num[mask] <- mface
   irn[mask] <- mirn
   iphi[mask] <- miphi
@@ -143,8 +143,50 @@ ring2nest <- function(nside, pix) {
 }
 
 
+## HELPER FUNCTION 1 FOR ring2nest
+correct_ring_phi <- function(location,iring,iphi){
+  delta <- rep(0,length(iphi))
+  delta[iphi<0] <- 1
+  delta[iphi>4*iring] <- -1
+  nzMask <- delta!=0
+  if (any(nzMask)){
+    iring[nzMask] <- iring[nzMask] - location[nzMask]*delta[nzMask]
+    iphi[nzMask]  <- iphi[nzMask] + delta[nzMask]*(4*iring[nzMask])
+  }
+  MringPhil <- list(irn=iring,iphi=iphi)
+  return(MringPhil)
+}
 
+## HELPER FUNCTION 2 FOR ring2nest
+mkxy2pix <- function() {
+  # sets the array giving the number of the pixel lying in (x,y)
+  # x and y are in {1,128}
+  # the pixel number is in {0,128**2-1}
+  # if  i-1 = sum_p=0  b_p * 2^p
+  # then ix = sum_p=0  b_p * 4^p
+  # iy = 2*ix
+  # ix + iy in {0, 128**2 -1}
 
+  x2pix <- rep(128,0)
+  y2pix <- rep(128,0)
+  for (i in 1:128) {
+    j<- i-1
+    k<- 0
+    ip<- 1
+    ip <- 1
+    while ( !(j==0) ) {
+      id <- j %% 2
+      j <- trunc(j/2)
+      k<- id*ip+k
+      ip<- 4*ip
+    }
+    x2pix[i]<- k
+    y2pix[i]<- 2*k
+  }
+
+  pix2 <- list(x=x2pix,y=y2pix)
+  return(pix2)
+}
 
 
 #

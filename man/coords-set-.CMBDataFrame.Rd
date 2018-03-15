@@ -2,10 +2,10 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{coords<-.CMBDataFrame}
 \alias{coords<-.CMBDataFrame}
-\title{Assign new coordinate system to CMBDataFrame}
+\title{Assign new \code{\link{coords}} system to \code{\link{CMBDataFrame}}}
 \usage{
 \method{coords}{CMBDataFrame}(cmbdf, ...) <- value
 }
 \description{
-Assign new coordinate system to CMBDataFrame
+Assign new \code{\link{coords}} system to \code{\link{CMBDataFrame}}
 }

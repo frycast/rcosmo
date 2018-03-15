@@ -197,9 +197,9 @@ testthat::test_that("spherical 'nested' data agrees with python results after co
 # nest2ring & ring2nest ------------------------------------------------------------
 
 
-testthat::context("Check nest2ring output")
+testthat::context("nest2ring & ring2nest output")
 
-## CODE USED TO GENERATE TEST DATA FROM YU GUANG's nest2ringR FUNCTION
+## CODE USED TO GENERATE nest2ring TEST DATA FROM YU GUANG's nest2ringR FUNCTION
 ## DATE: 12/03/2018
 ## It has been confirmed by Yu Guang that the R version of nest2ring agrees with the
 ## HEALPy version. So, the data was saved from the R version using the following code:
@@ -210,4 +210,28 @@ testthat::context("Check nest2ring output")
 testthat::test_that("nest2ring (C++) agrees with reference data", {
   ref <- readRDS("testdata/nest2ringR.rds")
   testthat::expect_equal(nest2ring(nside = 2, pix = 1:48), ref)
+  for (i in 1:length(ref))
+  {
+    eval(bquote(testthat::expect_equal(nest2ring(nside = 2, pix = .(i)), ref[.(i)])))
+  }
 })
+
+## CODE USED TO GENERATE ring2nest TEST DATA FROM MING's ring2nestR FUNCTION
+## DATE: 15/03/2018
+## It has been confirmed by Ming that the R version of ring2nest agrees with the
+## HEALPy version. So, the data was saved from the R version using the following code:
+# pix <- seq(1:48)
+# r2nR <- as.vector(ring2nestR(2, pix))
+# saveRDS(r2nR, file = "tests/testthat/testdata/ring2nestR.rds")
+
+testthat::test_that("ring2nest (R) agrees with reference data", {
+  ref <- readRDS("testdata/ring2nestR.rds")
+  testthat::expect_equal(ring2nest(nside = 2, pix = 1:48), ref)
+  for (i in 1:length(ref))
+  {
+    eval(bquote(testthat::expect_equal(ring2nest(nside = 2, pix = .(i)), ref[.(i)])))
+  }
+})
+
+
+

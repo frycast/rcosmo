@@ -2,18 +2,26 @@
 % Please edit documentation in R/Conversion.R
 \name{ring2nest}
 \alias{ring2nest}
-\title{Convert from "ring" to "nested" ordering scheme}
+\title{Ring to Nest.}
 \usage{
 ring2nest(nside, pix)
 }
 \arguments{
-\item{nside}{is the HEALPix nside parameter}
+\item{nside}{is the HEALPix nside parameter.}
 
-\item{pix}{is the set or subset of pixel indices at nside}
+\item{pix}{is a vector of HEALPix pixel indices, in the 'ring' ordering scheme.}
 }
 \value{
-vector of pixel indices in "nested" ordering scheme
+the output is a vector of HEALPix pixel indices in the 'nested' ordering scheme.
 }
 \description{
-Convert from "ring" to "nested" ordering scheme
+\code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme to
+HEALPix pixel indices in the 'nested' ordering scheme.
+}
+\examples{
+# compute HEALPix indices in the ring order of the set pix given in the nest order at nside
+nside <- 8
+pix <-c(1,2,23)
+ring2nest(nside,pix)
+
 }

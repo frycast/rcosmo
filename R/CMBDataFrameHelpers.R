@@ -205,7 +205,7 @@ window <- function(cmbdf, new.window, intersect = TRUE)
 #'@export
 `window<-` <- function(cmbdf,...,value)
 {
-  return(rcosmo::subWindow(cmbdf, value))
+  return(rcosmo::subWindow(cmbdf, new.window = value))
 }
 
 

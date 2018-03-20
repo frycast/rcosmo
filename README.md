@@ -16,6 +16,17 @@ The package “rcosmo” aims address various data processing and statistical an
 +	Tools for geometrical and statistical analysis of the CMB, on both global and localized area of the sphere.
   More details about the developed functions are presented with numerical examples.
 
+## Installation
+First install the devtools package:
+```
+install.packages("devtools")
+```
+Then install the latest RTools from CRAN at this link [here](https://cran.r-project.org/bin/windows/Rtools/) if it is not already installed.
+Then use devtools to install rcosmo:
+```
+devtools::github_install("VidaliLama/rcosmo")
+```
+If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::github_install("VidaliLama/rcosmo")` again.
 
 ## Next steps
   + Investigate R packages [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html) and [VecStatGraph3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)

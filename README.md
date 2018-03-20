@@ -3,7 +3,6 @@
 
 ### Warning: The functions in Rcosmo are still under development.
 ### Expected version 1 completion date is 01/07/2018. 
-### More advanced statistical and harmonic analysis tools, such as needlets, FFT, and spatial statistics are expected in the future version.
 
 The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from the epoch of recombination. It is the most ancient important source of data about the early universe and the key to unlocking the mysteries of the Big Bang and the structure of time and space. Spurred on by a wealth of satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation. An advanced R programming toolkit is needed to help statisticians perform CMB data analytics. 
 The package “rcosmo” aims address various data processing and statistical analysis needs for the present generation of cosmic microwave background (CMB) experiments. The current version of rcosmo covers the following functions

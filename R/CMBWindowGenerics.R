@@ -1,3 +1,56 @@
+#'Get the maximum distance between all points
+#'in a \code{\link{CMBWindow}}
+#'
+#'@param win a CMBWindow object
+#'
+#'@export
+maxDist.CMBWindow <- function(win)
+{
+
+  # Create temporary window in cartesian coordinates for dist and area
+  if ( coords(win) == "cartesian" ) {
+
+    win.xyz <- win
+
+  } else {
+
+    win.xyz <- sph2car(win)
+  }
+
+  # Calculate maximum distance
+  max.dist <- switch(winType(win),
+                     polygon = polygonMaxDist(win.xyz),
+                     minus.polygon = pi,
+                     disc = 2*as.numeric(win$r),
+                     minus.disc = pi,
+                     stop(paste("Could not determine window type",
+                                "using rcosmo::winType")))
+
+  return(max.dist)
+}
+
+## HELPER FUNCTION FOR maxDist
+polygonMaxDist <- function(win)
+{
+  max.dist <- 0
+  for ( i in 1:(nrow(win) - 1) )
+  {
+    for ( j in (i+1):nrow(win) )
+    {
+      dist <- geoDist(win[i,], win[j,])
+      if ( dist > max.dist ) max.dist <- dist
+    }
+  }
+
+  return(max.dist)
+}
+
+
+
+
+
+
+
 #' Check if an object is a CMBWindow
 #'
 #' @param win any object
@@ -124,7 +177,7 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
     line.phi <- seq(phi[1], phi[2], by = eps)
 
     ## Rotate so that all values are in [0,2*pi)
-    line.phi[line.phi >= 2*pi] <- line.phi[line.phi > 2*pi] - 2*pi
+    line.phi[line.phi >= 2*pi] <- line.phi[line.phi >= 2*pi] - 2*pi
 
     line <- data.frame(phi = line.phi,
                        theta = rep(pi/2,length(line.phi)))

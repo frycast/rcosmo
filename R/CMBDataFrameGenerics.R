@@ -1,3 +1,20 @@
+#'Get the maximum distance between all points
+#'in a \code{\link{CMBDataFrame}}
+#'
+#'@param cmbdf a CMBDataFrame object
+#'
+#'@export
+maxDist.CMBDataFrame <- function(cmbdf)
+{
+  coords(cmbdf) <- "cartesian"
+  return(maxDist_internal(cmbdf))
+}
+
+
+
+
+
+
 #' as.CMBDataFrame
 #'
 #' Safely converts a data.frame to a CMBDataFrame
@@ -190,14 +207,24 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
   {
     new.coords <- as.character(tolower(new.coords))
 
-    if ( is.null(attr(cmbdf, "coords")) )
+    if ( new.coords != "spherical" && new.coords != "cartesian" )
     {
-      stop(paste("(development stage) not yet implemented",
-                 "pix2coords in coords function"))
+      stop("new.coords must be 'spherical' or 'cartesian'")
     }
 
-    # Make sure that new.coords doesn't match current coords
-    if ( attr(cmbdf, "coords") == new.coords )
+    if ( is.null(attr(cmbdf, "coords")) )
+    {
+      stop("(development stage) pix2coords not yet implemented in coords")
+      cart <- ifelse(new.coords == "cartesian", TRUE, FALSE)
+      nest <- ifelse(ordering(cmbdf) == "nested", TRUE, FALSE)
+      ns <- nside(cmbdf)
+      nc <- ifelse(cart, 3, 2)
+
+      crds <- pix2coords(nside = ns, nested = nest, cartesian = cart)[,1:nc]
+      #THIS IS UNFINISHED BECAUSE THE cbind GENERIC PRODUCES A data.frame
+      cmbdf <- cbind(crds, cmbdf)
+    }
+    else if ( attr(cmbdf, "coords") == new.coords )
     {
       # Nothing to do
     }
@@ -228,7 +255,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       sph <- cmbdf[,c("theta", "phi")]
       others <- cmbdf[, other.names]
 
-      cmbdf[,1:3] <- sph2car(sph)
+      cmbdf[,1:3] <- rcosmo::sph2car(sph)
       cmbdf[,4:(n+1)] <- others
       names(cmbdf) <- c("x","y","z", other.names)
     }
@@ -307,7 +334,14 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
   {
     if ( nside(cmbdf) == 1024 )
     {
-      col <- ifelse(missing(sample.size), CMBcols1024, CMBcols1024[spix])
+      if (missing(sample.size))
+      {
+        col <- rcosmo:::CMBcols1024
+      }
+      else
+      {
+        col <-  CMBcols1024[spix]
+      }
 
       warning(paste("(development stage) the colour map for",
               "nside = 1024 may not be ideal"))
@@ -317,7 +351,14 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
     {
 
       ## The following code must be replaced to work with nside = 2048
-      col <- ifelse(missing(sample.size), CMBcols1024, CMBcols1024[spix])
+      if (missing(sample.size))
+      {
+        col <- rcosmo:::CMBcols1024
+      }
+      else
+      {
+        col <-  CMBcols1024[spix]
+      }
 
       warning(paste("(development stage) the colour map used was not",
               "generated for nside = 2048"))

@@ -29,6 +29,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// maxDist_internal
+double maxDist_internal(Rcpp::DataFrame cmbdf);
+RcppExport SEXP _rcosmo_maxDist_internal(SEXP cmbdfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    rcpp_result_gen = Rcpp::wrap(maxDist_internal(cmbdf));
+    return rcpp_result_gen;
+END_RCPP
+}
+// minDist
+double minDist(Rcpp::DataFrame cmbdf, NumericVector point);
+RcppExport SEXP _rcosmo_minDist(SEXP cmbdfSEXP, SEXP pointSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type point(pointSEXP);
+    rcpp_result_gen = Rcpp::wrap(minDist(cmbdf, point));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mkpix2xyC
 NumericMatrix mkpix2xyC(int nside);
 RcppExport SEXP _rcosmo_mkpix2xyC(SEXP nsideSEXP) {
@@ -66,53 +89,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// geoDistList
-Rcpp::List geoDistList(Rcpp::DataFrame cmbdf);
-RcppExport SEXP _rcosmo_geoDistList(SEXP cmbdfSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    rcpp_result_gen = Rcpp::wrap(geoDistList(cmbdf));
-    return rcpp_result_gen;
-END_RCPP
-}
-// distBinList
-Rcpp::List distBinList(Rcpp::DataFrame cmbdf, NumericVector breaks);
-RcppExport SEXP _rcosmo_distBinList(SEXP cmbdfSEXP, SEXP breaksSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(distBinList(cmbdf, breaks));
-    return rcpp_result_gen;
-END_RCPP
-}
-// covCMB_internal1
-NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks);
-RcppExport SEXP _rcosmo_covCMB_internal1(SEXP cmbdfSEXP, SEXP breaksSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(covCMB_internal1(cmbdf, breaks));
-    return rcpp_result_gen;
-END_RCPP
-}
-// covCMB_internal2
-NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, int nbin);
-RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP nbinSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< int >::type nbin(nbinSEXP);
-    rcpp_result_gen = Rcpp::wrap(covCMB_internal2(cmbdf, nbin));
-    return rcpp_result_gen;
-END_RCPP
-}
 // car2sph
 DataFrame car2sph(DataFrame df);
 RcppExport SEXP _rcosmo_car2sph(SEXP dfSEXP) {
@@ -135,19 +111,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// covCMB_internal1
+NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks);
+RcppExport SEXP _rcosmo_covCMB_internal1(SEXP cmbdfSEXP, SEXP breaksSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal1(cmbdf, breaks));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_pointInConvexPolygon", (DL_FUNC) &_rcosmo_pointInConvexPolygon, 2},
     {"_rcosmo_pointInDisc", (DL_FUNC) &_rcosmo_pointInDisc, 2},
+    {"_rcosmo_maxDist_internal", (DL_FUNC) &_rcosmo_maxDist_internal, 1},
+    {"_rcosmo_minDist", (DL_FUNC) &_rcosmo_minDist, 2},
     {"_rcosmo_mkpix2xyC", (DL_FUNC) &_rcosmo_mkpix2xyC, 1},
     {"_rcosmo_nest2ring", (DL_FUNC) &_rcosmo_nest2ring, 2},
     {"_rcosmo_pix2coords", (DL_FUNC) &_rcosmo_pix2coords, 4},
-    {"_rcosmo_geoDistList", (DL_FUNC) &_rcosmo_geoDistList, 1},
-    {"_rcosmo_distBinList", (DL_FUNC) &_rcosmo_distBinList, 2},
-    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
-    {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
     {"_rcosmo_car2sph", (DL_FUNC) &_rcosmo_car2sph, 1},
     {"_rcosmo_sph2car", (DL_FUNC) &_rcosmo_sph2car, 1},
+    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
     {NULL, NULL, 0}
 };
 

@@ -1,11 +1,111 @@
-rm(list=ls())
-library(microbenchmark)
-library(sphereplot)
-library(pryr)
-library(Rcpp)
+# rm(list=ls())
+# library(microbenchmark)
+# library(sphereplot)
+# library(pryr)
+# library(Rcpp)
+# library(Rcpp)
+# library(tidyverse)
 library(rcosmo)
-library(Rcpp)
-library(tidyverse)
+
+
+##################################################################
+################ DEMONSTRATE rcosmo ##############################
+##################################################################
+
+?CMBDataFrame
+cmbdf <- CMBDataFrame(nside = 32, ordering = "ring", coords = "spherical")
+plot(cmbdf)
+
+
+ns <- 2 # try: 1, 2, 16
+plot(cmbdf, back.col = "black")
+plotHPBoundaries(nside = ns, col = "red")
+base <- CMBDataFrame(nside = ns, ordering = "ring", coords = "spherical")
+plot(base, add = TRUE, size = 5, col = "yellow")
+
+
+
+
+sky <- CMBDataFrame("../CMB_map_smica1024.fits", coords = "spherical")
+
+sky
+
+attributes(sky)
+
+
+
+?CMBWindow
+win.p <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
+                   theta = c(pi/2, pi/2, pi/10, pi/10))
+plot(win.p, size = 2, back.col = "black")
+
+attributes(win.p)
+area(win.p)
+maxDist(win.p)
+
+
+
+
+win.d <- CMBWindow(theta = 0, phi = 0, r = 0.1)
+plot(win.p, size = 2, back.col = "black")
+plot(win.d, size = 2)
+
+
+
+
+sky.excl <- window(sky, list(win.p, win.d))
+
+area(sky.excl)
+area(win.d) + area(win.p)
+
+plot(sky.excl, add = TRUE, back.col = "black")
+
+
+
+
+
+## SPIRAL
+dt <- pi/5; dp <- pi/16; end <- pi + pi/20
+theta <- rev(c(2*dt, 4*dt, 4*dt, 2*dt, dt, dt, 2*dt, 3*dt,
+               3*dt, dt, 0, dt, 2*dt, end))
+phi <- rev(c(0, 6*dp, 12*dp, 14*dp, 12*dp, 7*dp, 6*dp, 9*dp,
+             5*dp, 4*dp, 8*dp, 15*dp, end, 14*dp))
+
+spiral <- CMBWindow(theta = theta, phi = phi)
+sky.spiral <- window(cmbdf, new.window = spiral)
+
+plot(sky.spiral, back.col = "black")
+plot(spiral, col = "red", add = TRUE, size = 1.5)
+a <- lapply(triangulate(spiral), plot, col = "yellow")
+
+
+
+
+
+
+?covCMB
+
+sky.disc <- window(sky, new.window = CMBWindow(theta = 0, phi = 0, r = 0.05))
+plot(sky.disc, back.col = "black")
+
+cv <- covCMB(sky.disc, num.bins = 10)
+
+plot(cv[,1], cv[,2], type = "b", xlab = "Distance",
+     ylab = "Covariance", main = "Empirical Covariance of Disk")
+
+cv
+
+
+
+
+
+
+
+
+
+
+
+
 
 #####################################################################
 ######## DEMONSTRATE nest2ring and ring2nest ########################
@@ -460,12 +560,24 @@ df <- car2sph(df.xyz)
 
 ### Using simulated data
 ## Set parameters
-ns <- 256 # 256
-num.bins <- 10 # 10
-
+ns <- 16
+num.bins <- 10
 cmbdf <- CMBDataFrame(nside = ns, coords = "cartesian",
                       ordering = "nested",
                       intensities = rnorm(12*ns^2))
+
+# Full sky
+C <- covCMB(cmbdf)
+
+
+## Using a window
+win <- CMBWindow(theta = c(pi/2,pi/2,pi/2-1,pi/2-1), phi = c(0,1,1,0))
+cmbdf.win <- window(cmbdf, new.window = win)
+plot(cmbdf.win)
+plot(win)
+C <- covCMB(cmbdf.win)
+
+
 ### NOTE: IN FUTURE WE CAN GET max.dist FROM CMBWindow
 ## With sample.size = 100,000 this took 4.2 minutes
 system.time({
@@ -490,27 +602,27 @@ plot(0:10, C, type = 'b')
 
 
 
-
-### Using a 'square' window
-cmbdf.sky.sph <- CMBDataFrame("../CMB_map_smica1024.fits",
-                              coords = "spherical")
-## Annoying way to do this because CMBWindow class is incomplete
-cmbdf.square <- cmbdf.sky.sph[  cmbdf.sky.sph$theta  <= 1
-                              & cmbdf.sky.sph$theta  >= 0
-                              & cmbdf.sky.sph$phi <= 1
-                              & cmbdf.sky.sph$phi >= 0,]
-
-## Annoying coversions because coords<- function unfinished
-df.square.xyz <- sph2car(cmbdf.sky.sph)
-df.square.xyz <- data.frame(df.square.xyz, I = cmbdf.square$I)
-
-df.square.xyz <- as.CMBDataFrame(df.square.xyz, nside = 1024,
-                                 coords = "cartesian",
-                                 ordering = ordering(cmbdf.sky.sph))
-## Plot of the square
-plot(cmbdf.sky.sph, sample.size = 80000)
-rgl::plot3d(df.square.xyz[,1:3], col = 'blue', type = 'p',
-            size = 1.6, pch = 3, add = TRUE)
+####%%%%%%%%%%%%%%% OLD WAY OF USING WINDOW %%%%%%%%%%%%%%%%%%%%%%%%%%###
+# ### Using a 'square' window
+# cmbdf.sky.sph <- CMBDataFrame("../CMB_map_smica1024.fits",
+#                               coords = "spherical")
+# ## Annoying way to do this because CMBWindow class is incomplete
+# cmbdf.square <- cmbdf.sky.sph[  cmbdf.sky.sph$theta  <= 1
+#                               & cmbdf.sky.sph$theta  >= 0
+#                               & cmbdf.sky.sph$phi <= 1
+#                               & cmbdf.sky.sph$phi >= 0,]
+#
+# ## Annoying coversions because coords<- function unfinished
+# df.square.xyz <- sph2car(cmbdf.sky.sph)
+# df.square.xyz <- data.frame(df.square.xyz, I = cmbdf.square$I)
+#
+# df.square.xyz <- as.CMBDataFrame(df.square.xyz, nside = 1024,
+#                                  coords = "cartesian",
+#                                  ordering = ordering(cmbdf.sky.sph))
+# ## Plot of the square
+# plot(cmbdf.sky.sph, sample.size = 80000)
+# rgl::plot3d(df.square.xyz[,1:3], col = 'blue', type = 'p',
+#             size = 1.6, pch = 3, add = TRUE)
 ## Get covariance (note that max.dist is unspecified)
 ## this took 5 minutes
 # system.time({
@@ -521,7 +633,7 @@ rgl::plot3d(df.square.xyz[,1:3], col = 'blue', type = 'p',
 C4 <-  read.csv("exploration/covCMB_square_ns1024_s100000.csv")[,2]
 ## Correlation plot
 plot(0:20, C4/C4[1], type = 'b')
-
+#####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###
 
 
 

@@ -6,3 +6,7 @@ coords <- function(x, new.coords) UseMethod("coords", x)
 
 #'@export
 area <- function(x) UseMethod("area", x)
+
+
+#'@export
+maxDist <- function(x) UseMethod("maxDist", x)

@@ -84,19 +84,19 @@ subWindow <- function(cmbdf, win, intersect = TRUE)
   ## pointInside happens here
   exist.m <- FALSE
   exist.p <- FALSE
-  keep.p <- rep(FALSE, nrow(cmbdf))
-  keep.m <- rep(TRUE, nrow(cmbdf))
+  keep.p <- rep(FALSE, nrow(cmbdf.xyz))
+  keep.m <- rep(TRUE, nrow(cmbdf.xyz))
   for ( w in win.xyz )
   {
     switch(rcosmo::winType(w),
            polygon = keep.p <- keep.p |
-             rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+             rcosmo::pointInConvexPolygon(cmbdf.xyz[,c("x","y","z")], w),
            minus.polygon = keep.m <- keep.m &
-             !rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+             !rcosmo::pointInConvexPolygon(cmbdf.xyz[,c("x","y","z")], w),
            disc = keep.p <- keep.p |
-             rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+             rcosmo::pointInDisc(cmbdf.xyz[,c("x","y","z")], w),
            minus.disc = keep.m <- keep.m &
-             !rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+             !rcosmo::pointInDisc(cmbdf.xyz[,c("x","y","z")], w),
            stop("Failed to determine window type using rcosmo::winType"))
 
     if ( rcosmo:::contains("minus", rcosmo::winType(w)) )

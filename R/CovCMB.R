@@ -9,7 +9,7 @@
 #' This function provides an empirical covariance estimate for data
 #' in a CMBDataFrame or data.frame. It places data into bins.
 #'
-#' @param cmbdf is a CMBDataFrame or data.frame
+#' @param cmbdf is a \code{\link{CMBDataFrame}} or \code{data.frame}
 #' @param num.bins specifies the number of bins
 #' @param sample.size optionally specify the size of a simple random
 #' sample to take before calculating covariance. This may be useful if
@@ -32,7 +32,7 @@ covCMB <- function(cmbdf,
                    max.dist)
 {
 
-  if ( class(cmbdf) != "CMBDataFrame" ) {
+  if ( !is.CMBDataFrame(cmbdf) ) {
 
     stop("cmbdf must be a CMBDataFrame")
 
@@ -57,14 +57,17 @@ covCMB <- function(cmbdf,
 
   if (missing(max.dist)) {
 
-    return(covCMB_internal2(cmbdf, num.bins))
-
-  } else {
-
-    breaks <- seq(0, max.dist, length.out = num.bins+1)
-    return(covCMB_internal1(cmbdf, breaks))
+    max.dist <- maxDist_internal(cmbdf)
 
   }
+
+  breaks <- seq(0, max.dist, length.out = num.bins+1)[-1]
+  bin.width <- breaks[1]
+  centers <- c(0, breaks - bin.width/2)
+
+  covs <- covCMB_internal1(cmbdf, breaks[-num.bins])
+  result <- data.frame(dist = centers, cov = covs[,1], n = covs[,2])
+  return(result)
 
 }
 

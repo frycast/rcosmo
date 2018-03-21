@@ -39,6 +39,36 @@ pointInDisc <- function(df, win) {
     .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
 }
 
+#'@title
+#'maxDist_internal
+#'
+#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
+#'
+#'@return the maximum distance between any of the
+#'points in \code{cmbdf}
+#'
+#'@name maxDist_internal
+#'
+#'@export
+maxDist_internal <- function(cmbdf) {
+    .Call('_rcosmo_maxDist_internal', PACKAGE = 'rcosmo', cmbdf)
+}
+
+#'@title
+#'minDist
+#'
+#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
+#'@param point a point on the unit sphere in cartesian coordinates
+#'
+#'@return the shortest distance from \code{point} to \code{cmbdf}
+#'
+#'@name minDist
+#'
+#'@export
+minDist <- function(cmbdf, point) {
+    .Call('_rcosmo_minDist', PACKAGE = 'rcosmo', cmbdf, point)
+}
+
 mkpix2xyC <- function(nside = 1024L) {
     .Call('_rcosmo_mkpix2xyC', PACKAGE = 'rcosmo', nside)
 }
@@ -101,77 +131,6 @@ pix2coords <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE
 }
 
 #'@title
-#'geoDistList
-#'@description
-#'Create a list of all geodesic distances between points on the unit
-#'sphere corresponding to the rows of the data.frame cmbdf.
-#'
-#'@param cmbdf a data.frame whose first 3 columns represent the cartesian
-#'coordinates x,y,z of nrow(cmbdf) points on a unit sphere.
-#'
-#'@return
-#'Let \eqn{x_i, x_j} be the points represented by row i and row j of
-#'cmbdf, where i < j, and let L denote the output list
-#'\code{L <- geoDistList(cmbdf)}. Then the distance \eqn{d(x_i,x_j)}
-#'is stored in \code{L[[i]][j-i]}.
-#'
-#'@name geoDistList
-#'
-#'@export
-geoDistList <- function(cmbdf) {
-    .Call('_rcosmo_geoDistList', PACKAGE = 'rcosmo', cmbdf)
-}
-
-#'@title
-#'distBinList
-#'@description
-#'Find all geodesic distances between points on the unit
-#'sphere corresponding to the rows of the data.frame cmbdf,
-#'then categorise these distances according to the intervals
-#'given by the breaks argument.
-#'
-#'@param cmbdf a data.frame whose first 3 columns represent the cartesian
-#'coordinates x,y,z of nrow(cmbdf) points on a unit sphere.
-#'@param breaks a vector, sorted from lowest to highest,
-#'specifying the break points for the intervals that are
-#'used to categorise the geodesic distances. The intervals are
-#'open at left and closed at right.
-#'
-#'@return
-#'Let \eqn{x_i, x_j} be the points represented by row i and row j of
-#'cmbdf, where\eqn{i < j}, and let \eqn{L} denote the output list
-#'\code{L <- distBinList(cmbdf, breaks)}. Suppose the distance
-#'\eqn{d(x_i,x_j)} falls into the \eqn{k^{th}} interval determined
-#'by \code{breaks}, then \code{L[[i]][j-i]} will hold the value \eqn{k}.
-#'
-#'@name distBinList
-#'
-#'@export
-distBinList <- function(cmbdf, breaks) {
-    .Call('_rcosmo_distBinList', PACKAGE = 'rcosmo', cmbdf, breaks)
-}
-
-#'@title
-#'covCMB_internal1
-#'
-#'@name covCMB_internal1
-#'
-#'@export
-covCMB_internal1 <- function(cmbdf, breaks) {
-    .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
-}
-
-#'@title
-#'covCMB_internal2
-#'
-#'@name covCMB_internal2
-#'
-#'@export
-covCMB_internal2 <- function(cmbdf, nbin) {
-    .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, nbin)
-}
-
-#'@title
 #'car2sph
 #'
 #'@param df a data.frame with columns labelled x, y and z
@@ -199,5 +158,15 @@ car2sph <- function(df) {
 #'@export
 sph2car <- function(df) {
     .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
+}
+
+#'@title
+#'covCMB_internal1
+#'
+#'@name covCMB_internal1
+#'
+#'@export
+covCMB_internal1 <- function(cmbdf, breaks) {
+    .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
 }
 

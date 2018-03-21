@@ -12,29 +12,28 @@ geoDist <- function(p1,p2) {
 
 
 
-
-#' Use Haversine formula
-#'
-#' Uses the Haversine formula to give the
-#' geodesic distance between two points on the unit sphere given
-#' in latitude and longitude. The Haversine formula is favoured
-#' for its numerical stability
-#'
-#'
-#'@param p1 a 2 element vector (lat, long) specifying a point on the
-#'unit sphere
-#'@param p2 a 2 element vector (lat, long) specifying a point on the
-#'unit sphere
-#'
-#'@return the geodesic distance between \code{p1} and \code{p2}
-#'
-#'@export
-haversineDist <- function(p1,p2) {
-
-  dlat <- abs((p1[1] - p2[1])/2)
-  dlon <- abs((p1[2] - p2[2])/2)
-  return(2*asin(sqrt( (sin(dlat))^2 + cos(p1[1])*cos(p2[1])*(sin(dlon))^2 )))
-}
+# #' Use Haversine formula
+# #'
+# #' Uses the Haversine formula to give the
+# #' geodesic distance between two points on the unit sphere given
+# #' in latitude and longitude. The Haversine formula is favoured
+# #' for its numerical stability
+# #'
+# #'
+# #'@param p1 a 2 element vector (lat, lon) specifying a point on the
+# #'unit sphere
+# #'@param p2 a 2 element vector (lat, lon) specifying a point on the
+# #'unit sphere
+# #'
+# #'@return the geodesic distance between \code{p1} and \code{p2}
+# #'
+# #'@export
+# haversineDist <- function(p1,p2) {
+#
+#   dlat <- abs((p1[1] - p2[1])/2)
+#   dlon <- abs((p1[2] - p2[2])/2)
+#   return(2*asin(sqrt( (sin(dlat))^2 + cos(p1[1])*cos(p2[1])*(sin(dlon))^2 )))
+# }
 
 
 

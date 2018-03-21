@@ -8,6 +8,47 @@
 library(rcosmo)
 
 
+### GENERATE DOCUMENTATION
+# pack <- "rcosmo"
+# path <- find.package(pack)
+# system(paste(shQuote(file.path(R.home("bin"), "R")),
+#              "CMD", "Rd2pdf", shQuote(path)))
+
+
+
+##################################################################
+################ DEMONSTRATE rbind & cbind ########################
+##################################################################
+
+# NOT WORKING YET: The following should automatically add coords:
+a <- CMBDataFrame(nside = 1, ordering = "nested")
+w1 <- CMBWindow(theta = 0, phi = 0, r = 0.1)
+w2 <- CMBWindow(theta = pi, phi = 0, r = 0.1)
+a.w1 <- window(a, new.window = w1)
+a.w2 <- window(a, new.window = w2)
+
+
+
+a <- CMBDataFrame(nside = 16, ordering = "nested", coords = "cartesian")
+w1 <- CMBWindow(theta = 0, phi = 0, r = 0.1)
+w2 <- CMBWindow(theta = pi, phi = 0, r = 0.1)
+w3 <- CMBWindow(theta = 0, phi = 0, r = 1)
+a.w1 <- window(a, new.window = w1)
+a.w2 <- window(a, new.window = w2)
+a.w3 <- window(a, new.window = w3)
+
+a.wins <- rbind(a.w1, a.w2)
+pix(a.w1)
+pix(a.w2)
+rbind(a.w1, a.w3) #correctly causes an error
+
+
+cbind(a.w1, a.w2) #correctly causes an error
+
+cbind(a.w1, 1:4)
+cbind(1:4, a.w1)
+
+
 ##################################################################
 ################ DEMONSTRATE rcosmo ##############################
 ##################################################################

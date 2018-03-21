@@ -11,6 +11,6 @@
 # library(rcosmo)
 gg <- makeCallGraph("package:rcosmo")
 gg <- layoutGraph(gg, layoutType = "circo")
-graph.par(list(nodes = list(fontsize=200)))
+graph.par(list(nodes = list(fontsize=100)))
 X11()
 renderGraph(gg)

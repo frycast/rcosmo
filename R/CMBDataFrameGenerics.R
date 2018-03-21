@@ -1,3 +1,156 @@
+
+#'\code{\link{cbind}} for CMBDataFrames
+#'
+#'Add a new column or columns (named vector or data.frame)
+#'to a \code{\link{CMBDataFrame}}.
+#'
+#'See the documentation for \code{\link{cbind}}
+#'
+#'@export
+cbind.CMBDataFrame <- function(..., deparse.level = 1)
+{
+  args <- list(...)
+
+  is.cmbdf <- sapply(args, is.CMBDataFrame)
+  if ( sum(is.cmbdf) != 1 )
+  {
+    stop("Just 1 CMBDataFrame must be passed to '...'")
+  }
+
+  # Keep this CMBDataFrame so we can get its attributes
+  cmbdf <- args[is.cmbdf][[1]]
+  args[is.cmbdf][[1]] <- as.data.frame(args[is.cmbdf][[1]])
+
+  df <- do.call(cbind, c(args, deparse.level = deparse.level))
+
+  nam <- names(df)
+  attributes(df) <- attributes(cmbdf)
+  names(df) <- nam
+
+  return(df)
+}
+
+
+#'Like \code{\link{rbind}} for CMBDataFrames
+#'
+#'Add a new row or rows to a \code{\link{CMBDataFrame}}.
+#'All arguments passed to \code{...} must be CMBDataFrames.
+#'
+#'See the documentation for \code{\link{rbind}}
+#'
+#'@export
+rbind.CMBDataFrame <- function(..., deparse.level = 1)
+{
+  args <- list(...)
+
+  if ( !all(sapply(args, rcosmo::is.CMBDataFrame)) )
+  {
+    stop("rbind.CMBDataFrame requires all arguments to be CMBDataFrames")
+  }
+
+  if ( !all(sapply(args, rcosmo::areCompatibleCMBDFs, cmbdf2 = args[[1]])) )
+  {
+    stop(paste0("The CMBDataFrames are not compatible for rbind.\n",
+                "You may need to convert coordinates or ordering"))
+  }
+
+  # Make sure that no pixels are repeated, using pairwise intersections
+  for (i in 1:(length(args)-1))
+  {
+    for (j in (i+1):length(args))
+    {
+      len <- length(intersect(pix(args[[i]]), pix(args[[j]])))
+
+      if ( len != 0 )
+      {
+        stop("The CMBDataFrames passed to rbind overlap somewhere")
+      }
+    }
+  }
+
+  # Keep this CMBDataFrame and the windows so we can get attributes
+  cmbdf <- args[[1]]
+  wins <- lapply(args, rcosmo::window)
+
+  args <- lapply(args, as.data.frame)
+
+  df <- do.call(rbind, c(args, deparse.level = deparse.level))
+
+
+  class(df) <- class(cmbdf)
+  attr(df, "nside") <- nside(cmbdf)
+  attr(df, "ordering") <- ordering(cmbdf)
+  attr(df, "coords") <- coords(cmbdf)
+  attr(df, "window") <- wins
+
+  return(df)
+}
+
+
+
+#Reduce(intersect, list(pix(a.w1),pix(a.w2),pix(a.w3)))
+
+#' areCompatibleCMBDFs
+#'
+#' Compare attributes to decide if two CMBDataFrames are compatible
+#'
+#' If the CMBDataFrames do not have compatible attributes then
+#' a message is printed indicating the attributes that do not match.
+#' To suppress this use the \code{\link{suppressMessages}} function
+#'
+#' @param cmbdf1 a \code{\link{CMBDataFrame}}
+#' @param cmbdf2 a \code{\link{CMBDataFrame}}
+#'
+#' @examples
+#' a <- CMBDataFrame(nside = 2, ordering = "ring", coords = "cartesian")
+#' a <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
+#' areCompatibleCMBDFs(a,b)
+#'
+#' suppressMessages(areCompatibleCMBDFs(a,b))
+#'
+#' @export
+areCompatibleCMBDFs <- function(cmbdf1, cmbdf2)
+{
+  if ( !is.CMBDataFrame(cmbdf1) || !is.CMBDataFrame(cmbdf1) )
+  {
+    stop("cmbdf1 and cmbdf2 must be CMBDataFrames")
+  }
+
+  ns <- identical(nside(cmbdf1), nside(cmbdf2))
+  ord <- identical(ordering(cmbdf1), ordering(cmbdf2))
+  crd <- identical(coords(cmbdf1), coords(cmbdf2))
+
+  reasons <- ""
+  if (!ns)
+  {
+    reasons <- paste0(reasons, "nside mismatch (nside1 = ", nside(cmbdf1),
+                     ", nside2 = ", nside(cmbdf2), ")\n")
+  }
+  if (!ord)
+  {
+    reasons <- paste0(reasons, "ordering mismatch (ordering1 = ", ordering(cmbdf1),
+                      ", ordering2 = ", ordering(cmbdf2), ")\n")
+  }
+  if (!crd)
+  {
+    reasons <- paste0(reasons, "coords mismatch (coords1 = ", coords(cmbdf1),
+                      ", coords2 = ", coords(cmbdf2), ")")
+  }
+
+  if ( !(ns && ord && crd) )
+  {
+    message(reasons)
+    return(FALSE)
+  }
+  else
+  {
+    return(TRUE)
+  }
+}
+
+
+
+
 #'Get the maximum distance between all points
 #'in a \code{\link{CMBDataFrame}}
 #'
@@ -215,12 +368,13 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
     if ( is.null(attr(cmbdf, "coords")) )
     {
       stop("(development stage) pix2coords not yet implemented in coords")
-      cart <- ifelse(new.coords == "cartesian", TRUE, FALSE)
-      nest <- ifelse(ordering(cmbdf) == "nested", TRUE, FALSE)
+
+      cart <- (new.coords == "cartesian")
+      nest <- (ordering(cmbdf) == "nested")
       ns <- nside(cmbdf)
       nc <- ifelse(cart, 3, 2)
 
-      crds <- pix2coords(nside = ns, nested = nest, cartesian = cart)[,1:nc]
+      crds <- pix2coords_internal(nside = ns, nested = nest, cartesian = cart)[,1:nc]
       #THIS IS UNFINISHED BECAUSE THE cbind GENERIC PRODUCES A data.frame
       cmbdf <- cbind(crds, cmbdf)
     }

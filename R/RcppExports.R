@@ -102,7 +102,7 @@ nest2ring <- function(nside, pix) {
 }
 
 #'@title
-#'pix2coords
+#'pix2coords_internal
 #'@description
 #'Converts HEALPix pixel scheme to spherical or
 #'Cartesian coordinates.
@@ -123,11 +123,11 @@ nest2ring <- function(nside, pix) {
 #' returned are i, j, and p which represent the HEALPix ring index,
 #' pixel-in-ring index, and pixel index respectively.
 #'
-#'@name pix2coords
+#'@name pix2coords_internal
 #'
 #' @export
-pix2coords <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
-    .Call('_rcosmo_pix2coords', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
+pix2coords_internal <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
+    .Call('_rcosmo_pix2coords_internal', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
 }
 
 #'@title

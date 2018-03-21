@@ -239,7 +239,7 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
 
 
 //'@title
-//'pix2coords
+//'pix2coords_internal
 //'@description
 //'Converts HEALPix pixel scheme to spherical or
 //'Cartesian coordinates.
@@ -260,14 +260,14 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
 //' returned are i, j, and p which represent the HEALPix ring index,
 //' pixel-in-ring index, and pixel index respectively.
 //'
-//'@name pix2coords
+//'@name pix2coords_internal
 //'
 //' @export
 // [[Rcpp::export]]
-NumericMatrix pix2coords(int nside = 0,
-                       bool nested = true,
-                       Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue,
-                       bool cartesian = false){
+NumericMatrix pix2coords_internal(int nside = 0,
+                   bool nested = true,
+                   Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue,
+                   bool cartesian = false){
   int Npix = 12*nside*nside;
   double fact1 = 1.5*nside;
   double fact2 = 3.0*nside*nside;

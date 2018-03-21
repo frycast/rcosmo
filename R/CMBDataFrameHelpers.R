@@ -5,7 +5,6 @@
 
 
 
-
 #'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
 #'
 #'A single CMBWindow or a list of CMBWindows can be passed to the \code{win}
@@ -408,4 +407,24 @@ sampleCMB <- function(cmbdf, sample.size)
 
 
 
+
+#' First Minkowski functional
+#'
+#' This function returns a CMBDataFrame with size sample.size,
+#' whose rows comprise a simple random sample of the rows
+#' from the input CMBDataFrame.
+#'
+#'@param cmbdf a CMB Data Frame.
+#'@param sample.size the desired sample size.
+#'
+#'@return
+#' A CMBDataFrame with size sample.size,
+#' whose rows comprise a simple random sample of the rows
+#' from the input CMBDataFrame.
+#'
+#'@examples
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' plot(sampleCMB(df, sample.size = 800000))
+#'
+#'@export
 

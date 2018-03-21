@@ -1,3 +1,51 @@
+#' pix2coords
+#'
+#' convert HEALPix pixel indices to cartesian or spherical coordinates
+#'
+#' @param nside the nside parameter
+#' @param coords 'cartesian' or 'spherical' coordinates
+#' @param ordering 'ring' or 'nested' ordering
+#' @param spix optional integer or vector of sample pixel indices
+#'
+#' @return a data.frame with columns 'x', 'y', 'z' (cartesian) or
+#' 'theta', 'phi' (spherical)
+#'
+#' @export
+pix2coords <- function(nside, coords = "cartesian", ordering = "nested", spix)
+{
+  if ( coords != "cartesian" && coords != "spherical")
+  {
+    stop("coords must be 'cartesian' or 'spherical'")
+  }
+
+  if ( ordering != "ring" && ordering != "nested")
+  {
+    stop("ordering must be 'ring' or 'nested'")
+  }
+
+  cart <- (coords == "cartesian")
+  nest <- (ordering == "nested")
+
+  if (missing(spix))
+  {
+    spix <- NULL
+  }
+
+  p2c <- pix2coords_internal(nside = nside, nested = nest,
+                             spix = spix, cartesian = cart)
+
+  if ( cart )
+  {
+    return(data.frame(x = p2c[,1], y = p2c[,2], z = p2c[,3]))
+  }
+  else
+  {
+    return(data.frame(theta = p2c[,1], phi = p2c[,2]))
+  }
+}
+
+
+
 #' Ring to Nest.
 #'
 #' \code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme to

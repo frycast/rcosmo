@@ -7,7 +7,7 @@
 covCMB(cmbdf, num.bins = 10, sample.size, max.dist)
 }
 \arguments{
-\item{cmbdf}{is a CMBDataFrame or data.frame}
+\item{cmbdf}{is a \code{\link{CMBDataFrame}} or \code{data.frame}}
 
 \item{num.bins}{specifies the number of bins}
 

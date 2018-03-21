@@ -221,11 +221,11 @@ CMBDataFrame <- function(CMBData,
       # generate the coordinates from HEALPix indices
       if (missing(spix))
       {
-        coordinates <- rcosmo::pix2coords(nside = nside, nested = nest,
+        coordinates <- rcosmo::pix2coords_internal(nside = nside, nested = nest,
                                           spix = NULL, cartesian = cartesian)
       } else {
 
-        coordinates <- rcosmo::pix2coords(nside = nside, nested = nest,
+        coordinates <- rcosmo::pix2coords_internal(nside = nside, nested = nest,
                                           spix = spix, cartesian = cartesian)
       }
 
@@ -348,10 +348,9 @@ CMBDataFrame <- function(CMBData,
         stop(paste("intensities parameter and spix",
              "parameter must have same length")))
 
-      stop("(development stage) if CMBData is unsepcified then spix must be unspecified")
-
     } else if ( !missing(sample.size) ) {
 
+      spix <- NULL
       len <- length(sample.size)
       try( if ( !missing(intensities) &&  length(intensities) != len )
         stop(paste("intensities parameter and sample.size",
@@ -362,6 +361,8 @@ CMBDataFrame <- function(CMBData,
 
 
     } else {
+
+      spix <- NULL
       len <- 12*nside^2
       try( if ( !missing(intensities) && length(intensities) != len )
         stop("intensities parameter must be of length 12*nside^2"))
@@ -378,20 +379,10 @@ CMBDataFrame <- function(CMBData,
     {
       message("Generating coordinates from HEALPix ordering...\n")
 
-      nest <- ifelse(ordering == "nested", TRUE, FALSE)
-      cartesian <- ifelse(coords == "cartesian", TRUE, FALSE)
+      cmbdf <- rcosmo::pix2coords(nside = nside, ordering = ordering,
+                                  coords = coords, spix = spix)
 
-      coordinates <- rcosmo::pix2coords(nside = nside, nested = nest,
-                                        cartesian = cartesian)
-
-      # Put the coordinates in a data.frame
-      if (coords == "spherical"){
-        cmbdf <- data.frame(theta = coordinates[,1], phi = coordinates[,2])
-      } else {
-        cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
-      }
-
-      cmbdf <- data.frame(cmbdf, I = intensities)
+      cmbdf <- cbind(cmbdf, I = intensities)
 
     } else {
 
@@ -402,7 +393,7 @@ CMBDataFrame <- function(CMBData,
 
     message("Adding CMB Data Frame attributes...\n")
 
-    if ( !missing(spix) ){
+    if ( !missing(spix) && !is.null(spix) ){
       attr(cmbdf, "row.names") <- as.integer(spix)
     }
     attr(cmbdf, "nside") <- nside

@@ -75,9 +75,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// pix2coords
-NumericMatrix pix2coords(int nside, bool nested, Rcpp::Nullable<Rcpp::IntegerVector> spix, bool cartesian);
-RcppExport SEXP _rcosmo_pix2coords(SEXP nsideSEXP, SEXP nestedSEXP, SEXP spixSEXP, SEXP cartesianSEXP) {
+// pix2coords_internal
+NumericMatrix pix2coords_internal(int nside, bool nested, Rcpp::Nullable<Rcpp::IntegerVector> spix, bool cartesian);
+RcppExport SEXP _rcosmo_pix2coords_internal(SEXP nsideSEXP, SEXP nestedSEXP, SEXP spixSEXP, SEXP cartesianSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -85,7 +85,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type nested(nestedSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type spix(spixSEXP);
     Rcpp::traits::input_parameter< bool >::type cartesian(cartesianSEXP);
-    rcpp_result_gen = Rcpp::wrap(pix2coords(nside, nested, spix, cartesian));
+    rcpp_result_gen = Rcpp::wrap(pix2coords_internal(nside, nested, spix, cartesian));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -131,7 +131,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_minDist", (DL_FUNC) &_rcosmo_minDist, 2},
     {"_rcosmo_mkpix2xyC", (DL_FUNC) &_rcosmo_mkpix2xyC, 1},
     {"_rcosmo_nest2ring", (DL_FUNC) &_rcosmo_nest2ring, 2},
-    {"_rcosmo_pix2coords", (DL_FUNC) &_rcosmo_pix2coords, 4},
+    {"_rcosmo_pix2coords_internal", (DL_FUNC) &_rcosmo_pix2coords_internal, 4},
     {"_rcosmo_car2sph", (DL_FUNC) &_rcosmo_car2sph, 1},
     {"_rcosmo_sph2car", (DL_FUNC) &_rcosmo_sph2car, 1},
     {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},

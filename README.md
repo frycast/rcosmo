@@ -12,7 +12,7 @@ The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from 
 + Statistical tools
 + Visualisation
 
-The current version of rcosmo covers includes the following functionality:
+The current version of `rcosmo` covers includes the following functionality:
 +	Generation of a comprehensive data frame of CMB observations, which include HEALPix indices, metadata, CMB intensities and their
   corresponding spherical and/or cartesian coordinates, as well as polarization data
 +	Window subsetting tools for investigating circular, convex and non-convex polygonal sub-regions on the sphere

@@ -19,7 +19,8 @@ The current version of `rcosmo` covers includes the following functionality:
 +	Fast empirical covariance and variogram estimation
 +	Implementation and analysis of spherical harmonics, spherical wavelets, etc
 +	Various methods for CMB map visualization, such as interactive 3D full sky maps rendered with OpenGL, Mollweide projection and HEALPix boundary plotting
-+ Other basic statistical and geometrical tools
++ Spherical geometry tools such as shortest distance between two points, calculate spherical angles, shortest distance between a point and a region, etc
+
 
 ## Installation
 First install the devtools package:

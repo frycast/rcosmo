@@ -15,19 +15,71 @@ library(rcosmo)
 #              "CMD", "Rd2pdf", shQuote(path)))
 
 
+##################################################################
+################ TESTING `[` and coords() ########################
+##################################################################
+
+
+# NESTED ORDERING
+a1 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
+b1 <- cbind(a1, m = rep(1, 12))
+c1 <- coords(a1, new.coords = "cartesian")
+d1 <- coords(a1, new.coords = "spherical")
+e1 <- coords(b1, new.coords = "cartesian")
+f1 <- coords(b1, new.coords = "spherical")
+
+a2 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "cartesian")
+b2 <- cbind(a2, m = rep(1, 12))
+c2 <- coords(a2, new.coords = "cartesian")
+d2 <- coords(a2, new.coords = "spherical")
+e2 <- coords(b2, new.coords = "cartesian")
+f2 <- coords(b2, new.coords = "spherical")
+
+a3 <- CMBDataFrame(nside = 1, ordering = "nested")
+b3 <- cbind(a3, m = rep(1, 12))
+c3 <- coords(a3, new.coords = "cartesian")
+d3 <- coords(a3, new.coords = "spherical")
+e3 <- coords(b3, new.coords = "cartesian")
+f3 <- coords(b3, new.coords = "spherical")
+
+a4 <- CMBDataFrame(nside = 1, ordering = "nested")[,-1]
+b4 <- cbind(a4, m = rep(1, 12))
+c4 <- coords(a4, new.coords = "cartesian")
+d4 <- coords(a4, new.coords = "spherical")
+e4 <- coords(b4, new.coords = "cartesian")
+f4 <- coords(b4, new.coords = "spherical")
+
+a <- CMBDataFrame(nside = 1, ordering = "ring")
+str(a)
+str(a[,1])
+str(a[1,])
+str(a[1])
+
+b <- CMBDataFrame(nside = 1, ordering = "ring", coords = "cartesian")
+pix(b) <- sample(1:12, 12)
+str(b)
+str(b[,1])
+str(b[1,])
+str(b[1])
+pix(b[1])
+pix(b[1,])
+pix(b[,1])
+pix(b[1:2])
+pix(b[4:7,])
+pix(b[,2:3])
+
+
+
 
 ##################################################################
-################ DEMONSTRATE rbind & cbind ########################
+################ TESTING rbind & cbind ###########################
 ##################################################################
 
-# NOT WORKING YET: The following should automatically add coords:
 a <- CMBDataFrame(nside = 1, ordering = "nested")
-w1 <- CMBWindow(theta = 0, phi = 0, r = 0.1)
+w1 <- CMBWindow(theta = 0, phi = 0, r = 1)
 w2 <- CMBWindow(theta = pi, phi = 0, r = 0.1)
 a.w1 <- window(a, new.window = w1)
 a.w2 <- window(a, new.window = w2)
-
-
 
 a <- CMBDataFrame(nside = 16, ordering = "nested", coords = "cartesian")
 w1 <- CMBWindow(theta = 0, phi = 0, r = 0.1)
@@ -38,15 +90,15 @@ a.w2 <- window(a, new.window = w2)
 a.w3 <- window(a, new.window = w3)
 
 a.wins <- rbind(a.w1, a.w2)
-pix(a.w1)
-pix(a.w2)
+all(pix(a.wins) == c(pix(a.w1), pix(a.w2)))
 rbind(a.w1, a.w3) #correctly causes an error
-
 
 cbind(a.w1, a.w2) #correctly causes an error
 
-cbind(a.w1, 1:4)
-cbind(1:4, a.w1)
+cbind(a.w1, m = 1:4)
+cbind(m = 1:4, a.w1)
+
+
 
 
 ##################################################################
@@ -163,7 +215,6 @@ all.equal((ring2nest(2, pix))[nest2ring(2,pix)],
           (nest2ring(2, pix))[ring2nest(2,pix)],
           pix)
 
-nest2ring(2, 4)
 ring2nest(2, pix)
 nest2ring(2, pix)
 
@@ -193,6 +244,42 @@ plot(cmbdf, back.col = "black", col = "yellow", size = 5, labels = pix)
 plotHPBoundaries(2, col = "red")
 
 
+
+#####################################################################
+######### TEST window() for cmbdf ###################################
+#####################################################################
+
+
+# window on cmbdf
+a <- CMBDataFrame(nside = 1, ordering = "nested", coords = "cartesian")
+w11 <- CMBWindow(x = 0, y = 0, z = 1, r = 1)
+w12 <- CMBWindow(theta = 0, phi = 0, r = 1)
+w13 <- CMBWindow(theta= pi/2, phi = 0, r = 1)
+w21 <- CMBWindow(x = 0, y = 0, z = -1, r = 1)
+w22 <- CMBWindow(theta = pi, phi = 0, r = 1)
+
+a.w11 <- window(a, new.window = w11)
+a.w12 <- window(a, new.window = w12)
+a.w13 <- window(a, new.window = w13)
+a.w21 <- window(a, new.window = w21)
+a.w22 <- window(a, new.window = w22)
+
+all(pix(a.w11) == pix(a.w12) & pix(a.w12) == c(1,2,3,4))
+all(pix(a.w21) == pix(a.w22) & pix(a.w22) == c(9, 10, 11, 12))
+
+b.w11w12 <- window(a, new.window = list(w11, w12))
+all.equal(a.w11, b.w11w12, check.attributes = FALSE)
+
+b.w11w21 <- window(a, new.window = list(w11, w21))
+c.w11w21 <- rbind(a.w11,a.w21)
+all.equal(c.w11w21, b.w11w21, check.attributes = FALSE)
+all.equal(window(c.w11w21), window(b.w11w21))
+
+b.w11w21w13 <- window(a, new.window = list(w11, w21, w13))
+c.w11w21w13 <- rbind(a.w11, a.w21, a.w13)
+c.w11w21w13 <- c.w11w21w13[order(pix(c.w11w21w13)),] # SHOW THIS PARTICULAR TRICK IN DOCUMENTATION
+all.equal(c.w11w21w13, b.w11w21w13, check.attributes = FALSE)
+all.equal(window(c.w11w21w13), window(b.w11w21w13))
 
 #####################################################################
 ######### DEMONSTRATE subWindow #####################################

@@ -1,10 +1,41 @@
+# This prevents cmbdf[,i] from dropping attributes of cmbdf
+#'@export
+`[.CMBDataFrame` <- function(x,i,j, ..., drop) {
+
+  mdrop <- missing(drop)
+
+  # nargs counts empty arguments so a[1,] has nargs() = 3
+  Narg <- nargs() - (!mdrop)
+
+  if ( Narg > 2 & mdrop ) drop <- FALSE
+  if ( Narg > 2 ) r <- NextMethod("[", drop = drop)
+  if ( Narg <= 2 ) r <- NextMethod("[")
+
+  attr(r, "ordering") <- attr(x, "ordering")
+  attr(r, "nside") <- attr(x, "nside")
+  attr(r, "coords") <- attr(x, "coords")
+  attr(r, "window") <- attr(x, "window")
+  r
+}
+
+
+
+
 
 #'\code{\link{cbind}} for CMBDataFrames
 #'
-#'Add a new column or columns (named vector or data.frame)
-#'to a \code{\link{CMBDataFrame}}.
+#'Add a new column or columns (vector, matrix or data.frame)
+#'to a \code{\link{CMBDataFrame}}. Note that method dispatch
+#'occurs on the first argument. So, the CMBDataFrame must
+#'be the first argument
 #'
 #'See the documentation for \code{\link{cbind}}
+#'
+#'@examples
+#'cmbdf <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
+#'cmbdf2 <- cbind(cmbdf, myData = rep(1, 12))
+#'cmbdf2
+#'
 #'
 #'@export
 cbind.CMBDataFrame <- function(..., deparse.level = 1)
@@ -31,15 +62,22 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 }
 
 
+
+
+
+
 #'Like \code{\link{rbind}} for CMBDataFrames
 #'
 #'Add a new row or rows to a \code{\link{CMBDataFrame}}.
 #'All arguments passed to \code{...} must be CMBDataFrames.
 #'
+#'@param unsafe defaults to FALSE. If \code{unsafe = TRUE} then
+#'overlapping pixel coordinates will not throw an error (faster).
+#'
 #'See the documentation for \code{\link{rbind}}
 #'
 #'@export
-rbind.CMBDataFrame <- function(..., deparse.level = 1)
+rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 {
   args <- list(...)
 
@@ -54,26 +92,28 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1)
                 "You may need to convert coordinates or ordering"))
   }
 
-  # Make sure that no pixels are repeated, using pairwise intersections
-  for (i in 1:(length(args)-1))
+  if ( unsafe == FALSE )
   {
-    for (j in (i+1):length(args))
+    # Make sure that no pixels are repeated, using pairwise intersections
+    for (i in 1:(length(args)-1))
     {
-      len <- length(intersect(pix(args[[i]]), pix(args[[j]])))
-
-      if ( len != 0 )
+      for (j in (i+1):length(args))
       {
-        stop("The CMBDataFrames passed to rbind overlap somewhere")
+        len <- length(intersect(pix(args[[i]]), pix(args[[j]])))
+
+        if ( len != 0 )
+        {
+          stop("The CMBDataFrames passed to rbind overlap somewhere")
+        }
       }
     }
   }
 
   # Keep this CMBDataFrame and the windows so we can get attributes
   cmbdf <- args[[1]]
-  wins <- lapply(args, rcosmo::window)
+  wins <- sapply(args, rcosmo::window)
 
   args <- lapply(args, as.data.frame)
-
   df <- do.call(rbind, c(args, deparse.level = deparse.level))
 
 
@@ -367,16 +407,27 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 
     if ( is.null(attr(cmbdf, "coords")) )
     {
-      stop("(development stage) pix2coords not yet implemented in coords")
-
       cart <- (new.coords == "cartesian")
       nest <- (ordering(cmbdf) == "nested")
       ns <- nside(cmbdf)
-      nc <- ifelse(cart, 3, 2)
 
-      crds <- pix2coords_internal(nside = ns, nested = nest, cartesian = cart)[,1:nc]
-      #THIS IS UNFINISHED BECAUSE THE cbind GENERIC PRODUCES A data.frame
-      cmbdf <- cbind(crds, cmbdf)
+      if (cart)
+      {
+        nc <- 3
+        nam <- c("x","y","z")
+      }
+      else
+      {
+        nc <- 2
+        nam <- c("theta","phi")
+      }
+
+      crds <- rcosmo:::pix2coords_internal(nside = ns, nested = nest,
+                                           cartesian = cart)[,1:nc]
+      crds <- as.data.frame(crds)
+      names(crds) <- nam
+
+      cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, cmbdf)
     }
     else if ( attr(cmbdf, "coords") == new.coords )
     {
@@ -385,33 +436,53 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
     else if ( new.coords == "spherical" )
     {
       # Convert to spherical
-      n <- ncol(cmbdf)
-      other.names <- names(cmbdf)[-c(which(names(cmbdf) == "x"),
-                                     which(names(cmbdf) == "y"),
-                                     which(names(cmbdf) == "z"))]
 
-      xyz <- cmbdf[,c("x", "y", "z")]
-      others <- cmbdf[, other.names]
+      # n <- ncol(cmbdf)
+      # other.names <- names(cmbdf)[-c(which(names(cmbdf) == "x"),
+      #                                which(names(cmbdf) == "y"),
+      #                                which(names(cmbdf) == "z"))]
+      #
+      # xyz <- cmbdf[,c("x", "y", "z")]
+      # others <- cmbdf[, other.names]
+      #
+      # cmbdf[,1:2] <- car2sph(xyz)
+      # cmbdf[,3:(n-1)] <- others
+      # cmbdf[,n] <- NULL
+      # names(cmbdf) <- c("theta", "phi", other.names)
 
-      cmbdf[,1:2] <- car2sph(xyz)
-      cmbdf[,3:(n-1)] <- others
-      cmbdf[,n] <- NULL
-      names(cmbdf) <- c("theta", "phi", other.names)
+      x.i <- which(names(cmbdf) == "x")
+      y.i <- which(names(cmbdf) == "y")
+      z.i <- which(names(cmbdf) == "z")
+
+      crds <- cmbdf[,c(x.i, y.i, z.i)]
+      crds <- rcosmo::car2sph(crds)
+      other <- cmbdf[,-c(x.i, y.i, z.i), drop = FALSE]
+      cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, other)
+      attr(cmbdf, "coords") <- "spherical"
     }
     else if ( new.coords == "cartesian" )
     {
       # convert to cartesian
 
-      n <- ncol(cmbdf)
-      other.names <- names(cmbdf)[-c(which(names(cmbdf) == "theta"),
-                                     which(names(cmbdf) == "phi"))]
+      # n <- ncol(cmbdf)
+      # other.names <- names(cmbdf)[-c(which(names(cmbdf) == "theta"),
+      #                                which(names(cmbdf) == "phi"))]
+      #
+      # sph <- cmbdf[,c("theta", "phi")]
+      # others <- cmbdf[, other.names]
+      #
+      # cmbdf[,1:3] <- rcosmo::sph2car(sph)
+      # cmbdf[,4:(n+1)] <- others
+      # names(cmbdf) <- c("x","y","z", other.names)
 
-      sph <- cmbdf[,c("theta", "phi")]
-      others <- cmbdf[, other.names]
+      theta.i <- which(names(cmbdf) == "theta")
+      phi.i <- which(names(cmbdf) == "phi")
 
-      cmbdf[,1:3] <- rcosmo::sph2car(sph)
-      cmbdf[,4:(n+1)] <- others
-      names(cmbdf) <- c("x","y","z", other.names)
+      crds <- cmbdf[,c(theta.i, phi.i)]
+      crds <- rcosmo::sph2car(crds)
+      other <- cmbdf[,-c(theta.i, phi.i), drop = FALSE]
+      cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, other)
+      attr(cmbdf, "coords") <- "cartesian"
     }
 
     attr(cmbdf, "coords") <- new.coords
@@ -474,7 +545,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
-                              col, back.col, labels, ...)
+                              col, back.col = "black", labels, ...)
 {
 
   if ( !missing(sample.size) )

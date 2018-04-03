@@ -17,7 +17,7 @@ testthat::test_that("Output matrix is as expected for 'ring' ordering", {
   filenames <- paste0("references/pix2coords_ring_spherical_", formatC(ns, width=2, flag="0"), ".rds")
   for (i in 1:length(ns))
   {
-    eval(bquote(testthat::expect_equal_to_reference(pix2coords(nside = ns[.(i)],
+    eval(bquote(testthat::expect_equal_to_reference(pix2coords_internal(nside = ns[.(i)],
                                                               nested = FALSE,
                                                               cartesian = FALSE),
                                                     filenames[.(i)])))
@@ -29,7 +29,7 @@ testthat::test_that("Output matrix is as expected for 'nested' ordering", {
   filenames <- paste0("references/pix2coords_nested_spherical_", formatC(ns, width=2, flag="0"), ".rds")
   for (i in 1:length(ns))
   {
-    eval(bquote(testthat::expect_equal_to_reference(pix2coords(nside = ns[.(i)],
+    eval(bquote(testthat::expect_equal_to_reference(pix2coords_internal(nside = ns[.(i)],
                                                                nested = TRUE,
                                                                cartesian = FALSE),
                                                    filenames[.(i)])))
@@ -39,19 +39,19 @@ testthat::test_that("Output matrix is as expected for 'nested' ordering", {
 testthat::test_that("random sample (spix) results agree with full results (spherical) (nested/ring)", {
   for (ns in 2^c(1,2,3,4,5)){
     for (i in sample(12*ns^2, 10)){
-      eval(bquote(testthat::expect_equal(pix2coords(nside = .(ns),
+      eval(bquote(testthat::expect_equal(pix2coords_internal(nside = .(ns),
                                                     nested = TRUE,
                                                     spix = .(i),
                                                     cartesian = FALSE)[1,],
-                                         pix2coords(nside = .(ns),
+                                         pix2coords_internal(nside = .(ns),
                                                     nested = TRUE,
                                                     cartesian = FALSE)[.(i),]
                                          )))
-      eval(bquote(testthat::expect_equal(pix2coords(nside = .(ns),
+      eval(bquote(testthat::expect_equal(pix2coords_internal(nside = .(ns),
                                                     nested = FALSE,
                                                     spix = .(i),
                                                     cartesian = FALSE)[1,],
-                                         pix2coords(nside = .(ns),
+                                         pix2coords_internal(nside = .(ns),
                                                     nested = FALSE,
                                                     cartesian = FALSE)[.(i),]
                                          )))
@@ -66,7 +66,7 @@ testthat::test_that("Output matrix is as expected for 'ring' ordering", {
   filenames <- paste0("references/pix2coords_ring_cartesian_", formatC(ns, width=2, flag="0"), ".rds")
   for (i in 1:length(ns))
   {
-    eval(bquote(testthat::expect_equal_to_reference(pix2coords(nside = ns[.(i)],
+    eval(bquote(testthat::expect_equal_to_reference(pix2coords_internal(nside = ns[.(i)],
                                                                nested = FALSE,
                                                                cartesian = TRUE),
                                                      filenames[.(i)])))
@@ -78,7 +78,7 @@ testthat::test_that("Output matrix is as expected for 'nested' ordering", {
   filenames <- paste0("references/pix2coords_nested_cartesian_", formatC(ns, width=2, flag="0"), ".rds")
   for (i in 1:length(ns))
   {
-    eval(bquote(testthat::expect_equal_to_reference(pix2coords(nside = ns[.(i)],
+    eval(bquote(testthat::expect_equal_to_reference(pix2coords_internal(nside = ns[.(i)],
                                                                nested = TRUE,
                                                                cartesian = TRUE),
                                                     filenames[.(i)])))
@@ -88,19 +88,19 @@ testthat::test_that("Output matrix is as expected for 'nested' ordering", {
 testthat::test_that("random sample (spix) results agree with full results (cartsian) (nested/ring)", {
   for (ns in 2^c(1,2,3,4,5)){
     for (i in sample(12*ns^2, 10)){
-      eval(bquote(testthat::expect_equal(pix2coords(nside = .(ns),
+      eval(bquote(testthat::expect_equal(pix2coords_internal(nside = .(ns),
                                                     nested = TRUE,
                                                     spix = .(i),
                                                     cartesian = TRUE)[1,],
-                                         pix2coords(nside = .(ns),
+                                         pix2coords_internal(nside = .(ns),
                                                     nested = TRUE,
                                                     cartesian = TRUE)[.(i),]
       )))
-      eval(bquote(testthat::expect_equal(pix2coords(nside = .(ns),
+      eval(bquote(testthat::expect_equal(pix2coords_internal(nside = .(ns),
                                                     nested = FALSE,
                                                     spix = .(i),
                                                     cartesian = TRUE)[1,],
-                                         pix2coords(nside = .(ns),
+                                         pix2coords_internal(nside = .(ns),
                                                     nested = FALSE,
                                                     cartesian = TRUE)[.(i),]
       )))
@@ -136,7 +136,7 @@ testthat::test_that("cartesian 'ring' data agrees with HEALpy result", {
   for (i in 1:length(ns))
   {
     eval(bquote(testthat::expect_equal( readRDS(filenames[.(i)]),
-                                        pix2coords(nside = ns[.(i)],
+                                        pix2coords_internal(nside = ns[.(i)],
                                                    nested = FALSE,
                                                    cartesian = TRUE)[,1:3] )))
   }
@@ -150,7 +150,7 @@ testthat::test_that("cartesian 'nested' data agrees with HEALpy result", {
   for (i in 1:length(ns))
   {
     eval(bquote(testthat::expect_equal( readRDS(filenames[.(i)]),
-                                        pix2coords(nside = ns[.(i)],
+                                        pix2coords_internal(nside = ns[.(i)],
                                                    nested = TRUE,
                                                    cartesian = TRUE)[,1:3] )))
   }
@@ -163,7 +163,7 @@ testthat::test_that("spherical 'ring' data agrees with python results after conv
                       formatC(ns, width=2, flag="0"), ".rds")
   for (i in 1:length(ns))
   {
-    p2c <- pix2coords(nside = ns[i], nested = FALSE, cartesian = FALSE)[,1:2]
+    p2c <- pix2coords_internal(nside = ns[i], nested = FALSE, cartesian = FALSE)[,1:2]
     p2c <- as.data.frame(p2c)
     names(p2c) <- c("theta", "phi")
     p2c <- as.matrix(sph2car(p2c))
@@ -179,7 +179,7 @@ testthat::test_that("spherical 'nested' data agrees with python results after co
                       formatC(ns, width=2, flag="0"), ".rds")
   for (i in 1:length(ns))
   {
-    p2c <- pix2coords(nside = ns[i], nested = TRUE, cartesian = FALSE)[,1:2]
+    p2c <- pix2coords_internal(nside = ns[i], nested = TRUE, cartesian = FALSE)[,1:2]
     p2c <- as.data.frame(p2c)
     names(p2c) <- c("theta", "phi")
     p2c <- as.matrix(sph2car(p2c))

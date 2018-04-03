@@ -7,9 +7,18 @@
 \method{cbind}{CMBDataFrame}(..., deparse.level = 1)
 }
 \description{
-Add a new column or columns (named vector or data.frame)
-to a \code{\link{CMBDataFrame}}.
+Add a new column or columns (vector, matrix or data.frame)
+to a \code{\link{CMBDataFrame}}. Note that method dispatch
+occurs on the first argument. So, the CMBDataFrame must
+be the first argument
 }
 \details{
 See the documentation for \code{\link{cbind}}
+}
+\examples{
+cmbdf <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
+cmbdf2 <- cbind(cmbdf, myData = rep(1, 12))
+cmbdf2
+
+
 }

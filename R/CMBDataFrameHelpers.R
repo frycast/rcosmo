@@ -127,7 +127,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE)
   }
 
 
-  cmbdf.new <- cmbdf[keep,]
+  cmbdf.new <- cmbdf[keep, , drop = FALSE]
 
   attr(cmbdf.new, "window") <- win
 
@@ -402,7 +402,7 @@ sampleCMB <- function(cmbdf, sample.size)
     stop("Argument must be a CMBDataFrame")
   }
   spix <- sample(pix(cmbdf), sample.size)
-  cmbdf[spix,]
+  cmbdf[spix, ]
 }
 
 

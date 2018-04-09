@@ -73,6 +73,8 @@ If you did not install RTools and are using RStudio then you will be prompted to
     >  'SMICA' indicates SMICA pipeline (others: COMMANDER, NILC, SEVEM).
     
 ## Useful links
+#### Data
+  + [Planck legacy archive](http://pla.esac.esa.int/pla/#home)
 #### Related papers and wikis
   + [Data analysis methods for CMB](http://iopscience.iop.org/article/10.1088/0034-4885/70/6/R02/meta)
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)

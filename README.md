@@ -1,4 +1,4 @@
-# rcosmo project
+# The rcosmo project
 
 
 ### Warning: The functions in rcosmo are still under development.

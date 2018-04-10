@@ -4,12 +4,15 @@
 \alias{rbind.CMBDataFrame}
 \title{Like \code{\link{rbind}} for CMBDataFrames}
 \usage{
-\method{rbind}{CMBDataFrame}(..., deparse.level = 1)
+\method{rbind}{CMBDataFrame}(..., deparse.level = 1, unsafe = FALSE)
+}
+\arguments{
+\item{unsafe}{defaults to FALSE. If \code{unsafe = TRUE} then
+overlapping pixel coordinates will not throw an error (faster).
+
+See the documentation for \code{\link{rbind}}}
 }
 \description{
 Add a new row or rows to a \code{\link{CMBDataFrame}}.
 All arguments passed to \code{...} must be CMBDataFrames.
-}
-\details{
-See the documentation for \code{\link{rbind}}
 }

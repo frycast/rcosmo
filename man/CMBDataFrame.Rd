@@ -4,7 +4,7 @@
 \alias{CMBDataFrame}
 \title{CMB Data Frames}
 \usage{
-CMBDataFrame(CMBData, coords, window, include.polar = FALSE,
+CMBDataFrame(CMBData, coords, win, include.polar = FALSE,
   include.masks = FALSE, spix, sample.size, nside, ordering, intensities)
 }
 \arguments{
@@ -13,7 +13,7 @@ another CMBDataFrame, or nothing.}
 
 \item{coords}{can be "spherical," "cartesian", or unspecified (HEALPix only).}
 
-\item{window}{optional \code{\link{CMBWindow}} object that specifies a
+\item{win}{optional \code{\link{CMBWindow}} object that specifies a
 spherical polygon within which to subset the full sky CMB data}
 
 \item{include.polar}{TRUE if polarisation data is required, otherwise FALSE}

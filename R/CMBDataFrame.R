@@ -39,7 +39,7 @@
 #'@param CMBData can be a string location of FITS file,
 #'another CMBDataFrame, or nothing.
 #'@param coords can be "spherical," "cartesian", or unspecified (HEALPix only).
-#'@param window optional \code{\link{CMBWindow}} object that specifies a
+#'@param win optional \code{\link{CMBWindow}} object that specifies a
 #'spherical polygon within which to subset the full sky CMB data
 #'@param include.polar TRUE if polarisation data is required, otherwise FALSE
 #'@param include.masks TRUE if TMASK and PMASK are required, otherwise FALSE
@@ -95,7 +95,7 @@
 #'@export
 CMBDataFrame <- function(CMBData,
                          coords,
-                         window,
+                         win,
                          include.polar = FALSE,
                          include.masks = FALSE,
                          spix,
@@ -106,9 +106,20 @@ CMBDataFrame <- function(CMBData,
 
   ### --- PREPARATION AND CHECKING ARGUMENTS ARE VALID --- ###
 
-  if ( !missing(window) && !is.CMBWindow(window) )
+  if ( !missing(win) )
   {
-    stop("'window' argument must be a CMBWindow")
+    if ( !rcosmo::is.CMBWindow(win) ) {
+
+      if ( !is.list(win) )
+      {
+        stop("'win' must be a CMBWindow or list of CMBWindows")
+      }
+
+      if (!all(sapply(win, rcosmo::is.CMBWindow)))
+      {
+        stop("'win' must be a CMBWindow or list of CMBWindows")
+      }
+    }
   }
 
   # If spix is a string then assume it is a path to file:
@@ -413,9 +424,9 @@ CMBDataFrame <- function(CMBData,
 
   }
 
-  if ( !missing(window) )
+  if ( !missing(win) )
   {
-    window(cmbdf) <- window
+    window(cmbdf) <- win
   }
 
   return(cmbdf)

@@ -5,8 +5,8 @@
 \title{Plot CMB Data}
 \usage{
 \method{plot}{CMBDataFrame}(cmbdf, add = FALSE, sample.size, type = "p",
-  size = 1, box = FALSE, axes = FALSE, aspect = FALSE, col, back.col,
-  labels, ...)
+  size = 1, box = FALSE, axes = FALSE, aspect = FALSE, col,
+  back.col = "black", labels, ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame with either spherical or cartesian coordinates.}

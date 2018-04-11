@@ -22,6 +22,14 @@ library(rcosmo)
 a <- CMBDataFrame(nside = 2, ordering = "nested", coords = "spherical")
 b <- CMBDataFrame(nside = 2, ordering = "ring", coords = "spherical")
 
+a2 <- ordering(a, new.ordering = "ring")
+b2 <- ordering(b, new.ordering = "nested" )
+
+attributes(b2)
+
+all.equal(b2, a)
+
+
 # Change row names then order by row.names
 a2 <- a
 pix(a2) <- nest2ring(nside = nside(a), pix = pix(a))

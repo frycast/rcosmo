@@ -169,3 +169,17 @@ testthat::test_that("Square bracket operator", {
   testthat::expect_equal_to_reference(a1[1],  "references/square_bracket_a1[1].rds")
 })
 
+
+
+
+# -------------------------------------------------
+testthat::context("CMBDataFrame helpers")
+
+testthat::test_that("Change of ordering scheme", {
+  testthat::expect_equal(ordering(a1, new.ordering = "ring"), b1)
+  testthat::expect_equal(ordering(a2, new.ordering = "ring"), b2)
+  testthat::expect_equal(ordering(a3, new.ordering = "ring"), b3)
+  testthat::expect_equal(ordering(b1, new.ordering = "nested"), a1)
+  testthat::expect_equal(ordering(b2, new.ordering = "nested"), a2)
+  testthat::expect_equal(ordering(b3, new.ordering = "nested"), a3)
+})

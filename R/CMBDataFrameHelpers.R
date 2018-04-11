@@ -297,27 +297,31 @@ ordering <- function( cmbdf, new.ordering )
   } else {
     new.ordering <- as.character(tolower(new.ordering))
 
-    if( !identical(new.ordering, "ring") & !identical(new.ordering,"nested") )
-    {
-      stop("new.ordering must be either 'ring' or 'nested'")
-    }
-
     if ( identical(as.character(attr(cmbdf, "ordering")), new.ordering) )
     {
       # Nothing to do
 
-    } else if ( identical(new.ordering, "nested") )
-    {
-      message("Converting to nested ordering...\n")
-      # Convert 'ring' to 'nested' ordering
-      warning("Conversion not completed as ordering function is under development\n")
+    } else if ( identical(new.ordering, "nested") ) {
 
-    } else if ( identical(new.ordering, "ring") )
-    {
+      message("Converting to nested ordering...\n")
+      pix(cmbdf) <- ring2nest(nside = nside(cmbdf), pix = pix(cmbdf))
+      cmbdf <- cmbdf[order(pix(cmbdf)),]
+      attr(cmbdf, "ordering") <- "nested"
+
+    } else if ( identical(new.ordering, "ring") ) {
+
       message("Converting to ring ordering...\n")
-      # Convert 'nested' to 'ring' ordering
-      warning("Conversion not completed as ordering function is under development\n")
+      pix(cmbdf) <- nest2ring(nside = nside(cmbdf), pix = pix(cmbdf))
+      cmbdf <- cmbdf[order(pix(cmbdf)),]
+      attr(cmbdf, "ordering") <- "ring"
+
+    } else {
+
+      stop("new.ordering must be either 'ring' or 'nested'")
+
     }
+
+    return(cmbdf)
   }
 }
 

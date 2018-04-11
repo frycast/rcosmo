@@ -187,7 +187,7 @@ ring2nest <- function(nside, pix) {
   ipring <- trunc(ipf + (face_num*(trunc(PixNum/12))))
   nPix <- ipring + 1
 
-  return(nPix)
+  return(as.integer(nPix))
 }
 
 
@@ -232,7 +232,7 @@ mkxy2pix <- function() {
     y2pix[i]<- 2*k
   }
 
-  pix2 <- list(x=x2pix,y=y2pix)
+  pix2 <- list(x=as.integer(x2pix),y=as.integer(y2pix))
   return(pix2)
 }
 

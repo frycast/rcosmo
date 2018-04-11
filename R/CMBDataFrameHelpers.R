@@ -204,7 +204,7 @@ window <- function(cmbdf, new.window, intersect = TRUE)
 #'@export
 `window<-` <- function(cmbdf,...,value)
 {
-  return(rcosmo::subWindow(cmbdf, new.window = value))
+  return(rcosmo::window(cmbdf, new.window = value))
 }
 
 
@@ -314,15 +314,15 @@ ordering <- function( cmbdf, new.ordering )
 
     } else if ( identical(new.ordering, "nested") )
     {
-      cat("Converting to nested ordering...\n")
+      message("Converting to nested ordering...\n")
       # Convert 'ring' to 'nested' ordering
-      cat("Conversion not completed as this function is under development\n")
+      warning("Conversion not completed as ordering function is under development\n")
 
     } else if ( identical(new.ordering, "ring") )
     {
-      cat("Converting to ring ordering...\n")
+      message("Converting to ring ordering...\n")
       # Convert 'nested' to 'ring' ordering
-      cat("Conversion not completed as this function is under development\n")
+      warning("Conversion not completed as ordering function is under development\n")
     }
   }
 }

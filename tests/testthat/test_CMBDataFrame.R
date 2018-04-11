@@ -12,6 +12,8 @@
 
 # Check all generics like cbind and rbind
 
+
+# -------------------------------------------------
 testthat::context("CMBDataFrame attributes")
 
 a1 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
@@ -58,6 +60,15 @@ testthat::test_that("window attribute", {
   testthat::expect_equal(window(b3), NULL)
 })
 
+testthat::test_that("pix attribute", {
+  testthat::expect_equal(pix(a1), seq(1,12))
+  testthat::expect_equal(pix(a2), seq(1,12))
+  testthat::expect_equal(pix(a3), seq(1,12))
+  testthat::expect_equal(pix(b1), seq(1,12))
+  testthat::expect_equal(pix(b2), seq(1,12))
+  testthat::expect_equal(pix(b3), seq(1,12))
+})
+
 testthat::test_that("is.CMBDataFrame TRUE", {
   testthat::expect_equal(is.CMBDataFrame(a1), TRUE)
   testthat::expect_equal(is.CMBDataFrame(a2), TRUE)
@@ -69,20 +80,16 @@ testthat::test_that("is.CMBDataFrame TRUE", {
 
 
 
-testthat::context("CMBDataFrame generics")
-
-testthat::test_that("Square bracket operator", {
-  testthat::expect_equal_to_reference(a1[1,], "references/square_bracket_a1[1,].rds")
-  testthat::expect_equal_to_reference(a1[,1], "references/square_bracket_a1[,1].rds")
-  testthat::expect_equal_to_reference(a1[1],  "references/square_bracket_a1[1].rds")
-})
 
 
+# -------------------------------------------------
 testthat::context("CMBDataFrame other arguments")
 
 c1 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(1.01,1.12, by = 0.01))
-c2 <- CMBDataFrame(nside = 1, ordering = "nested", win = list(CMBWindow(x = 0, y = 0, z = 1, r = 1),
-                                                              CMBWindow(theta = c(0,1,1), phi = c(0,0,1))))
+c2 <- CMBDataFrame(nside = 1, ordering = "nested", win = list(CMBWindow(x = 0, y = 0, z = 1, r = 1), CMBWindow(theta = c(0,1,1), phi = c(0,0,1))))
+c3 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(1.01,1.12, by = 0.01), spix = c(1,5,9,7))
+c4 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(1.01,1.12,by=0.01), sample.size = 12)
+c5 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(101,112), sample.size = 5)
 
 testthat::test_that("intensities argument", {
   testthat::expect_equal(c1$I, seq(1.01,1.12, by = 0.01))
@@ -93,33 +100,73 @@ testthat::test_that("window argument", {
                                           CMBWindow(theta = c(0,1,1), phi = c(0,0,1))))
 })
 
+testthat::test_that("spix argument", {
+  testthat::expect_equal(pix(c3), c(1,5,7,9))
+  testthat::expect_equal(c3, c1[c(1,5,7,9),])
+})
+
+testthat::test_that("sample.size argument", {
+  testthat::expect_equal(pix(c4), 1:12)
+  testthat::expect_equal(c4$I, seq(1.01,1.12,by=0.01))
+  testthat::expect_equal(all(c5$I - 100 == pix(c5)), TRUE)
+})
 
 
 
-a1 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
-b1 <- cbind(a1, m = rep(1, 12))
-c1 <- coords(a1, new.coords = "cartesian")
-d1 <- coords(a1, new.coords = "spherical")
-e1 <- coords(b1, new.coords = "cartesian")
-f1 <- coords(b1, new.coords = "spherical")
 
-a2 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "cartesian")
-b2 <- cbind(a2, m = rep(1, 12))
-c2 <- coords(a2, new.coords = "cartesian")
-d2 <- coords(a2, new.coords = "spherical")
-e2 <- coords(b2, new.coords = "cartesian")
-f2 <- coords(b2, new.coords = "spherical")
 
-a3 <- CMBDataFrame(nside = 1, ordering = "nested")
-b3 <- cbind(a3, m = rep(1, 12))
-c3 <- coords(a3, new.coords = "cartesian")
-d3 <- coords(a3, new.coords = "spherical")
-e3 <- coords(b3, new.coords = "cartesian")
-f3 <- coords(b3, new.coords = "spherical")
+# -------------------------------------------------
+testthat::context("Passing CMBDF to CMBDF")
 
-a4 <- CMBDataFrame(nside = 1, ordering = "nested")[,-1]
-b4 <- cbind(a4, m = rep(1, 12))
-c4 <- coords(a4, new.coords = "cartesian")
-d4 <- coords(a4, new.coords = "spherical")
-e4 <- coords(b4, new.coords = "cartesian")
-f4 <- coords(b4, new.coords = "spherical")
+d1 <- CMBDataFrame(nside = 1, ordering = "nested", spix = c(2,3,4,11))
+d2 <- CMBDataFrame(nside = 1, ordering = "ring", spix = c(2,3,4,11))
+
+
+testthat::test_that("change coords", {
+  testthat::expect_equal(a2, CMBDataFrame(a1, coords = "cartesian"))
+  testthat::expect_equal(a1, CMBDataFrame(a2, coords = "spherical"))
+  testthat::expect_equal(a1, CMBDataFrame(a3, coords = "spherical"))
+  testthat::expect_equal(a2, CMBDataFrame(a3, coords = "cartesian"))
+  testthat::expect_equal(b2, CMBDataFrame(b1, coords = "cartesian"))
+  testthat::expect_equal(b1, CMBDataFrame(b2, coords = "spherical"))
+  testthat::expect_equal(b1, CMBDataFrame(b3, coords = "spherical"))
+  testthat::expect_equal(b2, CMBDataFrame(b3, coords = "cartesian"))
+})
+
+testthat::test_that("change coords on subset CMBDF", {
+  testthat::expect_equal(a2[c(2,3,4,11),], CMBDataFrame(d1, coords = "cartesian"))
+  testthat::expect_equal(a1[c(2,3,4,11),], CMBDataFrame(d1, coords = "spherical"))
+  testthat::expect_equal(b2[c(2,3,4,11),], CMBDataFrame(d2, coords = "cartesian"))
+  testthat::expect_equal(b1[c(2,3,4,11),], CMBDataFrame(d2, coords = "spherical"))
+  testthat::expect_equal(a1[c(6,8,10,12),], CMBDataFrame(a2[c(6,8,10,12),], coords = "spherical"))
+  testthat::expect_equal(a2[c(6,8,10,12),], CMBDataFrame(a1[c(6,8,10,12),], coords = "cartesian"))
+})
+
+
+testthat::test_that("use spix on subset CMBDF", {
+  testthat::expect_equal(a3[c(3,4),], CMBDataFrame(d1, spix = c(3,4)))
+  testthat::expect_equal(b3[c(3,4),], CMBDataFrame(d2, spix = c(3,4)))
+})
+
+
+
+
+# -------------------------------------------------
+testthat::context("Reading to CMBDF from FITS")
+
+
+
+
+
+
+
+
+# -------------------------------------------------
+testthat::context("CMBDataFrame generics")
+
+testthat::test_that("Square bracket operator", {
+  testthat::expect_equal_to_reference(a1[1,], "references/square_bracket_a1[1,].rds")
+  testthat::expect_equal_to_reference(a1[,1], "references/square_bracket_a1[,1].rds")
+  testthat::expect_equal_to_reference(a1[1],  "references/square_bracket_a1[1].rds")
+})
+

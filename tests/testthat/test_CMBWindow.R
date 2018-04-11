@@ -1,4 +1,3 @@
-
 testthat::context("area of CMBDataFrame and CMBWindow")
 
 # Create windows and corresponding cmbdfs of each winType and coords

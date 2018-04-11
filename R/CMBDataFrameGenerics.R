@@ -410,6 +410,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       cart <- (new.coords == "cartesian")
       nest <- (ordering(cmbdf) == "nested")
       ns <- nside(cmbdf)
+      sp <- pix(cmbdf)
 
       if (cart)
       {
@@ -423,7 +424,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       }
 
       crds <- rcosmo:::pix2coords_internal(nside = ns, nested = nest,
-                                           cartesian = cart)[,1:nc]
+                                           cartesian = cart, spix = sp)[,1:nc]
       crds <- as.data.frame(crds)
       names(crds) <- nam
 
@@ -436,19 +437,6 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
     else if ( new.coords == "spherical" )
     {
       # Convert to spherical
-
-      # n <- ncol(cmbdf)
-      # other.names <- names(cmbdf)[-c(which(names(cmbdf) == "x"),
-      #                                which(names(cmbdf) == "y"),
-      #                                which(names(cmbdf) == "z"))]
-      #
-      # xyz <- cmbdf[,c("x", "y", "z")]
-      # others <- cmbdf[, other.names]
-      #
-      # cmbdf[,1:2] <- car2sph(xyz)
-      # cmbdf[,3:(n-1)] <- others
-      # cmbdf[,n] <- NULL
-      # names(cmbdf) <- c("theta", "phi", other.names)
 
       x.i <- which(names(cmbdf) == "x")
       y.i <- which(names(cmbdf) == "y")
@@ -463,17 +451,6 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
     else if ( new.coords == "cartesian" )
     {
       # convert to cartesian
-
-      # n <- ncol(cmbdf)
-      # other.names <- names(cmbdf)[-c(which(names(cmbdf) == "theta"),
-      #                                which(names(cmbdf) == "phi"))]
-      #
-      # sph <- cmbdf[,c("theta", "phi")]
-      # others <- cmbdf[, other.names]
-      #
-      # cmbdf[,1:3] <- rcosmo::sph2car(sph)
-      # cmbdf[,4:(n+1)] <- others
-      # names(cmbdf) <- c("x","y","z", other.names)
 
       theta.i <- which(names(cmbdf) == "theta")
       phi.i <- which(names(cmbdf) == "phi")

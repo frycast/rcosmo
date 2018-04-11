@@ -175,6 +175,12 @@ testthat::test_that("Square bracket operator", {
 # -------------------------------------------------
 testthat::context("CMBDataFrame helpers")
 
+sp.nest <- c(1,9,32,45)
+sp.ring <- nest2ring(nside = 2, pix = sp.nest)
+e1 <- CMBDataFrame(nside = 2, ordering = "nested", coords = "cartesian", spix = sp.nest)
+e2 <- CMBDataFrame(nside = 2, ordering = "ring", coords = "cartesian", spix = sp.ring)
+
+
 testthat::test_that("Change of ordering scheme", {
   testthat::expect_equal(ordering(a1, new.ordering = "ring"), b1)
   testthat::expect_equal(ordering(a2, new.ordering = "ring"), b2)
@@ -182,4 +188,7 @@ testthat::test_that("Change of ordering scheme", {
   testthat::expect_equal(ordering(b1, new.ordering = "nested"), a1)
   testthat::expect_equal(ordering(b2, new.ordering = "nested"), a2)
   testthat::expect_equal(ordering(b3, new.ordering = "nested"), a3)
+  testthat::expect_equivalent(a2[sp.nest,], b2[sp.ring,])
+  testthat::expect_equal(ordering(e1, new.ordering = "ring"), e2)
+  testthat::expect_equal(ordering(e2, new.ordering = "nested"), e1)
 })

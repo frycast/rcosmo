@@ -18,9 +18,9 @@ using namespace Rcpp;
 //  pix2$y  - pix index for y
 // This is a helper function
 // [[Rcpp::export]]
-NumericMatrix mkpix2xyC(int nside = 1024) {
+IntegerMatrix mkpix2xyC(int nside = 1024) {
 
-  NumericMatrix pix2xy(nside, 2);
+  IntegerMatrix pix2xy(nside, 2);
 
   //-----pix2x <- matrix(rep(nside,0),ncol=nside)
   //-----pix2y <- matrix(rep(nside,0),ncol=nside)
@@ -92,6 +92,7 @@ NumericMatrix mkpix2xyC(int nside = 1024) {
 //' @param nside is the HEALPix nside parameter.
 //'
 //' @param pix is the set or subset of pixel indices at nside.
+//' If pix is left blank then all pixels are converted.
 //'
 //' @return the output is the corresponding set of pixel in
 //' the ring ordering scheme.
@@ -105,18 +106,19 @@ NumericMatrix mkpix2xyC(int nside = 1024) {
 //' @name nest2ring
 //' @export
 // [[Rcpp::export]]
-NumericVector nest2ring(int nside, IntegerVector pix) {
+IntegerVector nest2ring(int nside, IntegerVector pix ) {
 
   // number of pix at nside
   int nPix = 12*nside*nside;
+
   int N = pix.length();
 
-  NumericVector jrll = NumericVector::create(
+  IntegerVector jrll = IntegerVector::create(
     2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4 );
-  NumericVector jpll = NumericVector::create(
+  IntegerVector jpll = IntegerVector::create(
     1, 3, 5, 7, 0, 2, 4, 6, 1, 3, 5, 7 );
 
-  NumericMatrix pix2xy = mkpix2xyC(); // ---------- IN THE ORIGINAL nside = 1024 always, why?
+  IntegerMatrix pix2xy = mkpix2xyC(); // ---------- IN THE ORIGINAL nside = 1024 always, why?
 
   // number of pixels in a face
   int npface = nside*nside;
@@ -124,12 +126,12 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
 
   // find the face number
   // face number in 0:11
-  NumericVector face_num(N);
+  IntegerVector face_num(N);
   for (int k = 0; k < N; k++)
   {
     face_num[k] = (int) ( (pix[k]-1)/npface );
   }
-  NumericVector ipf(N);
+  IntegerVector ipf(N);
   for (int k = 0; k < N; k++)
   {
     ipf[k] = (int) ( ((int)pix[k]-1) % npface );
@@ -137,14 +139,14 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
 
   // finds the x,y on the face (starting from the lowest corner)
   // from the pixel number
-  NumericVector ix(N);
-  NumericVector iy(N);
+  IntegerVector ix(N);
+  IntegerVector iy(N);
   int scalemlv = 1;
   int ismax = 4;
 
   int n1 = 1024;
   for (int i = 0; i <= ismax; i++) {
-    NumericVector ip_low(N);
+    IntegerVector ip_low(N);
     for (int k = 0; k < N; k++)
     {
       ip_low[k] = (int)ipf[k] % n1;
@@ -163,22 +165,22 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
 
   // transform to (horizontal, vertical) coordinates
   // 'vertical' in 0:2*(nside-1)
-  NumericVector jrt = ix + iy;
+  IntegerVector jrt = ix + iy;
   // 'horizontal' in -nside+1:nside-1
-  NumericVector jpt = ix - iy;
+  IntegerVector jpt = ix - iy;
 
   // Find z coordinate on S^2
   // ring number in 1:4*nside-1
-  NumericVector jr(N);
+  IntegerVector jr(N);
   for (int k = 0; k < N; k++ )
   {
     jr[k] = (int) (jrll[face_num[k]]*nside - jrt[k] - 1);
   }
 
   // initialisation
-  NumericVector nr(N);
-  NumericVector kshift(N);
-  NumericVector n_before(N);
+  IntegerVector nr(N);
+  IntegerVector kshift(N);
+  IntegerVector n_before(N);
 
   for ( int k = 0; k < N; k++ )
   {
@@ -209,7 +211,7 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
 
   // computes the phi coordinate on S^2, in [0,2*pi)
   // 'phi' number in the ring in 1:4*nr
-  NumericVector jp(N);
+  IntegerVector jp(N);
   for (int k = 0; k < N; k++) {
     jp[k] = (int)((jpll[face_num[k]]*nr[k] + jpt[k] + 1 + kshift[k])/2);
     if (jp[k] > nl4) {
@@ -220,12 +222,10 @@ NumericVector nest2ring(int nside, IntegerVector pix) {
   }
 
   // index in 0:nPix-1
-  NumericVector ipring = (n_before + jp);
+  IntegerVector ipring = (n_before + jp);
 
   return ipring;
 }
-
-
 
 
 

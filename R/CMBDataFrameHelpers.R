@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 #'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
 #'
 #'A single CMBWindow or a list of CMBWindows can be passed to the \code{win}
@@ -244,7 +238,7 @@ pix <- function(cmbdf, new.pix)
     return(cmbdf)
   }
 
-  return(as.numeric( row.names(cmbdf) ))
+  return(as.integer( row.names(cmbdf) ))
 }
 
 
@@ -362,7 +356,7 @@ nside <- function( cmbdf )
     stop("Argument must be a CMBDataFrame")
   }
 
-  attr( cmbdf, "nside" )
+  return( as.integer(attr( cmbdf, "nside" )) )
 }
 
 

@@ -53,7 +53,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // mkpix2xyC
-NumericMatrix mkpix2xyC(int nside);
+IntegerMatrix mkpix2xyC(int nside);
 RcppExport SEXP _rcosmo_mkpix2xyC(SEXP nsideSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -64,7 +64,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // nest2ring
-NumericVector nest2ring(int nside, IntegerVector pix);
+IntegerVector nest2ring(int nside, IntegerVector pix);
 RcppExport SEXP _rcosmo_nest2ring(SEXP nsideSEXP, SEXP pixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

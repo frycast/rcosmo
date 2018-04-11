@@ -85,6 +85,7 @@ mkpix2xyC <- function(nside = 1024L) {
 #' @param nside is the HEALPix nside parameter.
 #'
 #' @param pix is the set or subset of pixel indices at nside.
+#' If pix is left blank then all pixels are converted.
 #'
 #' @return the output is the corresponding set of pixel in
 #' the ring ordering scheme.

@@ -16,13 +16,13 @@
 # -------------------------------------------------
 testthat::context("CMBDataFrame attributes")
 
-a1 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
-a2 <- CMBDataFrame(nside = 1, ordering = "nested", coords = "cartesian")
-a3 <- CMBDataFrame(nside = 1, ordering = "nested")
+a1 <- CMBDataFrame(nside = 2, ordering = "nested", coords = "spherical")
+a2 <- CMBDataFrame(nside = 2, ordering = "nested", coords = "cartesian")
+a3 <- CMBDataFrame(nside = 2, ordering = "nested")
 
-b1 <- CMBDataFrame(nside = 1, ordering = "ring", coords = "spherical")
-b2 <- CMBDataFrame(nside = 1, ordering = "ring", coords = "cartesian")
-b3 <- CMBDataFrame(nside = 1, ordering = "ring")
+b1 <- CMBDataFrame(nside = 2, ordering = "ring", coords = "spherical")
+b2 <- CMBDataFrame(nside = 2, ordering = "ring", coords = "cartesian")
+b3 <- CMBDataFrame(nside = 2, ordering = "ring")
 
 testthat::test_that("coords attribute", {
   testthat::expect_equal(coords(a1), "spherical")
@@ -43,12 +43,12 @@ testthat::test_that("ordering attribute", {
 })
 
 testthat::test_that("nside attribute", {
-  testthat::expect_equal(nside(a1), 1)
-  testthat::expect_equal(nside(a2), 1)
-  testthat::expect_equal(nside(a3), 1)
-  testthat::expect_equal(nside(b1), 1)
-  testthat::expect_equal(nside(b2), 1)
-  testthat::expect_equal(nside(b3), 1)
+  testthat::expect_equal(nside(a1), 2)
+  testthat::expect_equal(nside(a2), 2)
+  testthat::expect_equal(nside(a3), 2)
+  testthat::expect_equal(nside(b1), 2)
+  testthat::expect_equal(nside(b2), 2)
+  testthat::expect_equal(nside(b3), 2)
 })
 
 testthat::test_that("window attribute", {
@@ -61,12 +61,12 @@ testthat::test_that("window attribute", {
 })
 
 testthat::test_that("pix attribute", {
-  testthat::expect_equal(pix(a1), seq(1,12))
-  testthat::expect_equal(pix(a2), seq(1,12))
-  testthat::expect_equal(pix(a3), seq(1,12))
-  testthat::expect_equal(pix(b1), seq(1,12))
-  testthat::expect_equal(pix(b2), seq(1,12))
-  testthat::expect_equal(pix(b3), seq(1,12))
+  testthat::expect_equal(pix(a1), seq(1,48))
+  testthat::expect_equal(pix(a2), seq(1,48))
+  testthat::expect_equal(pix(a3), seq(1,48))
+  testthat::expect_equal(pix(b1), seq(1,48))
+  testthat::expect_equal(pix(b2), seq(1,48))
+  testthat::expect_equal(pix(b3), seq(1,48))
 })
 
 testthat::test_that("is.CMBDataFrame TRUE", {
@@ -85,14 +85,14 @@ testthat::test_that("is.CMBDataFrame TRUE", {
 # -------------------------------------------------
 testthat::context("CMBDataFrame other arguments")
 
-c1 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(1.01,1.12, by = 0.01))
-c2 <- CMBDataFrame(nside = 1, ordering = "nested", win = list(CMBWindow(x = 0, y = 0, z = 1, r = 1), CMBWindow(theta = c(0,1,1), phi = c(0,0,1))))
-c3 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(1.01,1.12, by = 0.01), spix = c(1,5,9,7))
-c4 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(1.01,1.12,by=0.01), sample.size = 12)
-c5 <- CMBDataFrame(nside = 1, ordering = "nested", intensities = seq(101,112), sample.size = 5)
+c1 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48, by = 0.01))
+c2 <- CMBDataFrame(nside = 2, ordering = "nested", win = list(CMBWindow(x = 0, y = 0, z = 1, r = 1), CMBWindow(theta = c(0,1,1), phi = c(0,0,1))))
+c3 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48, by = 0.01), spix = c(1,5,9,7))
+c4 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48,by=0.01), sample.size = 48)
+c5 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(101,148), sample.size = 5)
 
 testthat::test_that("intensities argument", {
-  testthat::expect_equal(c1$I, seq(1.01,1.12, by = 0.01))
+  testthat::expect_equal(c1$I, seq(1.01,1.48, by = 0.01))
 })
 
 testthat::test_that("window argument", {
@@ -106,8 +106,8 @@ testthat::test_that("spix argument", {
 })
 
 testthat::test_that("sample.size argument", {
-  testthat::expect_equal(pix(c4), 1:12)
-  testthat::expect_equal(c4$I, seq(1.01,1.12,by=0.01))
+  testthat::expect_equal(pix(c4), 1:48)
+  testthat::expect_equal(c4$I, seq(1.01,1.48,by=0.01))
   testthat::expect_equal(all(c5$I - 100 == pix(c5)), TRUE)
 })
 
@@ -118,9 +118,9 @@ testthat::test_that("sample.size argument", {
 # -------------------------------------------------
 testthat::context("Passing CMBDF to CMBDF")
 
-d1 <- CMBDataFrame(nside = 1, ordering = "nested", spix = c(2,3,4,11))
-d2 <- CMBDataFrame(nside = 1, ordering = "ring", spix = c(2,3,4,11))
-
+d1 <- CMBDataFrame(nside = 2, ordering = "nested", spix = c(2,3,4,11))
+d2 <- CMBDataFrame(nside = 2, ordering = "ring", spix = c(2,3,4,11))
+d3 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48, by = 0.01), spix = c(2,3,4,11))
 
 testthat::test_that("change coords", {
   testthat::expect_equal(a2, CMBDataFrame(a1, coords = "cartesian"))
@@ -138,14 +138,13 @@ testthat::test_that("change coords on subset CMBDF", {
   testthat::expect_equal(a1[c(2,3,4,11),], CMBDataFrame(d1, coords = "spherical"))
   testthat::expect_equal(b2[c(2,3,4,11),], CMBDataFrame(d2, coords = "cartesian"))
   testthat::expect_equal(b1[c(2,3,4,11),], CMBDataFrame(d2, coords = "spherical"))
-  testthat::expect_equal(a1[c(6,8,10,12),], CMBDataFrame(a2[c(6,8,10,12),], coords = "spherical"))
-  testthat::expect_equal(a2[c(6,8,10,12),], CMBDataFrame(a1[c(6,8,10,12),], coords = "cartesian"))
+  testthat::expect_equal(a1[c(6,8,10,48),], CMBDataFrame(a2[c(6,8,10,48),], coords = "spherical"))
+  testthat::expect_equal(a2[c(6,8,10,48),], CMBDataFrame(a1[c(6,8,10,48),], coords = "cartesian"))
 })
 
 
 testthat::test_that("use spix on subset CMBDF", {
-  testthat::expect_equal(a3[c(3,4),], CMBDataFrame(d1, spix = c(3,4)))
-  testthat::expect_equal(b3[c(3,4),], CMBDataFrame(d2, spix = c(3,4)))
+  testthat::expect_equal(c1[c(3,11),], CMBDataFrame(d3, spix = c(3,11)))
 })
 
 

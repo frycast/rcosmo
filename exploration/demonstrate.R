@@ -15,6 +15,24 @@ library(rcosmo)
 #              "CMD", "Rd2pdf", shQuote(path)))
 
 
+
+
+##### ADD THIS TO THE ORDERING FUNCTION TO CONVERT CMBDF ORDERING #####
+
+a <- CMBDataFrame(nside = 2, ordering = "nested", coords = "spherical")
+b <- CMBDataFrame(nside = 2, ordering = "ring", coords = "spherical")
+
+# Change row names then order by row.names
+a2 <- a
+pix(a2) <- nest2ring(nside = nside(a), pix = pix(a))
+a2 <- a2[order(pix(a2)),]
+attr(a2, "ordering") <- "ring"
+all.equal(a2,b)
+
+
+
+
+
 ##################################################################
 ################ TESTING `[` and coords() ########################
 ##################################################################

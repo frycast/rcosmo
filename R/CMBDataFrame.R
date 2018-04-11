@@ -69,6 +69,10 @@
 #' # (these are stored in the row.names attribute)
 #' pix(df)
 #'
+#' # the spix argument specifies pixel indices,
+#' # to take a subset or sample of rows instead do:
+#'
+#'
 #'@export
 CMBDataFrame <- function(CMBData,
                          coords,
@@ -319,19 +323,22 @@ CMBDataFrame <- function(CMBData,
     nside <- rcosmo::nside(CMBData)
     n <- nrow(CMBData)
 
-    if (( !missing(sample.size) || !is.null(spix) ) && len > n)
+    if (( !missing(sample.size) || !is.null(spix) ) )
     {
-      stop("sample.size or length(spix) exceeds number of rows of 'CMBData'")
+      if ( len > n )
+      {
+        stop("sample.size or length(spix) exceeds number of rows of 'CMBData'")
+      }
     }
 
     if ( !missing(sample.size) )
     {
-      spix <- sort(sample(seq(1,n), sample.size))
+      spix <- sort(sample(pix(CMBData), sample.size))
     }
 
     if (!is.null(spix))
     {
-      cmbdf <- CMBData[spix,]
+      cmbdf <- CMBData[pix(CMBData) %in% spix,]
     } else {
       cmbdf <- CMBData
     }

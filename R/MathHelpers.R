@@ -1,14 +1,4 @@
-#' geodesic distance on the unit sphere
-#'
-#'@param p1 a point on the unit sphere given in cartesian coordinates (x,y,z)
-#'@param p2 a point on the unit sphere given in cartesian coordinates (x,y,z)
-#'
-#'@return the geodesic distance between \code{p1} and \code{p2}
-#'
-#'@export
-geoDist <- function(p1,p2) {
-  return(acos(sum(p1*p2)))
-}
+
 
 
 

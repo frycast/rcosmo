@@ -8,13 +8,23 @@
 #' implies more samples
 #' @param col the colour of plotted boundary lines
 #' @param size the size of the plotted boundary lines
+#' @param ordering optionally specify an ordering scheme
+#' from which to plot HEALPix pixel numbers. Can be
+#' either "ring" or "nested"
+#' @param nums.col specifies the colour of pixel numbers
+#' if \code{ordering} is specified
+#' @param nums.size specifies the size of pixel numbers
+#' if \code{ordering} is specified
+#' @param font A numeric font number from 1 to 5,
+#' used if \code{ordering} is specified
 #' @param ... arguments passed to \code{rgl::plot3d}
 #'
 #' @return produces a plot
 #'
 #' @export
 plotHPBoundaries <- function(nside, eps = pi/90,
-                             col = "black", size = 1,  ...)
+                             col = "black", size = 1, ordering,
+                             nums.col = col, nums.size = 5, font = 2, ...)
 {
 
   ### Part I
@@ -81,6 +91,20 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     S<-pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, size = size, ...)
+  }
+
+  if ( !missing(ordering) )
+  {
+    if ( !identical(ordering, "ring") && !identical(ordering, "nested") )
+    {
+      stop("ordering, if specified, must be 'ring' or 'nested'")
+    }
+
+    centers <- rcosmo::CMBDataFrame(nside = nside, ordering = ordering,
+                                    coords = "cartesian")
+
+    rcosmo:::plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
+                              size = nums.size, labels = 1:(12*nside^2), font = font)
   }
 }
 

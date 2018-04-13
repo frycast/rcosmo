@@ -24,18 +24,18 @@ m.poly.cmb <- window(cmbdf, new.window = m.polygon)
 
 
 testthat::test_that("areas sum to 4*pi", {
-  testthat::expect_equal(area(disc.cmb) + area(m.disc.cmb), 4*pi)
-  testthat::expect_equal(area(poly.cmb) + area(m.poly.cmb), 4*pi)
-  testthat::expect_equal(area(disc) + area(m.disc), 4*pi)
-  testthat::expect_equal(area(polygon) + area(m.polygon), 4*pi)
+  testthat::expect_equal(geoArea(disc.cmb) + geoArea(m.disc.cmb), 4*pi)
+  testthat::expect_equal(geoArea(poly.cmb) + geoArea(m.poly.cmb), 4*pi)
+  testthat::expect_equal(geoArea(disc) + geoArea(m.disc), 4*pi)
+  testthat::expect_equal(geoArea(polygon) + geoArea(m.polygon), 4*pi)
 })
 
 
 testthat::test_that("areas differences are accounted for", {
-  testthat::expect_equal(  area(poly.cmb) - area(polygon),
-                         -(area(m.poly.cmb) - area(m.polygon)))
-  testthat::expect_equal(  area(disc.cmb) - area(disc),
-                         -(area(m.disc.cmb) - area(m.disc)) )
+  testthat::expect_equal(  geoArea(poly.cmb) - geoArea(polygon),
+                         -(geoArea(m.poly.cmb) - geoArea(m.polygon)))
+  testthat::expect_equal(  geoArea(disc.cmb) - geoArea(disc),
+                         -(geoArea(m.disc.cmb) - geoArea(m.disc)) )
 })
 
 

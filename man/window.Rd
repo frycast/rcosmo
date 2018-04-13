@@ -30,7 +30,8 @@ a new CMBDataFrame whose CMBWindow attribute is new.window
 \details{
 Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 are treated differently from other windows: Let \eqn{A} be the union of the
-interiors of all windows whose winType does not include "minus",
+interiors of all windows in the list, \code{new.window}, whose winType
+does not include "minus",
 and let \eqn{B} be the intersection of the exteriors of all the windows whose
 \code{winType} does include "minus". Then, provided that
 \code{intersect = TRUE} (the default), the returned CMBDataFrame will

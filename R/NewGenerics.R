@@ -5,7 +5,7 @@ coords <- function(x, new.coords) UseMethod("coords", x)
 `coords<-` <- function(x, ..., value) UseMethod("coords<-", x)
 
 #'@export
-area <- function(x) UseMethod("area", x)
+geoArea <- function(x) UseMethod("geoArea", x)
 
 
 #'@export

@@ -341,7 +341,7 @@ is.CMBDataFrame <- function(cmbdf)
 
 
 
-#' Area of a \code{\link{CMBDataFrame}}
+#' Geodesic area covered by a \code{\link{CMBDataFrame}}
 #'
 #' Gives the surface on the unit sphere
 #' that is encompassed by all pixels in \code{cmbdf}
@@ -351,7 +351,7 @@ is.CMBDataFrame <- function(cmbdf)
 #'@return the sum of the areas of all pixels (rows) in cmbdf
 #'
 #'@export
-area.CMBDataFrame <- function(cmbdf)
+geoArea.CMBDataFrame <- function(cmbdf)
 {
   nside <- nside(cmbdf)
   if ( !is.numeric(nside) ) stop("problem with cmbdf nside parameter")

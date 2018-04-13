@@ -9,7 +9,8 @@ nest2ring(nside, pix)
 \arguments{
 \item{nside}{is the HEALPix nside parameter.}
 
-\item{pix}{is the set or subset of pixel indices at nside.}
+\item{pix}{is the set or subset of pixel indices at nside.
+If pix is left blank then all pixels are converted.}
 }
 \value{
 the output is the corresponding set of pixel in

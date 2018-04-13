@@ -5,7 +5,7 @@
 \title{CMB Data Frames}
 \usage{
 CMBDataFrame(CMBData, coords, win, include.polar = FALSE,
-  include.masks = FALSE, spix, sample.size, nside, ordering, intensities)
+  include.masks = FALSE, spix, sample.size, nside, ordering, intensities, ...)
 }
 \arguments{
 \item{CMBData}{can be a string location of FITS file,
@@ -42,9 +42,11 @@ the ordering scheme of \code{spix}.}
 
 \item{intensities}{a vector of intensities to be included
 if \code{CMBData} is unspecified. Note that \code{length(intensities)}
-must equal \eqn{12*nside^2} if spix and
-sample.size are unspecified, otherwise \code{length(intensities)}
-must equal \code{length(spix)} or \code{length(sample.size)}}
+must equal \eqn{12*nside^2} if either spix or
+sample.size are unspecified.}
+
+\item{...}{Optional names data columns of length nrow(CMBData) to
+add to the CMBDataFrame}
 }
 \value{
 A data frame whose columns contain the pixel center coordinates
@@ -68,7 +70,7 @@ df <- CMBDataFrame("CMB_map_smica1024.fits")
 df.sample <- CMBDataFrame(df, sample.size = 800000)
 plot(df.sample)
 
-# Specify a vector of pixel indices to keep, using spix
+# Specify a vector of pixel indices using spix
 df.subset <- CMBDataFrame(df, spix = c(2,4,6))
 
 # Take a look at the summary
@@ -77,5 +79,9 @@ summary(df)
 # Access HEALPix pixel indices using pix function
 # (these are stored in the row.names attribute)
 pix(df)
+
+# the spix argument specifies pixel indices,
+# to take a subset or sample of rows instead do:
+
 
 }

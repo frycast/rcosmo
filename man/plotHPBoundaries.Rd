@@ -4,7 +4,8 @@
 \alias{plotHPBoundaries}
 \title{plotHPBoundaries}
 \usage{
-plotHPBoundaries(nside, eps = pi/90, col = "black", size = 1, ...)
+plotHPBoundaries(nside, eps = pi/90, col = "black", size = 1, ordering,
+  nums.col = col, nums.size = 5, font = 2, ...)
 }
 \arguments{
 \item{nside}{the HEALPix nside parameter}
@@ -15,6 +16,19 @@ implies more samples}
 \item{col}{the colour of plotted boundary lines}
 
 \item{size}{the size of the plotted boundary lines}
+
+\item{ordering}{optionally specify an ordering scheme
+from which to plot HEALPix pixel numbers. Can be
+either "ring" or "nested"}
+
+\item{nums.col}{specifies the colour of pixel numbers
+if \code{ordering} is specified}
+
+\item{nums.size}{specifies the size of pixel numbers
+if \code{ordering} is specified}
+
+\item{font}{A numeric font number from 1 to 5,
+used if \code{ordering} is specified}
 
 \item{...}{arguments passed to \code{rgl::plot3d}}
 }

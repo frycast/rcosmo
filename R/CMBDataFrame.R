@@ -41,6 +41,8 @@
 #'if \code{CMBData} is unspecified. Note that \code{length(intensities)}
 #'must equal \eqn{12*nside^2} if either spix or
 #'sample.size are unspecified.
+#'@param ... Optional names data columns of length nrow(CMBData) to
+#'add to the CMBDataFrame
 #'
 #'@return
 #'A data frame whose columns contain the pixel center coordinates
@@ -83,7 +85,8 @@ CMBDataFrame <- function(CMBData,
                          sample.size,
                          nside,
                          ordering,
-                         intensities) {
+                         intensities,
+                         ...) {
 
   ### ----- PREPARATION AND CHECKING ARGUMENTS ARE VALID ----- ###
 
@@ -409,6 +412,11 @@ CMBDataFrame <- function(CMBData,
 
     stop("CMBData must be a CMBDataFrame, a path to a FITS file, or unspecified")
 
+  }
+
+  if ( !missing(...) )
+  {
+    cmbdf <- cbind(cmbdf, ...)
   }
 
   if ( !missing(win) )

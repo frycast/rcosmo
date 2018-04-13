@@ -16,29 +16,38 @@ library(rcosmo)
 
 
 
+sky <- CMBDataFrame(nside = 1024, ordering = "nested", coords = "spherical")
 
-##### ADD THIS TO THE ORDERING FUNCTION TO CONVERT CMBDF ORDERING #####
+#plot full sky after random sample
+plot(sky, sample.size = 100000)
 
-a <- CMBDataFrame(nside = 2, ordering = "nested", coords = "spherical")
-b <- CMBDataFrame(nside = 2, ordering = "ring", coords = "spherical")
+#add detailed window and display clear window boundaries
+plot(win2, add = TRUE); plot(poly); plot(disc)
 
-a2 <- ordering(a, new.ordering = "ring")
-b2 <- ordering(b, new.ordering = "nested" )
+#visualise healpix boundaries and pixel numbers
+plotHPBoundaries(nside = 1, col = "blue", ordering = "nested")
 
-attributes(b2)
+poly <- CMBWindow(theta = c(1,2,2), phi = c(0,0,1))
+disc <- CMBWindow(x = 0, y = 0, z = 1, r = 0.5)
+win1 <- CMBDataFrame(sky, win = poly)
+win2 <- CMBDataFrame(sky, win = list(poly, disc))
 
-all.equal(b2, a)
+win2 <- CMBDataFrame(win2, yourVar = rep(1, nrow(win2)))
 
-
-# Change row names then order by row.names
-a2 <- a
-pix(a2) <- nest2ring(nside = nside(a), pix = pix(a))
-a2 <- a2[order(pix(a2)),]
-attr(a2, "ordering") <- "ring"
-all.equal(a2,b)
-
+m1 <- matrix(c(0,1,0,1,0,0), nrow = 2, byrow = TRUE)
+m2 <- data.frame(theta = c(pi/2,pi/2), phi = c(0,pi/4))
+geoDist(m1,m2)
 
 
+#################################################################
+##### Change RGL viewpoint and create rotating view option ######
+#################################################################
+
+library(rcosmo)
+library(rgl)
+a <- CMBDataFrame(nside = 32, ordering = "nested", coords = "spherical")
+plot(a)
+rgl.viewpoint(theta = 0, phi = 0)
 
 
 ##################################################################
@@ -256,18 +265,13 @@ plot(cmbdf, back.col = "black", size = 6)
 plotHPBoundaries(ns, col = "red")
 plotHPBoundaries(2, col = "green")
 
-pix <- 1:48
+
 # With pixel indices NESTED
-cmbdf <- CMBDataFrame(nside = 2, ordering = "nested",
-                      coords = "cartesian")
-plot(cmbdf, back.col = "black", col = "yellow", size = 5, labels = pix)
-plotHPBoundaries(2, col = "red")
+plotHPBoundaries(2, col = "red", ordering = "nested")
 
 # With pixel indices RING
-cmbdf <- CMBDataFrame(nside = 2, ordering = "ring",
-                      coords = "cartesian")
-plot(cmbdf, back.col = "black", col = "yellow", size = 5, labels = pix)
-plotHPBoundaries(2, col = "red")
+plotHPBoundaries(2, col = "red", ordering = "ring")
+
 
 
 

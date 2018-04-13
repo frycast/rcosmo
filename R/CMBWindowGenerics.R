@@ -200,14 +200,14 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 
 
 
-#' Get the spherical area of a \code{\link{CMBWindow}}
+#' Get the geodesic area of a \code{\link{CMBWindow}}
 #'
 #' @param win a CMBWindow
 #'
 #' @return Tthe spherical area inside win
 #'
 #'@export
-area.CMBWindow <- function(win)
+geoArea.CMBWindow <- function(win)
 {
   # Calculate the area of the spherical polygon
   win.xyz <- rcosmo::coords(win, new.coords = "cartesian")

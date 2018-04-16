@@ -233,7 +233,7 @@ CMBDataFrame <- function(CMBData,
     CMBData <- CMBReadFITS(CMBData)
 
     # Get Nside from FITS header:
-    nside <- as.numeric(CMBData$hdr[which(CMBData$hdr == "NSIDE")+1])
+    nside <- CMBData$nside
     # Check that nside is an integer and greater than 0:
     if(nside %% 1 != 0 || (nside <= 0))
     {
@@ -246,7 +246,7 @@ CMBDataFrame <- function(CMBData,
     }
 
     # Get ordering from FITS header:
-    orderFITS <- tolower(CMBData$hdr[which(CMBData$hdr == "ORDERING")+1])
+    orderFITS <- CMBData$ordering
     if(orderFITS != "ring" && orderFITS != "nested")
     {
       stop(paste("Failed to obtain valid ordering scheme from FITS header,",
@@ -273,34 +273,40 @@ CMBDataFrame <- function(CMBData,
 
       # Add the corresponding intensities from CMBData into the data.frame
       if ( !is.null(spix) ){
-        cmbdf <- data.frame(cmbdf, I = CMBData$col[[1]][spix])
+        cmbdf <- data.frame(cmbdf, I = CMBData$col$I_STOKES[spix])
       } else {
-        cmbdf <- data.frame(cmbdf, I = CMBData$col[[1]])
+        cmbdf <- data.frame(cmbdf, I = CMBData$col$I_STOKES)
       }
 
     # Else coords are unspecified (HEALPix)
     } else {
 
       if ( !is.null(spix) ){
-        cmbdf <- data.frame(I = CMBData$col[[1]][spix])
+        cmbdf <- data.frame(I = CMBData$col$I_STOKES[spix])
       } else {
-        cmbdf <- data.frame(I = CMBData$col[[1]])
+        cmbdf <- data.frame(I = CMBData$col$I_STOKES)
       }
 
     }
 
     if (include.polar == TRUE) {
-      if (!is.null(spix)) stop(paste("(development stage) include.polar must",
-                                    "be FALSE if spix is specified"))
-      cmbdf$Q <- CMBData$col[[2]]
-      cmbdf$U <- CMBData$col[[3]]
+      if (!is.null(spix))
+      {
+        stop(paste("(development stage) include.polar must",
+                    "be FALSE if spix is specified"))
+      }
+      cmbdf$Q <- CMBData$col$Q_STOKES
+      cmbdf$U <- CMBData$col$U_STOKES
     }
 
     if (include.masks == TRUE) {
-      if (!is.null(spix)) stop(paste("(development stage) include.masks must",
-                                     "be FALSE if spix is specified"))
-      cmbdf$TMASK <- CMBData$col[[4]]
-      cmbdf$PMASK <- CMBData$col[[5]]
+      if (!is.null(spix))
+      {
+        stop(paste("(development stage) include.masks must",
+                    "be FALSE if spix is specified"))
+      }
+      cmbdf$TMASK <- CMBData$col$TMASK
+      cmbdf$PMASK <- CMBData$col$PMASK
     }
 
     message("Adding CMB Data Frame attributes...\n")
@@ -312,6 +318,9 @@ CMBDataFrame <- function(CMBData,
     attr(cmbdf, "ordering") <- orderFITS
     if (missing(coords)) coords <- NULL
     attr(cmbdf, "coords") <- coords
+    attr(cmbdf, "resolution") <- CMBData$resoln
+    attr(cmbdf, "header1") <- CMBData$header1
+    attr(cmbdf, "header2") <- CMBData$header2
 
     if (!missing(ordering))
     {

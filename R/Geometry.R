@@ -26,7 +26,8 @@ geoDist <- function(p1,p2) {
   }
 
 
-  return(acos(sapply(c(p1$x*p2$x + p1$y*p2$y + p1$z*p2$z), function(x) {min(x,1)})))
+  return(acos(sapply(c(p1$x*p2$x + p1$y*p2$y + p1$z*p2$z),
+                     function(x) {max(-1,min(x,1))})))
 }
 
 

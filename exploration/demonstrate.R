@@ -16,7 +16,16 @@ library(rcosmo)
 
 
 
-sky <- CMBDataFrame(nside = 1024, ordering = "nested", coords = "spherical")
+## ATTRIBUTES TO ADD: Coordsys (Galactic), and colunits (K_CMB),and resolution (arcmin)
+## PUT THE FULL FITSHEADER IN THE CMBDataFrame, CALL IT FITSHeader
+
+
+library(Rcpp)
+sourceCpp("src/ReadFITS.cpp")
+
+sky <- CMBDataFrame("C:/Users/dfryer/Downloads/COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits")
+
+ff <- CMBReadFITS("C:/Users/dfryer/Downloads/COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits")
 
 #plot full sky after random sample
 plot(sky, sample.size = 100000)

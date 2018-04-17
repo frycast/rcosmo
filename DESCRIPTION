@@ -19,7 +19,8 @@ Imports:
     FITSio (>= 2.1-0),
     Rcpp (>= 0.12.11),
     tibble,
-    rgl
+    rgl,
+	cli (>= 1.0.0)
 Suggests:
     knitr,
     rmarkdown,

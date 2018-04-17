@@ -1,4 +1,57 @@
 
+#' Get the FITS headers from a \code{\link{CMBDataFrame}}
+#'
+#'
+#'
+#'@param cmbdf a CMBDataFrame.
+#'
+#'@return
+#' The FITS headers belonging to the FITS file from which cmbdf
+#' data was imported
+#'
+#'@export
+header <- function( cmbdf )
+{
+  # Check that argument is a CMBDF
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+
+  return( c(attr( cmbdf, "header1" ),attr( cmbdf, "header2" )) )
+}
+
+
+
+
+#' Get the arcmin resolution from a \code{\link{CMBDataFrame}}
+#'
+#'@param cmbdf a CMBDataFrame.
+#'
+#'@return
+#' The arcmin resolution as specified by the FITS file where the
+#' data was sourced
+#'
+#'@export
+resolution <- function( cmbdf )
+{
+  # Check that argument is a CMBDF
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+
+  return( attr( cmbdf, "resolution" ) )
+}
+
+
+
+
+
+
+
+
+
 #'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
 #'
 #'A single CMBWindow or a list of CMBWindows can be passed to the \code{win}

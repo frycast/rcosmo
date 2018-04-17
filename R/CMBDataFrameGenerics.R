@@ -15,6 +15,9 @@
   attr(r, "nside") <- attr(x, "nside")
   attr(r, "coords") <- attr(x, "coords")
   attr(r, "window") <- attr(x, "window")
+  attr(r, "header1") <- attr(x, "header1")
+  attr(r, "header2") <- attr(x, "header2")
+  attr(r, "resolution") <- attr(x, "resolution")
   r
 }
 
@@ -54,8 +57,16 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 
   df <- do.call(cbind, c(args, deparse.level = deparse.level))
 
+  class(df) <- class(cmbdf)
   nam <- names(df)
-  attributes(df) <- attributes(cmbdf)
+  attr(df, "ordering") <- attr(cmbdf, "ordering")
+  attr(df, "nside") <- attr(cmbdf, "nside")
+  attr(df, "coords") <- attr(cmbdf, "coords")
+  attr(df, "window") <- attr(cmbdf, "window")
+  attr(df, "row.names") <- attr(cmbdf, "row.names")
+  attr(df, "header1") <- attr(cmbdf, "header1")
+  attr(df, "header2") <- attr(cmbdf, "header2")
+  attr(df, "resolution") <- attr(cmbdf, "resolution")
   names(df) <- nam
 
   return(df)
@@ -122,6 +133,9 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
   attr(df, "ordering") <- ordering(cmbdf)
   attr(df, "coords") <- coords(cmbdf)
   attr(df, "window") <- wins
+  attr(df, "header1") <- attr(cmbdf, "header1")
+  attr(df, "header2") <- attr(cmbdf, "header2")
+  attr(df, "resolution") <- attr(cmbdf, "resolution")
 
   return(df)
 }
@@ -612,35 +626,102 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
 
 
 
-#' Summarise CMB Data
+#' Summarise a \code{\link{CMBDataFrame}}
 #'
-#' This function produces a summary from a CMB Data Frame.
+#' This function produces a summary from a CMBDataFrame.
 #'
-#'@param cmbdf a CMB Data Frame.
+#'@param cmbdf a CMBDataFrame.
 #'
 #'@return
-#'A summary of the CMB data.
-#'
-#'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
-#' summary(df)
+#'A summary
 #'
 #'@export
 summary.CMBDataFrame <- function(cmbdf)
 {
-  if ( sum(names(df) == "I") %>% as.numeric() %>% identical(1) )
+  ans <- list(intensities = summary(cmbdf$I))
+
+  if ( is.null(coords(cmbdf)) )
   {
-    ans <- list(intensities = summary(df$I))
+    ans$coords <- "HEALPix only"
+  }
+  else
+  {
+    ans$coords <- coords(cmbdf)
   }
 
-  ans[["coords"]] <- ifelse(is.null(coords(cmbdf)),
-                            "HEALPix only",coords(cmbdf))
-  ans[["ordering"]] <- ordering(cmbdf)
-  ans[["nside"]] <- nside(cmbdf)
-  ans[["window"]] <- "The CMBWindow class is under development"
+  if ( is.null(window(cmbdf)) )
+  {
+    ans$window <- "full sky"
+  }
+  else
+  {
+    ans$window <- window(cmbdf)
+  }
 
-  ans
+  if ( is.null(resolution(cmbdf)) )
+  {
+    ans$resolution <- "unknown"
+  }
+  else
+  {
+    ans$resolution <- resolution(cmbdf)
+  }
+
+  ans$ordering <- ordering(cmbdf)
+  ans$nside <- nside(cmbdf)
+  ans$pix <- pix(cmbdf)
+  ans$n <- nrow(cmbdf)
+  ans$area <- geoArea(cmbdf)
+
+  class(ans) <- "summary.CMBDataFrame"
+  return(ans)
 }
+
+
+#'Print a summary of a CMBDataFrame
+#'
+#'@param x a \code{summary.CMBDataFrame} object, i.e.,
+#'the output of \code{\link{summary.CMBDataFrame}}
+#'
+#'@export
+print.summary.CMBDataFrame <- function(x, ...)
+{
+  cat(
+    rule(center = " CMBDataFrame Object ", line = "bar4"), "\n",
+    sep = ""
+  )
+
+  # Window loop details here in boxes
+  cat("Number of CMBWindows: ", length(x$window), "\n" )
+  if ( length(x$window) <= 5 )
+  {
+    lapply(x$window, function(x) { print(summary(x)); cat("\n\n") } )
+  }
+  else
+  {
+    cat("Too many windows to print them all here", "\n\n")
+  }
+
+  cat("Total area covered by all pixels: ", ans$area, "\n")
+
+
+
+  # Summary of intensities
+  cat(rule(line = "~"), "\n", sep = "")
+  cat_line("Intensity quartiles")
+  print(x$intensities)
+
+  # Finishing line
+  cat(
+    rule(line = "="),
+    sep = ""
+  )
+}
+
+
+
+
+
 
 
 
@@ -669,7 +750,7 @@ summary.CMBDataFrame <- function(cmbdf)
 #'@export
 print.CMBDataFrame <- function(cmbdf,...)
 {
-  print(tibble::as.tibble(cmbdf),...)
+  print(tibble::as.tibble(cmbdf), ...)
 }
 
 

@@ -8,6 +8,7 @@
 library(rcosmo)
 
 
+
 ### GENERATE DOCUMENTATION
 # pack <- "rcosmo"
 # path <- find.package(pack)
@@ -20,11 +21,37 @@ library(rcosmo)
 ## PUT THE FULL FITSHEADER IN THE CMBDataFrame, CALL IT FITSHeader
 
 
-library(Rcpp)
-sourceCpp("src/ReadFITS.cpp")
+sky1 <- CMBDataFrame("../CMB_map_smica1024.fits")
+
+header(sky1)
+
+
+win <- CMBWindow(x = 1, y = 0, z = 0, r = 0.05)
+win2 <- CMBWindow(theta = pi/2, phi = 0, r = 0.05)
+win3 <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
+                  theta = c(pi/2, pi/2, pi/10, pi/10))
+
+skywin <- window(sky1, new.window = list(win,win2))
+
+summary(skywin)
+summary(win)
+summary(win2)
+summary(win3)
+
+
+a <- summary(sky1)
+class(a)
+a
+
+library(sp)
+
+
+
+
+
+
 
 sky <- CMBDataFrame("C:/Users/dfryer/Downloads/COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits")
-
 ff <- CMBReadFITS("C:/Users/dfryer/Downloads/COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits")
 
 #plot full sky after random sample

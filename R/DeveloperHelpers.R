@@ -27,4 +27,6 @@ copyCMBAttributes <- function(cmbdf1, cmbdf2, exclude)
   {
     attr(cmbdf1, a) <- attr(cmbdf2, a)
   }
+
+  return(cmbdf1)
 }

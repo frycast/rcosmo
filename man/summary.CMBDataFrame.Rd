@@ -2,21 +2,16 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{summary.CMBDataFrame}
 \alias{summary.CMBDataFrame}
-\title{Summarise CMB Data}
+\title{Summarise a \code{\link{CMBDataFrame}}}
 \usage{
 \method{summary}{CMBDataFrame}(cmbdf)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{cmbdf}{a CMBDataFrame.}
 }
 \value{
-A summary of the CMB data.
+A summary
 }
 \description{
-This function produces a summary from a CMB Data Frame.
-}
-\examples{
-df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
-summary(df)
-
+This function produces a summary from a CMBDataFrame.
 }

@@ -1,3 +1,74 @@
+#' Summarise a \code{\link{CMBWindow}}
+#'
+#' This function produces a summary from a CMBWindow
+#'
+#'@param cmbdf a CMBWindow
+#'
+#'@return
+#'A summary
+#'
+#'@export
+summary.CMBWindow <- function(win)
+{
+  ans <- list()
+  ans$area <- geoArea(win)
+  ans$coords <- coords(win)
+  ans$assumedConvex <- assumedConvex(win)
+  ans$winType <- winType(win)
+
+  if ( coords(win) == "cartesian" )
+  {
+    crds <- car2sph(win)
+  }
+  else
+  {
+    crds <- win[,c("theta","phi")]
+  }
+
+  ans$coords <- crds
+
+  if ( winType(win) == "polygon" || winType(win) == "minus.polygon" )
+  {
+    ans$rangeTheta <- c(min(crds[,"theta"]), max(crds[,"theta"]))
+    ans$rangePhi <- c(min(crds[,"phi"]), max(crds[,"phi"]))
+  }
+
+  if ( winType(win) == "disc" || winType(win) == "minus.disc" )
+  {
+    ans$center <- crds[, c("theta","phi")]
+    ans$radius <- win[,"r"]
+  }
+
+  class(ans) <- "summary.CMBWindow"
+
+  return(ans)
+}
+
+
+
+#'Print a summary of a \code{\link{CMBWindow}}
+#'
+#'@param x a \code{summary.CMBWindow} object, i.e.,
+#'the output of \code{\link{summary.CMBWindow}}
+#'
+#'@export
+print.summary.CMBWindow <- function(x, ...)
+{
+  cat(
+    boxx(c(paste0("Window type: ", x$winType),
+         paste0("Window area: ", round(x$area,4)))
+    ),
+    sep = ""
+  )
+}
+
+
+
+
+
+
+
+
 #'Get the maximum distance between all points
 #'in a \code{\link{CMBWindow}}
 #'

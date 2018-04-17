@@ -20,6 +20,15 @@ A list containing the intensity (I), polarisation (Q, U), PMASK, TMASK and metad
   However, \code{readFITS} is more general and so is more likely to work.
 }
 \examples{
-  CMBReadFITS("CMB_map_smica1024.fits")
+dat <- CMBReadFITS("CMB_map_smica1024.fits")
+
+# View metadata
+dat$header1
+dat$header2
+dat$resoln
+dat$method
+dat$coordsys
+dat$nside
+dat$hdr
 
 }

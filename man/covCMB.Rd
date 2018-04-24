@@ -4,7 +4,7 @@
 \alias{covCMB}
 \title{Covariance for CMB}
 \usage{
-covCMB(cmbdf, num.bins = 10, sample.size, max.dist)
+covCMB(cmbdf, num.bins = 10, sample.size, max.dist, breaks)
 }
 \arguments{
 \item{cmbdf}{is a \code{\link{CMBDataFrame}} or \code{data.frame}}
@@ -21,9 +21,18 @@ For example, if cmbdf represents a full sky map
 or a random sample of a full sky map then \code{max.dist = pi}.
 If max.dist is known then specifying it may reduce
 computation time.}
+
+\item{breaks}{optionally specify the breaks manually using a
+vector giving the break points between cells, i.e., the vector
+has length \code{num.bins - 1}.}
 }
 \value{
-
+A data.frame containing sample covariance values, bin centers,
+and number \code{n} of data point pairs whose distance falls in
+the corresponding bin. The first
+row of this data.frame corresponds to the sample variance.
+If \code{breaks} are specified manually then locations of bin
+centers are not returned.
 }
 \description{
 This function provides an empirical covariance estimate for data

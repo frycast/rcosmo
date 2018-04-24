@@ -33,10 +33,8 @@ NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
   {
     double product = I[i]*I[i];
     C[0] = C[0] + product;
-    C[1] = C[1] + product;
   }
   B[0] = n;
-  B[1] = n;
 
   // Now we deal with the case i != j
   // We only need i, j to cover the upper triangle distance matrix i < j

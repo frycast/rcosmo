@@ -55,8 +55,8 @@ summary.CMBWindow <- function(win)
 print.summary.CMBWindow <- function(x, ...)
 {
   cat(
-    boxx(c(paste0("Window type: ", x$winType),
-         paste0("Window area: ", round(x$area,4)))
+    cli::boxx(c(paste0("Window type: ", x$winType),
+                paste0("Window area: ", round(x$area,4)))
     ),
     sep = ""
   )

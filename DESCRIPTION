@@ -20,7 +20,7 @@ Imports:
     Rcpp (>= 0.12.11),
     tibble,
     rgl,
-	cli (>= 1.0.0)
+	  cli (>= 1.0.0)
 Suggests:
     knitr,
     rmarkdown,

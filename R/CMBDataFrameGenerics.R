@@ -586,17 +586,18 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
   }
 
   ## Change coordinates if necessary
-  coords <- coords(cmbdf)
+  cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
 
-  try(if(coords != "spherical" && coords != "cartesian")
-    stop("Coordinates must be spherical or cartesian"))
-
-  if (coords == "spherical") {
-    cmbdf.xyz <- rcosmo::sph2car(cmbdf[,c("theta","phi")])
-  } else {
-    # Else coords are already cartesian
-    cmbdf.xyz <- data.frame(x = cmbdf$x, y = cmbdf$y, z = cmbdf$z)
-  }
+  #coords <- coords(cmbdf)
+  # try(if(!is.null(cords) && (coords != "spherical" && coords != "cartesian"))
+  #   stop("Coordinates must be spherical or cartesian"))
+  #
+  # if (coords == "spherical") {
+  #   cmbdf.xyz <- rcosmo::sph2car(cmbdf[,c("theta","phi")])
+  # } else {
+  #   # Else coords are already cartesian
+  #   cmbdf.xyz <- data.frame(x = cmbdf$x, y = cmbdf$y, z = cmbdf$z)
+  # }
 
   ## Do the plotting
   if ( !missing(back.col) )
@@ -672,6 +673,7 @@ summary.CMBDataFrame <- function(cmbdf)
   ans$pix <- pix(cmbdf)
   ans$n <- nrow(cmbdf)
   ans$area <- geoArea(cmbdf)
+  ans$method <- header(cmbdf)[grepl("METHOD  =", header(cmbdf))]
 
   class(ans) <- "summary.CMBDataFrame"
   return(ans)
@@ -687,33 +689,41 @@ summary.CMBDataFrame <- function(cmbdf)
 print.summary.CMBDataFrame <- function(x, ...)
 {
   cat(
-    rule(center = " CMBDataFrame Object ", line = "bar4"), "\n",
+    cli::rule(center = " CMBDataFrame Object ", line = "bar4"), "\n",
     sep = ""
   )
 
   # Window loop details here in boxes
-  cat("Number of CMBWindows: ", length(x$window), "\n" )
-  if ( length(x$window) <= 5 )
+  if ( x$window != "full sky" )
   {
-    lapply(x$window, function(x) { print(summary(x)); cat("\n\n") } )
+    cat("Number of CMBWindows: ", length(x$window), "\n" )
+    if ( length(x$window) <= 5 )
+    {
+      lapply(x$window, function(x) { print(summary(x)); cat("\n\n") } )
+    }
+    else
+    {
+      cat("Too many windows to print them all here", "\n\n")
+    }
   }
   else
   {
-    cat("Too many windows to print them all here", "\n\n")
+    cat("Full sky map\n")
   }
+  cat(x$method, "\n")
 
-  cat("Total area covered by all pixels: ", ans$area, "\n")
+  cat("Total area covered by all pixels: ", x$area, "\n")
 
 
 
   # Summary of intensities
-  cat(rule(line = "~"), "\n", sep = "")
-  cat_line("Intensity quartiles")
+  cat(cli::rule(line = "~"), "\n", sep = "")
+  cli::cat_line("Intensity quartiles")
   print(x$intensities)
 
   # Finishing line
   cat(
-    rule(line = "="),
+    cli::rule(line = "="),
     sep = ""
   )
 }

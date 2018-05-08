@@ -123,6 +123,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// covCMB_internal2
+NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
+RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cos_breaks(cos_breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal2(cmbdf, cos_breaks));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_pointInConvexPolygon", (DL_FUNC) &_rcosmo_pointInConvexPolygon, 2},
@@ -135,6 +147,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_car2sph", (DL_FUNC) &_rcosmo_car2sph, 1},
     {"_rcosmo_sph2car", (DL_FUNC) &_rcosmo_sph2car, 1},
     {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
+    {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
     {NULL, NULL, 0}
 };
 

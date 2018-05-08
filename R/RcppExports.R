@@ -171,3 +171,25 @@ covCMB_internal1 <- function(cmbdf, breaks) {
     .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
 }
 
+#'@title
+#'covCMB_internal2
+#'
+#'
+#'This function acknowledges that there is no need to transform with acos.
+#'The breaks are cos(r_i) where r_i is the radius.
+#'The bins will have equal area provided that cos(r_i) - cos(r_{i+1}) is fixed.
+#'Alternatively, the bins will have equal annular width if r_{i+1} - r_i is fixed,
+#'but cos(r_i) must be passed in, regardless of which
+#'metric is used to fix distance beforehand.
+#'We must note that: For r in (0,pi), cos is a strictly decreasing function,
+#'e.g. cos(0) > cos(max.dist)
+#'
+#'
+#'
+#'@name covCMB_internal2
+#'
+#'@export
+covCMB_internal2 <- function(cmbdf, cos_breaks) {
+    .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, cos_breaks)
+}
+

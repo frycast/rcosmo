@@ -282,9 +282,9 @@ CMBDataFrame <- function(CMBData,
     } else {
 
       if ( !is.null(spix) ){
-        cmbdf <- data.frame(I = CMBData$col$I_STOKES[spix])
+        cmbdf <- data.frame(I = as.vector(CMBData$col$I_STOKES[spix]))
       } else {
-        cmbdf <- data.frame(I = CMBData$col$I_STOKES)
+        cmbdf <- data.frame(I = as.vector(CMBData$col$I_STOKES))
       }
 
     }
@@ -295,8 +295,8 @@ CMBDataFrame <- function(CMBData,
         stop(paste("(development stage) include.polar must",
                     "be FALSE if spix is specified"))
       }
-      cmbdf$Q <- CMBData$col$Q_STOKES
-      cmbdf$U <- CMBData$col$U_STOKES
+      cmbdf$Q <- as.vector(CMBData$col$Q_STOKES)
+      cmbdf$U <- as.vector(CMBData$col$U_STOKES)
     }
 
     if (include.masks == TRUE) {
@@ -305,8 +305,8 @@ CMBDataFrame <- function(CMBData,
         stop(paste("(development stage) include.masks must",
                     "be FALSE if spix is specified"))
       }
-      cmbdf$TMASK <- CMBData$col$TMASK
-      cmbdf$PMASK <- CMBData$col$PMASK
+      cmbdf$TMASK <- as.vector(CMBData$col$TMASK)
+      cmbdf$PMASK <- as.vector(CMBData$col$PMASK)
     }
 
     message("Adding CMB Data Frame attributes...\n")

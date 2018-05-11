@@ -4,6 +4,8 @@
 # OUTPUTS: C(r), for each r
 
 
+#### WARNING: THE LAST BIN IS NOT THE RIGHT SIZE AS IT CONTAINS ALL
+#### DISTANCES GREATER THAN max.dist SO IT SHOULD PERHAPS BE DISCARDED
 #' Covariance for CMB
 #'
 #' This function provides an empirical covariance estimate for data
@@ -15,22 +17,34 @@
 #' sample to take before calculating covariance. This may be useful if
 #' the full covariance computation is too slow.
 #' @param max.dist an optional number between 0 and pi specifying the
-#' maximum geodesic distance between any two points in cmbdf.
-#' For example, if cmbdf represents a full sky map
-#' or a random sample of a full sky map then \code{max.dist = pi}.
-#' If max.dist is known then specifying it may reduce
-#' computation time.
+#' maximum geodesic distance to use for calculating covariance. Only
+#' used if \code{breaks} is unspecified.
 #' @param breaks optionally specify the breaks manually using a
-#' vector giving the break points between cells, i.e., the vector
-#' has length \code{num.bins - 1}.
+#' vector giving the break points between cells. This vector
+#' has length \code{num.bins} since the last break point is taken
+#' as \code{max.dist}. If \code{equiareal = TRUE} then
+#' these breaks should be \eqn{cos(r_i)} where \eqn{r_i} are radii.
+#' If \code{equiareal = FALSE} then these breaks should be \eqn{r_i}.
+#' @param equiareal if TRUE then the bins have equal spherical
+#' area. If false then the bins have equal annular widths.
+#' Default is TRUE.
+#' @param calc.max.dist if TRUE then the \code{max.dist} will be
+#' calculated from the locations in cmbdf. Otherwise
+#' either \code{max.dist} must be specified or max.dist will
+#' default to pi.
 #'
 #' @return
-#' A data.frame containing sample covariance values, bin centers,
-#' and number \code{n} of data point pairs whose distance falls in
-#' the corresponding bin. The first
+#' An object of class CMBCovariance consisting of a \code{data.frame}
+#' containing sample covariance
+#' values, bin centers, and number \code{n} of data point pairs
+#' whose distance falls in
+#' the corresponding bin.
+#' The first
 #' row of this data.frame corresponds to the sample variance.
-#' If \code{breaks} are specified manually then locations of bin
-#' centers are not returned.
+#' The attribute "breaks" contains the break points used.
+#' The returned \code{data.frame} has
+#' \code{num.bins + 1} rows since the first row, the sample
+#' variance, is not counted as a bin.
 #'
 #' @examples
 #'
@@ -39,7 +53,9 @@ covCMB <- function(cmbdf,
                    num.bins = 10,
                    sample.size,
                    max.dist,
-                   breaks)
+                   breaks,
+                   equiareal = TRUE,
+                   calc.max.dist = FALSE)
 {
 
   if ( !is.CMBDataFrame(cmbdf) ) {
@@ -70,29 +86,42 @@ covCMB <- function(cmbdf,
 
     if (missing(max.dist)) {
 
-      max.dist <- maxDist_internal(cmbdf)
-
+      if (calc.max.dist)
+      {
+        max.dist <- maxDist_internal(cmbdf)
+      }
+      else
+      {
+        max.dist <- pi
+      }
     }
 
-    marks <- seq(0, max.dist, length.out = num.bins+1)[-1]
-    bin.width <- marks[1]
-    centers <- c(0, marks - bin.width/2)
-    breaks <- marks[-num.bins]
-
-    covs <- covCMB_internal1(cmbdf, breaks)
-    result <- data.frame(dist = centers, cov = covs[,1], n = as.integer(c(covs[,2][1],covs[,2][-1]/2)) )
-  }
-  else
-  {
-    if ( !missing(max.dist) || num.bins != 10 )
+    if (equiareal)
     {
-      warning(paste0("The max.dist and num.bins parameters have no effect",
-                     " when breaks is specified"))
+      breaks <- seq(cos(max.dist), 1, length.out = num.bins+1)[-(num.bins+1)]
+    }
+    else
+    {
+      breaks <- cos(rev(seq(0, max.dist, length.out = num.bins+1)[-1]))
     }
 
-    covs <- covCMB_internal1(cmbdf, breaks)
-    result <- data.frame(cov = covs[,1], n = as.integer(c(covs[,2][1],covs[,2][-1]/2)) )
   }
+
+  covs <- covCMB_internal2(cmbdf, breaks)
+
+  # Reverse order since cosine is decreasing
+  covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])
+  covs[2:nrow(covs),2] <- rev(covs[2:nrow(covs),2])
+  v <- c(0,rev(acos(breaks)))
+  # Drop the throw-away bin (distances greater than max.dist)
+  covs <- covs[-nrow(covs),]
+
+  # Find the bin centers (break_{i+1} - break_i)/2 with break_0 = 0.
+  centers <- c(0,v[1:(length(v)-1)] + (v[2:length(v)] - v[1:(length(v) - 1)])/2)
+
+  result <- data.frame(dist = centers, cov = covs[,1], n = as.integer(c(covs[,2][1], covs[,2][-1]/2)) )
+  class(result) <- c("CMBCovariance", "data.frame")
+  attr(result, "breaks") <- breaks
 
   return(result)
 }

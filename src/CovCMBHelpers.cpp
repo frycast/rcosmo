@@ -19,7 +19,7 @@ NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
 
   int n = cmbdf.nrow();
   int nbreaks = breaks.length();
-  int nbin = nbreaks + 1;
+  int nbin = nbreaks;
   NumericVector x = cmbdf["x"];
   NumericVector y = cmbdf["y"];
   NumericVector z = cmbdf["z"];
@@ -27,7 +27,7 @@ NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
   // We use nbin + 1 to create space for the variance atom (zero bin)
   NumericVector C = NumericVector( nbin + 1 );
   NumericVector B = NumericVector( nbin + 1 );
-  NumericMatrix out = NumericMatrix(nbin + 1, 2); //(nrow, ncolumn)
+  NumericMatrix out = NumericMatrix( nbin + 1, 2 ); //(nrow, ncolumn)
 
   // Deal with the variance atom case C(0) first (i = j)
   // These values also go into the first bin, C(1).
@@ -59,6 +59,8 @@ NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
       C[bin] = C[bin] + I[i]*I[j];
 
       // Increment the number of products in the bin
+      // Note that the last bin is not the same size as it
+      // contains all distances greater than max.dist
       B[bin] = B[bin] + 1;
     }
 
@@ -75,9 +77,8 @@ NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
 
 
 
-
-//This script acknowledges that there is no need to transform with acos.
-//The breaks are cos(r_i) where r_i is the radius.
+//Unlike covCMB_internal1, this script acknowledges that there is no need
+//to transform with acos. The breaks are cos(r_i) where r_i is the radius.
 //The bins will have equal area provided that cos(r_i) - cos(r_{i+1}) is fixed.
 //Alternatively, the bins will have equal annular width if r_{i+1} - r_i is fixed,
 //but cos(r_i) must be passed in, regardless of which
@@ -107,15 +108,16 @@ NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks) 
 
   int n = cmbdf.nrow();
   int nbreaks = cos_breaks.length();
-  int nbin = nbreaks + 1;
+  // We have nbin bins + the zero bin (index 0) + the throw-away bin (index 1, dist > max.dist)
+  int nbin = nbreaks;
   NumericVector x = cmbdf["x"];
   NumericVector y = cmbdf["y"];
   NumericVector z = cmbdf["z"];
   NumericVector I = cmbdf["I"];
-  // We use nbin + 1 to create space for the variance atom (zero bin)
-  NumericVector C = NumericVector( nbin + 1 );
-  NumericVector B = NumericVector( nbin + 1 );
-  NumericMatrix out = NumericMatrix( nbin + 1, 2 ); //(nrow, ncolumn)
+  // We use nbin + 2 to create space for the variance atom (zero bin) and the throw away bin
+  NumericVector C = NumericVector( nbin + 2 );
+  NumericVector B = NumericVector( nbin + 2 );
+  NumericMatrix out = NumericMatrix( nbin + 2, 2 ); //(nrow, ncolumn)
 
   // Deal with the variance atom case C(0) first (i = j)
   // These values also go into the first bin, C(1).
@@ -157,6 +159,8 @@ NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks) 
       C[bin] = C[bin] + I[i]*I[j];
 
       // Increment the number of products in the bin
+      // Note that the first bin is not the same size as it
+      // contains all distances greater than max.dist
       B[bin] = B[bin] + 1;
     }
 

@@ -539,65 +539,73 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
                               col, back.col = "black", labels, ...)
 {
 
+  if (is.null(coords(cmbdf)))
+  {
+    # When the coods are HEALPix only there is some issue
+    # with sampling in the plot function then converting to cartesian.
+    # The plot function crashes / is slow.
+    stop("(development stage) cannot plot when coords are NULL")
+  }
+
   if ( !missing(sample.size) )
   {
+    stop("(development stage) there is some issue with sample pixels in plot")
     spix <- sample(pix(cmbdf), sample.size)
     cmbdf <- cmbdf[spix,]
   }
 
-  ## Stored data is used to make colours if col is missing
-  if ( missing(col) )
+  if (missing(col))
   {
-    if ( nside(cmbdf) == 1024 )
-    {
-      if (missing(sample.size))
-      {
-        col <- rcosmo:::CMBcols1024
-      }
-      else
-      {
-        col <-  CMBcols1024[spix]
-      }
-
-      warning(paste("(development stage) the colour map for",
-              "nside = 1024 may not be ideal"))
-
-    }
-    else if ( nside(cmbdf) == 2048 )
-    {
-
-      ## The following code must be replaced to work with nside = 2048
-      if (missing(sample.size))
-      {
-        col <- rcosmo:::CMBcols1024
-      }
-      else
-      {
-        col <-  CMBcols1024[spix]
-      }
-
-      warning(paste("(development stage) the colour map used was not",
-              "generated for nside = 2048"))
-    }
-    else
-    {
-      col <- "blue"
-    }
+    col <- rcosmo:::colmap[cut(cmbdf$I, length(colmap))]
   }
+
+
+  # ## Stored data is used to make colours if col is missing
+  # if ( missing(col) )
+  # {
+  #   if ( nside(cmbdf) == 1024 )
+  #   {
+  #     if (missing(sample.size))
+  #     {
+  #       col <- rcosmo:::CMBcols1024
+  #     }
+  #     else
+  #     {
+  #       col <-  CMBcols1024[spix]
+  #       stop("(development stage) colours not assigned to sample")
+  #     }
+  #
+  #     warning(paste("(development stage) the colour map for",
+  #             "nside = 1024 may not be ideal"))
+  #
+  #   }
+  #   else if ( nside(cmbdf) == 2048 )
+  #   {
+  #
+  #     stop("(development stage) colours not assigned")
+  #
+  #     ## The following code must be replaced to work with nside = 2048
+  #     if (missing(sample.size))
+  #     {
+  #       col <- rcosmo:::CMBcols1024
+  #     }
+  #     else
+  #     {
+  #       col <-  CMBcols1024[spix]
+  #     }
+  #
+  #     warning(paste("(development stage) the colour map used was not",
+  #             "generated for nside = 2048"))
+  #   }
+  #   else
+  #   {
+  #     col <- "blue"
+  #   }
+  # }
+
 
   ## Change coordinates if necessary
   cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
-
-  #coords <- coords(cmbdf)
-  # try(if(!is.null(cords) && (coords != "spherical" && coords != "cartesian"))
-  #   stop("Coordinates must be spherical or cartesian"))
-  #
-  # if (coords == "spherical") {
-  #   cmbdf.xyz <- rcosmo::sph2car(cmbdf[,c("theta","phi")])
-  # } else {
-  #   # Else coords are already cartesian
-  #   cmbdf.xyz <- data.frame(x = cmbdf$x, y = cmbdf$y, z = cmbdf$z)
-  # }
 
   ## Do the plotting
   if ( !missing(back.col) )

@@ -4,7 +4,8 @@
 \alias{covCMB}
 \title{Covariance for CMB}
 \usage{
-covCMB(cmbdf, num.bins = 10, sample.size, max.dist, breaks)
+covCMB(cmbdf, num.bins = 10, sample.size, max.dist, breaks,
+  equiareal = TRUE, calc.max.dist = FALSE)
 }
 \arguments{
 \item{cmbdf}{is a \code{\link{CMBDataFrame}} or \code{data.frame}}
@@ -24,7 +25,20 @@ computation time.}
 
 \item{breaks}{optionally specify the breaks manually using a
 vector giving the break points between cells, i.e., the vector
-has length \code{num.bins - 1}.}
+has length \code{num.bins - 1}. If \code{equiareal = TRUE} then
+these breaks should be \eqn{cos(r_i)} where \eqn{r_i} are radii,
+and \eqn{cos(r_i) - cos(r_{i+1})} should be fixed for all i. If
+\code{equiareal = FALSE} then these breaks should be \eqn{r_i}
+and \eqn{r_{i+1} - r_i} should be fixed.}
+
+\item{equiareal}{if TRUE then the bins have equal spherical
+area. If false then the bins have equal annular widths.
+Default is TRUE.}
+
+\item{calc.max.dist}{if TRUE then the \code{max.dist} will be
+calculated from the locations in cmbdf. Otherwise
+either \code{max.dist} must be specified or max.dist will
+default to pi.}
 }
 \value{
 A data.frame containing sample covariance values, bin centers,

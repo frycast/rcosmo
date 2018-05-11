@@ -93,7 +93,7 @@ close(zz)
 
 names(col) <- TTYPEn
 
-# Return a neat list and close the file  -----------------------------------------------------
+# Return a list and close the file  -----------------------------------------------------
 cmbdat <- list(col = col, hdr = hdr, resoln = resoln, method = method, coordsys = coordsys,
                ordering = ordering, nside = nside, baddata = baddata, header1 = header1,
                header2 = header2)

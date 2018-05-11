@@ -7,6 +7,24 @@
 # library(tidyverse)
 library(rcosmo)
 
+## Test a non-CMB map
+#http://cade.irap.omp.eu/dokuwiki/doku.php?id=chipass
+sky.t <- CMBDataFrame("C:\Users\dfryer\Downloads\CHIPASS_1_1024.fits", coords = "cartesian")
+
+
+
+sky <- CMBDataFrame("../CMB_map_smica1024.fits")
+
+# Why does this plot take so long?
+plot(sky.m, sample.size = 100000)
+
+# Show that spix can change ordering unintentionally
+nest <- (ordering(sky.m) == "nested")
+ns <- nside(sky.m)
+sp <- pix(sky.m)
+nc <- 3
+full.m <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE, spix = sp)[,1:nc]
+m.5 <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE, spix = c(32,5,19))[,1:nc]
 
 
 ### GENERATE DOCUMENTATION
@@ -14,6 +32,16 @@ library(rcosmo)
 # path <- find.package(pack)
 # system(paste(shQuote(file.path(R.home("bin"), "R")),
 #              "CMD", "Rd2pdf", shQuote(path)))
+
+
+
+## WHAT IS HAPPENING WITH THIS STRANGE ANOMALY?
+sky <- CMBDataFrame("../CMB_map_smica1024.fits", coords = "cartesian")
+size <- 1 # try 0.1
+win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size), phi = c(0,size,size,0))
+cmbdf.win <- window(sky, new.window = win)
+plot(cmbdf.win, add = TRUE, sample.size = nrow(cmbdf.win))
+
 
 
 
@@ -46,9 +74,19 @@ a
 library(sp)
 
 
+#################################################################
+########## DEMONSTRATE TMASK ####################################
+#################################################################
+
+## Test include.masks = TRUE
+sky.m <- CMBDataFrame("../CMB_map_smica1024.fits", include.masks = TRUE, coords = "cartesian")
+plot(sky.m, col = sky.m$TMASK + 1, sample.size = 50000)
 
 
 
+#################################################################
+##### Experiment with functions for cheat sheet #################
+#################################################################
 
 
 sky <- CMBDataFrame("C:/Users/dfryer/Downloads/COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits")
@@ -756,225 +794,50 @@ df <- car2sph(df.xyz)
 ## Set parameters
 ns <- 16
 num.bins <- 10
-cmbdf <- CMBDataFrame(nside = ns, coords = "cartesian",
+npix <- 12*ns^2
+sim.I <- rnorm(npix)
+
+cmbdf.fake <- CMBDataFrame(nside = ns, coords = "cartesian",
                       ordering = "nested",
-                      intensities = rnorm(12*ns^2))
-
-# Full sky
-C <- covCMB(cmbdf)
-
-
-## Using a window
-win <- CMBWindow(theta = c(pi/2,pi/2,pi/2-1,pi/2-1), phi = c(0,1,1,0))
-cmbdf.win <- window(cmbdf, new.window = win)
-plot(cmbdf.win)
-plot(win)
-C <- covCMB(cmbdf.win)
-
-
-### NOTE: IN FUTURE WE CAN GET max.dist FROM CMBWindow
-## With sample.size = 100,000 this took 4.2 minutes
-system.time({
-  C1 <- covCMB(cmbdf, max.dist = pi, sample.size = 100000)
-})
-## With sample.size = 100,000 this took 5.8 minutes
-system.time({
-  C2 <- covCMB(cmbdf, sample.size = 100000)
-})
+                      intensities = sim.I)
+# Full sky fake data
+C <- covCMB(cmbdf.fake)
 
 
 
-### Using CMB full sky data
-cmbdf.sky <- CMBDataFrame("../CMB_map_smica1024.fits",
-                          coords = "cartesian")
-## This took about half an hour (untimed)
-#C3 <- covCMB(cmbdf.sky, max.dist = pi, num.bins = 10, sample.size = 200000)
-#write.csv(C3, "covCMB_fullsky_ns1024_s200000")
-plot(cmbdf.sky, sample.size = 200000)
-C3 <- read.csv("exploration/covCMB_fullsky_ns1024_s200000.csv")
-plot(0:10, C, type = 'b')
+### Using real data ###########################################################
+#sky <- CMBDataFrame("../CMB_map_smica1024.fits", coords = "cartesian")
+#plot(sky, sample.size = 500000)
+sky <- readRDS("../fullsky.Rds")
+
+## Window
+size <- 0.2
+win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size), phi = c(0,size,size,0))
+cmbdf.win <- window(sky, new.window = win)
+# plot(cmbdf.win, add = TRUE)
+# plot(win)
+C <- covCMB(cmbdf.win, max.dist = size, num.bins = 20)
+plot(C$dist, C$cov/C$cov[1])
+
+## Full sky sample
+sky.s <- sampleCMB(sky, sample.size = 50000)
+C.sky <- covCMB(sky.s, max.dist = pi, num.bins = 200)
+plot(C.sky$dist, C.sky$cov/C$cov[1])
 
 
 
-####%%%%%%%%%%%%%%% OLD WAY OF USING WINDOW %%%%%%%%%%%%%%%%%%%%%%%%%%###
-# ### Using a 'square' window
-# cmbdf.sky.sph <- CMBDataFrame("../CMB_map_smica1024.fits",
-#                               coords = "spherical")
-# ## Annoying way to do this because CMBWindow class is incomplete
-# cmbdf.square <- cmbdf.sky.sph[  cmbdf.sky.sph$theta  <= 1
-#                               & cmbdf.sky.sph$theta  >= 0
-#                               & cmbdf.sky.sph$phi <= 1
-#                               & cmbdf.sky.sph$phi >= 0,]
-#
-# ## Annoying coversions because coords<- function unfinished
-# df.square.xyz <- sph2car(cmbdf.sky.sph)
-# df.square.xyz <- data.frame(df.square.xyz, I = cmbdf.square$I)
-#
-# df.square.xyz <- as.CMBDataFrame(df.square.xyz, nside = 1024,
-#                                  coords = "cartesian",
-#                                  ordering = ordering(cmbdf.sky.sph))
-# ## Plot of the square
-# plot(cmbdf.sky.sph, sample.size = 80000)
-# rgl::plot3d(df.square.xyz[,1:3], col = 'blue', type = 'p',
-#             size = 1.6, pch = 3, add = TRUE)
-## Get covariance (note that max.dist is unspecified)
-## this took 5 minutes
-# system.time({
-#   C4 <- covCMB(df.square.xyz, num.bins = 20,
-#               sample.size = 100000)
-# })
-# write.csv(C4, "exploration/covCMB_square_ns1024_s100000.csv")
-C4 <-  read.csv("exploration/covCMB_square_ns1024_s100000.csv")[,2]
-## Correlation plot
-plot(0:20, C4/C4[1], type = 'b')
-#####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###
+######### BENCHMARK covCMB_internal1 vs covCMB_internal2 ############
+
+library(microbenchmark)
+
+breaks1 <- seq(0, pi, length.out = 10+1)[-1]
+breaks2 <- seq(cos(pi), 1, length.out = 10+1)[-(10+1)]
+sky.fake <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested", intensities = rnorm(12*16^2))
 
 
-
-### Using a smaller 'square' window
-cmbdf.square.small <- cmbdf.sky.sph[  cmbdf.sky.sph$theta  <= 0.6
-                                    & cmbdf.sky.sph$theta  >= 0.5
-                                    & cmbdf.sky.sph$phi <= 0.1
-                                    & cmbdf.sky.sph$phi >= 0,]
-df.square.small.xyz <- sph2car(cmbdf.square.small)
-df.square.small.xyz <- data.frame(df.square.small.xyz,
-                                  I = cmbdf.square.small$I)
-## Plot of the square
-plot(cmbdf.sky.sph, sample.size = 80000)
-rgl::plot3d(df.square.small.xyz[,1:3], col = 'blue', type = 'p',
-            size = 2.5, pch = 3, add = TRUE)
-## Dodgy way to add class and attributes because we dont have
-## as.CMBDataFrame function yet
-class(df.square.small.xyz) <- c("CMBDataFrame", "data.frame")
-attr(df.square.small.xyz, "coords") <- "cartesian"
-## Get covariance (note that the full data set is used)
-## this took 5 seconds
-system.time({
-  C5 <- covCMB(df.square.small.xyz, num.bins = 20)
-})
-## Correlation plot
-plot(0:20, C5/C5[1], type = 'b')
-
-
-
-
-########## BENCHMARK THE DIFFERENT APPROACHES TO covCMB ############
-########## ALSO CONTAINS VALUABLE TEST FOR TESTTHAT ################
-
-## Set parameters
-ns <- 1
-num.bins <- 10
-
-cmbdf <- CMBDataFrame(nside = ns, coords = "cartesian", ordering = "nested",
-                      intensities = rnorm(12*ns^2))
-
-## Method 1 (covCMB_internal2, max.dist is unknown)
-f1 <- function(cmbdf, num.bins)
-{
-  return(covCMB_internal2(cmbdf, num.bins))
-}
-
-## Method 3 (covCMB_internal1, max.dist is known to be pi)
-f2 <- function(cmbdf, num.bins, max.dist = pi)
-{
-  cut.points <- seq(0, max.dist, length.out = num.bins+1)
-  return(covCMB_internal1(cmbdf, cut.points))
-}
-
-## Method 3 (relying on R, max.dist is unknown)
-f3 <- function(cmbdf, num.bins)
-{
-  dists <- rcosmo::geoDistList(cmbdf)
-  max.dist <- max(sapply(dists, max))
-  cut.points <- seq(0, max.dist, length.out = num.bins+1)
-  dists.bins <- lapply(dists, findInterval, vec = cut.points,
-                       left.open = TRUE)
-  C <- vector(mode = "numeric", length = num.bins + 1)
-  B <- vector(mode = "numeric", length = num.bins + 1)
-  for (i in 1:length(dists.bins)) {
-    for (j in 1:length(dists.bins[[i]])) {
-
-      b <- dists.bins[[i]][j]
-      C[b+1] <- C[b+1] + cmbdf[i,"I"]*cmbdf[j+i,"I"]
-      B[b+1] <- B[b+1] + 1
-    }
-  }
-
-  for (i in 1:nrow(cmbdf))
-  {
-    C[1] = C[1] +  cmbdf[i,"I"]*cmbdf[i,"I"]
-  }
-  B[1] = nrow(cmbdf)
-
-  return(C/B)
-}
-
-
-## Method 4 (relying on R, max.dist is known to be pi)
-f4 <- function(cmbdf, num.bins, max.dist = pi)
-{
-  cut.points <- seq(0, max.dist, length.out = num.bins+1)
-  dists.bins <- distBinList(cmbdf, cut.points)
-  C <- vector(mode = "numeric", length = num.bins + 1)
-  B <- vector(mode = "numeric", length = num.bins + 1)
-  for (i in 1:length(dists.bins)) {
-    for (j in 1:length(dists.bins[[i]])) {
-
-      b <- dists.bins[[i]][j]
-      C[b+1] <- C[b+1] + cmbdf[i,"I"]*cmbdf[j+i,"I"]
-      B[b+1] <- B[b+1] + 1
-    }
-  }
-
-  for (i in 1:nrow(cmbdf))
-  {
-    C[1] = C[1] +  cmbdf[i,"I"]*cmbdf[i,"I"]
-  }
-  B[1] = nrow(cmbdf)
-
-  return(C/B)
-}
-
-## Benchmarking
-microbenchmark(C1 <- f1(cmbdf, num.bins), C2 <- f2(cmbdf, num.bins),
-               C3 <- f3(cmbdf, num.bins), C4 <- f4(cmbdf, num.bins))
-
-## Check results are identical
-identical(C1, C2)
-identical(C2, C3)
-identical(C3, C4)
-
-
-
-
-
-
-
-
-
-
-######### EXPLAIN WHY max(dist, -1) WILL BE USED IN geoDistList #####
-
-## Remove the max(dist, -1) line from geoDistList before running this:
-dists <- rcosmo::geoDistList(cmbdf)
-num.nans <- sum(sapply(sapply(dists, is.nan), sum))
-num.nans
-for ( i in 1:num.nans )
-{
-  this.nan <- which(sapply(sapply(dists, is.nan), sum) == 1)[i]
-  index <- c(this.nan, this.nan + which( is.nan(dists[[this.nan]])))
-  cat("Result: ", sum(cmbdf[index[1],1:3]*cmbdf[index[2],1:3]), "\n\n")
-}
-## Show Nans being produced:
-# acos(sum(cmbdf[index[1],1:3]*cmbdf[index[2],1:3]))
-
-
-
-
-
-
-
-
+mb <- microbenchmark(covCMB_internal1(sky.fake, breaks1),
+                     covCMB_internal2(sky.fake, breaks2))
+summary(mb)$mean[1]/summary(mb)$mean[2] # Internal2 is about 5 times faster
 
 
 ######### DEMONSTRATION OF SPEED INCREASE FROM Rcpp #################

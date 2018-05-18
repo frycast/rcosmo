@@ -549,9 +549,8 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
 
   if ( !missing(sample.size) )
   {
-    stop("(development stage) there is some issue with sample pixels in plot")
     spix <- sample(pix(cmbdf), sample.size)
-    cmbdf <- cmbdf[spix,]
+    cmbdf <- cmbdf[pix(cmbdf) %in% spix,]
   }
 
   if (missing(col))
@@ -608,11 +607,8 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
   cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
 
   ## Do the plotting
-  if ( !missing(back.col) )
-  {
-    rgl::open3d()
-    rgl::bg3d(back.col)
-  }
+  rgl::open3d()
+  rgl::bg3d(back.col)
 
   if ( missing(labels) )
   {

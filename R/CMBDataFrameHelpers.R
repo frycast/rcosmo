@@ -453,8 +453,8 @@ sampleCMB <- function(cmbdf, sample.size)
   {
     stop("Argument must be a CMBDataFrame")
   }
-  spix <- sample(pix(cmbdf), sample.size)
-  cmbdf[spix, ]
+  srows <- sample(1:nrow(cmbdf), sample.size)
+  cmbdf[srows, ]
 }
 
 

@@ -4,7 +4,7 @@
 \alias{covCMB}
 \title{Covariance for CMB}
 \usage{
-covCMB(cmbdf, num.bins = 10, sample.size, max.dist, breaks,
+covCMB(cmbdf, num.bins = 10, sample.size, max.dist = pi, breaks,
   equiareal = TRUE, calc.max.dist = FALSE)
 }
 \arguments{
@@ -17,19 +17,15 @@ sample to take before calculating covariance. This may be useful if
 the full covariance computation is too slow.}
 
 \item{max.dist}{an optional number between 0 and pi specifying the
-maximum geodesic distance between any two points in cmbdf.
-For example, if cmbdf represents a full sky map
-or a random sample of a full sky map then \code{max.dist = pi}.
-If max.dist is known then specifying it may reduce
-computation time.}
+maximum geodesic distance to use for calculating covariance. Only
+used if \code{breaks} is unspecified.}
 
 \item{breaks}{optionally specify the breaks manually using a
-vector giving the break points between cells, i.e., the vector
-has length \code{num.bins - 1}. If \code{equiareal = TRUE} then
-these breaks should be \eqn{cos(r_i)} where \eqn{r_i} are radii,
-and \eqn{cos(r_i) - cos(r_{i+1})} should be fixed for all i. If
-\code{equiareal = FALSE} then these breaks should be \eqn{r_i}
-and \eqn{r_{i+1} - r_i} should be fixed.}
+vector giving the break points between cells. This vector
+has length \code{num.bins} since the last break point is taken
+as \code{max.dist}. If \code{equiareal = TRUE} then
+these breaks should be \eqn{cos(r_i)} where \eqn{r_i} are radii.
+If \code{equiareal = FALSE} then these breaks should be \eqn{r_i}.}
 
 \item{equiareal}{if TRUE then the bins have equal spherical
 area. If false then the bins have equal annular widths.
@@ -41,12 +37,17 @@ either \code{max.dist} must be specified or max.dist will
 default to pi.}
 }
 \value{
-A data.frame containing sample covariance values, bin centers,
-and number \code{n} of data point pairs whose distance falls in
-the corresponding bin. The first
+An object of class CMBCovariance consisting of a \code{data.frame}
+containing sample covariance
+values, bin centers, and number \code{n} of data point pairs
+whose distance falls in
+the corresponding bin.
+The first
 row of this data.frame corresponds to the sample variance.
-If \code{breaks} are specified manually then locations of bin
-centers are not returned.
+The attribute "breaks" contains the break points used.
+The returned \code{data.frame} has
+\code{num.bins + 1} rows since the first row, the sample
+variance, is not counted as a bin.
 }
 \description{
 This function provides an empirical covariance estimate for data

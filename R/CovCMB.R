@@ -52,7 +52,7 @@
 covCMB <- function(cmbdf,
                    num.bins = 10,
                    sample.size,
-                   max.dist,
+                   max.dist = pi,
                    breaks,
                    equiareal = TRUE,
                    calc.max.dist = FALSE)
@@ -84,17 +84,12 @@ covCMB <- function(cmbdf,
   if ( missing(breaks) )
   {
 
-    if (missing(max.dist)) {
 
-      if (calc.max.dist)
-      {
-        max.dist <- maxDist_internal(cmbdf)
-      }
-      else
-      {
-        max.dist <- pi
-      }
+    if (calc.max.dist)
+    {
+      max.dist <- maxDist_internal(cmbdf)
     }
+
 
     if (equiareal)
     {

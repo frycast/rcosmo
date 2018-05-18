@@ -37,7 +37,7 @@ m.5 <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE,
 
 ## WHAT IS HAPPENING WITH THIS STRANGE ANOMALY?
 sky <- CMBDataFrame("../CMB_map_smica1024.fits", coords = "cartesian")
-size <- 1 # try 0.1
+size <- 0.1
 win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size), phi = c(0,size,size,0))
 cmbdf.win <- window(sky, new.window = win)
 plot(cmbdf.win, add = TRUE, sample.size = nrow(cmbdf.win))

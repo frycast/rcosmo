@@ -5,7 +5,7 @@
 \title{CMB Data Frames}
 \usage{
 CMBDataFrame(CMBData, coords, win, include.polar = FALSE,
-  include.masks = FALSE, spix, sample.size, nside, ordering, intensities, ...)
+  include.masks = FALSE, spix, sample.size, nside, ordering, I, ...)
 }
 \arguments{
 \item{CMBData}{can be a string location of FITS file,
@@ -40,8 +40,8 @@ scheme will be taken from the CMBData object, which must then be
 either a CMBDataFrame or a path to a FITS file. This parameter also specifies
 the ordering scheme of \code{spix}.}
 
-\item{intensities}{a vector of intensities to be included
-if \code{CMBData} is unspecified. Note that \code{length(intensities)}
+\item{I}{a vector of intensities to be included
+if \code{CMBData} is unspecified. Note that \code{length(I)}
 must equal \eqn{12*nside^2} if either spix or
 sample.size are unspecified.}
 

@@ -37,8 +37,8 @@
 #'scheme will be taken from the CMBData object, which must then be
 #'either a CMBDataFrame or a path to a FITS file. This parameter also specifies
 #'the ordering scheme of \code{spix}.
-#'@param intensities a vector of intensities to be included
-#'if \code{CMBData} is unspecified. Note that \code{length(intensities)}
+#'@param I a vector of intensities to be included
+#'if \code{CMBData} is unspecified. Note that \code{length(I)}
 #'must equal \eqn{12*nside^2} if either spix or
 #'sample.size are unspecified.
 #'@param ... Optional names data columns of length nrow(CMBData) to
@@ -85,7 +85,7 @@ CMBDataFrame <- function(CMBData,
                          sample.size,
                          nside,
                          ordering,
-                         intensities,
+                         I,
                          ...) {
 
   ### ----- PREPARATION AND CHECKING ARGUMENTS ARE VALID ----- ###
@@ -169,9 +169,9 @@ CMBDataFrame <- function(CMBData,
       stop("nside must be unspecified when 'CMBData' is specified")
     }
 
-    if ( !missing(intensities) )
+    if ( !missing(I) )
     {
-      stop("intensities must be unspecified when 'CMBData' is specified")
+      stop("I must be unspecified when 'CMBData' is specified")
     }
   }
 
@@ -186,9 +186,9 @@ CMBDataFrame <- function(CMBData,
       stop("nside must be unspecified when 'CMBData' is specified")
     }
 
-    if ( !missing(intensities) )
+    if ( !missing(I) )
     {
-      stop("intensities must be unspecified when 'CMBData' is specified")
+      stop("I must be unspecified when 'CMBData' is specified")
     }
 
     if ( include.polar != FALSE || include.masks != FALSE )
@@ -208,13 +208,13 @@ CMBDataFrame <- function(CMBData,
                  "and 'ordering' must both be specified"))
     }
 
-    if ( !missing(intensities) )
+    if ( !missing(I) )
     {
       if ( is.null(spix) && missing(sample.size) )
       {
-        if ( length(intensities) != 12*nside^2 )
+        if ( length(I) != 12*nside^2 )
         {
-          stop(paste("The intensities parameter must have length 12*nside^2",
+          stop(paste("The I parameter must have length 12*nside^2",
                      "unless spix or sample.size is specified"))
         }
       }
@@ -380,15 +380,15 @@ CMBDataFrame <- function(CMBData,
       len <- 12*nside^2
     }
 
-    if ( !is.null(spix) && !missing(intensities)
-         && length(intensities) != length(spix) )
+    if ( !is.null(spix) && !missing(I)
+         && length(I) != length(spix) )
     {
-      intensities <- intensities[spix]
+      I <- I[spix]
     }
 
-    if ( missing(intensities) )
+    if ( missing(I) )
     {
-      intensities <- rep(NA, len)
+      I <- rep(NA, len)
     }
 
     if ( !missing(coords) )
@@ -398,11 +398,11 @@ CMBDataFrame <- function(CMBData,
       cmbdf <- rcosmo::pix2coords(nside = nside, ordering = ordering,
                                   coords = coords, spix = spix)
 
-      cmbdf <- cbind(cmbdf, I = intensities)
+      cmbdf <- cbind(cmbdf, I = I)
 
     } else {
 
-      cmbdf <- data.frame(I = intensities)
+      cmbdf <- data.frame(I = I)
 
     }
 

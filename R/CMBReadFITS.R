@@ -196,6 +196,7 @@ CMBReadFITS2 <- function(filename = "CMB_map_smica1024.fits", sample.size) {
     pix <- sample(1:naxis2, size = sample.size)
     col <- rep(list(array(NA, dim = c(sample.size, 1))), tfields)
 
+    r <- 1
     for (i in 1:naxis2) {
       for (j in 1:tfields) {
         element <- switch(btype[j],
@@ -203,7 +204,8 @@ CMBReadFITS2 <- function(filename = "CMB_map_smica1024.fits", sample.size) {
                           .Internal(readBin(zz, "double", 1, 4, TRUE, swap)) )    # I,Q,U
         if (i %in% pix)
         {
-          col[[j]][i, ] <- element
+          col[[j]][r, ] <- element
+          r <- r + 1
         }
       }
     }

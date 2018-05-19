@@ -23,8 +23,10 @@
 #'
 #' @export
 plotHPBoundaries <- function(nside, eps = pi/90,
-                             col = "black", size = 1, ordering,
-                             nums.col = col, nums.size = 5, font = 2, ...)
+                             col = "black",
+                             size = 1, ordering,
+                             nums.col = col, nums.size = 5,
+                             font = 2, ...)
 {
 
   ### Part I
@@ -104,7 +106,8 @@ plotHPBoundaries <- function(nside, eps = pi/90,
                                     coords = "cartesian")
 
     rcosmo:::plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
-                              size = nums.size, labels = 1:(12*nside^2), font = font)
+                              size = nums.size, labels = 1:(12*nside^2),
+                              font = font, back.col = )
   }
 }
 

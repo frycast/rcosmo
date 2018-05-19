@@ -232,6 +232,9 @@ CMBDataFrame <- function(CMBData,
 
     CMBData <- CMBReadFITS(CMBData)
 
+    data <- as.data.frame(CMBData$data)
+    names(data) <- CMBData$colnames
+
     # Get Nside from FITS header:
     nside <- CMBData$nside
     # Check that nside is an integer and greater than 0:
@@ -271,20 +274,22 @@ CMBDataFrame <- function(CMBData,
         cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
       }
 
+
+
       # Add the corresponding intensities from CMBData into the data.frame
       if ( !is.null(spix) ){
-        cmbdf <- data.frame(cmbdf, I = CMBData$col$I_STOKES[spix])
+        cmbdf <- data.frame(cmbdf, I = data$I_STOKES[spix])
       } else {
-        cmbdf <- data.frame(cmbdf, I = CMBData$col$I_STOKES)
+        cmbdf <- data.frame(cmbdf, I = data$I_STOKES)
       }
 
     # Else coords are unspecified (HEALPix)
     } else {
 
       if ( !is.null(spix) ){
-        cmbdf <- data.frame(I = as.vector(CMBData$col$I_STOKES[spix]))
+        cmbdf <- data.frame(I = as.vector(data$I_STOKES[spix]))
       } else {
-        cmbdf <- data.frame(I = as.vector(CMBData$col$I_STOKES))
+        cmbdf <- data.frame(I = as.vector(data$I_STOKES))
       }
 
     }
@@ -295,8 +300,8 @@ CMBDataFrame <- function(CMBData,
         stop(paste("(development stage) include.polar must",
                     "be FALSE if spix is specified"))
       }
-      cmbdf$Q <- as.vector(CMBData$col$Q_STOKES)
-      cmbdf$U <- as.vector(CMBData$col$U_STOKES)
+      cmbdf$Q <- as.vector(data$Q_STOKES)
+      cmbdf$U <- as.vector(data$U_STOKES)
     }
 
     if (include.masks == TRUE) {
@@ -305,8 +310,8 @@ CMBDataFrame <- function(CMBData,
         stop(paste("(development stage) include.masks must",
                     "be FALSE if spix is specified"))
       }
-      cmbdf$TMASK <- as.vector(CMBData$col$TMASK)
-      cmbdf$PMASK <- as.vector(CMBData$col$PMASK)
+      cmbdf$TMASK <- as.vector(data$TMASK)
+      cmbdf$PMASK <- as.vector(data$PMASK)
     }
 
     message("Adding CMB Data Frame attributes...\n")

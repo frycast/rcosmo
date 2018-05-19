@@ -2,21 +2,24 @@
 % Please edit documentation in R/nestSearch.R
 \name{nestSearch}
 \alias{nestSearch}
-\title{Nest Search}
+\title{Nested Search}
 \usage{
-nestSearch(target = c(0, 0, 1), Nside = 16, index.only = TRUE,
-  j = c(min(3, log2(Nside)), min(7, log2(Nside)), log2(Nside)))
+nestSearch(target, nside, index.only = FALSE, j = 1:log2(nside),
+  demo.plot = FALSE)
 }
 \arguments{
 \item{target}{is a vector of Cartesian coordinates for the target
 point on S^2}
 
-\item{Nside}{is the Nside for which the HEALPix points are searched for}
+\item{nside}{is the nside for which the HEALPix points are searched}
+
+\item{demo.plot}{If TRUE then a plot will be produced with
+target pixel in yellow and closest pixel at each step in red}
 }
 \value{
-if \code{index_only} TRUE then the output will be a HEALPix index.
-If \code{index_only} FALSE then the output is the list containing the HEALPix index
-and Cartesian coordinate vector of the HEALPix point closest to \code{tp}.
+if \code{index.only = TRUE} then the output will be a HEALPix index.
+If \code{index.only} FALSE then the output is the list containing the HEALPix index
+and Cartesian coordinate vector of the HEALPix point closest to \code{target}.
 }
 \description{
 Finds the closest HEALPix pixel center to a given \code{target} point,
@@ -26,8 +29,8 @@ ordering scheme.
 }
 \examples{
 # Find the pix index and Cartesian coordinates of the HEALPix point
-# at Nside closest to the target point c(0,0,1)
-h <- nestSearch(c(0,0,1),Nside=1024,index_only=FALSE, plot_points=TRUE )
-cat("Closest HEALPix point to (0,0,1) at Nside = 1024 is (",h$xyz,")")
+# at nside closest to the target point c(0,0,1)
+h <- nestSearch(c(0,0,1), nside=1024)
+cat("Closest HEALPix point to (0,0,1) at nside = 1024 is (",h$xyz,")")
 
 }

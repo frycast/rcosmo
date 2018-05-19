@@ -34,21 +34,6 @@ m.5 <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE,
 #              "CMD", "Rd2pdf", shQuote(path)))
 
 
-
-## WHAT IS HAPPENING WITH THIS STRANGE ANOMALY?
-sky <- CMBDataFrame("../CMB_map_smica1024.fits", coords = "cartesian")
-size <- 0.1
-win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size), phi = c(0,size,size,0))
-cmbdf.win <- window(sky, new.window = win)
-plot(cmbdf.win, add = TRUE, sample.size = nrow(cmbdf.win))
-
-
-
-
-## ATTRIBUTES TO ADD: Coordsys (Galactic), and colunits (K_CMB),and resolution (arcmin)
-## PUT THE FULL FITSHEADER IN THE CMBDataFrame, CALL IT FITSHeader
-
-
 sky1 <- CMBDataFrame("../CMB_map_smica1024.fits")
 
 header(sky1)
@@ -59,7 +44,7 @@ win2 <- CMBWindow(theta = pi/2, phi = 0, r = 0.05)
 win3 <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
                   theta = c(pi/2, pi/2, pi/10, pi/10))
 
-skywin <- window(sky1, new.window = list(win,win2))
+skywin <- window(sky, new.window = list(win,win2))
 
 summary(skywin)
 summary(win)
@@ -67,11 +52,78 @@ summary(win2)
 summary(win3)
 
 
-a <- summary(sky1)
+a <- summary(sky)
 class(a)
 a
 
 library(sp)
+
+#################################################################
+########## DEMONSTRATE nside = 2048 coordinates workaround ######
+#################################################################
+
+## When using CMB data with nside = 2048 many machines will not
+## have enough RAM to assign cartesian coordinates, so the
+## window function will crash since it implicitly assigns
+## cartesian coordinates. The work-around is to use the
+## in.pixels parameter of the window function after visually
+## determining which pixels the window intersects, as in the
+## example below.
+sky <- readRDS("C:/Users/danie/Downloads/CMB_map_smica_1024.Rda")
+fullsky <- readRDS("C:/Users/danie/Downloads/CMB_map_smica_2048.Rda")
+
+size <- 0.5 # The horizon at recombination is today ~1degree on the sky = ~0.02 radians
+win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size),
+                 phi = c(0,size,size,0))
+
+plotHPBoundaries(nside = 1, ordering = "nested")
+plot(win)
+
+pixelWin <- pixelWindow(j1 = 0, j2 = log2(1024), pix.j1 = c(1,5))
+plot(sky[pixelWin,])
+
+skywin <- window(skyfull, new.window = win, in.pixels = c(1,5))
+plot(skywin)
+
+#################################################################
+########## DEMONSTRATE nest_search ##############################
+#################################################################
+
+# Closest point in level j2, when searching within
+# pixel pix.j1 at level j1.
+j1 <- 0
+j2 <- 1
+next.pix.j1 <- nestSearch_step(c(0,0,1), j2 = j2, j1 = j1,
+                               pix.j1 = 1, demo.plot = TRUE)
+plotHPBoundaries(2^j1, ordering = "nested")
+
+# Deeper...
+j1 <- 1
+j2 <- 2
+next.pix.j1 <- nestSearch_step(c(0,0,1), j2 = j2, j1 = j1,
+                               pix.j1 = next.pix.j1$pix,
+                               demo.plot = TRUE)
+
+# Deeper...
+j1 <- 2
+j2 <- 3
+nestSearch_step(c(0,0,1), j2 = j2, j1 = j1,
+                pix.j1 = next.pix.j1$pix,
+                demo.plot = TRUE)
+
+
+# Deepest...
+nestSearch(c(0,0,1), 16, demo.plot = TRUE)
+
+
+# Also works for points outside the unit sphere and any nside
+nestSearch(c(0,2,2), nside = 16224)
+
+
+library(microbenchmark)
+microbenchmark(
+  nestSearch(c(0,0,1), 2048, j = c(1,2,3,4,5,6,7,8,9,10,11)),
+  nestSearch(c(0,0,1), 2048, j = c(3,7,11)) )
 
 
 #################################################################

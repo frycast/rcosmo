@@ -10,7 +10,9 @@ CMBReadFITS(filename = "CMB_map_smica1024.fits", sample.size)
 \item{filename}{The path to the fits file.}
 }
 \value{
-A list containing the intensity (I), polarisation (Q, U), PMASK, TMASK and metadata.
+A list containing a matrix named \code{data} whose columns may include
+the intensity (I), polarisation (Q, U), PMASKa and TMASK. Other list
+elements correspond to header information and other metadata.
 }
 \description{
 \code{CMBReadFITS} is adapted from the \link{readFITS} function in package

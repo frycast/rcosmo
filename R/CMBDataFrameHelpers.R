@@ -1,4 +1,15 @@
 
+
+
+
+
+
+
+
+
+
+
+
 #' Get the FITS headers from a \code{\link{CMBDataFrame}}
 #'
 #'
@@ -75,6 +86,12 @@ resolution <- function( cmbdf )
 #'@param win a CMBWindow or a list of CMBWindows
 #'@param intersect a boolean that determines
 #'the behaviour when \code{win} is a list (see details).
+#'@param in.pixels a vector of pixels at resolution
+#'\code{in.pixels.res} whose union contains the
+#'window(s) \code{win} entirely
+#'@param in.pixels.res a resolution
+#'(i.e., \eqn{j} such that nside = \code{2^j|}) at
+#'which the \code{in.pixels} parameter is specified
 #'
 #'@return a CMBDataFrame which is restricted to the
 #'region of the sky specified by \code{win}
@@ -82,7 +99,8 @@ resolution <- function( cmbdf )
 #'@examples
 #'
 #'@export
-subWindow <- function(cmbdf, win, intersect = TRUE)
+subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
+                      in.pixels.res = 0)
 {
   if ( !rcosmo::is.CMBDataFrame(cmbdf) ) {
     stop("'cmbdf' must be a CMBDataFrame")
@@ -103,6 +121,18 @@ subWindow <- function(cmbdf, win, intersect = TRUE)
   else
   {
     win <- list(win)
+  }
+
+  if ( !missing(in.pixels) )
+  {
+    if (ordering(cmbdf) != "nested")
+    {
+      stop("in.pixel can only be used with nested ordering")
+    }
+    pixelWin <- rcosmo::pixelWindow(in.pixels.res,
+                                    log2(nside(cmbdf)),
+                                    in.pixels)
+    cmbdf <- cmbdf[pixelWin,]
   }
 
   # subsequent operations will require cartesian coordinates
@@ -181,6 +211,9 @@ subWindow <- function(cmbdf, win, intersect = TRUE)
   return(cmbdf.new)
 }
 
+## HELPER FUNCTION FOR subWindow
+
+
 
 
 
@@ -214,6 +247,12 @@ subWindow <- function(cmbdf, win, intersect = TRUE)
 #'\code{new.window} may also be a list (see details section).
 #'@param intersect a boolean that determines
 #'the behaviour when \code{win} is a list (see details).
+#'@param in.pixels a vector of pixels at resolution
+#'\code{in.pixels.res} whose union contains the
+#'window(s) \code{win} entirely
+#'@param in.pixels.res a resolution
+#'(i.e., \eqn{j} such that nside = \code{2^j|}) at
+#'which the \code{in.pixels} parameter is specified
 #'
 #'@return
 #' The window attribute of cmbdf or, if new.window is specified, a
@@ -234,12 +273,23 @@ subWindow <- function(cmbdf, win, intersect = TRUE)
 #' plot(cmbdf)
 #'
 #'@export
-window <- function(cmbdf, new.window, intersect = TRUE)
+window <- function(cmbdf, new.window, intersect = TRUE,
+                   in.pixels, in.pixels.res = 0)
 {
   if ( !missing(new.window) )
   {
-    return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
-                              intersect = intersect))
+    if ( !missing(in.pixels) )
+    {
+      return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
+                               intersect = intersect,
+                               in.pixels = in.pixels,
+                               in.pixels.res = in.pixels.res))
+    }
+    else
+    {
+      return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
+                               intersect = intersect))
+    }
   }
 
   return(attr(cmbdf, "window"))

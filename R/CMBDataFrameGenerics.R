@@ -607,8 +607,11 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
   cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
 
   ## Do the plotting
-  rgl::open3d()
-  rgl::bg3d(back.col)
+  if ( !add )
+  {
+    rgl::open3d()
+    rgl::bg3d(back.col)
+  }
 
   if ( missing(labels) )
   {

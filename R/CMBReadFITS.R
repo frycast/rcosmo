@@ -196,8 +196,8 @@ CMBReadFITS <- function(filename = "CMB_map_smica1024.fits", sample.size) {
   len <- naxis2*tfields
   for (i in 1:len){
       col[i] <- switch(col[i],
-                       .Internal(readBin(zz, "integer", 1, 1, FALSE, swap)),   # PMASK,TMASK
-                       .Internal(readBin(zz, "double", 1, 4, TRUE, swap)) )    # I,Q,U
+                       .Internal(readBin(zz, "integer", 1L, 1L, FALSE, swap)),   # PMASK,TMASK
+                       .Internal(readBin(zz, "double", 1L, 4L, TRUE, swap)) )    # I,Q,U
   }
 
   col <- matrix(col, nrow = naxis2, byrow = TRUE)

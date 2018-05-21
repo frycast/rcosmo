@@ -13,19 +13,39 @@ sky.t <- CMBDataFrame("C:\Users\dfryer\Downloads\CHIPASS_1_1024.fits", coords = 
 
 
 
+## Toy with mmap package
+
+library(mmap)
+s <- as.mmap(skyfull)
+
+filename <- "../CMB_map_smica1024.fits"
+zz <- file(filename, "rb")
+mystruct <- struct(I = real32(),
+                   Q = real32(),
+                   U = real32(),
+                   PMASK = int8(),
+                   TMASK = int8())
+m <- mmap(file = "../CMB_map_smica1024.fits",
+          mode = mystruct,
+          off = 2880*3)
+extractFUN(m) <- function(X) do.call(data.frame, X)
+
+# It turns out that the endianness has been swapped. First
+# element should be I = -9.20102e-05 but instead it is
+# I = -2.60201e-20. If we get the binary using mode = raw()
+# then the first 4 bytes are b8 c0 f5 9e, which can be
+# plugged into a hex to float calculator to show that swapping
+# the endianness gives/fixes the error we have seen.
+m[1]
+
+close(zz)
+munmap(m)
+
+
+f <- file("b8 c0 f5 9e")
+readBin(f)
+
 sky <- CMBDataFrame("../CMB_map_smica1024.fits")
-
-# Why does this plot take so long?
-plot(sky.m, sample.size = 100000)
-
-# Show that spix can change ordering unintentionally
-nest <- (ordering(sky.m) == "nested")
-ns <- nside(sky.m)
-sp <- pix(sky.m)
-nc <- 3
-full.m <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE, spix = sp)[,1:nc]
-m.5 <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE, spix = c(32,5,19))[,1:nc]
-
 
 ### GENERATE DOCUMENTATION
 # pack <- "rcosmo"
@@ -34,8 +54,8 @@ m.5 <- rcosmo:::pix2coords_internal(nside = ns, nested = nest, cartesian = TRUE,
 #              "CMD", "Rd2pdf", shQuote(path)))
 
 
-sky1 <- CMBDataFrame("../CMB_map_smica1024.fits")
 
+sky1 <- CMBDataFrame("../CMB_map_smica1024.fits")
 header(sky1)
 
 

@@ -12,7 +12,8 @@ pixelWindow(j1, j2, pix.j1)
 \item{j2}{the upper resolution}
 
 \item{pix.j1}{the pixel index at resolution j1 within which
-all pixels from resolution j2 will be returned}
+all pixels from resolution j2 will be returned. \code{pix.j1} can
+also be a vector of non-zero pixel indices.}
 }
 \value{
 All pixels in resolution j2 that fall within the pixel

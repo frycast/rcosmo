@@ -135,9 +135,8 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     cmbdf <- cmbdf[pixelWin,]
   }
 
-  # subsequent operations will require cartesian coordinates
+  # subsequent operations will require win to have cartesian coordinates
   win.xyz <- lapply(win, rcosmo::coords, new.coords = "cartesian")
-  cmbdf.xyz <- rcosmo::coords(cmbdf, new.coords = "cartesian")
 
   # Triangulate all non-convex polygons into lists of convex polygons,
   # making win.xyz into a new list of only convex polygons
@@ -160,31 +159,71 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   ## pointInside happens here
   exist.m <- FALSE
   exist.p <- FALSE
-  keep.p <- rep(FALSE, nrow(cmbdf.xyz))
-  keep.m <- rep(TRUE, nrow(cmbdf.xyz))
-  for ( w in win.xyz )
-  {
-    switch(rcosmo::winType(w),
-           polygon = keep.p <- keep.p |
-             rcosmo::pointInConvexPolygon(cmbdf.xyz[,c("x","y","z")], w),
-           minus.polygon = keep.m <- keep.m &
-             !rcosmo::pointInConvexPolygon(cmbdf.xyz[,c("x","y","z")], w),
-           disc = keep.p <- keep.p |
-             rcosmo::pointInDisc(cmbdf.xyz[,c("x","y","z")], w),
-           minus.disc = keep.m <- keep.m &
-             !rcosmo::pointInDisc(cmbdf.xyz[,c("x","y","z")], w),
-           stop("Failed to determine window type using rcosmo::winType"))
-
-    if ( rcosmo:::contains("minus", rcosmo::winType(w)) )
+  keep.p <- rep(FALSE, nrow(cmbdf))
+  keep.m <- rep(TRUE, nrow(cmbdf))
+  if (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian")
+  { ## This might be a little quicker if coords are already cartesian
+    #################################################################
+    for ( w in win.xyz )
     {
-      exist.m <- TRUE
-    }
-    else
-    {
-      exist.p <- TRUE
-    }
+      switch(rcosmo::winType(w),
+             polygon = keep.p <- keep.p |
+               rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+             minus.polygon = keep.m <- keep.m &
+               !rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+             disc = keep.p <- keep.p |
+               rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+             minus.disc = keep.m <- keep.m &
+               !rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+             stop("Failed to determine window type using rcosmo::winType"))
 
+      if ( rcosmo:::contains("minus", rcosmo::winType(w)) )
+      {
+        exist.m <- TRUE
+      }
+      else
+      {
+        exist.p <- TRUE
+      }
+    }
   }
+  else
+  { ## This is quicker and more robust than assigning cartesian coords in R
+    #######################################################################
+    nes <- (ordering(cmbdf) == "nested")
+    spx <- pix(cmbdf)
+    for ( w in win.xyz )
+    {
+      switch(rcosmo::winType(w),
+             polygon = keep.p <- keep.p |
+               rcosmo::pointInConvexPolygonHP(nside = nside(cmbdf),
+                                              nested = nes,
+                                              win = w, spix = spx),
+             minus.polygon = keep.m <- keep.m &
+               !rcosmo::pointInConvexPolygonHP(nside = nside(cmbdf),
+                                               nested = nes,
+                                               win = w, spix = spx),
+             disc = keep.p <- keep.p |
+               rcosmo::pointInDiscHP(nside = nside(cmbdf),
+                                     nested = nes,
+                                     win = w, spix = spx),
+             minus.disc = keep.m <- keep.m &
+               !rcosmo::pointInDiscHP(nside = nside(cmbdf),
+                                      nested = nes,
+                                      win = w, spix = spx),
+             stop("Failed to determine window type using rcosmo::winType"))
+
+      if ( rcosmo:::contains("minus", rcosmo::winType(w)) )
+      {
+        exist.m <- TRUE
+      }
+      else
+      {
+        exist.p <- TRUE
+      }
+    }
+  }
+
 
   if ( intersect && exist.p )
   {
@@ -211,7 +250,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   return(cmbdf.new)
 }
 
-## HELPER FUNCTION FOR subWindow
+
 
 
 

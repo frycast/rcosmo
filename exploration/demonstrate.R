@@ -427,7 +427,7 @@ plotHPBoundaries(2, col = "red", ordering = "ring")
 
 
 # window on cmbdf
-a <- CMBDataFrame(nside = 1, ordering = "nested", coords = "cartesian")
+a <- CMBDataFrame(nside = 1, ordering = "nested")
 w11 <- CMBWindow(x = 0, y = 0, z = 1, r = 1)
 w12 <- CMBWindow(theta = 0, phi = 0, r = 1)
 w13 <- CMBWindow(theta= pi/2, phi = 0, r = 1)

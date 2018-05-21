@@ -5,50 +5,27 @@
 
 using namespace Rcpp;
 
-// pointInConvexPolygon
-LogicalVector pointInConvexPolygon(DataFrame df, DataFrame win);
-RcppExport SEXP _rcosmo_pointInConvexPolygon(SEXP dfSEXP, SEXP winSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
-    rcpp_result_gen = Rcpp::wrap(pointInConvexPolygon(df, win));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pointInDisc
-LogicalVector pointInDisc(DataFrame df, DataFrame win);
-RcppExport SEXP _rcosmo_pointInDisc(SEXP dfSEXP, SEXP winSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
-    rcpp_result_gen = Rcpp::wrap(pointInDisc(df, win));
-    return rcpp_result_gen;
-END_RCPP
-}
-// maxDist_internal
-double maxDist_internal(Rcpp::DataFrame cmbdf);
-RcppExport SEXP _rcosmo_maxDist_internal(SEXP cmbdfSEXP) {
+// covCMB_internal1
+NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks);
+RcppExport SEXP _rcosmo_covCMB_internal1(SEXP cmbdfSEXP, SEXP breaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    rcpp_result_gen = Rcpp::wrap(maxDist_internal(cmbdf));
+    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal1(cmbdf, breaks));
     return rcpp_result_gen;
 END_RCPP
 }
-// minDist
-double minDist(Rcpp::DataFrame cmbdf, NumericVector point);
-RcppExport SEXP _rcosmo_minDist(SEXP cmbdfSEXP, SEXP pointSEXP) {
+// covCMB_internal2
+NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
+RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type point(pointSEXP);
-    rcpp_result_gen = Rcpp::wrap(minDist(cmbdf, point));
+    Rcpp::traits::input_parameter< NumericVector >::type cos_breaks(cos_breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal2(cmbdf, cos_breaks));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -111,43 +88,96 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// covCMB_internal1
-NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks);
-RcppExport SEXP _rcosmo_covCMB_internal1(SEXP cmbdfSEXP, SEXP breaksSEXP) {
+// pointInConvexPolygonHP
+LogicalVector pointInConvexPolygonHP(int nside, bool nested, DataFrame win, Rcpp::Nullable<Rcpp::IntegerVector> spix);
+RcppExport SEXP _rcosmo_pointInConvexPolygonHP(SEXP nsideSEXP, SEXP nestedSEXP, SEXP winSEXP, SEXP spixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(covCMB_internal1(cmbdf, breaks));
+    Rcpp::traits::input_parameter< int >::type nside(nsideSEXP);
+    Rcpp::traits::input_parameter< bool >::type nested(nestedSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type spix(spixSEXP);
+    rcpp_result_gen = Rcpp::wrap(pointInConvexPolygonHP(nside, nested, win, spix));
     return rcpp_result_gen;
 END_RCPP
 }
-// covCMB_internal2
-NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
-RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
+// pointInDiscHP
+LogicalVector pointInDiscHP(int nside, bool nested, DataFrame win, Rcpp::Nullable<Rcpp::IntegerVector> spix);
+RcppExport SEXP _rcosmo_pointInDiscHP(SEXP nsideSEXP, SEXP nestedSEXP, SEXP winSEXP, SEXP spixSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type nside(nsideSEXP);
+    Rcpp::traits::input_parameter< bool >::type nested(nestedSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type spix(spixSEXP);
+    rcpp_result_gen = Rcpp::wrap(pointInDiscHP(nside, nested, win, spix));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pointInConvexPolygon
+LogicalVector pointInConvexPolygon(DataFrame df, DataFrame win);
+RcppExport SEXP _rcosmo_pointInConvexPolygon(SEXP dfSEXP, SEXP winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
+    rcpp_result_gen = Rcpp::wrap(pointInConvexPolygon(df, win));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pointInDisc
+LogicalVector pointInDisc(DataFrame df, DataFrame win);
+RcppExport SEXP _rcosmo_pointInDisc(SEXP dfSEXP, SEXP winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type win(winSEXP);
+    rcpp_result_gen = Rcpp::wrap(pointInDisc(df, win));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maxDist_internal
+double maxDist_internal(Rcpp::DataFrame cmbdf);
+RcppExport SEXP _rcosmo_maxDist_internal(SEXP cmbdfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type cos_breaks(cos_breaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(covCMB_internal2(cmbdf, cos_breaks));
+    rcpp_result_gen = Rcpp::wrap(maxDist_internal(cmbdf));
+    return rcpp_result_gen;
+END_RCPP
+}
+// minDist
+double minDist(Rcpp::DataFrame cmbdf, NumericVector point);
+RcppExport SEXP _rcosmo_minDist(SEXP cmbdfSEXP, SEXP pointSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type point(pointSEXP);
+    rcpp_result_gen = Rcpp::wrap(minDist(cmbdf, point));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcosmo_pointInConvexPolygon", (DL_FUNC) &_rcosmo_pointInConvexPolygon, 2},
-    {"_rcosmo_pointInDisc", (DL_FUNC) &_rcosmo_pointInDisc, 2},
-    {"_rcosmo_maxDist_internal", (DL_FUNC) &_rcosmo_maxDist_internal, 1},
-    {"_rcosmo_minDist", (DL_FUNC) &_rcosmo_minDist, 2},
+    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
+    {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
     {"_rcosmo_mkpix2xyC", (DL_FUNC) &_rcosmo_mkpix2xyC, 1},
     {"_rcosmo_nest2ring", (DL_FUNC) &_rcosmo_nest2ring, 2},
     {"_rcosmo_pix2coords_internal", (DL_FUNC) &_rcosmo_pix2coords_internal, 4},
     {"_rcosmo_car2sph", (DL_FUNC) &_rcosmo_car2sph, 1},
     {"_rcosmo_sph2car", (DL_FUNC) &_rcosmo_sph2car, 1},
-    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
-    {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
+    {"_rcosmo_pointInConvexPolygonHP", (DL_FUNC) &_rcosmo_pointInConvexPolygonHP, 4},
+    {"_rcosmo_pointInDiscHP", (DL_FUNC) &_rcosmo_pointInDiscHP, 4},
+    {"_rcosmo_pointInConvexPolygon", (DL_FUNC) &_rcosmo_pointInConvexPolygon, 2},
+    {"_rcosmo_pointInDisc", (DL_FUNC) &_rcosmo_pointInDisc, 2},
+    {"_rcosmo_maxDist_internal", (DL_FUNC) &_rcosmo_maxDist_internal, 1},
+    {"_rcosmo_minDist", (DL_FUNC) &_rcosmo_minDist, 2},
     {NULL, NULL, 0}
 };
 

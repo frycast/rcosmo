@@ -4,14 +4,14 @@
 \alias{nestSearch_step}
 \title{nestSearch_step}
 \usage{
-nestSearch_step(target, j2, j1 = j2, pix.j1 = 0, demo.plot = FALSE)
+nestSearch_step(target, j1 = j2, j2, pix.j1 = 0, demo.plot = FALSE)
 }
 \arguments{
 \item{target}{is the target point on S^2 in spherical coordinates.}
 
-\item{j2}{is the upper resolution.}
-
 \item{j1}{is the lower resolution, with j1 < j2.}
+
+\item{j2}{is the upper resolution.}
 
 \item{pix.j1}{is the initial pix index at resolution j1,
 i.e., the j1-level pixel to search in. If \code{pix.j1 = 0} then

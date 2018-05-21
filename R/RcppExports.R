@@ -2,71 +2,35 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #'@title
-#'pointInConvexPolygon
+#'covCMB_internal1
 #'
-#'@param df a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent points on the surface of a unit sphere
-#'@param win a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent clockwise oriented vertices of a convex spherical
-#'polygon that lies entirely within one open hemisphere of the unit sphere.
-#'
-#'@return a logical vector indicated which rows of \code{df}
-#'lie within the spherical convex polygon determined by \code{win}
-#'
-#'@name pointInConvexPolygon
+#'@name covCMB_internal1
 #'
 #'@export
-pointInConvexPolygon <- function(df, win) {
-    .Call('_rcosmo_pointInConvexPolygon', PACKAGE = 'rcosmo', df, win)
+covCMB_internal1 <- function(cmbdf, breaks) {
+    .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
 }
 
 #'@title
-#'pointInDisc
+#'covCMB_internal2
 #'
-#'@param df a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent points on the surface of a unit sphere
-#'@param win a data.frame with columns x, y, z for the cartesian coordinates
-#'of a point on the unit sphere, representing a disc center, and column r for
-#'the radius or that disc.
 #'
-#'@return a logical vector indicated which rows of \code{df}
-#'lie within the spherical disc determined by \code{win}
+#'This function acknowledges that there is no need to transform with acos.
+#'The breaks are cos(r_i) where r_i is the radius.
+#'The bins will have equal area provided that cos(r_i) - cos(r_{i+1}) is fixed.
+#'Alternatively, the bins will have equal annular width if r_{i+1} - r_i is fixed,
+#'but cos(r_i) must be passed in, regardless of which
+#'metric is used to fix distance beforehand.
+#'We must note that: For r in (0,pi), cos is a strictly decreasing function,
+#'e.g. cos(0) > cos(max.dist)
 #'
-#'@name pointInDisc
 #'
-#'@export
-pointInDisc <- function(df, win) {
-    .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
-}
-
-#'@title
-#'maxDist_internal
 #'
-#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
-#'
-#'@return the maximum distance between any of the
-#'points in \code{cmbdf}
-#'
-#'@name maxDist_internal
+#'@name covCMB_internal2
 #'
 #'@export
-maxDist_internal <- function(cmbdf) {
-    .Call('_rcosmo_maxDist_internal', PACKAGE = 'rcosmo', cmbdf)
-}
-
-#'@title
-#'minDist
-#'
-#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
-#'@param point a point on the unit sphere in cartesian coordinates
-#'
-#'@return the shortest distance from \code{point} to \code{cmbdf}
-#'
-#'@name minDist
-#'
-#'@export
-minDist <- function(cmbdf, point) {
-    .Call('_rcosmo_minDist', PACKAGE = 'rcosmo', cmbdf, point)
+covCMB_internal2 <- function(cmbdf, cos_breaks) {
+    .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, cos_breaks)
 }
 
 mkpix2xyC <- function(nside = 1024L) {
@@ -162,34 +126,112 @@ sph2car <- function(df) {
 }
 
 #'@title
-#'covCMB_internal1
+#'pointInConvexPolygonHP
 #'
-#'@name covCMB_internal1
+#'@param nside the nside parameter at which to find pixels
+#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING
+#'@param win a data.frame with columns x, y, z for cartesian coordinates
+#'The rows represent clockwise oriented vertices of a convex spherical
+#'polygon that lies entirely within one open hemisphere of the unit sphere
+#'@param spix Optional integer or vector of sample pixel indices. If \code{spix}
+#'is unspecified then all pixels at \code{nside} are used
+#'
+#'@return a logical vector indicated which pixels in \code{spix}
+#'lie within the spherical convex polygon determined by \code{win}
+#'
+#'@name pointInConvexPolygonHP
 #'
 #'@export
-covCMB_internal1 <- function(cmbdf, breaks) {
-    .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
+pointInConvexPolygonHP <- function(nside, nested, win, spix = NULL) {
+    .Call('_rcosmo_pointInConvexPolygonHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
 }
 
 #'@title
-#'covCMB_internal2
+#'pointInDiscHP
 #'
+#'@param nside the nside parameter at which to find pixels
+#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING
+#'@param win a data.frame with columns x, y, z for the cartesian coordinates
+#'of a point on the unit sphere, representing a disc center, and column r for
+#'the radius or that disc
+#'@param spix Optional integer or vector of sample pixel indices. If \code{spix}
+#'is unspecified then all pixels at \code{nside} are used
 #'
-#'This function acknowledges that there is no need to transform with acos.
-#'The breaks are cos(r_i) where r_i is the radius.
-#'The bins will have equal area provided that cos(r_i) - cos(r_{i+1}) is fixed.
-#'Alternatively, the bins will have equal annular width if r_{i+1} - r_i is fixed,
-#'but cos(r_i) must be passed in, regardless of which
-#'metric is used to fix distance beforehand.
-#'We must note that: For r in (0,pi), cos is a strictly decreasing function,
-#'e.g. cos(0) > cos(max.dist)
+#'@return a logical vector indicated which pixels in \code{spix}
+#'lie within the spherical disc determined by \code{win}
 #'
-#'
-#'
-#'@name covCMB_internal2
+#'@name pointInDiscHP
 #'
 #'@export
-covCMB_internal2 <- function(cmbdf, cos_breaks) {
-    .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, cos_breaks)
+pointInDiscHP <- function(nside, nested, win, spix = NULL) {
+    .Call('_rcosmo_pointInDiscHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
+}
+
+#'@title
+#'pointInConvexPolygon
+#'
+#'@param df a data.frame with columns x, y, z for cartesian coordinates.
+#'The rows represent points on the surface of a unit sphere
+#'@param win a data.frame with columns x, y, z for cartesian coordinates.
+#'The rows represent clockwise oriented vertices of a convex spherical
+#'polygon that lies entirely within one open hemisphere of the unit sphere.
+#'
+#'@return a logical vector indicated which rows of \code{df}
+#'lie within the spherical convex polygon determined by \code{win}
+#'
+#'@name pointInConvexPolygon
+#'
+#'@export
+pointInConvexPolygon <- function(df, win) {
+    .Call('_rcosmo_pointInConvexPolygon', PACKAGE = 'rcosmo', df, win)
+}
+
+#'@title
+#'pointInDisc
+#'
+#'@param df a data.frame with columns x, y, z for cartesian coordinates.
+#'The rows represent points on the surface of a unit sphere
+#'@param win a data.frame with columns x, y, z for the cartesian coordinates
+#'of a point on the unit sphere, representing a disc center, and column r for
+#'the radius or that disc.
+#'
+#'@return a logical vector indicated which rows of \code{df}
+#'lie within the spherical disc determined by \code{win}
+#'
+#'@name pointInDisc
+#'
+#'@export
+pointInDisc <- function(df, win) {
+    .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
+}
+
+#'@title
+#'maxDist_internal
+#'
+#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
+#'
+#'@return the maximum distance between any of the
+#'points in \code{cmbdf}
+#'
+#'@name maxDist_internal
+#'
+#'@export
+maxDist_internal <- function(cmbdf) {
+    .Call('_rcosmo_maxDist_internal', PACKAGE = 'rcosmo', cmbdf)
+}
+
+#'@title
+#'minDist
+#'
+#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
+#'@param point a point on the unit sphere in cartesian coordinates
+#'
+#'@return the shortest distance from \code{point} to \code{cmbdf}
+#'
+#'@name minDist
+#'
+#'@export
+minDist <- function(cmbdf, point) {
+    .Call('_rcosmo_minDist', PACKAGE = 'rcosmo', cmbdf, point)
 }
 

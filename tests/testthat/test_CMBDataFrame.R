@@ -85,11 +85,11 @@ testthat::test_that("is.CMBDataFrame TRUE", {
 # -------------------------------------------------
 testthat::context("CMBDataFrame other arguments")
 
-c1 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48, by = 0.01))
+c1 <- CMBDataFrame(nside = 2, ordering = "nested", I = seq(1.01,1.48, by = 0.01))
 c2 <- CMBDataFrame(nside = 2, ordering = "nested", win = list(CMBWindow(x = 0, y = 0, z = 1, r = 1), CMBWindow(theta = c(0,1,1), phi = c(0,0,1))))
-c3 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48, by = 0.01), spix = c(1,5,9,7))
-c4 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48,by=0.01), sample.size = 48)
-c5 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(101,148), sample.size = 5)
+c3 <- CMBDataFrame(nside = 2, ordering = "nested", I = seq(1.01,1.48, by = 0.01), spix = c(1,5,9,7))
+c4 <- CMBDataFrame(nside = 2, ordering = "nested", I = seq(1.01,1.48,by=0.01), sample.size = 48)
+c5 <- CMBDataFrame(nside = 2, ordering = "nested", I = seq(101,148), sample.size = 5)
 
 testthat::test_that("intensities argument", {
   testthat::expect_equal(c1$I, seq(1.01,1.48, by = 0.01))
@@ -120,7 +120,7 @@ testthat::context("Passing CMBDF to CMBDF")
 
 d1 <- CMBDataFrame(nside = 2, ordering = "nested", spix = c(2,3,4,11))
 d2 <- CMBDataFrame(nside = 2, ordering = "ring", spix = c(2,3,4,11))
-d3 <- CMBDataFrame(nside = 2, ordering = "nested", intensities = seq(1.01,1.48, by = 0.01), spix = c(2,3,4,11))
+d3 <- CMBDataFrame(nside = 2, ordering = "nested", I = seq(1.01,1.48, by = 0.01), spix = c(2,3,4,11))
 
 testthat::test_that("change coords", {
   testthat::expect_equal(a2, CMBDataFrame(a1, coords = "cartesian"))

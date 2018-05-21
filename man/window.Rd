@@ -4,7 +4,7 @@
 \alias{window}
 \title{Window attribute of \code{\link{CMBDataFrame}}}
 \usage{
-window(cmbdf, new.window, intersect = TRUE)
+window(cmbdf, new.window, intersect = TRUE, in.pixels, in.pixels.res = 0)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}
@@ -15,6 +15,14 @@ in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
 
 \item{intersect}{a boolean that determines
 the behaviour when \code{win} is a list (see details).}
+
+\item{in.pixels}{a vector of pixels at resolution
+\code{in.pixels.res} whose union contains the
+window(s) \code{win} entirely}
+
+\item{in.pixels.res}{a resolution
+(i.e., \eqn{j} such that nside = \code{2^j|}) at
+which the \code{in.pixels} parameter is specified}
 }
 \value{
 The window attribute of cmbdf or, if new.window is specified, a

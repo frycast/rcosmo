@@ -4,7 +4,7 @@
 \alias{subWindow}
 \title{Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}}
 \usage{
-subWindow(cmbdf, win, intersect = TRUE)
+subWindow(cmbdf, win, intersect = TRUE, in.pixels, in.pixels.res = 0)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame}
@@ -13,6 +13,14 @@ subWindow(cmbdf, win, intersect = TRUE)
 
 \item{intersect}{a boolean that determines
 the behaviour when \code{win} is a list (see details).}
+
+\item{in.pixels}{a vector of pixels at resolution
+\code{in.pixels.res} whose union contains the
+window(s) \code{win} entirely}
+
+\item{in.pixels.res}{a resolution
+(i.e., \eqn{j} such that nside = \code{2^j|}) at
+which the \code{in.pixels} parameter is specified}
 }
 \value{
 a CMBDataFrame which is restricted to the

@@ -1,8 +1,7 @@
-# The rcosmo project
+# The `rcosmo` project
 
+### Documentation (version 1) is available by [clicking here](rcosmo.pdf). 
 
-### Warning: The functions in rcosmo are still under development.
-### Expected version 1 completion date is 01/07/2018. 
 
 The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from the epoch of recombination. It is the most ancient important source of data about the early universe and the key to unlocking the mysteries of the Big Bang and the structure of time and space. Spurred on by a wealth of satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation. An advanced R programming toolkit is needed to help statisticians perform CMB data analytics. 
 
@@ -12,7 +11,7 @@ The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from 
 + Statistical tools
 + Visualisation
 
-The current version of `rcosmo` covers includes the following functionality:
+The current version of `rcosmo` includes the following functionality:
 +	Generation of a comprehensive data frame of CMB observations, which include HEALPix indices, metadata, CMB intensities and their
   corresponding spherical and/or cartesian coordinates, as well as polarization data
 +	Window subsetting tools for investigating circular, convex and non-convex polygonal sub-regions on the sphere
@@ -35,27 +34,13 @@ devtools::github_install("VidaliLama/rcosmo")
 If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::github_install("VidaliLama/rcosmo")` again.
 
 ## Next steps
-  + Investigate R packages [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html) and [VecStatGraph3D](https://www.rdocumentation.org/packages/VecStatGraphs3D/versions/1.6)
-  + What to do with the polarisation data (Q_STOKES, U_STOKES).
-    + [Details here: Scroll to 'Polarisation Convention / Internal Convention'](http://healpix.sourceforge.net/html/intronode6.htm)
-  + Sample mean, variance and higher moments (need normalising factor with area)
-  + Sample covariance and variogram (assume Gaussianity and homogeneity, don't assume isotropy):
-  
-    <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{1}{\&hash;\text{terms&space;in&space;sum}}\sum_{t_1&space;\in&space;S^2}\sum_{\{d(t_1,t_2)&space;=&space;r\}}&space;X(t_1)X(t_2)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{1}{\&hash;\text{terms&space;in&space;sum}}\sum_{t_1&space;\in&space;S^2}\sum_{\{d(t_1,t_2)&space;=&space;r\}}&space;X(t_1)X(t_2)" title="\frac{1}{\#\text{terms in sum}}\sum_{t_1 \in S^2}\sum_{\{d(t_1,t_2) = r\}} X(t_1)X(t_2)" /></a>
-    
-  + Kriging (e.g. for equatorial region with milky way interference)
+  + Kriging (e.g. for equatorial region)
   + 2D projection [Mollweide view](https://en.wikipedia.org/wiki/Mollweide_projection)
   
 ## Suggestions
   + Provide 2D HEALPix projection. [See here](http://sufoo.c.ooco.jp/program/healpix.html) and Figure 5 from [this paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513).
   + Look at [spatstat](https://cran.r-project.org/web/packages/spatstat/index.html) package):
-  + Make *summary(CMBDataFrame)* return [number of pixels](http://healpy.readthedocs.io/en/latest/healpy_pix.html#nside-npix-resolution), area, units, coordinate system and common statistics.
   + Provide common intensity unit conversions (K_CMB <-> K_RJ <-> MJy/sr). [See here.](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/Article/View/181/20/what-are-the-intensity-units-of-the-planck-all-sky-maps-and-how-do-i-convert-between-them)
-  + Provide conversion between RING and NESTED numbering schemes for *CMBDataFrame*. [See here.](http://healpy.readthedocs.io/en/latest/healpy_pix.html#conversion-between-nested-and-ring-schemes)
-    > "It is in the RING scheme that Fourier transforms with spherical harmonics are easy to implement.    
-    >  NESTED tree structure allows one to implement efficiently all applications involving nearest-neighbour searches, and also allows for an immediate construction of the fast Haar wavelet transform" [Source.](http://healpix.sourceforge.net/html/intronode4.htm)
-      
-      
 
 ## Notes on Planck maps 
   + [official plank colourmap](https://github.com/zonca/paperplots/raw/master/data/Planck_Parchment_RGB.txt)
@@ -124,10 +109,6 @@ If you did not install RTools and are using RStudio then you will be prompted to
   + [rpython, run python code from R](http://rpython.r-forge.r-project.org/)
   + [rpy2-R in Python](https://rpy2.bitbucket.io/)
   + [Jupyter with the IR Kernel: Using R with Jupyter Notebooks](http://blog.revolutionanalytics.com/2015/09/using-r-with-jupyter-notebooks.html)
-#### Journals for submission
+#### Journals
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
-  
-## Vague suggestions
-  + > "Standard operations of numerical analysis which one might wish to execute on the sphere include convolutions with local and  global kernels, Fourier analysis with spherical harmonics and power spectrum estimation, wavelet decomposition, nearest-neighbour searches, topological analysis, including searches for extrema or zero-crossings, computing Minkowski functionals, extraction of patches and finite differencing for solving partial differential equations." [Source: HEALPix doc.](http://healpix.sourceforge.net/html/intronode3.htm)
-  + [Pixel window functions.](http://healpix.jpl.nasa.gov/html/intronode14.htm)

@@ -4,8 +4,9 @@
 \alias{plotHPBoundaries}
 \title{plotHPBoundaries}
 \usage{
-plotHPBoundaries(nside, eps = pi/90, col = "black", size = 1, ordering,
-  nums.col = col, nums.size = 5, font = 2, ...)
+plotHPBoundaries(nside, eps = pi/90, col = "black", lwd = 1, ordering,
+  incl.labels = 1:(12 * nside^2), nums.col = col, nums.size = 1,
+  font = 2, ...)
 }
 \arguments{
 \item{nside}{the HEALPix nside parameter}
@@ -15,11 +16,15 @@ implies more samples}
 
 \item{col}{the colour of plotted boundary lines}
 
-\item{size}{the size of the plotted boundary lines}
+\item{lwd}{the thickness of the plotted boundary lines}
 
 \item{ordering}{optionally specify an ordering scheme
 from which to plot HEALPix pixel numbers. Can be
 either "ring" or "nested"}
+
+\item{incl.labels}{If \code{ordering} is specified then
+this parameter sets the pixel indices that will be
+displayed (default is all indices at \code{nside})}
 
 \item{nums.col}{specifies the colour of pixel numbers
 if \code{ordering} is specified}

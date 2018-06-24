@@ -7,14 +7,37 @@
 # library(tidyverse)
 library(rcosmo)
 
+
+# Install mmap from tarball
+devtools::install_local("../mmap", force = TRUE)
+
+library(mmap)
+filename <- "../CMB_map_smica1024.fits"
+zz <- file(filename, "rb")
+mystruct <- struct(I = real32(),
+                   Q = real32(),
+                   U = real32(),
+                   PMASK = int8(),
+                   TMASK = int8())
+m <- mmap(file = "../CMB_map_smica1024.fits",
+          mode = mystruct,
+          off = 2880*3,
+          endian = "big")
+extractFUN(m) <- function(X) do.call(data.frame, X)
+m[1]
+
+
+
+
+
 ## Test a non-CMB map
 #http://cade.irap.omp.eu/dokuwiki/doku.php?id=chipass
-sky.t <- CMBDataFrame("C:\Users\dfryer\Downloads\CHIPASS_1_1024.fits", coords = "cartesian")
+sky.t <- CMBDataFrame("C:\Users\dfryer\Downloads\CHIPASS_1_1024.fits",
+                      coords = "cartesian")
 
 
 
 ## Toy with mmap package
-
 library(mmap)
 s <- as.mmap(skyfull)
 
@@ -36,26 +59,76 @@ extractFUN(m) <- function(X) do.call(data.frame, X)
 # then the first 4 bytes are b8 c0 f5 9e, which can be
 # plugged into a hex to float calculator to show that swapping
 # the endianness gives/fixes the error we have seen.
+
 m[1]
+a <- sample(1:(12*1024^2), 1000000)
+b <- m[sort(a)]
+
+sum(b[,"PMASK"])
 
 close(zz)
 munmap(m)
 
 
-f <- file("b8 c0 f5 9e")
-readBin(f)
-
-sky <- CMBDataFrame("../CMB_map_smica1024.fits")
-
 ### GENERATE DOCUMENTATION
-# pack <- "rcosmo"
-# path <- find.package(pack)
-# system(paste(shQuote(file.path(R.home("bin"), "R")),
-#              "CMD", "Rd2pdf", shQuote(path)))
+pack <- "rcosmo"
+path <- find.package(pack)
+system(paste(shQuote(file.path(R.home("bin"), "R")),
+             "CMD", "Rd2pdf", shQuote(path)))
 
 
+######## Experimenting code for thesis ################
+sky <- CMBDataFrame("../CMB_map_smica1024.fits", include.masks = TRUE)
+sky.sample <- CMBDataFrame(sky, sample.size = 100000, coords = "cartesian")
+win <- CMBWindow(x = 1, y = 0, z = 0, r = 0.1)
+cap <- window(sky, new.window = win)
+plot(cap, back.col = "white")
 
-sky1 <- CMBDataFrame("../CMB_map_smica1024.fits")
+disc <- CMBWindow(theta = pi/2, phi = -pi/8, r = 0.2)
+polygon <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
+                     theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
+
+plot(sky.sample, back.col = "white")
+plot(disc, lwd = 3, col = "blue"); plot(polygon, lwd = 3, col = "blue")
+summary(polygon)
+summary(disc)
+
+
+d.exterior <- CMBWindow(theta = pi/2, phi = 0, r = 0.5,
+                        set.minus = TRUE)
+
+wins <- list(d.exterior, CMBWindow(theta = pi/2, phi = 0, r = 1))
+
+sky.annulus <- window(sky.sample, new.window = wins)
+plot(wins[[1]], col = "blue", lwd = 5)
+plot(wins[[2]], col = "blue", lwd = 5)
+plot(sky.annulus, back.col = "white", add = TRUE)
+plot(wins[[1]], col = "blue", size = 5)
+plot(wins[[2]], col = "blue", size = 5)
+
+sky.cov <- covCMB(sky.sample, max.dist = 0.03, num.bins = 200)
+
+# Apply the temperature mask
+sky.masked <- sky[as.logical(sky$TMASK),]
+
+# Visualise the temperature mask
+plot(sky.sample, col = sky.sample$TMASK + 1, size = 3, back.col = "white")
+
+# Calculate var and mean on unmasked sky
+mean(sky$I)
+var(sky$I)
+
+
+# Calculate var and mean on masked sky
+mean(sky.masked$I)
+var(sky.masked$I)
+
+
+alpha <- -10
+A <- pixelArea(sky)
+A*sum(sky.masked$I < alpha)
+##########################################################
+
 header(sky1)
 
 
@@ -63,6 +136,7 @@ win <- CMBWindow(x = 1, y = 0, z = 0, r = 0.05)
 win2 <- CMBWindow(theta = pi/2, phi = 0, r = 0.05)
 win3 <- CMBWindow(phi = c(0, pi/10, pi/10, 0),
                   theta = c(pi/2, pi/2, pi/10, pi/10))
+plot(win3)
 
 skywin <- window(sky, new.window = list(win,win2))
 
@@ -71,12 +145,60 @@ summary(win)
 summary(win2)
 summary(win3)
 
-
 a <- summary(sky)
 class(a)
 a
 
 library(sp)
+
+#################################################################
+######   DEMONSTRATE APPLYING MASKS #############################
+#################################################################
+library(gsl)
+N <- 1000
+
+sky <- CMBDataFrame("../CMB_map_smica1024.fits", include.masks = TRUE)
+sky.masked <- sky[as.logical(sky$TMASK),]
+
+sky.masked <- CMBDataFrame(sky.masked, coords = "cartesian")
+sky.unmasked <- CMBDataFrame(sky, coords = "cartesian")
+
+plot(sky.masked)
+cov.masked <- covCMB(sky.masked, max.dist = 0.03, sample.size = 100000, num.bins = N)
+cov.unmasked <- covCMB(sky.unmasked, max.dist = 0.03, sample.size = 100000, num.bins = N)
+
+X11(); plot(cov.masked$dist, cov.masked$cov, main = "Masked")
+X11(); plot(cov.unmasked$dist, cov.unmasked$cov, main = "Unmasked")
+
+#We use rev to order cosines of distances from -1 to 1
+C_est <- rev(cov.masked$cov)*1e9 # micro kelvin
+s <- rev(cos(cov.masked$dist))
+plot(s, C_est)
+
+#Components of angular power spectrum
+n<-1000
+## See: http://www.gnu.org/software/gsl/doc/html/specfunc.html#legendre-functions-and-spherical-harmonics
+#fl_func <- function(i) {4*pi*sum(C_est*legendre_Plm(i, 0, s, give=FALSE, strict=TRUE))/N} # This was the wrong function for Pl
+fl_func <- function(l) {4*pi*sum(C_est/cov.masked$cov[1]*legendre_Pl(l, s))/N}
+fl<- sapply(1:n, fl_func)
+
+#Plot angular power spectrum
+X11()
+plot(fl*(1:n)*(1:n+1)/(2*pi), type="l", col=grey(.5))
+
+plot(200:length(fl),fl[200:length(fl)], type="l", col=grey(.5))
+
+#################################################################
+######## DEMONSTRATE USE OF equiareal PAREMETER IN covCMB ######
+################################################################
+
+# Using data from above
+
+# This was really slow for some reason or maybe it just froze
+cov.ea <- covCMB(sky.unmasked, equiareal= TRUE, sample.size = 100000, num.bins = 1000)
+cov.not.ea <- covCMB(sky.unmasked, equiareal = FALSE, sample.size = 100000, num.bins = 1000)
+
+
 
 #################################################################
 ########## DEMONSTRATE nside = 2048 coordinates workaround ######
@@ -89,21 +211,7 @@ library(sp)
 ## in.pixels parameter of the window function after visually
 ## determining which pixels the window intersects, as in the
 ## example below.
-sky <- readRDS("C:/Users/danie/Downloads/CMB_map_smica_1024.Rda")
-fullsky <- readRDS("C:/Users/danie/Downloads/CMB_map_smica_2048.Rda")
 
-size <- 0.5 # The horizon at recombination is today ~1degree on the sky = ~0.02 radians
-win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size),
-                 phi = c(0,size,size,0))
-
-plotHPBoundaries(nside = 1, ordering = "nested")
-plot(win)
-
-pixelWin <- pixelWindow(j1 = 0, j2 = log2(1024), pix.j1 = c(1,5))
-plot(sky[pixelWin,])
-
-skywin <- window(skyfull, new.window = win, in.pixels = c(1,5))
-plot(skywin)
 
 #################################################################
 ########## DEMONSTRATE nest_search ##############################
@@ -133,7 +241,7 @@ nestSearch_step(c(0,0,1), j2 = j2, j1 = j1,
 
 
 # Deepest...
-nestSearch(c(0,0,1), 16, demo.plot = TRUE)
+nestSearch(c(0,0,1), 32, demo.plot = TRUE)
 
 
 # Also works for points outside the unit sphere and any nside
@@ -146,12 +254,52 @@ microbenchmark(
   nestSearch(c(0,0,1), 2048, j = c(3,7,11)) )
 
 
+# Problem with nested search j_0 = 0
+label <- function(x, bpix)
+{
+  dists <-  apply(bpix, MARGIN = 1,
+                  function(bp) {
+                    sum((bp - x)^2)
+                  } )
+  return(which.min(dists))
+}
+
+## Fail example for j_0 = 0 (colour boundaries at nside = 1)
+base1 <- CMBDataFrame(nside = 1, coords = "cartesian")[,c("x","y","z")]
+cmbdf1 <- window(CMBDataFrame(nside = 128, coords = "cartesian"),
+                 in.pixels = c(1,4,5), in.pixels.res = 0)
+cols1 <- apply(cmbdf1[,c("x","y","z")], MARGIN = 1, label, bpix = base1)
+cmbdf1[,c("x","y","z")] <- cmbdf1[,c("x","y","z")]*0.99
+
+cols1[cols1 == 1] <- 6
+plot(cmbdf1, col = cols1, size = 5, back.col = "white")
+plotHPBoundaries(nside = 1, lwd = 7, col = "black", ordering = "nested",
+                 nums.size = 1.7)
+
+theta <- 0.95 #phi = 0
+nestSearch(c(sin(theta), 0, cos(theta)), 32, j = 0:log2(32), demo.plot = TRUE)
+
+## Fail example for j_0 = 3 (colour boundaries at nside = 8)
+base2 <- CMBDataFrame(nside = 8, coords = "cartesian")[,c("x","y","z")]
+cmbdf2 <- window(CMBDataFrame(nside = 1024, coords = "cartesian"), in.pixels = c(59,60,246,248), in.pixels.res = 3)
+cols2 <- apply(cmbdf2[,c("x","y","z")], MARGIN = 1, label, bpix = base2)
+cmbdf2[,c("x","y","z")] <- cmbdf2[,c("x","y","z")]*0.99
+
+plot(cmbdf2, col = cols2, size = 5, back.col = "white")
+plotHPBoundaries(nside = 8, lwd = 5, col = "black",
+                 incl.labels = c(59,60,246,248), ordering = "nested")
+
+theta <- 0.35
+nestSearch(c(sin(theta), 0, cos(theta)), 64, j = 3:log2(64), demo.plot = TRUE)
+
+
 #################################################################
 ########## DEMONSTRATE TMASK ####################################
 #################################################################
 
 ## Test include.masks = TRUE
-sky.m <- CMBDataFrame("../CMB_map_smica1024.fits", include.masks = TRUE, coords = "cartesian")
+sky.m <- CMBDataFrame("../CMB_map_smica1024.fits", include.masks = TRUE,
+                      coords = "cartesian")
 plot(sky.m, col = sky.m$TMASK + 1, sample.size = 50000)
 
 
@@ -399,15 +547,24 @@ all.equal((ring2nest(2, pix))[nest2ring(2,pix)],
 ring2nest(2, pix)
 nest2ring(2, pix)
 
+
+
+# Demonstrate ring order
+
+cmbdf <- CMBDataFrame(nside = 8, ordering = "ring")
+plot(cmbdf, type = 'l', col = "black", back.col = "white")
+tolabel <- c(1,100:107,768)
+plot(cmbdf[tolabel,], labels = tolabel, col = "red", add = TRUE)
+
 #####################################################################
-######### DEMONSTRATE HealpixBoundaries #############################
+######### DEMONSTRATE plot HealpixBoundaries ########################
 #####################################################################
 
 # With dots
 ns <- 1
 cmbdf <- CMBDataFrame(nside = ns, ordering = "nested",
                       coords = "spherical")
-plot(cmbdf, back.col = "black", size = 6)
+plot(cmbdf, back.col = "black", col = "blue", size = 6)
 plotHPBoundaries(ns, col = "red")
 plotHPBoundaries(2, col = "green")
 
@@ -419,7 +576,116 @@ plotHPBoundaries(2, col = "red", ordering = "nested")
 plotHPBoundaries(2, col = "red", ordering = "ring")
 
 
+## Stage 1 (nside 1)
+# Plot individual pixels in different colours and only label a few
+cmbdf2 <- CMBDataFrame(nside = 64, ordering = "nested")
+plot(window(cmbdf2,in.pixels = c(1,9)), col = "blue", back.col = "white")
+plot(window(cmbdf2,in.pixels = c(2,10)), col = "green", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 3), col = "yellow", add = TRUE)
+plot(window(cmbdf2,in.pixels = c(4,12)), col = "orange", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 5), col = "orange", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 6), col = "red", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 7), col = "white", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 8), col = "gray", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 9), col = "blue", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 10), col = "green", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 11), col = "yellow", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 12), col = "orange", add = TRUE)
+plotHPBoundaries(nside = 1, ordering = "nested",
+                 incl.labels = c(1,2,3,4,5,6,9), col = "red")
 
+
+
+
+## Stage 2 (nside 2)
+# Scale the locations so the pixels don't overshadow the lines
+cmbdf3 <- CMBDataFrame(nside = 256, ordering = "nested",
+                       coords = "cartesian")
+cmbdf3.w <- window(cmbdf3,in.pixels = 1)
+cmbdf3.w[,c("x","y","z")] <- cmbdf3.w[,c("x","y","z")]*0.99
+
+# Colour base pixel 1 strongly
+plot(cmbdf3.w, col = "light blue",
+     back.col = "white", add = TRUE, size = 1.2)
+plotHPBoundaries(nside = 2, col = "black", lwd = 1,
+                 ordering = "nested",
+                 nums.col = "red", incl.labels = c(1,2,3,4))
+
+# Add center labels for the pixels at nside 2 in base pixel 1
+# centers <- rcosmo::CMBDataFrame(nside = 2, ordering = "nested",
+#                                 coords = "cartesian")
+# rcosmo:::plot.CMBDataFrame(centers[c(1,2,3,4),], add = TRUE, col = "red",
+#                            labels = c(1,2,3,4), font = 2)
+
+# Plot boundaries and add pixel colours
+plotHPBoundaries(nside = 2, col = "red")
+plot(window(cmbdf2,in.pixels = 2), col = "green", add = TRUE)
+plot(window(cmbdf2,in.pixels = 4), col = "purple", add = TRUE)
+plot(window(cmbdf2,in.pixels = 5), col = "orange", add = TRUE)
+plot(window(cmbdf2,in.pixels = 6), col = "red", add = TRUE)
+
+
+
+##Stage 1 (nside 1) version 2
+plot(window(cmbdf2,in.pixels = 1), col = "blue", back.col = "white")
+plot(window(cmbdf2,in.pixels = 2), col = "green", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 3), col = "yellow", add = TRUE)
+plot(window(cmbdf2,in.pixels = 4), col = "orange", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 5), col = "orange", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 6), col = "red", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 7), col = "white", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 8), col = "gray", add = TRUE)
+plot(window(cmbdf2,in.pixels = 9), col = "blue", add = TRUE)
+plot(window(cmbdf2,in.pixels = 10), col = "green", add = TRUE)
+#plot(window(cmbdf2,in.pixels = 11), col = "yellow", add = TRUE)
+plot(window(cmbdf2,in.pixels = 12), col = "orange", add = TRUE)
+plotHPBoundaries(nside = 1, ordering = "nested",
+                 incl.labels = c(1,2,4,5,6,9,10,12), col = "black",
+                 nums.col = "red")
+
+plotHPBoundaries(nside = 1, ordering = "nested",
+                 incl.labels = c(3,7,8,11), col = "black",
+                 nums.size = 0.7, nums.col = "red")
+
+# This function labels pixels according to the
+# way that nestSearch sees them (by distance)
+label <- function(x, bpix)
+{
+  dists <-  apply(bpix, MARGIN = 1,
+                  function(bp) {
+                    sum((bp - x)^2)
+                  } )
+  return(which.min(dists))
+}
+
+# Generate base pixels
+base <- CMBDataFrame(nside = 1,
+                     coords = "cartesian")[,c("x","y","z")]
+
+# Generate pixels at high resolution within base pixels 1, 4, 5
+cmbdf <- window(CMBDataFrame(nside = 128, coords = "cartesian"),
+                in.pixels = c(1,4,5), in.pixels.res = 0)
+
+# Apply the label function to colour pixels the way that nestSearch sees them
+cols <- apply(cmbdf[,c("x","y","z")], MARGIN = 1,
+              label, bpix = base)
+cols[cols == 1] <- 8 # remove black colour
+cmbdf[,c("x","y","z")] <- cmbdf[,c("x","y","z")]*0.99
+
+# Plot all pixels at target resolution
+plot(cmbdf, col = cols, size = 5, back.col = "white")
+
+# Plot base pixel boundaries
+plotHPBoundaries(nside = 1, lwd = 7, col = "black",
+                 ordering = "nested", nums.size = 1.7)
+
+# The problematic pixel is located at (theta, phi) = (0.95, 0)
+theta <- 0.95
+
+# Conduct nested search for the nearest neighbour to
+# the problematic pixel, starting at base pixel resolution
+nestSearch(c(sin(theta), 0, cos(theta)), 32, j = 0:log2(32),
+           demo.plot = TRUE)
 
 #####################################################################
 ######### TEST window() for cmbdf ###################################
@@ -458,8 +724,42 @@ all.equal(c.w11w21w13, b.w11w21w13, check.attributes = FALSE)
 all.equal(window(c.w11w21w13), window(b.w11w21w13))
 
 #####################################################################
-######### DEMONSTRATE subWindow #####################################
+######### DEMONSTRATE window ########################################
 #####################################################################
+
+
+## Use the in.pixels argument of window.
+## We start by using plotHPBoundaries to determine which pixel the
+## window lies in
+sky <- readRDS("C:/Users/danie/Downloads/CMB_map_smica_1024.Rda")
+fullsky <- readRDS("C:/Users/danie/Downloads/CMB_map_smica_2048.Rda")
+
+size <- 0.5 # The horizon at recombination is today ~1degree on the sky = ~0.02 radians
+win <- CMBWindow(theta = c(pi/2, pi/2, pi/2-size, pi/2-size),
+                 phi = c(0,size,size,0))
+plotHPBoundaries(nside = 1, ordering = "nested")
+plot(win)
+pixelWin <- pixelWindow(j1 = 0, j2 = log2(1024), pix.j1 = c(1,5))
+plot(sky[pixelWin,])
+skywin <- window(skyfull, new.window = win, in.pixels = c(1,5))
+plot(skywin)
+
+
+
+
+
+# It is much quicker if you already have cartesian coords
+# because no call to pix2coords_internal
+cmb1 <- CMBDataFrame(nside = 16, ordering = "nested")
+cmb2 <- CMBDataFrame(nside = 16, ordering = "nested", coords = "cartesian")
+w <- CMBWindow(x = 0, y = 0, z = 1, r = 1)
+library(microbenchmark)
+microbenchmark(
+  window(cmb1, new.window = w),
+  window(cmb2, new.window = w)
+)
+
+
 
 cmbdf <- CMBDataFrame(nside = 128, ordering = "nested",
                       coords = "cartesian")
@@ -637,6 +937,7 @@ a <- lapply(face, plot, col = "yellow")
 ## non-convex polygon using triangulate implicitly
 win <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
                  theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
+plot(win)
 cmbdf.wins <- window(cmbdf, new.window = win)
 plot(cmbdf.wins, col = "red", add = TRUE, size = 1)
 winType(window(cmbdf.wins))

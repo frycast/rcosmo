@@ -18,18 +18,19 @@ the behaviour when \code{win} is a list (see details).}
 
 \item{in.pixels}{a vector of pixels at resolution
 \code{in.pixels.res} whose union contains the
-window(s) \code{win} entirely}
+window(s) \code{win} entirely, or if \code{new.window} is
+unspecified then this whole pixel is returned}
 
 \item{in.pixels.res}{a resolution
 (i.e., \eqn{j} such that nside = \code{2^j|}) at
 which the \code{in.pixels} parameter is specified}
 }
 \value{
-The window attribute of cmbdf or, if new.window is specified, a
-new CMBDataFrame.
+The window attribute of cmbdf or, if new.window/in.pixels is specified,
+a new CMBDataFrame.
 }
 \description{
-When new.window is unspecified this function returns the
+When new.window or in.pixels is unspecified this function returns the
 \code{\link{CMBWindow}} attribute of a
 CMBDataFrame. The return value is NULL if the window is full sky.
 When new.window is specified this function instead returns

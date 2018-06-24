@@ -1,5 +1,19 @@
-
-
+#' pixelArea
+#'
+#' Get the area of a single HEALPix pixel
+#'
+#'@param cmbdf a \code{\link{CMBDataFrame}}
+#'
+#'@return the area of a single HEALPix pixel
+#' at the \code{nside} resolution of \code{cmbdf}
+#'
+#'@export
+pixelArea <- function(cmbdf)
+{
+  nside <- nside(cmbdf)
+  if ( !is.numeric(nside) ) stop("problem with cmbdf nside parameter")
+  return(pi/(3*nside^2))
+}
 
 
 
@@ -188,8 +202,8 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     }
   }
   else
-  { ## This is quicker and more robust than assigning cartesian coords in R
-    #######################################################################
+  { ## This is quicker and more robust than assigning new coords in R
+    #################################################################
     nes <- (ordering(cmbdf) == "nested")
     spx <- pix(cmbdf)
     for ( w in win.xyz )
@@ -259,7 +273,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
 #' Window attribute of \code{\link{CMBDataFrame}}
 #'
-#' When new.window is unspecified this function returns the
+#' When new.window or in.pixels is unspecified this function returns the
 #' \code{\link{CMBWindow}} attribute of a
 #' CMBDataFrame. The return value is NULL if the window is full sky.
 #' When new.window is specified this function instead returns
@@ -288,14 +302,15 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'the behaviour when \code{win} is a list (see details).
 #'@param in.pixels a vector of pixels at resolution
 #'\code{in.pixels.res} whose union contains the
-#'window(s) \code{win} entirely
+#'window(s) \code{win} entirely, or if \code{new.window} is
+#'unspecified then this whole pixel is returned
 #'@param in.pixels.res a resolution
 #'(i.e., \eqn{j} such that nside = \code{2^j|}) at
 #'which the \code{in.pixels} parameter is specified
 #'
 #'@return
-#' The window attribute of cmbdf or, if new.window is specified, a
-#' new CMBDataFrame.
+#' The window attribute of cmbdf or, if new.window/in.pixels is specified,
+#' a new CMBDataFrame.
 #'
 #'@examples
 #' cmbdf <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested")
@@ -319,6 +334,16 @@ window <- function(cmbdf, new.window, intersect = TRUE,
   {
     if ( !missing(in.pixels) )
     {
+      if (max(in.pixels) > 12*(2^in.pixels.res)^2)
+      {
+        stop("in.pixels out of range specified by in.pixels.res")
+      }
+
+      if (ordering(cmbdf) != "nested")
+      {
+        stop("in.pixel can only be used with nested ordering")
+      }
+
       return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
                                intersect = intersect,
                                in.pixels = in.pixels,
@@ -329,6 +354,26 @@ window <- function(cmbdf, new.window, intersect = TRUE,
       return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
                                intersect = intersect))
     }
+  }
+
+  # We reach this point only if new.window is missing
+  if ( !missing(in.pixels) )
+  {
+    if (max(in.pixels) > 12*(2^in.pixels.res)^2)
+    {
+      stop("in.pixels out of range specified by in.pixels.res")
+    }
+
+    if (ordering(cmbdf) != "nested")
+    {
+      stop("in.pixel can only be used with nested ordering")
+    }
+
+    pixelWin <- rcosmo::pixelWindow(in.pixels.res,
+                                    log2(nside(cmbdf)),
+                                    in.pixels)
+
+    return(cmbdf[pixelWin,])
   }
 
   return(attr(cmbdf, "window"))

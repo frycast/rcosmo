@@ -76,7 +76,7 @@ covCMB <- function(cmbdf,
 
   }
 
-  if ( !all.equal(names(cmbdf), c("x", "y", "z", "I")) )
+  if ( !all( c("x", "y", "z", "I") %in% names(cmbdf) ) )
   {
     stop("cmbdf must have columns named 'x', 'y', 'z', 'I' in that order")
   }
@@ -102,7 +102,7 @@ covCMB <- function(cmbdf,
 
   }
 
-  covs <- covCMB_internal2(cmbdf, breaks)
+  covs <- covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
 
   # Reverse order since cosine is decreasing
   covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])

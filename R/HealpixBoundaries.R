@@ -7,10 +7,13 @@
 #' @param eps controls the smoothness of the plot, smaller eps
 #' implies more samples
 #' @param col the colour of plotted boundary lines
-#' @param size the size of the plotted boundary lines
+#' @param lwd the thickness of the plotted boundary lines
 #' @param ordering optionally specify an ordering scheme
 #' from which to plot HEALPix pixel numbers. Can be
 #' either "ring" or "nested"
+#' @param incl.labels If \code{ordering} is specified then
+#' this parameter sets the pixel indices that will be
+#' displayed (default is all indices at \code{nside})
 #' @param nums.col specifies the colour of pixel numbers
 #' if \code{ordering} is specified
 #' @param nums.size specifies the size of pixel numbers
@@ -24,8 +27,9 @@
 #' @export
 plotHPBoundaries <- function(nside, eps = pi/90,
                              col = "black",
-                             size = 1, ordering,
-                             nums.col = col, nums.size = 5,
+                             lwd = 1, ordering,
+                             incl.labels = 1:(12*nside^2),
+                             nums.col = col, nums.size = 1,
                              font = 2, ...)
 {
 
@@ -38,10 +42,10 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     for ( m in seq(0,3,1) ){
       #Northern Hemisphere
       plotPixel( data.frame(theta = S[,1], phi = S[,2] + pi*m/2),
-                 col = col, size = size, ...)
+                 col = col, lwd = lwd, ...)
       #Southern Hemisphere
       plotPixel( data.frame(theta = S[,1] - pi, phi = S[,2] + pi*m/2),
-                 col = col, size = size, ...)
+                 col = col, lwd = lwd, ...)
     }
 
 
@@ -51,10 +55,10 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     for ( m in seq(0,3,1) ){
       #Northern Hemisphere
       plotPixel( data.frame(theta = S[,1], phi = S[,2] + pi*m/2),
-                 col = col, size = size, ...)
+                 col = col, lwd = lwd, ...)
       #Southern Hemisphere
       plotPixel( data.frame(theta = S[,1] - pi, phi = S[,2] + pi*m/2),
-                 col = col, size = size, ...)
+                 col = col, lwd = lwd, ...)
     }
   }
 
@@ -65,14 +69,14 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     if (PHI[length(PHI)]!= acos(2/3))  PHI = c(PHI, acos(2/3))
     S<-cbind(PHI, rep(1,length(PHI))*k*pi/2)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
-               col = col, size = size, ...)
+               col = col, lwd = lwd, ...)
 
     #Southern Hemisphere
     PHI<- seq(acos(-2/3),pi,eps)
     if (PHI[length(PHI)]!= pi)  PHI = c(PHI, pi)
     S<-cbind(PHI, rep(1,length(PHI))*k*pi/2)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
-               col = col, size = size, ...)
+               col = col, lwd = lwd, ...)
 
   }
 
@@ -83,7 +87,7 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     end_phi<- 4*k/(3*nside)*3*pi/8
     S<-pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
-               col = col, size = size, ...)
+               col = col, lwd = lwd, ...)
 
     start_theta<- acos(2/3)
     temp<- -start_phi
@@ -92,7 +96,7 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     aa=k+13
     S<-pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
-               col = col, size = size, ...)
+               col = col, lwd = lwd, ...)
   }
 
   if ( !missing(ordering) )
@@ -103,21 +107,21 @@ plotHPBoundaries <- function(nside, eps = pi/90,
     }
 
     centers <- rcosmo::CMBDataFrame(nside = nside, ordering = ordering,
-                                    coords = "cartesian")
+                                    coords = "cartesian")[incl.labels,]
 
     rcosmo:::plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
-                              size = nums.size, labels = 1:(12*nside^2),
-                              font = font, back.col = )
+                              cex = nums.size, labels = incl.labels,
+                              font = font)
   }
 }
 
 
 ## HELPER FUNCTION 1
-plotPixel <- function(S, col = "black", size = 1, ...)
+plotPixel <- function(S, col = "black", lwd = 1, ...)
 {
   C <- rcosmo::sph2car(S)
   rgl::plot3d(C[,"x"],C[,"y"],C[,"z"],
-              type = "l", add = TRUE, col = col, size = size, ...)
+              type = "l", add = TRUE, col = col, lwd = lwd, ...)
 }
 
 pbEqBelt<-function(n, k, eps, start_phi,

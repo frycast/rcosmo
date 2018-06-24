@@ -1,16 +1,16 @@
 Package: rcosmo
-URL: https://github.com/VidaliLama/cmbstat
-BugReports: https://github.com/VidaliLama/cmbstat/issues
+URL: https://github.com/VidaliLama/rcosmo
+BugReports: https://github.com/VidaliLama/rcosmo/issues
 Title: R Cosmic Microwave Background Data Analysis
 Version: 0.0.0.9000
 Authors@R: as.person(c(
-    "Daniel Fryer <daniel-fryer@live.com.au> [aut, cre]",
+    "Daniel Fryer <d.fryer@latrobe.edu.au> [aut, cre]",
     "Yuguang Wang <Y.Wang@latrobe.edu.au> [aut]",
     "Andriy Olenko <A.Olenko@latrobe.edu.au> [aut]",
     "Ming Li <Ming.Li@latrobe.edu.au> [aut]"
   ))
-Description: Statistical analysis of Cosmic Microwave Background data on a sphere.
-    More description needs to be included on indented lines like this.
+Description: Handling and statistical analysis of Cosmic Microwave Background 
+    data on a HEALPix grid.
 Depends: R (>= 3.3.1)
 License: MIT + file LICENSE
 Encoding: UTF-8

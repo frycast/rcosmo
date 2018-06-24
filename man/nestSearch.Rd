@@ -4,7 +4,7 @@
 \alias{nestSearch}
 \title{Nested Search}
 \usage{
-nestSearch(target, nside, index.only = FALSE, j = 1:log2(nside),
+nestSearch(target, nside, index.only = FALSE, j = 0:log2(nside),
   demo.plot = FALSE)
 }
 \arguments{

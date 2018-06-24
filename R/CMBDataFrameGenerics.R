@@ -369,7 +369,7 @@ geoArea.CMBDataFrame <- function(cmbdf)
 {
   nside <- nside(cmbdf)
   if ( !is.numeric(nside) ) stop("problem with cmbdf nside parameter")
-  return(4*pi/(12*nside^2)*nrow(cmbdf))
+  return(pi/(3*nside^2)*nrow(cmbdf))
 }
 
 
@@ -539,18 +539,16 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
                               col, back.col = "black", labels, ...)
 {
 
-  if (is.null(coords(cmbdf)))
-  {
-    # When the coods are HEALPix only there is some issue
-    # with sampling in the plot function then converting to cartesian.
-    # The plot function crashes / is slow.
-    stop("(development stage) cannot plot when coords are NULL")
-  }
 
   if ( !missing(sample.size) )
   {
     spix <- sample(pix(cmbdf), sample.size)
     cmbdf <- cmbdf[pix(cmbdf) %in% spix,]
+  }
+
+  if (is.null(coords(cmbdf)))
+  {
+    coords(cmbdf) <- "cartesian"
   }
 
   if (missing(col))

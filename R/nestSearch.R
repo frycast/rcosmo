@@ -24,7 +24,7 @@
 #' @export
 nestSearch <- function(target, nside,
                        index.only = FALSE,
-                       j = 1:log2(nside),
+                       j = 0:log2(nside),
                        demo.plot = FALSE)
 {
   j <- c(0,j)
@@ -115,7 +115,7 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
     hp.j2 <- rcosmo::pix2coords(nside = nside.j2,
                                 order = "nested",
                                 coords = "cartesian")
-    rgl::plot3d(hp.j2, col="blue", size = 2,
+    rgl::plot3d(hp.j2, col="black", size = 2,
                 type = 'p', pch = 2,  add = TRUE)
 
     # HEALPix points in window
@@ -124,18 +124,18 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
                                    order = "nested",
                                    coords = "cartesian",
                                    spix = pixelWin)
-    rgl::plot3d(pixelWin, col="green", size = 7,
+    rgl::plot3d(pixelWin, col="green", size = 12,
                 type = 'p', pch = 2,  add = TRUE)
 
     # # add the target point target
     rgl::plot3d(target[1], target[2], target[3],
-                col="yellow", size = 10,
+                col="yellow", size = 12,
                 type = 'p', pch = 2,  add = TRUE)
     #
     # # add the closest HEALPix point to target
     xyz <- as.numeric(xyz.j2[index.min,])
     rgl::plot3d(xyz[1], xyz[2], xyz[3],
-                col="red", size = 10,
+                col="red", size = 13,
                 type = 'p', pch = 2,  add = TRUE)
     ### ----------------------------------------- ###
   }

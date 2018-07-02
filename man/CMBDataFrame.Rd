@@ -57,6 +57,11 @@ optionally polarisation (Q,U) and masks (TMASK, PMASK).
 The row.names attribute of the resulting CMB Data Frame contains
 HEALPix indices.
 }
+\description{
+The function \code{CMBDataFrame} creates objects of class CMBDataFrame.
+These are a special type of \link{data.frame} that carry metadata
+about, e.g., the HEALPix ordering scheme, coordinate system, and nside parameter.
+}
 \examples{
 ## Method 1: Read the data while constructing the CMBDataFrame
 df <- CMBDataFrame("CMB_map_smica1024.fits")

@@ -10,8 +10,8 @@
 
 #' CMBDataFrame class
 #'
-#' The function \code{\link{CMBDataFrame}} creates objects of class CMBDataFrame.
-#' These are a special type of \code\link{data.frame}} that carry metadata
+#' The function \code{CMBDataFrame} creates objects of class CMBDataFrame.
+#' These are a special type of \link{data.frame} that carry metadata
 #' about, e.g., the HEALPix ordering scheme, coordinate system, and nside parameter.
 #'
 #'@param CMBData Can be a string location of FITS file,

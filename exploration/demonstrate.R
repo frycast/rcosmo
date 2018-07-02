@@ -6,25 +6,38 @@
 # library(Rcpp)
 # library(tidyverse)
 library(rcosmo)
-
-
 # Install mmap from tarball
 devtools::install_local("../mmap", force = TRUE)
-
 library(mmap)
-filename <- "../CMB_map_smica1024.fits"
-zz <- file(filename, "rb")
-mystruct <- struct(I = real32(),
-                   Q = real32(),
-                   U = real32(),
-                   PMASK = int8(),
-                   TMASK = int8())
-m <- mmap(file = "../CMB_map_smica1024.fits",
-          mode = mystruct,
-          off = 2880*3,
-          endian = "big")
-extractFUN(m) <- function(X) do.call(data.frame, X)
-m[1]
+
+
+
+
+
+# Make a CMBDat object and take a sample data.frame
+map <- CMBReadFITS("../CMB_map_smica1024.fits", mmap = TRUE)
+s <- sample(1:(12*1024^2), 1000000)
+dat.sample <- map$data[sort(s)]
+
+# Get windows to make CMBDataFrames
+win <- CMBWindow(x = 1, y = 0, z = 0, r = 0.1)
+win2 <- CMBWindow(phi = c(0, pi/4, pi/4, pi/5),
+                     theta = c(pi/2, pi/2, pi/4, pi/2 - pi/20))
+cap <- window(map, new.window = win)
+polygon <- window(map, new.window = win2)
+plot(cap)
+plot(polygon)
+
+sky <- CMBDataFrame(map, sample.size = 1000000)
+plot(sky)
+plot(cap, add = TRUE)
+plot(polygon, add = TRUE)
+
+
+
+
+mmap::munmap(map$data)
+
 
 
 
@@ -34,40 +47,6 @@ m[1]
 #http://cade.irap.omp.eu/dokuwiki/doku.php?id=chipass
 sky.t <- CMBDataFrame("C:\Users\dfryer\Downloads\CHIPASS_1_1024.fits",
                       coords = "cartesian")
-
-
-
-## Toy with mmap package
-library(mmap)
-s <- as.mmap(skyfull)
-
-filename <- "../CMB_map_smica1024.fits"
-zz <- file(filename, "rb")
-mystruct <- struct(I = real32(),
-                   Q = real32(),
-                   U = real32(),
-                   PMASK = int8(),
-                   TMASK = int8())
-m <- mmap(file = "../CMB_map_smica1024.fits",
-          mode = mystruct,
-          off = 2880*3)
-extractFUN(m) <- function(X) do.call(data.frame, X)
-
-# It turns out that the endianness has been swapped. First
-# element should be I = -9.20102e-05 but instead it is
-# I = -2.60201e-20. If we get the binary using mode = raw()
-# then the first 4 bytes are b8 c0 f5 9e, which can be
-# plugged into a hex to float calculator to show that swapping
-# the endianness gives/fixes the error we have seen.
-
-m[1]
-a <- sample(1:(12*1024^2), 1000000)
-b <- m[sort(a)]
-
-sum(b[,"PMASK"])
-
-close(zz)
-munmap(m)
 
 
 ### GENERATE DOCUMENTATION

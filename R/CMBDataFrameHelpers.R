@@ -116,9 +116,9 @@ resolution <- function( cmbdf )
 subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
                       in.pixels.res = 0)
 {
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) ) {
-    stop("'cmbdf' must be a CMBDataFrame")
-  }
+  # if ( !rcosmo::is.CMBDataFrame(cmbdf) ) {
+  #   stop("'cmbdf' must be a CMBDataFrame")
+  # }
 
   if ( !rcosmo::is.CMBWindow(win) ) {
 
@@ -137,9 +137,9 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     win <- list(win)
   }
 
-  if ( !missing(in.pixels) )
+  if ( !missing(in.pixels) && rcosmo::is.CMBDataFrame(cmbdf) )
   {
-    if (ordering(cmbdf) != "nested")
+    if ( rcosmo::ordering(cmbdf) != "nested" )
     {
       stop("in.pixel can only be used with nested ordering")
     }
@@ -170,12 +170,25 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   win.xyz <- win.conv
 
 
-  ## pointInside happens here
   exist.m <- FALSE
   exist.p <- FALSE
-  keep.p <- rep(FALSE, nrow(cmbdf))
-  keep.m <- rep(TRUE, nrow(cmbdf))
-  if (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian")
+  if ( rcosmo::is.CMBDataFrame(cmbdf) )
+  {
+    keep.p <- rep(FALSE, nrow(cmbdf))
+    keep.m <- rep(TRUE, nrow(cmbdf))
+  }
+  else
+  {
+    if ( !rcosmo::is.CMBDat(cmbdf) )
+    {
+      stop("cmbdf must be a CMBDataFrame or CMBDat object")
+    }
+    keep.p <- rep(FALSE, 12*cmbdf$nside^2)
+    keep.m <- rep(TRUE, 12*cmbdf$nside^2)
+  }
+  ## pointInside happens here
+  if ( rcosmo::is.CMBDataFrame(cmbdf)
+       && (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian") )
   { ## This might be a little quicker if coords are already cartesian
     #################################################################
     for ( w in win.xyz )
@@ -204,25 +217,35 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   else
   { ## This is quicker and more robust than assigning new coords in R
     #################################################################
-    nes <- (ordering(cmbdf) == "nested")
-    spx <- pix(cmbdf)
+    if ( rcosmo::is.CMBDataFrame(cmbdf) )
+    {
+      nes <- (rcosmo::ordering(cmbdf) == "nested")
+      ns <- nside(cmbdf)
+      spx <- rcosmo::pix(cmbdf)
+    }
+    else
+    {
+      nes <- (cmbdf$ordering == "nested")
+      ns <- cmbdf$nside
+      spx <- 1:(12*ns^2)
+    }
     for ( w in win.xyz )
     {
       switch(rcosmo::winType(w),
              polygon = keep.p <- keep.p |
-               rcosmo::pointInConvexPolygonHP(nside = nside(cmbdf),
+               rcosmo::pointInConvexPolygonHP(nside = ns,
                                               nested = nes,
                                               win = w, spix = spx),
              minus.polygon = keep.m <- keep.m &
-               !rcosmo::pointInConvexPolygonHP(nside = nside(cmbdf),
+               !rcosmo::pointInConvexPolygonHP(nside = ns,
                                                nested = nes,
                                                win = w, spix = spx),
              disc = keep.p <- keep.p |
-               rcosmo::pointInDiscHP(nside = nside(cmbdf),
+               rcosmo::pointInDiscHP(nside = ns,
                                      nested = nes,
                                      win = w, spix = spx),
              minus.disc = keep.m <- keep.m &
-               !rcosmo::pointInDiscHP(nside = nside(cmbdf),
+               !rcosmo::pointInDiscHP(nside = ns,
                                       nested = nes,
                                       win = w, spix = spx),
              stop("Failed to determine window type using rcosmo::winType"))
@@ -256,8 +279,24 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     keep <- keep.m
   }
 
+  if ( is.CMBDataFrame(cmbdf) )
+  {
+    cmbdf.new <- cmbdf[keep, , drop = FALSE]
+  }
+  else
+  {
+    keep <- which(keep)
+    cmbdf.new <- cmbdf$data[keep,]
 
-  cmbdf.new <- cmbdf[keep, , drop = FALSE]
+    attr(cmbdf.new, "row.names") <- keep
+    attr(cmbdf.new, "nside") <- cmbdf$nside
+    class(cmbdf.new) <- c("CMBDataFrame","data.frame")
+    attr(cmbdf.new, "ordering") <- cmbdf$ordering
+    attr(cmbdf.new, "coords") <- NULL
+    attr(cmbdf.new, "resolution") <- cmbdf$resoln
+    attr(cmbdf.new, "header1") <- cmbdf$header1
+    attr(cmbdf.new, "header2") <- cmbdf$header2
+  }
 
   attr(cmbdf.new, "window") <- win
 
@@ -323,7 +362,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'
 #' ## Change the window of an existing CMBDataFrame
 #' window(cmbdf) <- CMBWindow(theta = rep(0.1, 10),
-#'                            phi = seq(0, 9*2*pi/10, length.out = 10))
+#'                            phi = seq(0, 18*pi/10, length.out = 10))
 #' plot(cmbdf)
 #'
 #'@export
@@ -355,8 +394,11 @@ window <- function(cmbdf, new.window, intersect = TRUE,
                                intersect = intersect))
     }
   }
-
   # We reach this point only if new.window is missing
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  {
+    stop("If new.window is unspecified then cmbdf must be a CMBDataFrame")
+  }
   if ( !missing(in.pixels) )
   {
     if (max(in.pixels) > 12*(2^in.pixels.res)^2)
@@ -364,7 +406,7 @@ window <- function(cmbdf, new.window, intersect = TRUE,
       stop("in.pixels out of range specified by in.pixels.res")
     }
 
-    if (ordering(cmbdf) != "nested")
+    if (rcosmo::ordering(cmbdf) != "nested")
     {
       stop("in.pixel can only be used with nested ordering")
     }

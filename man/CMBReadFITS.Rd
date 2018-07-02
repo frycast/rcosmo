@@ -4,15 +4,21 @@
 \alias{CMBReadFITS}
 \title{Read CMB data from a FITS file.}
 \usage{
-CMBReadFITS(filename = "CMB_map_smica1024.fits", sample.size)
+CMBReadFITS(filename = "CMB_map_smica1024.fits", mmap = FALSE)
 }
 \arguments{
 \item{filename}{The path to the fits file.}
+
+\item{mmap}{A boolean indicating whether to use memory mapping.}
 }
 \value{
-A list containing a matrix named \code{data} whose columns may include
-the intensity (I), polarisation (Q, U), PMASKa and TMASK. Other list
-elements correspond to header information and other metadata.
+A list containing header information and other metadata
+as well as an element called \code{data} where:
+If \code{mmap = FALSE} then a \code{data.frame} is
+included, named \code{data}, whose columns may include, for
+example, the intensity (I), polarisation (Q, U), PMASK and TMASK.
+If \code{mmap = TRUE} then a \code{\link{mmap}} object is returned
+that points to the CMB map data table in the FITS file.
 }
 \description{
 \code{CMBReadFITS} is adapted from the \link{readFITS} function in package

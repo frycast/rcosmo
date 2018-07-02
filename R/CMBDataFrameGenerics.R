@@ -224,7 +224,7 @@ maxDist.CMBDataFrame <- function(cmbdf)
 
 #' as.CMBDataFrame
 #'
-#' Safely converts a data.frame to a CMBDataFrame
+#' Safely converts a \code{\link{data.frame}} to a CMBDataFrame
 #'
 #' @param df Any data.frame with a column labelled "I" for intensities
 #' @param coords specifies the coordinate system to be "spherical",
@@ -347,6 +347,20 @@ as.CMBDataFrame <- function(df, coords, ordering, nside)
 is.CMBDataFrame <- function(cmbdf)
 {
   identical(as.numeric(sum(class(cmbdf) == "CMBDataFrame")), 1)
+}
+
+
+
+#' Check if an object is of class CMBDat
+#'
+#' @param cmbdf Any R object
+#'
+#' @return TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
+#'
+#' @export
+is.CMBDat <- function(cmbdf)
+{
+  identical(as.numeric(sum(class(cmbdf) == "CMBDat")), 1)
 }
 
 
@@ -699,7 +713,7 @@ print.summary.CMBDataFrame <- function(x, ...)
   )
 
   # Window loop details here in boxes
-  if ( x$window != "full sky" )
+  if ( any(x$window != "full sky") )
   {
     cat("Number of CMBWindows: ", length(x$window), "\n" )
     if ( length(x$window) <= 5 )

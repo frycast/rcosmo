@@ -8,8 +8,10 @@ using namespace Rcpp;
 // THIS SHOULD BECOME UNUSED ONCE covCMB_internal2 IS COMPLETE
 // IT REMAINS HERE TO DO SOME BENCHMARKING
 //
-//'@title
-//'covCMB_internal1
+//'@title covCMB_internal1
+//'
+//'
+//'see \code{\link{CMBDataFrame}}
 //'
 //'@name covCMB_internal1
 //'

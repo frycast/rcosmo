@@ -23,5 +23,5 @@ must have columns named "x", "y", and "z"}
 A CMBDataFrame
 }
 \description{
-Safely converts a data.frame to a CMBDataFrame
+Safely converts a \code{\link{data.frame}} to a CMBDataFrame
 }

@@ -2,7 +2,10 @@
 % Please edit documentation in R/RcppExports.R
 \name{covCMB_internal1}
 \alias{covCMB_internal1}
-\title{covCMB_internal1}
+\title{covCMB_internal1
+
+
+see \code{\link{CMBDataFrame}}}
 \usage{
 covCMB_internal1(cmbdf, breaks)
 }

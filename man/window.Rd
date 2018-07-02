@@ -63,7 +63,7 @@ window(cmbdf.win)
 
 ## Change the window of an existing CMBDataFrame
 window(cmbdf) <- CMBWindow(theta = rep(0.1, 10),
-                           phi = seq(0, 9*2*pi/10, length.out = 10))
+                           phi = seq(0, 18*pi/10, length.out = 10))
 plot(cmbdf)
 
 }

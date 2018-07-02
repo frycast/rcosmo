@@ -15,7 +15,7 @@
 #' about, e.g., the HEALPix ordering scheme, coordinate system, and nside parameter.
 #'
 #'@param CMBData Can be a string location of FITS file,
-#'another CMBDataFrame, or unspecified.
+#'another \code{CMBDataFrame}, a \code{CMBDat} object, or unspecified.
 #'@param coords Can be "spherical," "cartesian", or unspecified (HEALPix only).
 #'@param win optional \code{\link{CMBWindow}} object that specifies a
 #'spherical polygon within which to subset the full sky CMB data.
@@ -224,6 +224,28 @@ CMBDataFrame <- function(CMBData,
     }
   }
 
+
+  ## CASE 4: CMBData is a CMBDat object
+  if ( !missing(CMBData) && is.CMBDat(CMBData) )
+  {
+    if ( !missing(nside) )
+    {
+      stop("nside must be unspecified when 'CMBData' is specified")
+    }
+
+    if ( !missing(I) )
+    {
+      stop("I must be unspecified when 'CMBData' is specified")
+    }
+
+    if ( !missing(include.polar) || !missing(include.masks) )
+    {
+      stop(paste("include.polar and include.masks must not be",
+                 "specified if CMBData is a CMBDat object"))
+    }
+  }
+
+
   ### ---------------------------------------------------  ###
 
 
@@ -424,6 +446,39 @@ CMBDataFrame <- function(CMBData,
     if ( missing(coords) ) coords <- NULL
     attr(cmbdf, "coords") <- coords
 
+
+  ################################################################
+  ###### CASE 4: CMBData is a CMBDat object (maybe with mmap) ####
+  ################################################################
+  } else if ( !missing(CMBData) && is.CMBDat(CMBData) ) {
+
+    ns <- CMBData$nside
+    if ( !missing(sample.size) )
+    {
+
+      spix <- sort(sample(1:(12*ns^2), sample.size))
+
+    } else if ( is.null(spix) ) {
+
+      spix <- 1:(12*ns^2)
+    }
+
+
+    cmbdf <- CMBData$data[spix,]
+
+    attr(cmbdf, "row.names") <- spix
+    attr(cmbdf, "nside") <- ns
+    class(cmbdf) <- c("CMBDataFrame","data.frame")
+    attr(cmbdf, "ordering") <- CMBData$ordering
+    attr(cmbdf, "coords") <- NULL
+    attr(cmbdf, "resolution") <- CMBData$resoln
+    attr(cmbdf, "header1") <- CMBData$header1
+    attr(cmbdf, "header2") <- CMBData$header2
+
+    if ( !missing(coords) )
+    {
+      coords(cmbdf) <- coords
+    }
 
   } else {
 

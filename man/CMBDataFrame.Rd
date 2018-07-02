@@ -9,7 +9,7 @@ CMBDataFrame(CMBData, coords, win, include.polar = FALSE,
 }
 \arguments{
 \item{CMBData}{Can be a string location of FITS file,
-another CMBDataFrame, or unspecified.}
+another \code{CMBDataFrame}, a \code{CMBDat} object, or unspecified.}
 
 \item{coords}{Can be "spherical," "cartesian", or unspecified (HEALPix only).}
 

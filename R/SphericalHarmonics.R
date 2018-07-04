@@ -1,16 +1,16 @@
-#' Compute spherical harmonic values at given points on the sphere. 
-#' 
-#' The function \code{SphericalHarmonics} computes the spherical harmonic values on the given 3D cartesian coordinates. 
+#' Compute spherical harmonic values at given points on the sphere.
+#'
+#' The function \code{SphericalHarmonics} computes the spherical harmonic values on the given 3D Cartesian coordinates.
 #' @param L  The degree of spherical harmonic
 #' @param m  The order number of the degree-L spherical harmonic
 #' @param xyz Given points in 3D cartesian coordinates
-#' @return The spherical harmonic values 
-#' @examples 
+#' @return The spherical harmonic values
+#' @examples
 #' SphericalHarmonics(5,2,c(0,1,0))
 #' SphericalHarmonics(5,2,diag(3))
 #' @keywords spherical harmonic
-#' @references Hesse, K., Sloan, I. H., & Womersley, R. S. (2010). 
-#' Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219). 
+#' @references Hesse, K., Sloan, I. H., & Womersley, R. S. (2010).
+#' Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219).
 #' Springer Berlin Heidelberg.
 #' @export
 SphericalHarmonics <- function(L,m,xyz){
@@ -51,7 +51,7 @@ SphericalHarmonics <- function(L,m,xyz){
     if (m>0){
     # Compute Y_{L,k}
     Y <- c_ellm*(1-z^2)^(m_abs/2)*JacobiRecursive(m_abs,m_abs,L-m_abs,z)*cos(m_abs*phi)
-    # The m-th derivative of the Legendre polynomial 
+    # The m-th derivative of the Legendre polynomial
     # P_L^(m)(z) = P_{L-m}^(m,m)(z)
     }else if (m==0){
       Y <- sqrt((2*L+1)/(4*pi))*JacobiRecursive(0,0,L,z)
@@ -59,7 +59,6 @@ SphericalHarmonics <- function(L,m,xyz){
     Y <- c_ellm*(1-z^2)^(m_abs/2)*JacobiRecursive(m_abs,m_abs,L-m_abs,z)*sin(m_abs*phi)
     }
     Y <- Y*sqrt(4*pi)
-  } 
-  return (Y) 
+  }
+  return (Y)
 }
- 

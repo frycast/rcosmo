@@ -17,15 +17,15 @@ SphericalHarmonics(L, m, xyz)
 The spherical harmonic values
 }
 \description{
-The function \code{SphericalHarmonics} computes the spherical harmonic values on the given 3D cartesian coordinates.
+The function \code{SphericalHarmonics} computes the spherical harmonic values on the given 3D Cartesian coordinates.
 }
 \examples{
 SphericalHarmonics(5,2,c(0,1,0))
 SphericalHarmonics(5,2,diag(3))
 }
 \references{
-Hesse, K., Sloan, I. H., & Womersley, R. S. (2010). 
-Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219). 
+Hesse, K., Sloan, I. H., & Womersley, R. S. (2010).
+Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219).
 Springer Berlin Heidelberg.
 }
 \keyword{harmonic}

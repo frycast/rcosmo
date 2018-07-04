@@ -1,7 +1,3 @@
-
-
-
-
 #' CMBWindow
 #'
 #' Create a CMBWindow: Either a polygon or a disc type

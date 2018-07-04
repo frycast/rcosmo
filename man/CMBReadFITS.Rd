@@ -21,11 +21,11 @@ If \code{mmap = TRUE} then a \code{\link{mmap}} object is returned
 that points to the CMB map data table in the FITS file.
 }
 \description{
-\code{CMBReadFITS} is adapted from the \link{readFITS} function in package
+\code{CMBReadFITS} is adapted from the \code{\link{readFITS} }function in package
   \href{https://cran.r-project.org/web/packages/FITSio/index.html}{FITSio}.
   \code{CMBReadFITS} is in development stage and will only work with 'CMB_map_smica1024.fits'.
-  When it works, \code{CMBReadFITS} is much faster than \code{readFITS}.
-  However, \code{readFITS} is more general and so is more likely to work.
+  When it works, \code{CMBReadFITS} is much faster than \code{\link{readFITS}}.
+  However, \code{\link{readFITS}} is more general and so is more likely to work.
 }
 \examples{
 dat <- CMBReadFITS("CMB_map_smica1024.fits")

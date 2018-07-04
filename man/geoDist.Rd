@@ -8,13 +8,13 @@ geoDist(p1, p2)
 }
 \arguments{
 \item{p1}{a 3 element vector on the unit sphere
-given in cartesian coordinates (x,y,z),
+given in Cartesian coordinates (x,y,z),
 or a 2 element vector (theta, phi) giving spherical coordinates,
-can also be a data.frame or matrix with rows specifying vectors}
+can also be a \code{\link{data.frame}} or matrix with rows specifying vectors}
 
-\item{p2}{a vector on the unit sphere given in cartesian coordinates (x,y,z)
+\item{p2}{a vector on the unit sphere given in Cartesian coordinates (x,y,z)
 or a named vector (theta, phi) giving spherical coordinates,
-can also be a data.frame or matrix with rows specifying vectors}
+can also be a \code{\link{data.frame}} or matrix with rows specifying vectors}
 }
 \value{
 The geodesic distance between \code{p1} and \code{p2}

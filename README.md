@@ -61,6 +61,7 @@ If you did not install RTools and are using RStudio then you will be prompted to
 #### Data
   + [Planck legacy archive](http://pla.esac.esa.int/pla/#home)
 #### Related papers and wikis
+  + [FITS Standard](https://fits.gsfc.nasa.gov/fits_standard.html)
   + [Data analysis methods for CMB](http://iopscience.iop.org/article/10.1088/0034-4885/70/6/R02/meta)
   + [How to make maps from CMB data without losing information](http://iopscience.iop.org/article/10.1086/310631)
   + [CMB and astrophysical component maps wiki](https://wiki.cosmos.esa.int/planckpla/index.php/CMB_and_astrophysical_component_maps)

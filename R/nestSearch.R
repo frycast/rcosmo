@@ -1,7 +1,7 @@
 #' Nested Search
 #'
 #' Finds the closest HEALPix pixel center to a given \code{target} point,
-#' specified in cartesian coordinates, using an efficient nested search
+#' specified in Cartesian coordinates, using an efficient nested search
 #' algorithm. HEALPix indices are all assumed to be in the "nested"
 #' ordering scheme.
 #'

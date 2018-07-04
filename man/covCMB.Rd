@@ -8,7 +8,7 @@ covCMB(cmbdf, num.bins = 10, sample.size, max.dist = pi, breaks,
   equiareal = TRUE, calc.max.dist = FALSE)
 }
 \arguments{
-\item{cmbdf}{is a \code{\link{CMBDataFrame}} or \code{data.frame}}
+\item{cmbdf}{is a \code{\link{CMBDataFrame}} or \code{\link{data.frame}}}
 
 \item{num.bins}{specifies the number of bins}
 
@@ -37,7 +37,7 @@ either \code{max.dist} must be specified or max.dist will
 default to pi.}
 }
 \value{
-An object of class CMBCovariance consisting of a \code{data.frame}
+An object of class CMBCovariance consisting of a \code{\link{data.frame}}
 containing sample covariance
 values, bin centers, and number \code{n} of data point pairs
 whose distance falls in
@@ -45,7 +45,7 @@ the corresponding bin.
 The first
 row of this data.frame corresponds to the sample variance.
 The attribute "breaks" contains the break points used.
-The returned \code{data.frame} has
+The returned \code{\link{data.frame}} has
 \code{num.bins + 1} rows since the first row, the sample
 variance, is not counted as a bin.
 }

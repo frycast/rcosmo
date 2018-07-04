@@ -10,11 +10,11 @@
 ############################################################################
 #' Read CMB data from a FITS file.
 #'
-#' \code{CMBReadFITS} is adapted from the \link{readFITS} function in package
+#' \code{CMBReadFITS} is adapted from the \code{\link{readFITS} }function in package
 #'   \href{https://cran.r-project.org/web/packages/FITSio/index.html}{FITSio}.
 #'   \code{CMBReadFITS} is in development stage and will only work with 'CMB_map_smica1024.fits'.
-#'   When it works, \code{CMBReadFITS} is much faster than \code{readFITS}.
-#'   However, \code{readFITS} is more general and so is more likely to work.
+#'   When it works, \code{CMBReadFITS} is much faster than \code{\link{readFITS}}.
+#'   However, \code{\link{readFITS}} is more general and so is more likely to work.
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.

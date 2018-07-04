@@ -38,12 +38,19 @@
 #'dat$hdr
 #'
 #'@export
-CMBReadFITS <- function(filename = "CMB_map_smica1024.fits", mmap = FALSE) {
+CMBReadFITS <- function(filename, mmap = FALSE) {
+
+  # FITS standard: 2880byte blocks, 80char keyword strings
+  chars <- 80L
+  bytes <- 2880L
 
   zz <- file(filename, "rb")
   header1 <- FITSio::readFITSheader(zz)
   header2 <- FITSio::readFITSheader(zz)
   hdr <- FITSio::parseHdr(header2)
+
+  blocks <- ceiling(length(header1)*chars/bytes) +
+            ceiling(length(header2)*chars/bytes)
 
   # Info needed for reading in binary data
   naxis1 <- as.numeric(hdr[which(hdr == "NAXIS1") + 1]) # Number of bytes per row
@@ -94,6 +101,8 @@ CMBReadFITS <- function(filename = "CMB_map_smica1024.fits", mmap = FALSE) {
 
   swap <- "big" != .Platform$endian
 
+
+
   if ( mmap == FALSE )
   {
     col <- as.numeric(rep(btype, naxis2))
@@ -110,14 +119,10 @@ CMBReadFITS <- function(filename = "CMB_map_smica1024.fits", mmap = FALSE) {
   }
   else # mmap = TRUE ONLY WORKS FOR THE SPECIFIC MAP 'CMB_map_smica1024.fits'
   {
-    mystruct <- mmap::struct(I = mmap::real32(),
-                             Q = mmap::real32(),
-                             U = mmap::real32(),
-                             PMASK = mmap::int8(),
-                             TMASK = mmap::int8())
+    mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
     col <- mmap::mmap(file = filename,
                       mode = mystruct,
-                      off = 2880*3,
+                      off = blocks*bytes,
                       endian = "big")
     mmap::extractFUN(col) <- function(X) do.call(data.frame, X)
   }
@@ -134,3 +139,27 @@ CMBReadFITS <- function(filename = "CMB_map_smica1024.fits", mmap = FALSE) {
   class(cmbdat) <- c("CMBDat", "list")
   return(cmbdat)
 }
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # #
+#       Helper functions for mmap C_types         #
+CTypeSwitch <- function(x) {
+  sapply(x, switch, quote(int8()), quote(real32()))
+}
+
+simplifyNames <- function(x) {
+  sapply(x, function(x) {
+      if (toupper(x) == "I_STOKES") return("I")
+      if (toupper(x) == "Q_STOKES") return("Q")
+      if (toupper(x) == "U_STOKES") return("U")
+      return(x)})
+}
+
+CTypeExpression <- function(TTYPEn, btype)
+{
+  names <- simplifyNames(TTYPEn)
+  CTypes <- CTypeSwitch(btype)
+  names(CTypes) <- names
+  return(CTypes)
+}
+# # # # # # # # # # # # # # # # # # # # # # # # # #

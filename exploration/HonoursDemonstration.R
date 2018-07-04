@@ -12,7 +12,7 @@ data <- readFITS("../CMB_map_smica1024.fits")
 ######################################
 library(rcosmo)
 ## Use memory mapping to connect to the file
-map <- CMBReadFITS("../CMB_map_smica1024.fits", mmap = TRUE)
+map <- CMBReadFITS("../CMB_map_smica2048.fits", mmap = TRUE)
 ## Read the full map
 sky <- CMBDataFrame(map)
 sky

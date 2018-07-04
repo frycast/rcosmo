@@ -59,7 +59,7 @@ HEALPix indices.
 }
 \description{
 The function \code{CMBDataFrame} creates objects of class CMBDataFrame.
-These are a special type of \link{data.frame} that carry metadata
+These are a special type of \code{\link{data.frame}} that carry metadata
 about, e.g., the HEALPix ordering scheme, coordinate system, and nside parameter.
 }
 \examples{

@@ -1,64 +1,10 @@
-#### PREVIOUS WAY TO IMPORT DATA ####
-library(FITSio)
-
-## DON'T RUN THIS, IT TAKES 40 MINUTES!
-data <- readFITS("../CMB_map_smica1024.fits")
-
-
-
-
-######################################
-######### INTRODUCING rcosmo #########
-######################################
-library(rcosmo)
-## Use memory mapping to connect to the file
-map <- CMBReadFITS("../CMB_map_smica2048.fits", mmap = TRUE)
-## Read the full map
-sky <- CMBDataFrame(map)
-sky
-## Read a uniform sample
-set.seed(1)
-sky.sample <- CMBDataFrame(map, sample.size = 1e6)
-plot(sky.sample, size = 2)
-## Add coordinates
-coords(sky.sample) <- "spherical"
-sky.sample
-
-## Calculate covariance
-sky.small <- CMBDataFrame(map, sample.size = 1e5)
-Cov <- covCMB(sky.small, max.dist = 0.03, num.bins = 100)
-X11()
-plot(Cov$dist, Cov$cov/Cov$cov[1],
-     main = "Empirical correlation",
-     xlab = "Distance",
-     ylab = "Correlation")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ######################################
 ######### INTRODUCING HEALPIX ########
 ######################################
+library(rcosmo)
+
+### NOTICE THE EQUAL AREAS AND NICE EVEN SPREAD!
+### SO, GETTING AN (ALMOST) UNIFORM SAMPLE IS SIMPLE
 
 ## Visualise base resolution pixals
 cmbdf <- CMBDataFrame(nside = 64, ordering = "nested")
@@ -72,7 +18,7 @@ plotHPBoundaries(nside = 1, ordering = "nested",
                  incl.labels = 1:12, col = "red")
 
 ## Add more boundaries
-plotHPBoundaries(nside = 16, ordering = "nested",
+plotHPBoundaries(nside = 8, ordering = "nested",
                  incl.labels = 1:12, col = "red")
 
 
@@ -84,6 +30,15 @@ plotHPBoundaries(nside = 16, ordering = "nested",
 
 
 
+######################################
+######### IMPORT HEALPIX #############
+######################################
+
+#### PREVIOUS WAY TO IMPORT DATA ####
+library(FITSio)
+
+## DON'T RUN THIS, IT TAKES OVER 40 MINUTES, AND CRASHES!
+data <- readFITS("../CMB_map_smica2048.fits")
 
 
 
@@ -93,13 +48,41 @@ plotHPBoundaries(nside = 16, ordering = "nested",
 
 
 
+#----------------------------------------------------------------
+
+## Read the full map
+sky <- CMBDataFrame("../CMB_map_smica2048.fits", include.masks = TRUE)
+sky
+
+
+## Use memory mapping to connect to the file
+map <- CMBReadFITS("../CMB_map_smica2048.fits", mmap = TRUE)
+
+
+## Uniform sample from memory map (1 million pixels)
+set.seed(1)
+sky.sample <- CMBDataFrame(map, sample.size = 1e6)
+plot(sky.sample, size = 2)
 
 
 
 
+######################################
+######### CONVERSIONS    #############
+######################################
 
 
+## Add coordinates
+coords(sky.sample) <- "spherical"
+sky.sample
 
+
+coords(sky.sample) <- "cartesian"
+sky.sample
+
+
+## Switch between ring and nested
+ordering(sky.sample) <- "ring"
 
 
 
@@ -133,20 +116,19 @@ plot(star, add = TRUE, size = 3); plot(swin, lwd = 5)
 
 
 
+######################################
+######### STATISTICAL METHODS ########
+######################################
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+## Calculate covariance
+sky.small <- CMBDataFrame(map, sample.size = 1e5)
+Cov <- covCMB(sky.small, max.dist = 0.03, num.bins = 100)
+X11()
+plot(Cov$dist, Cov$cov/Cov$cov[1],
+     main = "Empirical correlation",
+     xlab = "Distance",
+     ylab = "Correlation")
 
 
 ######################################
@@ -154,6 +136,8 @@ plot(star, add = TRUE, size = 3); plot(swin, lwd = 5)
 ######################################
 
 summary(annulus)
+
+# area differences
 
 ######################################
 ############ UNIT TESTING ############

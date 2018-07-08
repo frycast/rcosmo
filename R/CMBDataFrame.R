@@ -325,8 +325,14 @@ CMBDataFrame <- function(CMBData,
         stop(paste("(development stage) include.polar must",
                     "be FALSE if spix is specified"))
       }
-      cmbdf$Q <- as.vector(data$Q_STOKES, mode = "numeric")
-      cmbdf$U <- as.vector(data$U_STOKES, mode = "numeric")
+      if ( length(data$Q_STOKES) > 0 )
+      {
+        cmbdf$Q <- as.vector(data$Q_STOKES, mode = "numeric")
+      }
+      if ( length(data$U_STOKES) > 0 )
+      {
+        cmbdf$U <- as.vector(data$U_STOKES, mode = "numeric")
+      }
     }
 
     if (include.masks == TRUE) {
@@ -335,8 +341,14 @@ CMBDataFrame <- function(CMBData,
         stop(paste("(development stage) include.masks must",
                     "be FALSE if spix is specified"))
       }
-      cmbdf$TMASK <- as.vector(data$TMASK, mode = "integer")
-      cmbdf$PMASK <- as.vector(data$PMASK, mode = "integer")
+      if ( length(data$TMASK) > 0 )
+      {
+        cmbdf$TMASK <- as.vector(data$TMASK, mode = "integer")
+      }
+      if ( length(data$PMASK) > 0 )
+      {
+        cmbdf$PMASK <- as.vector(data$PMASK, mode = "integer")
+      }
     }
 
     message("Adding CMB Data Frame attributes...\n")

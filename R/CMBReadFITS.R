@@ -103,28 +103,36 @@ CMBReadFITS <- function(filename, mmap = FALSE) {
 
 
 
+  # if ( mmap == FALSE )
+  # {
+  #   # col <- as.numeric(rep(btype, naxis2))
+  #   # len <- naxis2*tfields
+  #   # for (i in 1:len){
+  #   #     col[i] <- switch(col[i],
+  #   #                      .Internal(readBin(zz, "integer", 1L,
+  #   #                                        1L, FALSE, swap)), # PMASK,TMASK
+  #   #                      .Internal(readBin(zz, "double", 1L,
+  #   #                                        4L, TRUE, swap)) ) # I,Q,U
+  #   # }
+  #   # col <- matrix(col, nrow = naxis2, byrow = TRUE)
+  #   # col <- as.data.frame(col)
+  # }
+  # else
+  # {}
+
+  mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
+  map <- mmap::mmap(file = filename,
+                    mode = mystruct,
+                    off = blocks*bytes,
+                    endian = "big")
+  mmap::extractFUN(map) <- function(X) do.call(data.frame, X)
+
   if ( mmap == FALSE )
   {
-    col <- as.numeric(rep(btype, naxis2))
-    len <- naxis2*tfields
-    for (i in 1:len){
-        col[i] <- switch(col[i],
-                         .Internal(readBin(zz, "integer", 1L,
-                                           1L, FALSE, swap)), # PMASK,TMASK
-                         .Internal(readBin(zz, "double", 1L,
-                                           4L, TRUE, swap)) ) # I,Q,U
-    }
-    col <- matrix(col, nrow = naxis2, byrow = TRUE)
-    col <- as.data.frame(col)
-  }
-  else # mmap = TRUE ONLY WORKS FOR THE SPECIFIC MAP 'CMB_map_smica1024.fits'
-  {
-    mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
-    col <- mmap::mmap(file = filename,
-                      mode = mystruct,
-                      off = blocks*bytes,
-                      endian = "big")
-    mmap::extractFUN(col) <- function(X) do.call(data.frame, X)
+    col <- map[1:(12*nside^2)]
+    mmap::munmap(map)
+  } else {
+    col <- map
   }
 
 
@@ -144,7 +152,7 @@ CMBReadFITS <- function(filename, mmap = FALSE) {
 # # # # # # # # # # # # # # # # # # # # # # # # # #
 #       Helper functions for mmap C_types         #
 CTypeSwitch <- function(x) {
-  sapply(x, switch, quote(int8()), quote(real32()))
+  sapply(x, switch, quote(mmap::int8()), quote(mmap::real32()))
 }
 
 simplifyNames <- function(x) {

@@ -567,7 +567,9 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
 
   if (missing(col))
   {
-    col <- rcosmo:::colmap[cut(cmbdf$I, length(colmap))]
+    tryCatch(col <- rcosmo:::colmap[cut(cmbdf$I, length(colmap))],
+             error = function(e) {},
+             finally = eval(col <- "blue"))
   }
 
 

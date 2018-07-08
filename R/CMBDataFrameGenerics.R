@@ -552,8 +552,6 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
                               axes = FALSE, aspect = FALSE,
                               col, back.col = "black", labels, ...)
 {
-
-
   if ( !missing(sample.size) )
   {
     spix <- sample(pix(cmbdf), sample.size)
@@ -567,55 +565,9 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
 
   if (missing(col))
   {
-    tryCatch(col <- rcosmo:::colmap[cut(cmbdf$I, length(colmap))],
-             error = function(e) {},
-             finally = eval(col <- "blue"))
+    col <- tryCatch(rcosmo:::colmap[cut(cmbdf$I, length(colmap))],
+             error = function(e) {return("blue")})
   }
-
-
-  # ## Stored data is used to make colours if col is missing
-  # if ( missing(col) )
-  # {
-  #   if ( nside(cmbdf) == 1024 )
-  #   {
-  #     if (missing(sample.size))
-  #     {
-  #       col <- rcosmo:::CMBcols1024
-  #     }
-  #     else
-  #     {
-  #       col <-  CMBcols1024[spix]
-  #       stop("(development stage) colours not assigned to sample")
-  #     }
-  #
-  #     warning(paste("(development stage) the colour map for",
-  #             "nside = 1024 may not be ideal"))
-  #
-  #   }
-  #   else if ( nside(cmbdf) == 2048 )
-  #   {
-  #
-  #     stop("(development stage) colours not assigned")
-  #
-  #     ## The following code must be replaced to work with nside = 2048
-  #     if (missing(sample.size))
-  #     {
-  #       col <- rcosmo:::CMBcols1024
-  #     }
-  #     else
-  #     {
-  #       col <-  CMBcols1024[spix]
-  #     }
-  #
-  #     warning(paste("(development stage) the colour map used was not",
-  #             "generated for nside = 2048"))
-  #   }
-  #   else
-  #   {
-  #     col <- "blue"
-  #   }
-  # }
-
 
   ## Change coordinates if necessary
   cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")

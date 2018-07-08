@@ -57,6 +57,7 @@ sky
 
 ## Use memory mapping to connect to the file
 map <- CMBReadFITS("../CMB_map_smica2048.fits", mmap = TRUE)
+map$data
 
 
 ## Uniform sample from memory map (1 million pixels)
@@ -81,8 +82,6 @@ coords(sky.sample) <- "cartesian"
 sky.sample
 
 
-## Switch between ring and nested
-ordering(sky.sample) <- "ring"
 
 
 
@@ -105,6 +104,7 @@ theta <-  rep(c(0.1,0.5), 4)
 d <- pi/4; phi <- (0:7)*d
 swin <- CMBWindow(theta = theta, phi = phi)
 star <- window(sky.sample, new.window = swin)
+sky.small <- CMBDataFrame(map, sample.size = 1e5)
 plot(annulus, back.col = "black", size = 3)
 plot(dext, lwd = 5); plot(disc, lwd = 5)
 plot(sky.small, add = TRUE)
@@ -119,7 +119,6 @@ plot(star, add = TRUE, size = 3); plot(swin, lwd = 5)
 ######################################
 ######### STATISTICAL METHODS ########
 ######################################
-
 
 ## Calculate covariance
 sky.small <- CMBDataFrame(map, sample.size = 1e5)
@@ -143,7 +142,7 @@ summary(annulus)
 ############ UNIT TESTING ############
 ######################################
 
-# CTRL + SHIFT + T
+# CTRL + SHIFT + T"
 
 
 

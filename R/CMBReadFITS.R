@@ -18,6 +18,8 @@
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.
+#'@param spix The sample pixels (rows) to read from the FITS file
+#'binary data table (optional)
 #'@return A list containing header information and other metadata
 #'as well as an element called \code{data} where:
 #'If \code{mmap = FALSE} then a \code{data.frame} is
@@ -38,7 +40,7 @@
 #'dat$hdr
 #'
 #'@export
-CMBReadFITS <- function(filename, mmap = FALSE) {
+CMBReadFITS <- function(filename, mmap = FALSE, spix) {
 
   # FITS standard: 2880byte blocks, 80char keyword strings
   chars <- 80L
@@ -101,25 +103,6 @@ CMBReadFITS <- function(filename, mmap = FALSE) {
 
   swap <- "big" != .Platform$endian
 
-
-
-  # if ( mmap == FALSE )
-  # {
-  #   # col <- as.numeric(rep(btype, naxis2))
-  #   # len <- naxis2*tfields
-  #   # for (i in 1:len){
-  #   #     col[i] <- switch(col[i],
-  #   #                      .Internal(readBin(zz, "integer", 1L,
-  #   #                                        1L, FALSE, swap)), # PMASK,TMASK
-  #   #                      .Internal(readBin(zz, "double", 1L,
-  #   #                                        4L, TRUE, swap)) ) # I,Q,U
-  #   # }
-  #   # col <- matrix(col, nrow = naxis2, byrow = TRUE)
-  #   # col <- as.data.frame(col)
-  # }
-  # else
-  # {}
-
   mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
   map <- mmap::mmap(file = filename,
                     mode = mystruct,
@@ -129,7 +112,11 @@ CMBReadFITS <- function(filename, mmap = FALSE) {
 
   if ( mmap == FALSE )
   {
-    col <- map[1:(12*nside^2)]
+    if ( missing(spix) )
+    {
+      spix <- 1:(12*nside^2)
+    }
+    col <- map[spix]
     mmap::munmap(map)
   } else {
     col <- map

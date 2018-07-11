@@ -1,6 +1,7 @@
 # The `rcosmo` project
 
-### Documentation (version 1) is available by [clicking here](rcosmo.pdf). 
+### The vignette (version 1) is available by [clicking here](rcosmoVignette.pdf)
+### Documentation (version 0.1, needs work) is available by [clicking here](rcosmo.pdf). 
 
 
 The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from the epoch of recombination. It is the most ancient important source of data about the early universe and the key to unlocking the mysteries of the Big Bang and the structure of time and space. Spurred on by a wealth of satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation. An advanced R programming toolkit is needed to help statisticians perform CMB data analytics. 

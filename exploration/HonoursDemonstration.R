@@ -28,8 +28,6 @@ plotHPBoundaries(nside = 8, ordering = "nested",
 
 
 
-
-
 ######################################
 ######### IMPORT HEALPIX #############
 ######################################
@@ -57,14 +55,13 @@ sky
 
 ## Use memory mapping to connect to the file
 map <- CMBReadFITS("../CMB_map_smica2048.fits", mmap = TRUE)
-map$data
+
 
 
 ## Uniform sample from memory map (1 million pixels)
 set.seed(1)
 sky.sample <- CMBDataFrame(map, sample.size = 1e6)
 plot(sky.sample, size = 2)
-
 
 
 
@@ -101,7 +98,7 @@ disc <- CMBWindow(theta = pi/2, phi = 0, r = 1)
 annulus <- window(sky.sample, new.window = list(disc, dext))
 ## Extract a non-convex polygon
 theta <-  rep(c(0.1,0.5), 4)
-d <- pi/4; phi <- (0:7)*d
+phi <- (0:7)*pi/4
 swin <- CMBWindow(theta = theta, phi = phi)
 star <- window(sky.sample, new.window = swin)
 sky.small <- CMBDataFrame(map, sample.size = 1e5)
@@ -122,12 +119,15 @@ plot(star, add = TRUE, size = 3); plot(swin, lwd = 5)
 
 ## Calculate covariance
 sky.small <- CMBDataFrame(map, sample.size = 1e5)
+
 Cov <- covCMB(sky.small, max.dist = 0.03, num.bins = 100)
+
 X11()
 plot(Cov$dist, Cov$cov/Cov$cov[1],
      main = "Empirical correlation",
      xlab = "Distance",
      ylab = "Correlation")
+head(Cov)
 
 
 ######################################
@@ -142,7 +142,7 @@ summary(annulus)
 ############ UNIT TESTING ############
 ######################################
 
-# CTRL + SHIFT + T"
+# CTRL + SHIFT + T
 
 
 
@@ -161,7 +161,15 @@ summary(annulus)
 
 
 
-
+# th <-  rep(c(0.1,0.5), 4); ph <- (0:7)*pi/4
+# poly <- CMBWindow(theta = th, phi = ph); plot(poly, lwd = 5)
+# winType(poly) <- "minus.polygon"
+# disc <- CMBWindow(x = 0, y = 0, z = 1, r = 0.5); plot(disc , lwd = 5)
+# region <- window(sky.sample, new.window = list(poly, disc))
+# plot(region, size = 2, back.col = "white")
+# sky.small <- CMBDataFrame(map, sample.size = 1e5)
+# plot(sky.small, add = TRUE);
+# plot(disc, lwd = 5); plot(poly, lwd = 5)
 
 
 

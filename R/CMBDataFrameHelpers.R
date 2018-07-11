@@ -96,8 +96,8 @@ resolution <- function( cmbdf )
 #'then the returned CMBDataFrame will be the intersection of \eqn{B}
 #'(resp. \eqn{A}) with \code{cmbdf}.
 #'
-#'@param cmbdf a CMBDataFrame
-#'@param win a CMBWindow or a list of CMBWindows
+#'@param cmbdf a \code{\link{CMBDataFrame}} or CMBDat object
+#'@param win a \code{\link{CMBWindow}} or a list of CMBWindows
 #'@param intersect a boolean that determines
 #'the behaviour when \code{win} is a list (see details).
 #'@param in.pixels a vector of pixels at resolution

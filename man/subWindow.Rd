@@ -7,9 +7,9 @@
 subWindow(cmbdf, win, intersect = TRUE, in.pixels, in.pixels.res = 0)
 }
 \arguments{
-\item{cmbdf}{a CMBDataFrame}
+\item{cmbdf}{a \code{\link{CMBDataFrame}} or CMBDat object}
 
-\item{win}{a CMBWindow or a list of CMBWindows}
+\item{win}{a \code{\link{CMBWindow}} or a list of CMBWindows}
 
 \item{intersect}{a boolean that determines
 the behaviour when \code{win} is a list (see details).}

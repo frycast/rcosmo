@@ -4,12 +4,15 @@
 \alias{CMBReadFITS}
 \title{Read CMB data from a FITS file.}
 \usage{
-CMBReadFITS(filename = "CMB_map_smica1024.fits", mmap = FALSE)
+CMBReadFITS(filename, mmap = FALSE, spix)
 }
 \arguments{
 \item{filename}{The path to the fits file.}
 
 \item{mmap}{A boolean indicating whether to use memory mapping.}
+
+\item{spix}{The sample pixels (rows) to read from the FITS file
+binary data table (optional)}
 }
 \value{
 A list containing header information and other metadata

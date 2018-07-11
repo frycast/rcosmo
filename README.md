@@ -39,8 +39,6 @@ If you did not install RTools and are using RStudio then you will be prompted to
   + 2D projection [Mollweide view](https://en.wikipedia.org/wiki/Mollweide_projection)
   
 ## Suggestions
-  + Provide 2D HEALPix projection. [See here](http://sufoo.c.ooco.jp/program/healpix.html) and Figure 5 from [this paper](cosmocoffee.info/arxivref.php?abs=astro-ph/0409513).
-  + Look at [spatstat](https://cran.r-project.org/web/packages/spatstat/index.html) package):
   + Provide common intensity unit conversions (K_CMB <-> K_RJ <-> MJy/sr). [See here.](https://irsasupport.ipac.caltech.edu/index.php?/Knowledgebase/Article/View/181/20/what-are-the-intensity-units-of-the-planck-all-sky-maps-and-how-do-i-convert-between-them)
 
 ## Notes on Planck maps 

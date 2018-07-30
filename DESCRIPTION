@@ -18,9 +18,9 @@ LazyData: true
 Imports:
     FITSio (>= 2.1-0),
     Rcpp (>= 0.12.11),
-    mmap,
-    tibble,
-    rgl,
+    mmap (>= 0.6-17),
+    tibble (>= 1.4.2),
+    rgl (>= 0.99.16),
 	  cli (>= 1.0.0)
 Suggests:
     knitr,

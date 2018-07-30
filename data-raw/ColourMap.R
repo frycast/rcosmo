@@ -1,5 +1,5 @@
-# library(R.matlab)
-# # CMBcolmap.mat was provided by Yu Guang to suit nside 2048
+library(R.matlab)
+# CMBcolmap.mat was provided by Yu Guang to suit nside 2048
 # mat <- readMat("data-raw/CMBcolmap.mat")
 # colmap <- rgb(mat$map[,1], mat$map[,2], mat$map[,3])
 
@@ -7,13 +7,11 @@
 # https://github.com/zonca/paperplots/blob/master/data/Planck_Parchment_RGB.txt
 planck <- read.table("data-raw/CMBcolmap.txt")
 colmap <- rgb(planck$V1, planck$V2, planck$V3, maxColorValue = 255)
-devtools::use_data(colmap, internal = TRUE)
 
+map <- CMBReadFITS("../CMB_map_smica1024.fits", mmap = TRUE)
+sky <- CMBDataFrame(map)
+rx <- range(sky$I, na.rm = TRUE)
+breaks1024 <- seq.int(rx[1L], rx[2L], length.out = 257L)
 
-# Generate colours for nside = 1024 though we should be doing nside = 2048
-# library(rcosmo)
-# cmbdf <- CMBDataFrame("../CMB_map_smica1024.fits")
-# cols <- colmap[cut(cmbdf$I, length(colmap))]
-# CMBcols1024 <- factor(cols)
-# devtools::use_data(CMBcols1024, internal = TRUE, overwrite = TRUE)
+devtools::use_data(colmap, breaks1024, internal = TRUE, overwrite = TRUE)
 

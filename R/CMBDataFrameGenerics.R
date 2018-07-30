@@ -565,8 +565,9 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
 
   if (missing(col))
   {
-    col <- tryCatch(rcosmo:::colmap[cut(cmbdf$I, length(colmap))],
-             error = function(e) {return("blue")})
+     #col <- tryCatch(rcosmo:::colmap[cut(cmbdf$I, length(rcosmo:::colmap))],
+     #        error = function(e) {return("blue")})
+     col <- colscheme(cmbdf$I, rcosmo:::breaks1024, rcosmo:::colmap)
   }
 
   ## Change coordinates if necessary
@@ -592,7 +593,13 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
   }
 }
 
-
+# Helper function for plot.CMBDataFrame
+colscheme <- function(I, breaks, colmap) {
+  intervals<- findInterval(I, breaks[2:256], rightmost.closed = FALSE,
+                           all.inside = FALSE, left.open = TRUE)
+  cols <- colmap[intervals+1]
+  return(cols)
+}
 
 
 

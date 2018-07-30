@@ -8,3 +8,5 @@
 ^LearnToDoDocumentation$
 ^packrat/
 ^\.Rprofile$
+^rcosmo\.pdf$
+^rcosmoVignette\.pdf$

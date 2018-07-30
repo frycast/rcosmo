@@ -5,8 +5,8 @@ Title: R Cosmic Microwave Background Data Analysis
 Version: 0.0.0.9000
 Authors@R: as.person(c(
     "Daniel Fryer <d.fryer@latrobe.edu.au> [aut, cre]",
-    "Yuguang Wang <Y.Wang@latrobe.edu.au> [aut]",
     "Andriy Olenko <A.Olenko@latrobe.edu.au> [aut]",
+    "Yuguang Wang <Y.Wang@latrobe.edu.au> [aut]",
     "Ming Li <Ming.Li@latrobe.edu.au> [aut]"
   ))
 Description: Handling and statistical analysis of Cosmic Microwave Background 
@@ -25,7 +25,8 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    R.rsp
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
-VignetteBuilder: knitr
+VignetteBuilder: R.rsp

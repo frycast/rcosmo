@@ -1,12 +1,3 @@
-# R function for creating a CMBDataFrame
-
-############### TO DO: #################################
-# 1. If ordering is given and CMBData is path to FITS then
-#     we should convert the odering to the desired ordering after
-#     importing in whatever order the FITS specifies
-# 2. Remove NULL arguments and use missing() instead
-
-
 
 #' CMBDataFrame class
 #'
@@ -45,12 +36,7 @@
 #'add to the CMBDataFrame.
 #'
 #'@return
-#'A data frame whose columns contain the pixel center coordinates
-#'theta, phi (colatitude in range \eqn{[0,pi]} and longitude
-#'in range \eqn{[0,2pi)} respectively)
-#'or (x,y,z), CMB intensities (I), and
-#'optionally polarisation (Q,U) and masks (TMASK, PMASK).
-#'The row.names attribute of the resulting CMB Data Frame contains
+#'A \code{CMBDataFrame} whose \code{row.names} attribute contains
 #'HEALPix indices.
 #'
 #'@examples

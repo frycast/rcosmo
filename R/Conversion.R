@@ -237,3 +237,67 @@ mkxy2pix <- function() {
 }
 
 
+#' Change the coordinate system of a data.frame
+#'
+#'
+#'@param df a data.frame with columns labelled x, y, z (for cartesian)
+#' or theta, phi (for spherical colatitude and longitude respectively)
+#'@param new.coords specifies the new coordinate system
+#'("spherical" or "cartesian").
+#'
+#'@return
+#' A new data.frame is whose coordinates are as specified by
+#' \code{new.coords}
+#'
+#'@export
+coords.data.frame <- function(df, new.coords)
+{
+  if ( new.coords == "spherical" )
+  {
+    if ( all(c("theta","phi") %in% names(df)) )
+    {
+      return(df)
+    }
+
+    if ( !all(c("x","y","z") %in% names(df)) )
+    {
+      stop(paste0("df must have columns labelled x, y, z (for cartesian) ",
+                  "or theta, phi (for spherical colatitude and ",
+                  "longitude respectively)"))
+    }
+
+    x.i <- which(names(df) == "x")
+    y.i <- which(names(df) == "y")
+    z.i <- which(names(df) == "z")
+
+    crds <- df[,c(x.i, y.i, z.i)]
+    crds <- rcosmo::car2sph(crds)
+    other <- df[,-c(x.i, y.i, z.i), drop = FALSE]
+    df <- cbind(crds, other)
+
+  } else if ( new.coords == "cartesian" ) {
+
+    if ( all(c("x","y","z") %in% names(df)) )
+    {
+      return(df)
+    }
+
+    if ( !all(c("theta","phi") %in% names(df)) )
+    {
+      stop(paste0("df must have columns labelled x, y, z (for cartesian) ",
+                  "or theta, phi (for spherical colatitude and ",
+                  "longitude respectively)"))
+    }
+
+    theta.i <- which(names(df) == "theta")
+    phi.i <- which(names(df) == "phi")
+
+    crds <- df[,c(theta.i, phi.i)]
+    crds <- rcosmo::sph2car(crds)
+    other <- df[,-c(theta.i, phi.i), drop = FALSE]
+    df <- cbind(crds, other)
+  }
+
+  return(df)
+}
+

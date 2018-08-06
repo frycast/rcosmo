@@ -4,10 +4,13 @@
 \alias{summary.CMBDataFrame}
 \title{Summarise a \code{\link{CMBDataFrame}}}
 \usage{
-\method{summary}{CMBDataFrame}(cmbdf)
+\method{summary}{CMBDataFrame}(cmbdf, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}
+
+\item{intensities}{the name of a column specifying CMB intensities
+(or potentially another numeric quantity of interest)}
 }
 \value{
 A summary

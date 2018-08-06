@@ -4,12 +4,15 @@
 \alias{plot.CMBDataFrame}
 \title{Plot CMB Data}
 \usage{
-\method{plot}{CMBDataFrame}(cmbdf, add = FALSE, sample.size, type = "p",
-  size = 1, box = FALSE, axes = FALSE, aspect = FALSE, col,
-  back.col = "black", labels, ...)
+\method{plot}{CMBDataFrame}(cmbdf, intensities = "I", add = FALSE,
+  sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
+  aspect = FALSE, col, back.col = "black", labels, ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame with either spherical or cartesian coordinates.}
+
+\item{intensities}{the name of a column that specifies CMB intensities.
+This is only used if \code{col} is unspecified}
 
 \item{add}{if TRUE then this plot will be added to any existing plot.
 Note that if \code{back.col} (see below) is specified then a new plot

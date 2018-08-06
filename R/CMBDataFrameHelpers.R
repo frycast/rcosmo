@@ -77,10 +77,12 @@ resolution <- function( cmbdf )
 
 
 
-#'Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}
+#'subWindow
 #'
+#'Restricts a \code{\link{CMBDataFrame}}, \code{CMBDat} object,
+#'or \code{\link{data.frame}} to a \code{\link{CMBWindow}} region.
 #'A single CMBWindow or a list of CMBWindows can be passed to the \code{win}
-#'argument
+#'argument.
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 #'are treated differently from other windows: Let \eqn{A} be the union of the
@@ -96,18 +98,24 @@ resolution <- function( cmbdf )
 #'then the returned CMBDataFrame will be the intersection of \eqn{B}
 #'(resp. \eqn{A}) with \code{cmbdf}.
 #'
-#'@param cmbdf a \code{\link{CMBDataFrame}} or CMBDat object
+#'@param cmbdf a \code{\link{CMBDataFrame}}, a \code{data.frame},
+#'or CMBDat object. If this is a data.frame then it must have
+#'columns labelled x,y,z specifying cartesian coordinates, or
+#'columns labelled theta, phi specifying colatitude and longitude
+#'respectively.
 #'@param win a \code{\link{CMBWindow}} or a list of CMBWindows
 #'@param intersect a boolean that determines
 #'the behaviour when \code{win} is a list (see details).
 #'@param in.pixels a vector of pixels at resolution
 #'\code{in.pixels.res} whose union contains the
-#'window(s) \code{win} entirely
+#'window(s) \code{win} entirely. This will only be used
+#'if \code{cmbdf} is a \code{CMBDataFrame}
 #'@param in.pixels.res a resolution
 #'(i.e., \eqn{j} such that nside = \code{2^j|}) at
 #'which the \code{in.pixels} parameter is specified
 #'
-#'@return a CMBDataFrame which is restricted to the
+#'@return a CMBDataFrame, or just a data.frame,
+#'which is restricted to the
 #'region of the sky specified by \code{win}
 #'
 #'@examples
@@ -116,9 +124,17 @@ resolution <- function( cmbdf )
 subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
                       in.pixels.res = 0)
 {
-  # if ( !rcosmo::is.CMBDataFrame(cmbdf) ) {
-  #   stop("'cmbdf' must be a CMBDataFrame")
-  # }
+  if ( !is.CMBDataFrame(cmbdf) && !is.CMBDat(cmbdf) )
+  {
+    if ( is.data.frame(cmbdf) )
+    {
+      cmbdf <- coords(cmbdf, new.coords = "cartesian")
+    }
+    else
+    {
+      stop("cmbdf must be a data.frame, CMBDataFrame or CMBDat object")
+    }
+  }
 
   if ( !rcosmo::is.CMBWindow(win) ) {
 
@@ -172,7 +188,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
   exist.m <- FALSE
   exist.p <- FALSE
-  if ( rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( rcosmo::is.CMBDataFrame(cmbdf) || is.data.frame(cmbdf) )
   {
     keep.p <- rep(FALSE, nrow(cmbdf))
     keep.m <- rep(TRUE, nrow(cmbdf))
@@ -181,16 +197,23 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   {
     if ( !rcosmo::is.CMBDat(cmbdf) )
     {
-      stop("cmbdf must be a CMBDataFrame or CMBDat object")
+      stop("cmbdf must be a CMBDataFrame, data.frame or CMBDat object")
     }
     keep.p <- rep(FALSE, 12*cmbdf$nside^2)
     keep.m <- rep(TRUE, 12*cmbdf$nside^2)
   }
   ## pointInside happens here
-  if ( rcosmo::is.CMBDataFrame(cmbdf)
-       && (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian") )
+  if ( (rcosmo::is.CMBDataFrame(cmbdf)
+       && (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian"))
+       || (!rcosmo::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)))
   { ## This might be a little quicker if coords are already cartesian
     #################################################################
+    if ( !all( c("x","y","z") %in% names(cmbdf) ) )
+    {
+     stop(paste0("If cmbdf is a data.frame it must have columns named x,y,z ",
+                 "that specify Cartesian coordinates"))
+    }
+
     for ( w in win.xyz )
     {
       switch(rcosmo::winType(w),
@@ -223,12 +246,14 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
       ns <- nside(cmbdf)
       spx <- rcosmo::pix(cmbdf)
     }
-    else
+    else if ( rcosmo::is.CMBDat(cmbdf) )
     {
       nes <- (cmbdf$ordering == "nested")
       ns <- cmbdf$nside
       spx <- 1:(12*ns^2)
     }
+
+
     for ( w in win.xyz )
     {
       switch(rcosmo::winType(w),
@@ -279,11 +304,11 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     keep <- keep.m
   }
 
-  if ( is.CMBDataFrame(cmbdf) )
+  if ( is.CMBDataFrame(cmbdf) || is.data.frame(cmbdf) )
   {
     cmbdf.new <- cmbdf[keep, , drop = FALSE]
   }
-  else
+  else if ( is.CMBDat(cmbdf) )
   {
     keep <- which(keep)
     cmbdf.new <- cmbdf$data[keep,]
@@ -319,19 +344,8 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #' a new CMBDataFrame whose CMBWindow attribute is new.window
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
-#'are treated differently from other windows: Let \eqn{A} be the union of the
-#'interiors of all windows in the list, \code{new.window}, whose winType
-#'does not include "minus",
-#'and let \eqn{B} be the intersection of the exteriors of all the windows whose
-#'\code{winType} does include "minus". Then, provided that
-#'\code{intersect = TRUE} (the default), the returned CMBDataFrame will
-#'be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
-#'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
-#'be the intersection of the points in \code{cmbdf} with the union of
-#'\eqn{A} and \eqn{B}.
-#'Note that if \eqn{A} (resp. \eqn{B}) is empty
-#'then the returned CMBDataFrame will be the intersection of \eqn{B}
-#'(resp. \eqn{A}) with \code{cmbdf}.
+#'are treated differently from other windows. See \code{\link{subWindow}} for
+#'more details.
 #'
 #'@param cmbdf a CMBDataFrame.
 #'@param new.window optionally specify a new window

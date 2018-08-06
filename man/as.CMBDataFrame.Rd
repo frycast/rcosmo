@@ -4,24 +4,32 @@
 \alias{as.CMBDataFrame}
 \title{as.CMBDataFrame}
 \usage{
-as.CMBDataFrame(df, coords, ordering, nside)
+as.CMBDataFrame(df, ordering, nside, spix)
 }
 \arguments{
-\item{df}{Any data.frame with a column labelled "I" for intensities}
+\item{df}{Any \code{data.frame} whose rows are in HEALPix order}
 
-\item{coords}{specifies the coordinate system to be "spherical",
-"cartesian" or unspecified (HEALPix only). If "spherical" then df
-must have columns named "theta" and "phi" (colatitude and longitude
-respectively). If "cartesian" then df
-must have columns named "x", "y", and "z"}
+\item{ordering}{character string that specifies the ordering scheme
+("ring" or "nested")}
 
-\item{ordering}{specifies the ordering scheme ("ring" or "nested")}
+\item{nside}{an integer that specifies the Nside (resolution)
+HEALPix parameter}
 
-\item{nside}{specifies the Nside parameter}
+\item{spix}{a vector that specifies the HEALPix pixel index
+corresponding to each row of \code{df}. If \code{spix} is left blank and
+\code{df} is a \code{data.frame}, then \code{df} is assumed to contain data
+for every pixel at resolution parameter \code{nside} (the full sky).
+However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
+then \code{spix} is set equal to \code{pix(df)}}
 }
 \value{
 A CMBDataFrame
 }
 \description{
-Safely converts a \code{\link{data.frame}} to a CMBDataFrame
+Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
+rows of the data.frame are assumed to be in the HEALPix order
+given by \code{ordering}, and at the HEALPix resolution given
+by \code{nside}. Coordinates, if present, are checked to correspond
+to HEALPix pixel centers. The coordinates must be named either x,y,z
+(cartesian) or theta, phi (spherical colatitude and longitude respectively).
 }

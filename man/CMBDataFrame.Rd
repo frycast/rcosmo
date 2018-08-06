@@ -49,12 +49,7 @@ sample.size are unspecified.}
 add to the CMBDataFrame.}
 }
 \value{
-A data frame whose columns contain the pixel center coordinates
-theta, phi (colatitude in range \eqn{[0,pi]} and longitude
-in range \eqn{[0,2pi)} respectively)
-or (x,y,z), CMB intensities (I), and
-optionally polarisation (Q,U) and masks (TMASK, PMASK).
-The row.names attribute of the resulting CMB Data Frame contains
+A \code{CMBDataFrame} whose \code{row.names} attribute contains
 HEALPix indices.
 }
 \description{

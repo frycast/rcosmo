@@ -224,21 +224,29 @@ maxDist.CMBDataFrame <- function(cmbdf)
 
 #' as.CMBDataFrame
 #'
-#' Safely converts a \code{\link{data.frame}} to a CMBDataFrame
+#' Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
+#' rows of the data.frame are assumed to be in the HEALPix order
+#' given by \code{ordering}, and at the HEALPix resolution given
+#' by \code{nside}. Coordinates, if present, are checked to correspond
+#' to HEALPix pixel centers. The coordinates must be named either x,y,z
+#' (cartesian) or theta, phi (spherical colatitude and longitude respectively).
 #'
-#' @param df Any data.frame with a column labelled "I" for intensities
-#' @param coords specifies the coordinate system to be "spherical",
-#' "cartesian" or unspecified (HEALPix only). If "spherical" then df
-#' must have columns named "theta" and "phi" (colatitude and longitude
-#' respectively). If "cartesian" then df
-#' must have columns named "x", "y", and "z"
-#' @param ordering specifies the ordering scheme ("ring" or "nested")
-#' @param nside specifies the Nside parameter
+#' @param df Any \code{data.frame} whose rows are in HEALPix order
+#' @param ordering character string that specifies the ordering scheme
+#' ("ring" or "nested")
+#' @param nside an integer that specifies the Nside (resolution)
+#' HEALPix parameter
+#' @param spix a vector that specifies the HEALPix pixel index
+#' corresponding to each row of \code{df}. If \code{spix} is left blank and
+#' \code{df} is a \code{data.frame}, then \code{df} is assumed to contain data
+#' for every pixel at resolution parameter \code{nside} (the full sky).
+#' However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
+#' then \code{spix} is set equal to \code{pix(df)}
 #'
 #' @return A CMBDataFrame
 #'
 #' @export
-as.CMBDataFrame <- function(df, coords, ordering, nside)
+as.CMBDataFrame <- function(df, ordering, nside, spix)
 {
   if ( !is.data.frame(df) ) {
 
@@ -246,66 +254,59 @@ as.CMBDataFrame <- function(df, coords, ordering, nside)
 
   }
 
-  if ( !("I"  %in% names(df) ) ) {
-
-    stop(gettextf("'%s' does not have a column named 'I' for intensities",
-                  deparse(substitute(df))))
-
-  }
-
-
   if ( !is.CMBDataFrame(df) ) {
     ################ df IS NOT A CMBDataFrame ####################
 
+    if(missing(nside) || missing(ordering))
+    {
+      stop(paste0("nside and ordering must both be specified if df is",
+                  " not already a CMBDataFrame"))
+    }
+
+    if(missing(spix))
+    {
+      spix <- 1:(12*nside^2)
+    }
+
+    if ( nrow(df) != length(spix) )
+    {
+      stop(paste0("The number of rows of df must equal the length of spix, ",
+                  "or if spix is unspecified then df must have number of ",
+                  "rows equal to 12*nside^2"))
+    }
+
     attr(df, "ordering") <- ordering
     attr(df, "nside") <- nside
+    attr(df, "row.names") <- spix
 
-    if ( missing(coords) ) {
 
-      if ( any(c("theta", "phi", "x", "y", "z") %in% names(df) ) ) {
-        warning("coords was unspecified and so coordinates
-                were set to HEALPix only")
-      }
+    if ( ("theta" %in% names(df) && "phi" %in% names(df)) ) {
+      attr(df, "coords") <- "spherical"
+    } else if ( ("x" %in% names(df) && "y" %in% names(df)
+          && "z" %in% names(df) ) ) {
+      attr(df, "coords") <- "cartesian"
+    } else {
       attr(df, "coords") <- NULL
-
-      } else {
-
-        coords <- tolower(coords)
-
-        if ( coords == "spherical"
-             && !("theta" %in% names(df)
-                  &&   "phi" %in% names(df)) ) {
-          stop(gettextf("Since coords = spherical, '%s' must have
-                        column names %s and %s",
-                        deparse(substitute(df)),
-                        dQuote("theta"),
-                        dQuote("phi")))
-        }
-
-        if ( coords == "cartesian"
-             && !("x" %in% names(df)
-                  &&   "y" %in% names(df)
-                  &&   "z" %in% names(df) ) ) {
-          stop(gettextf("Since coords = cartesian, '%s' must have
-                        column names %s, %s and %s",
-                        deparse(substitute(df)),
-                        dQuote("x"),
-                        dQuote("y"),
-                        dQuote("z")))
-        }
-
-        if (coords != "spherical" && coords != "cartesian") {
-          stop("coords must be unspecified, 'spherical' or 'cartesian'")
-        }
-        attr(df, "coords") <- coords
-
-      }
+    }
 
   } else {
     ################ df IS  A CMBDataFrame #######################
 
-    coords(df) <- ifelse(!missing(coords), coords, coords(df))
-    ordering(df) <- ifelse(!missing(ordering), ordering, ordering(df))
+    ## We do some checks and change nothing
+
+    if(!missing(spix) && spix != pix(df))
+    {
+      stop(paste0("df is a CMBDataFrame so spix must match",
+                  " pix(df) or be unspecified"))
+    }
+
+    if (!missing(ordering) && ordering(df) != tolower(ordering) ) {
+      stop(gettextf("Since '%s' is a CMBDataFrame already,
+                    ordering should be unspecified or match the ordering
+                    attribute of '%s'",
+                    deparse(substitute(df)),
+                    deparse(substitute(df))))
+    }
 
     if (!missing(nside) && nside(df) != tolower(nside) ) {
       stop(gettextf("Since '%s' is a CMBDataFrame already,
@@ -516,6 +517,8 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #' This function produces a plot from a CMB Data Frame.
 #'
 #'@param cmbdf a CMB Data Frame with either spherical or cartesian coordinates.
+#'@param intensities the name of a column that specifies CMB intensities.
+#'This is only used if \code{col} is unspecified
 #'@param add if TRUE then this plot will be added to any existing plot.
 #'Note that if \code{back.col} (see below) is specified then a new plot
 #'window will be opened and \code{add = TRUE} will have no effect
@@ -547,7 +550,8 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #' plot(df, sample.size = 800000)
 #'
 #'@export
-plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
+plot.CMBDataFrame <- function(cmbdf, intensities = "I",
+                              add = FALSE, sample.size,
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
                               col, back.col = "black", labels, ...)
@@ -565,9 +569,8 @@ plot.CMBDataFrame <- function(cmbdf, add = FALSE, sample.size,
 
   if (missing(col))
   {
-     #col <- tryCatch(rcosmo:::colmap[cut(cmbdf$I, length(rcosmo:::colmap))],
-     #        error = function(e) {return("blue")})
-     col <- colscheme(cmbdf$I, rcosmo:::breaks1024, rcosmo:::colmap)
+     col <- colscheme(cmbdf[,intensities, drop = TRUE],
+                      rcosmo:::breaks1024, rcosmo:::colmap)
   }
 
   ## Change coordinates if necessary
@@ -612,14 +615,16 @@ colscheme <- function(I, breaks, colmap) {
 #' This function produces a summary from a CMBDataFrame.
 #'
 #'@param cmbdf a CMBDataFrame.
+#'@param intensities the name of a column specifying CMB intensities
+#'(or potentially another numeric quantity of interest)
 #'
 #'@return
 #'A summary
 #'
 #'@export
-summary.CMBDataFrame <- function(cmbdf)
+summary.CMBDataFrame <- function(cmbdf, intensities = "I")
 {
-  ans <- list(intensities = summary(cmbdf$I))
+  ans <- list(intensities = summary(cmbdf[,intensities, drop = TRUE]))
 
   if ( is.null(coords(cmbdf)) )
   {

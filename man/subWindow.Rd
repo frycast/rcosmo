@@ -2,12 +2,16 @@
 % Please edit documentation in R/CMBDataFrameHelpers.R
 \name{subWindow}
 \alias{subWindow}
-\title{Restrict a \code{\link{CMBDataFrame}} to a \code{\link{CMBWindow}}}
+\title{subWindow}
 \usage{
 subWindow(cmbdf, win, intersect = TRUE, in.pixels, in.pixels.res = 0)
 }
 \arguments{
-\item{cmbdf}{a \code{\link{CMBDataFrame}} or CMBDat object}
+\item{cmbdf}{a \code{\link{CMBDataFrame}}, a \code{data.frame},
+or CMBDat object. If this is a data.frame then it must have
+columns labelled x,y,z specifying cartesian coordinates, or
+columns labelled theta, phi specifying colatitude and longitude
+respectively.}
 
 \item{win}{a \code{\link{CMBWindow}} or a list of CMBWindows}
 
@@ -16,19 +20,23 @@ the behaviour when \code{win} is a list (see details).}
 
 \item{in.pixels}{a vector of pixels at resolution
 \code{in.pixels.res} whose union contains the
-window(s) \code{win} entirely}
+window(s) \code{win} entirely. This will only be used
+if \code{cmbdf} is a \code{CMBDataFrame}}
 
 \item{in.pixels.res}{a resolution
 (i.e., \eqn{j} such that nside = \code{2^j|}) at
 which the \code{in.pixels} parameter is specified}
 }
 \value{
-a CMBDataFrame which is restricted to the
+a CMBDataFrame, or just a data.frame,
+which is restricted to the
 region of the sky specified by \code{win}
 }
 \description{
+Restricts a \code{\link{CMBDataFrame}}, \code{CMBDat} object,
+or \code{\link{data.frame}} to a \code{\link{CMBWindow}} region.
 A single CMBWindow or a list of CMBWindows can be passed to the \code{win}
-argument
+argument.
 }
 \details{
 Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})

@@ -112,3 +112,7 @@ If you did not install RTools and are using RStudio then you will be prompted to
 #### Journals
   + [Journal of Statistical Software](https://www.jstatsoft.org)
   + [The R Journal](https://journal.r-project.org)
+#### Source files for stars and constellations
+  + [https://www.iau.org/public/themes/constellations/](https://www.iau.org/public/themes/constellations/)
+  + [http://www.midnightkite.com/index.aspx?AID=0&URL=StarChartFAQ](http://www.midnightkite.com/index.aspx?AID=0&URL=StarChartFAQ)
+  + [http://pbarbier.com/constellations/boundaries.html](http://pbarbier.com/constellations/boundaries.html)

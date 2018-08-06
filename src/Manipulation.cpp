@@ -262,7 +262,6 @@ IntegerVector nest2ring(int nside, IntegerVector pix ) {
 //'
 //'@name pix2coords_internal
 //'
-//' @export
 // [[Rcpp::export]]
 NumericMatrix pix2coords_internal(int nside = 0,
                    bool nested = true,
@@ -402,7 +401,6 @@ NumericMatrix pix2coords_internal(int nside = 0,
 //'
 //'@name car2sph
 //'
-//'@export
 // [[Rcpp::export]]
 DataFrame car2sph(DataFrame df) {
 
@@ -497,7 +495,6 @@ DataFrame sph2car(DataFrame df) {
 //'
 //'@name pointInConvexPolygonHP
 //'
-//'@export
 // [[Rcpp::export]]
 LogicalVector pointInConvexPolygonHP(int nside, bool nested, DataFrame win,
                                      Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue)
@@ -559,7 +556,6 @@ LogicalVector pointInConvexPolygonHP(int nside, bool nested, DataFrame win,
 //'
 //'@name pointInDiscHP
 //'
-//'@export
 // [[Rcpp::export]]
 LogicalVector pointInDiscHP(int nside, bool nested, DataFrame win,
                             Rcpp::Nullable<Rcpp::IntegerVector> spix = R_NilValue)
@@ -610,7 +606,6 @@ LogicalVector pointInDiscHP(int nside, bool nested, DataFrame win,
 //'
 //'@name pointInConvexPolygon
 //'
-//'@export
 // [[Rcpp::export]]
 LogicalVector pointInConvexPolygon(DataFrame df, DataFrame win)
 {
@@ -669,7 +664,6 @@ LogicalVector pointInConvexPolygon(DataFrame df, DataFrame win)
 //'
 //'@name pointInDisc
 //'
-//'@export
 // [[Rcpp::export]]
 LogicalVector pointInDisc(DataFrame df, DataFrame win)
 {
@@ -710,7 +704,6 @@ LogicalVector pointInDisc(DataFrame df, DataFrame win)
 //'
 //'@name maxDist_internal
 //'
-//'@export
 // [[Rcpp::export]]
 double maxDist_internal(Rcpp::DataFrame cmbdf) {
 

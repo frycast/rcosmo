@@ -15,7 +15,6 @@ using namespace Rcpp;
 //'
 //'@name covCMB_internal1
 //'
-//'@export
 // [[Rcpp::export]]
 NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
 
@@ -104,7 +103,6 @@ NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks) {
 //'
 //'@name covCMB_internal2
 //'
-//'@export
 // [[Rcpp::export]]
 NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks) {
 

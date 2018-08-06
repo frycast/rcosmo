@@ -66,7 +66,7 @@ covCMB <- function(cmbdf,
 
   if ( !missing(sample.size) ) {
 
-    cmbdf <- sampleCMB(cmbdf, sample.size = sample.size)
+    cmbdf <- rcosmo:::sampleCMB(cmbdf, sample.size = sample.size)
 
   }
 
@@ -87,7 +87,7 @@ covCMB <- function(cmbdf,
 
     if (calc.max.dist)
     {
-      max.dist <- maxDist_internal(cmbdf)
+      max.dist <- rcosmo:::maxDist_internal(cmbdf)
     }
 
 
@@ -102,7 +102,7 @@ covCMB <- function(cmbdf,
 
   }
 
-  covs <- covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
+  covs <- rcosmo:::covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
 
   # Reverse order since cosine is decreasing
   covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])

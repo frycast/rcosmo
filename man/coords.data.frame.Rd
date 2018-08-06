@@ -14,7 +14,7 @@ or theta, phi (for spherical colatitude and longitude respectively)}
 ("spherical" or "cartesian").}
 }
 \value{
-A new data.frame is whose coordinates are as specified by
+A new data.frame whose coordinates are as specified by
 \code{new.coords}
 }
 \description{

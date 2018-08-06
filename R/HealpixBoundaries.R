@@ -106,7 +106,7 @@ plotHPBoundaries <- function(nside, eps = pi/90,
       stop("ordering, if specified, must be 'ring' or 'nested'")
     }
 
-    centers <- rcosmo::CMBDataFrame(nside = nside, ordering = ordering,
+    centers <- rcosmo:::CMBDataFrame(nside = nside, ordering = ordering,
                                     coords = "cartesian")[incl.labels,]
 
     rcosmo:::plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
@@ -119,7 +119,7 @@ plotHPBoundaries <- function(nside, eps = pi/90,
 ## HELPER FUNCTION 1
 plotPixel <- function(S, col = "black", lwd = 1, ...)
 {
-  C <- rcosmo::sph2car(S)
+  C <- rcosmo:::sph2car(S)
   rgl::plot3d(C[,"x"],C[,"y"],C[,"z"],
               type = "l", add = TRUE, col = col, lwd = lwd, ...)
 }

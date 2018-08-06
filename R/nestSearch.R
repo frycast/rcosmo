@@ -31,7 +31,7 @@ nestSearch <- function(target, nside,
   h <- list(pix = 0)
   for ( i in 2:length(j) )
   {
-    h <- rcosmo::nestSearch_step( target, j2=j[i],
+    h <- rcosmo:::nestSearch_step( target, j2=j[i],
                                   j1=j[i-1], pix.j1 = h$pix,
                                   demo.plot = demo.plot)
   }
@@ -96,7 +96,7 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
   spix.j2 <- pixelWindow(j1, j2, pix.j1)
 
   # Convert spix.j2 to Cartesian coordinates
-  xyz.j2 <- rcosmo::pix2coords_internal(nside = nside.j2,
+  xyz.j2 <- rcosmo:::pix2coords_internal(nside = nside.j2,
                                         nested = TRUE,
                                         cartesian = TRUE,
                                         spix = spix.j2)[,1:3]
@@ -112,15 +112,15 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
     ### -------- JUST FOR VISUALISATION ---------- ###
     ###      PLOT TO VISUALISE THE RESULTS         ###
     # HEALPix points at level j2
-    hp.j2 <- rcosmo::pix2coords(nside = nside.j2,
+    hp.j2 <- rcosmo:::pix2coords(nside = nside.j2,
                                 order = "nested",
                                 coords = "cartesian")
     rgl::plot3d(hp.j2, col="black", size = 2,
                 type = 'p', pch = 2,  add = TRUE)
 
     # HEALPix points in window
-    pixelWin <- rcosmo::pixelWindow(j1, j2, pix.j1)
-    pixelWin <- rcosmo::pix2coords(nside = nside.j2,
+    pixelWin <- rcosmo:::pixelWindow(j1, j2, pix.j1)
+    pixelWin <- rcosmo:::pix2coords(nside = nside.j2,
                                    order = "nested",
                                    coords = "cartesian",
                                    spix = pixelWin)

@@ -38,7 +38,7 @@ pixelArea <- function(cmbdf)
 header <- function( cmbdf )
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -61,7 +61,7 @@ header <- function( cmbdf )
 resolution <- function( cmbdf )
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -136,14 +136,14 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     }
   }
 
-  if ( !rcosmo::is.CMBWindow(win) ) {
+  if ( !rcosmo:::is.CMBWindow(win) ) {
 
     if ( !is.list(win) )
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
 
-    if (!all(sapply(win, rcosmo::is.CMBWindow)))
+    if (!all(sapply(win, rcosmo:::is.CMBWindow)))
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
@@ -153,20 +153,20 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     win <- list(win)
   }
 
-  if ( !missing(in.pixels) && rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !missing(in.pixels) && rcosmo:::is.CMBDataFrame(cmbdf) )
   {
-    if ( rcosmo::ordering(cmbdf) != "nested" )
+    if ( rcosmo:::ordering(cmbdf) != "nested" )
     {
       stop("in.pixel can only be used with nested ordering")
     }
-    pixelWin <- rcosmo::pixelWindow(in.pixels.res,
+    pixelWin <- rcosmo:::pixelWindow(in.pixels.res,
                                     log2(nside(cmbdf)),
                                     in.pixels)
     cmbdf <- cmbdf[pixelWin,]
   }
 
   # subsequent operations will require win to have cartesian coordinates
-  win.xyz <- lapply(win, rcosmo::coords, new.coords = "cartesian")
+  win.xyz <- lapply(win, rcosmo:::coords, new.coords = "cartesian")
 
   # Triangulate all non-convex polygons into lists of convex polygons,
   # making win.xyz into a new list of only convex polygons
@@ -174,9 +174,9 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   for ( w in win.xyz )
   {
     #Triangulate each w and add all triangles to win.conv
-    if ( rcosmo:::contains("polygon", winType(w)) && !rcosmo::assumedConvex(w))
+    if ( rcosmo:::contains("polygon", winType(w)) && !rcosmo:::assumedConvex(w))
     {
-        win.conv <- append(win.conv, rcosmo::triangulate(w))
+        win.conv <- append(win.conv, rcosmo:::triangulate(w))
     }
     else
     {
@@ -188,14 +188,14 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
   exist.m <- FALSE
   exist.p <- FALSE
-  if ( rcosmo::is.CMBDataFrame(cmbdf) || is.data.frame(cmbdf) )
+  if ( rcosmo:::is.CMBDataFrame(cmbdf) || is.data.frame(cmbdf) )
   {
     keep.p <- rep(FALSE, nrow(cmbdf))
     keep.m <- rep(TRUE, nrow(cmbdf))
   }
   else
   {
-    if ( !rcosmo::is.CMBDat(cmbdf) )
+    if ( !rcosmo:::is.CMBDat(cmbdf) )
     {
       stop("cmbdf must be a CMBDataFrame, data.frame or CMBDat object")
     }
@@ -203,9 +203,9 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     keep.m <- rep(TRUE, 12*cmbdf$nside^2)
   }
   ## pointInside happens here
-  if ( (rcosmo::is.CMBDataFrame(cmbdf)
+  if ( (rcosmo:::is.CMBDataFrame(cmbdf)
        && (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian"))
-       || (!rcosmo::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)))
+       || (!rcosmo:::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)))
   { ## This might be a little quicker if coords are already cartesian
     #################################################################
     if ( !all( c("x","y","z") %in% names(cmbdf) ) )
@@ -216,18 +216,18 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
     for ( w in win.xyz )
     {
-      switch(rcosmo::winType(w),
+      switch(rcosmo:::winType(w),
              polygon = keep.p <- keep.p |
-               rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+               rcosmo:::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
              minus.polygon = keep.m <- keep.m &
-               !rcosmo::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+               !rcosmo:::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
              disc = keep.p <- keep.p |
-               rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+               rcosmo:::pointInDisc(cmbdf[,c("x","y","z")], w),
              minus.disc = keep.m <- keep.m &
-               !rcosmo::pointInDisc(cmbdf[,c("x","y","z")], w),
+               !rcosmo:::pointInDisc(cmbdf[,c("x","y","z")], w),
              stop("Failed to determine window type using rcosmo::winType"))
 
-      if ( rcosmo:::contains("minus", rcosmo::winType(w)) )
+      if ( rcosmo:::contains("minus", rcosmo:::winType(w)) )
       {
         exist.m <- TRUE
       }
@@ -240,13 +240,13 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   else
   { ## This is quicker and more robust than assigning new coords in R
     #################################################################
-    if ( rcosmo::is.CMBDataFrame(cmbdf) )
+    if ( rcosmo:::is.CMBDataFrame(cmbdf) )
     {
-      nes <- (rcosmo::ordering(cmbdf) == "nested")
+      nes <- (rcosmo:::ordering(cmbdf) == "nested")
       ns <- nside(cmbdf)
-      spx <- rcosmo::pix(cmbdf)
+      spx <- rcosmo:::pix(cmbdf)
     }
-    else if ( rcosmo::is.CMBDat(cmbdf) )
+    else if ( rcosmo:::is.CMBDat(cmbdf) )
     {
       nes <- (cmbdf$ordering == "nested")
       ns <- cmbdf$nside
@@ -256,26 +256,26 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
     for ( w in win.xyz )
     {
-      switch(rcosmo::winType(w),
+      switch(rcosmo:::winType(w),
              polygon = keep.p <- keep.p |
-               rcosmo::pointInConvexPolygonHP(nside = ns,
+               rcosmo:::pointInConvexPolygonHP(nside = ns,
                                               nested = nes,
                                               win = w, spix = spx),
              minus.polygon = keep.m <- keep.m &
-               !rcosmo::pointInConvexPolygonHP(nside = ns,
+               !rcosmo:::pointInConvexPolygonHP(nside = ns,
                                                nested = nes,
                                                win = w, spix = spx),
              disc = keep.p <- keep.p |
-               rcosmo::pointInDiscHP(nside = ns,
+               rcosmo:::pointInDiscHP(nside = ns,
                                      nested = nes,
                                      win = w, spix = spx),
              minus.disc = keep.m <- keep.m &
-               !rcosmo::pointInDiscHP(nside = ns,
+               !rcosmo:::pointInDiscHP(nside = ns,
                                       nested = nes,
                                       win = w, spix = spx),
              stop("Failed to determine window type using rcosmo::winType"))
 
-      if ( rcosmo:::contains("minus", rcosmo::winType(w)) )
+      if ( rcosmo:::contains("minus", rcosmo:::winType(w)) )
       {
         exist.m <- TRUE
       }
@@ -397,19 +397,19 @@ window <- function(cmbdf, new.window, intersect = TRUE,
         stop("in.pixel can only be used with nested ordering")
       }
 
-      return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
+      return(rcosmo:::subWindow(cmbdf = cmbdf, win = new.window,
                                intersect = intersect,
                                in.pixels = in.pixels,
                                in.pixels.res = in.pixels.res))
     }
     else
     {
-      return(rcosmo::subWindow(cmbdf = cmbdf, win = new.window,
+      return(rcosmo:::subWindow(cmbdf = cmbdf, win = new.window,
                                intersect = intersect))
     }
   }
   # We reach this point only if new.window is missing
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("If new.window is unspecified then cmbdf must be a CMBDataFrame")
   }
@@ -420,12 +420,12 @@ window <- function(cmbdf, new.window, intersect = TRUE,
       stop("in.pixels out of range specified by in.pixels.res")
     }
 
-    if (rcosmo::ordering(cmbdf) != "nested")
+    if (rcosmo:::ordering(cmbdf) != "nested")
     {
       stop("in.pixel can only be used with nested ordering")
     }
 
-    pixelWin <- rcosmo::pixelWindow(in.pixels.res,
+    pixelWin <- rcosmo:::pixelWindow(in.pixels.res,
                                     log2(nside(cmbdf)),
                                     in.pixels)
 
@@ -442,7 +442,7 @@ window <- function(cmbdf, new.window, intersect = TRUE,
 #'@export
 `window<-` <- function(cmbdf,...,value)
 {
-  return(rcosmo::window(cmbdf, new.window = value))
+  return(rcosmo:::window(cmbdf, new.window = value))
 }
 
 
@@ -471,7 +471,7 @@ window <- function(cmbdf, new.window, intersect = TRUE,
 pix <- function(cmbdf, new.pix)
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -492,7 +492,7 @@ pix <- function(cmbdf, new.pix)
 #' Assign new pixel indices to a CMBDataFrame
 #' @export
 `pix<-` <- function(cmbdf,...,value) {
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -529,7 +529,7 @@ pix <- function(cmbdf, new.pix)
 ordering <- function( cmbdf, new.ordering )
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -572,7 +572,7 @@ ordering <- function( cmbdf, new.ordering )
 #' Assign new ordering scheme to CMBDataFrame
 #' @export
 `ordering<-` <- function(cmbdf,...,value) {
-  rcosmo::ordering(cmbdf, new.ordering = value)
+  rcosmo:::ordering(cmbdf, new.ordering = value)
   cmbdf
 }
 
@@ -599,7 +599,7 @@ ordering <- function( cmbdf, new.ordering )
 nside <- function( cmbdf )
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -639,7 +639,7 @@ nside <- function( cmbdf )
 #'@export
 sampleCMB <- function(cmbdf, sample.size)
 {
-  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }

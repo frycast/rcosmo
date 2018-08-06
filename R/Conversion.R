@@ -246,7 +246,7 @@ mkxy2pix <- function() {
 #'("spherical" or "cartesian").
 #'
 #'@return
-#' A new data.frame is whose coordinates are as specified by
+#' A new data.frame whose coordinates are as specified by
 #' \code{new.coords}
 #'
 #'@export
@@ -271,7 +271,7 @@ coords.data.frame <- function(df, new.coords)
     z.i <- which(names(df) == "z")
 
     crds <- df[,c(x.i, y.i, z.i)]
-    crds <- rcosmo::car2sph(crds)
+    crds <- rcosmo:::car2sph(crds)
     other <- df[,-c(x.i, y.i, z.i), drop = FALSE]
     df <- cbind(crds, other)
 
@@ -293,7 +293,7 @@ coords.data.frame <- function(df, new.coords)
     phi.i <- which(names(df) == "phi")
 
     crds <- df[,c(theta.i, phi.i)]
-    crds <- rcosmo::sph2car(crds)
+    crds <- rcosmo:::sph2car(crds)
     other <- df[,-c(theta.i, phi.i), drop = FALSE]
     df <- cbind(crds, other)
   }

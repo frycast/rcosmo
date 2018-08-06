@@ -92,12 +92,12 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 {
   args <- list(...)
 
-  if ( !all(sapply(args, rcosmo::is.CMBDataFrame)) )
+  if ( !all(sapply(args, rcosmo:::is.CMBDataFrame)) )
   {
     stop("rbind.CMBDataFrame requires all arguments to be CMBDataFrames")
   }
 
-  if ( !all(sapply(args, rcosmo::areCompatibleCMBDFs, cmbdf2 = args[[1]])) )
+  if ( !all(sapply(args, rcosmo:::areCompatibleCMBDFs, cmbdf2 = args[[1]])) )
   {
     stop(paste0("The CMBDataFrames are not compatible for rbind.\n",
                 "You may need to convert coordinates or ordering"))
@@ -122,7 +122,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 
   # Keep this CMBDataFrame and the windows so we can get attributes
   cmbdf <- args[[1]]
-  wins <- sapply(args, rcosmo::window)
+  wins <- sapply(args, rcosmo:::window)
 
   args <- lapply(args, as.data.frame)
   df <- do.call(rbind, c(args, deparse.level = deparse.level))
@@ -472,7 +472,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       z.i <- which(names(cmbdf) == "z")
 
       crds <- cmbdf[,c(x.i, y.i, z.i)]
-      crds <- rcosmo::car2sph(crds)
+      crds <- rcosmo:::car2sph(crds)
       other <- cmbdf[,-c(x.i, y.i, z.i), drop = FALSE]
       cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, other)
       attr(cmbdf, "coords") <- "spherical"
@@ -485,7 +485,7 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       phi.i <- which(names(cmbdf) == "phi")
 
       crds <- cmbdf[,c(theta.i, phi.i)]
-      crds <- rcosmo::sph2car(crds)
+      crds <- rcosmo:::sph2car(crds)
       other <- cmbdf[,-c(theta.i, phi.i), drop = FALSE]
       cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, other)
       attr(cmbdf, "coords") <- "cartesian"

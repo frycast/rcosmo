@@ -38,7 +38,7 @@ convertToXYZDataFrame <- function(p)
        || ncol(p) == 2 )
   {
     names(p) <- c("theta","phi")
-    return(rcosmo::sph2car(data.frame(theta = p["theta"], phi = p["phi"])))
+    return(rcosmo:::sph2car(data.frame(theta = p["theta"], phi = p["phi"])))
   }
   else if ( (is.null(ncol(p)) && length(p) == 3)
              || ncol(p) == 3 )

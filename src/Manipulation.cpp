@@ -451,7 +451,6 @@ DataFrame car2sph(DataFrame df) {
 //'
 //'@name sph2car
 //'
-//'@export
 // [[Rcpp::export]]
 DataFrame sph2car(DataFrame df) {
 

@@ -122,7 +122,6 @@ car2sph <- function(df) {
 #'
 #'@name sph2car
 #'
-#'@export
 sph2car <- function(df) {
     .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
 }

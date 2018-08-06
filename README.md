@@ -116,3 +116,8 @@ If you did not install RTools and are using RStudio then you will be prompted to
   + [https://www.iau.org/public/themes/constellations/](https://www.iau.org/public/themes/constellations/)
   + [http://www.midnightkite.com/index.aspx?AID=0&URL=StarChartFAQ](http://www.midnightkite.com/index.aspx?AID=0&URL=StarChartFAQ)
   + [http://pbarbier.com/constellations/boundaries.html](http://pbarbier.com/constellations/boundaries.html)
+#### Other examples of HEALPix data
+  + [http://healpix.sourceforge.net/resources.php](http://healpix.sourceforge.net/resources.php)
+  + [http://aladin.u-strasbg.fr/java/Demo/AladinDemo.gml](http://aladin.u-strasbg.fr/java/Demo/AladinDemo.gml)
+  + [http://www.atnf.csiro.au/people/mcalabre/WCS/example_data.html](http://www.atnf.csiro.au/people/mcalabre/WCS/example_data.html)
+

@@ -8,7 +8,6 @@
 #'
 #'@name covCMB_internal1
 #'
-#'@export
 covCMB_internal1 <- function(cmbdf, breaks) {
     .Call('_rcosmo_covCMB_internal1', PACKAGE = 'rcosmo', cmbdf, breaks)
 }
@@ -30,7 +29,6 @@ covCMB_internal1 <- function(cmbdf, breaks) {
 #'
 #'@name covCMB_internal2
 #'
-#'@export
 covCMB_internal2 <- function(cmbdf, cos_breaks) {
     .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, cos_breaks)
 }
@@ -92,7 +90,6 @@ nest2ring <- function(nside, pix) {
 #'
 #'@name pix2coords_internal
 #'
-#' @export
 pix2coords_internal <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
     .Call('_rcosmo_pix2coords_internal', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
 }
@@ -107,7 +104,6 @@ pix2coords_internal <- function(nside = 0L, nested = TRUE, spix = NULL, cartesia
 #'
 #'@name car2sph
 #'
-#'@export
 car2sph <- function(df) {
     .Call('_rcosmo_car2sph', PACKAGE = 'rcosmo', df)
 }
@@ -142,7 +138,6 @@ sph2car <- function(df) {
 #'
 #'@name pointInConvexPolygonHP
 #'
-#'@export
 pointInConvexPolygonHP <- function(nside, nested, win, spix = NULL) {
     .Call('_rcosmo_pointInConvexPolygonHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
 }
@@ -163,7 +158,6 @@ pointInConvexPolygonHP <- function(nside, nested, win, spix = NULL) {
 #'
 #'@name pointInDiscHP
 #'
-#'@export
 pointInDiscHP <- function(nside, nested, win, spix = NULL) {
     .Call('_rcosmo_pointInDiscHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
 }
@@ -182,7 +176,6 @@ pointInDiscHP <- function(nside, nested, win, spix = NULL) {
 #'
 #'@name pointInConvexPolygon
 #'
-#'@export
 pointInConvexPolygon <- function(df, win) {
     .Call('_rcosmo_pointInConvexPolygon', PACKAGE = 'rcosmo', df, win)
 }
@@ -201,7 +194,6 @@ pointInConvexPolygon <- function(df, win) {
 #'
 #'@name pointInDisc
 #'
-#'@export
 pointInDisc <- function(df, win) {
     .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
 }
@@ -216,7 +208,6 @@ pointInDisc <- function(df, win) {
 #'
 #'@name maxDist_internal
 #'
-#'@export
 maxDist_internal <- function(cmbdf) {
     .Call('_rcosmo_maxDist_internal', PACKAGE = 'rcosmo', cmbdf)
 }

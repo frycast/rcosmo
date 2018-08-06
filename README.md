@@ -22,7 +22,7 @@ The current version of `rcosmo` includes the following functionality:
 + Spherical geometry tools such as shortest distance between two points, calculate spherical angles, shortest distance between a point and a region, etc
 
 
-## Installation
+## Installation (Windows and OSX)
 First install the devtools package:
 ```
 install.packages("devtools")
@@ -33,6 +33,16 @@ Then use devtools to install rcosmo:
 devtools::github_install("VidaliLama/rcosmo")
 ```
 If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::github_install("VidaliLama/rcosmo")` again.
+
+## Installation (Linux)
+
+```
+install.packages("devtools")
+library(devtools)
+find_rtools()
+source("https://raw.githubusercontent.com/r-lib/remotes/master/install-github.R")$value("r-lib/remotes")
+remotes::install_github("VidaliLama/rcosmo")
+```
 
 ## Next steps
   + Kriging (e.g. for equatorial region)

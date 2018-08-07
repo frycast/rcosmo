@@ -53,7 +53,7 @@ A \code{CMBDataFrame} whose \code{row.names} attribute contains
 HEALPix indices.
 }
 \description{
-The function \code{CMBDataFrame} creates objects of class CMBDataFrame.
+The function \code{CMBDataFrame} creates objects of class \code{CMBDataFrame}.
 These are a special type of \code{\link{data.frame}} that carry metadata
 about, e.g., the HEALPix ordering scheme, coordinate system, and nside parameter.
 }

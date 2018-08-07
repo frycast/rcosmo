@@ -30,7 +30,7 @@ install.packages("devtools")
 Then, if using Microsoft Windows, install the latest RTools from CRAN at this link [here](https://cran.r-project.org/bin/windows/Rtools/) if it is not already installed on your device.
 Then use devtools to install rcosmo:
 ```
-devtools::github_install("VidaliLama/rcosmo")
+devtools::install_github("VidaliLama/rcosmo")
 ```
 If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::github_install("VidaliLama/rcosmo")` again.
 

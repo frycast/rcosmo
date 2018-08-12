@@ -32,7 +32,7 @@ nestSearch <- function(target, nside,
   for ( i in 2:length(j) )
   {
     h <- rcosmo:::nestSearch_step( target, j2=j[i],
-                                  j1=j[i-1], pix.j1 = h$pix,
+                                  j1 = j[i-1], pix.j1 = h$pix,
                                   demo.plot = demo.plot)
   }
 

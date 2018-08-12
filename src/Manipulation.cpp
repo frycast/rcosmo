@@ -288,7 +288,9 @@ NumericMatrix pix2coords_internal(int nside = 0,
     }
   } else {
     IntegerVector sp(spix.get());
-    std::sort(sp.begin(),sp.end());
+    // We used to sort spix before HPDataFrame but I
+    // am not sure if this is necessary anymore:
+    //std::sort(sp.begin(),sp.end());
     N = sp.length();
     pvec = sp - 1;
 
@@ -301,11 +303,13 @@ NumericMatrix pix2coords_internal(int nside = 0,
         throw std::invalid_argument("sample pixel is out of range");
       }
     }
-    for (int spi = 0; spi < N-1; ++spi) {
-      if (sp[spi] == sp[spi+1]) {
-        throw std::invalid_argument("duplicate pixel indices not allowed");
-      }
-    }
+// We banned duplicate pixel indices before HPDataFrame was created,
+// but I'm not sure if this is necessary anymore:
+//    for (int spi = 0; spi < N-1; ++spi) {
+//      if (sp[spi] == sp[spi+1]) {
+//        throw std::invalid_argument("duplicate pixel indices not allowed");
+//      }
+//    }
   }
 
   NumericMatrix ang(N,2);

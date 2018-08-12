@@ -4,7 +4,7 @@
 \alias{plotHPBoundaries}
 \title{plotHPBoundaries}
 \usage{
-plotHPBoundaries(nside, eps = pi/90, col = "black", lwd = 1, ordering,
+plotHPBoundaries(nside, eps = pi/90, col = "gray", lwd = 1, ordering,
   incl.labels = 1:(12 * nside^2), nums.col = col, nums.size = 1,
   font = 2, ...)
 }

@@ -1,3 +1,145 @@
+#' HEALPix ordering scheme from a CMBDataFrame
+#'
+#' This function returns the HEALPix ordering scheme from a CMBDataFrame.
+#' The ordering scheme is either "ring" or "nested".
+#'
+#' If a new ordering is specified, using e.g. new.ordering = "ring", the
+#' ordering scheme of the CMBDataFrame will be converted.
+#'
+#'@param cmbdf a CMB Data Frame.
+#'@param new.ordering specifies the new ordering ("ring" or "nest") if a change of ordering
+#'scheme is desired.
+#'
+#'@return
+#' The name of the HEALPix ordering scheme that is used in the CMBDataFrame cmbdf
+#'
+#'@examples
+#' df <- CMBDataFrame(nside = 1, ordering = "nested")
+#' ordering(df)
+#' ordering(df, new.ordering = "ring")
+#'
+#'@export
+ordering.CMBDataFrame <- function( cmbdf, new.ordering )
+{
+
+  if ( missing(new.ordering) )
+  {
+    return(attr( cmbdf, "ordering" ))
+
+  } else {
+    new.ordering <- as.character(tolower(new.ordering))
+
+    if ( identical(as.character(attr(cmbdf, "ordering")), new.ordering) )
+    {
+      # Nothing to do
+
+    } else if ( identical(new.ordering, "nested") ) {
+
+      message("Converting to nested ordering...\n")
+      pix(cmbdf) <- rcosmo:::ring2nest(nside = nside(cmbdf),
+                                       pix = pix(cmbdf))
+      cmbdf <- cmbdf[order(pix(cmbdf)),]
+      attr(cmbdf, "ordering") <- "nested"
+
+    } else if ( identical(new.ordering, "ring") ) {
+
+      message("Converting to ring ordering...\n")
+      pix(cmbdf) <- nest2ring(nside = nside(cmbdf), pix = pix(cmbdf))
+      cmbdf <- cmbdf[order(pix(cmbdf)),]
+      attr(cmbdf, "ordering") <- "ring"
+
+    } else {
+
+      stop("new.ordering must be either 'ring' or 'nested'")
+
+    }
+
+    return(cmbdf)
+  }
+}
+
+#' Assign new ordering scheme to CMBDataFrame
+#' @export
+`ordering<-.CMBDataFrame` <- function(cmbdf,...,value) {
+  rcosmo:::ordering(cmbdf, new.ordering = value)
+  cmbdf
+}
+
+
+
+
+
+
+
+
+
+
+
+#' HEALPix Nside parameter from a CMBDataFrame
+#'
+#' This function returns the HEALPix Nside parameter of a CMBDataFrame
+#'
+#'@param cmbdf a CMB Data Frame.
+#'
+#'@return
+#' The HEALPix Nside parameter
+#'
+#'@examples
+#' df <- CMBDataFrame(nside = 16)
+#' nside(df)
+#'
+#'@export
+nside.CMBDataFrame <- function( cmbdf )
+{
+  return( as.integer(attr( cmbdf, "nside" )) )
+}
+
+
+
+
+
+
+#' HEALPix pixel indices from \code{\link{CMBDataFrame}}
+#'
+#' If new.pix is unspecified then this function returns the vector of
+#' HEALPix pixel indices from a CMBDataFrame. If new.pix is specified then
+#' this function returns a new CMBDataFrame with pixel indices new.pix
+#'
+#'@param cmbdf a CMBDataFrame.
+#'@param new.pix optional vector of pixel indices
+#'
+#'@return
+#' The vector of HEALPix pixel indices or, if new.pix is specified,
+#' a new CMBDataFrame.
+#'
+#'@examples
+#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+#' pix(df)
+#'
+#'@export
+pix.CMBDataFrame <- function(cmbdf, new.pix)
+{
+
+  if ( !missing(new.pix) )
+  {
+    row.names(cmbdf) <- new.pix
+    return(cmbdf)
+  }
+
+  return(as.integer( row.names(cmbdf) ))
+}
+
+
+
+#' Assign new pixel indices to a CMBDataFrame
+#' @export
+`pix<-.CMBDataFrame` <- function(cmbdf,...,value) {
+  row.names(cmbdf) <- value
+  cmbdf
+}
+
+
+
 # This prevents cmbdf[,i] from dropping attributes of cmbdf
 #'@export
 `[.CMBDataFrame` <- function(x,i,j, ..., drop) {
@@ -510,13 +652,11 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 
 
 
-
-#### CURRENTLY THE DATA USED IN THE PLOT FUNCTION IS TOO LARGE FOR CRAN ##
 #' Plot CMB Data
 #'
-#' This function produces a plot from a CMB Data Frame.
+#' This function produces a plot from a \code{\link{CMBDataFrame}}.
 #'
-#'@param cmbdf a CMB Data Frame with either spherical or cartesian coordinates.
+#'@param cmbdf a \code{\link{CMBDataFrame}}.
 #'@param intensities the name of a column that specifies CMB intensities.
 #'This is only used if \code{col} is unspecified
 #'@param add if TRUE then this plot will be added to any existing plot.
@@ -546,8 +686,9 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #'A plot of the CMB data
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' plot(df, sample.size = 800000)
+#' filename <- "CMB_map_smica1024.fits"
+#' sky <- CMBDataFrame(filename)
+#' plot(sky, sample.size = 800000)
 #'
 #'@export
 plot.CMBDataFrame <- function(cmbdf, intensities = "I",
@@ -569,8 +710,16 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
 
   if (missing(col))
   {
-     col <- colscheme(cmbdf[,intensities, drop = TRUE],
-                      rcosmo:::breaks1024, rcosmo:::colmap)
+     col <- tryCatch(colscheme(cmbdf[,intensities, drop = TRUE],
+                           rcosmo:::breaks1024, rcosmo:::colmap),
+                     error = function(e) {
+                      stop(paste0("Problem producing CMB colour scheme. ",
+                                  "Make sure that the intensities ",
+                                  "parameter matches a column name of cmbdf. ",
+                                  "Or, try specifying colours manually ",
+                                  "with the col parameter."),
+                           call. = FALSE)
+                     })
   }
 
   ## Change coordinates if necessary
@@ -585,7 +734,8 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
 
   if ( missing(labels) )
   {
-    rgl::plot3d(cmbdf.xyz, col = col, type = type, size = size,
+    rgl::plot3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z,
+                col = col, type = type, size = size,
                 box = box, axes = axes, add = add, aspect = aspect, ...)
   }
   else

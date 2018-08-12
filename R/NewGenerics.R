@@ -10,3 +10,18 @@ geoArea <- function(x) UseMethod("geoArea", x)
 
 #'@export
 maxDist <- function(x) UseMethod("maxDist", x)
+
+#'@export
+pix <- function(x,y) UseMethod("pix", x)
+
+#'@export
+`pix<-` <- function(x, ..., value) UseMethod("pix<-", x)
+
+#'@export
+nside <- function(x) UseMethod("nside", x)
+
+#'@export
+ordering <- function(x,y) UseMethod("ordering", x)
+
+#'@export
+`ordering<-` <- function(x, ..., value) UseMethod("ordering<-", x)

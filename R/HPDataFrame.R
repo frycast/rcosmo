@@ -374,15 +374,16 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 
   ns <- nside(hpdf)
   od <- ordering(hpdf)
+  pix <- pix(hpdf)
   nc <- (new.coords == "cartesian")
 
   if ( healpix.only == TRUE )
   {
-    crd.names <- names(hpdf)[names(hpdf) %in%
-                  c("x","y","z","theta","phi")]
-    if ( length(crd.names) > 0 )
+    crd.cols <- which( names(hpdf) %in%
+                  c("x","y","z","theta","phi") )
+    if ( length(crd.cols) > 0 )
     {
-      hpdf <- hpdf[ , -crd.names]
+      hpdf <- hpdf[ , -crd.cols]
     }
 
   }
@@ -399,7 +400,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
       # Use pix to convert to spherical
       sph <- rcosmo:::pix2coords_internal(nside = ns,
                 nested = (od == "nested"),
-                spix = pix(hpdf),
+                spix = pix,
                 cartesian = FALSE)
       sph <- as.data.frame(sph)
       names(sph) <- c("theta","phi")
@@ -429,7 +430,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
       # Use pix to convert to cartesian
       xyz <- rcosmo:::pix2coords_internal(nside = ns,
                nested = (od == "nested"),
-               spix = pix(hpdf),
+               spix = pix,
                cartesian = TRUE)
       xyz <- as.data.frame(xyz)
       names(xyz) <- c("x","y","z")
@@ -448,6 +449,9 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
   }
 
   class(hpdf) <- unique(c("HPDataFrame", class(hpdf)))
+  attr(hpdf, "ordering") <- od
+  attr(hpdf, "nside") <- ns
+  attr(hpdf, "pix") <- pix
 
   return(hpdf)
 }

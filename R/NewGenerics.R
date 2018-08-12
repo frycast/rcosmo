@@ -1,5 +1,5 @@
 #'@export
-coords <- function(x, new.coords) UseMethod("coords", x)
+coords <- function(x, ...) UseMethod("coords", x)
 
 #'@export
 `coords<-` <- function(x, ..., value) UseMethod("coords<-", x)

@@ -6,46 +6,53 @@
 \usage{
 \method{plot}{CMBDataFrame}(cmbdf, intensities = "I", add = FALSE,
   sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
-  aspect = FALSE, col, back.col = "black", labels, ...)
+  aspect = FALSE, col, back.col = "black", labels, hp.boundaries = 0,
+  hpb.col = "gray", ...)
 }
 \arguments{
-\item{cmbdf}{a \code{\link{CMBDataFrame}}.}
+\item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
-\item{intensities}{the name of a column that specifies CMB intensities.
-This is only used if \code{col} is unspecified}
+\item{intensities}{The name of a column that specifies CMB intensities.
+This is only used if \code{col} is unspecified.}
 
-\item{add}{if TRUE then this plot will be added to any existing plot.
+\item{add}{If TRUE then this plot will be added to any existing plot.
 Note that if \code{back.col} (see below) is specified then a new plot
-window will be opened and \code{add = TRUE} will have no effect}
+window will be opened and \code{add = TRUE} will have no effect.}
 
-\item{sample.size}{optionally specifies the size of a simple random
+\item{sample.size}{Optionally specifies the size of a simple random
 sample to take before plotting. This can make the plot less
-computationally intensive}
+computationally intensive.}
 
-\item{type}{a single character indicating the type of item to plot.
+\item{type}{A single character indicating the type of item to plot.
 Supported types are: 'p' for points, 's' for spheres, 'l' for lines,
 'h' for line segments from z = 0, and 'n' for nothing.}
 
-\item{size}{the size of plotted points}
+\item{size}{The size of plotted points.}
 
-\item{box}{whether to draw a box}
+\item{box}{Whether to draw a box.}
 
-\item{axes}{whether to draw axes}
+\item{axes}{Whether to draw axes.}
 
-\item{aspect}{either a logical indicating whether to adjust the
+\item{aspect}{Either a logical indicating whether to adjust the
 aspect ratio, or a new ratio.}
 
-\item{col}{specify the colour(s) of the plotted points}
+\item{col}{Specify the colour(s) of the plotted points.}
 
-\item{back.col}{optionally specifies the background colour of
+\item{back.col}{Optionally specifies the background colour of
 the plot. This argument is passed to rgl::bg3d.}
 
-\item{labels}{optionally specify a vector of labels to plot,
+\item{labels}{Optionally specify a vector of labels to plot,
 such as words or vertex indices. If this is specified then
 \code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
-\code{length(labels)} must equal \code{nrow(cmbdf)}}
+\code{length(labels)} must equal \code{nrow(cmbdf)}.}
 
-\item{...}{arguments passed to rgl::plot3d}
+\item{hp.boundaries}{Integer. If greater than 0 then HEALPix
+pixel boundaries at \code{nside = hp.boundaries} will be
+added to the plot.}
+
+\item{hpb.col}{Colour for the \code{hp.boundaries}.}
+
+\item{...}{Arguments passed to rgl::plot3d.}
 }
 \value{
 A plot of the CMB data

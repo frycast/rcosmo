@@ -332,12 +332,16 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 
 #' Coordinate system from a \code{\link{HPDataFrame}}
 #'
-#' Add or change coordinates in a \code{\link{HPDataFrame}}
+#' Add or change coordinates in a \code{\link{HPDataFrame}}.
+#' This does not affect the argument object \code{hpdf}.
+#' Instead it returns a new \code{\link{HPDataFrame}}
+#' with the desired coordinates. To change \code{hpdf}
+#' directly see \code{\link{coords<-.HPDataFrame}}.
 #'
 #' If columns exist labelled x,y,z (cartesian) or theta, phi
 #' (colatitude and longitude respectively), then these will be
 #' treated as the coordinates of \code{hpdf} and converted
-#' accordingly
+#' accordingly.
 #' If columns x,y,z or theta,phi are not present then the healpix
 #' pixel indices as given by \code{pix(hpdf)} are used for
 #' assigning coordinates.
@@ -357,6 +361,11 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 #'@examples
 #' df <- HPDataFrame(I = rep(0,12), nside = 1)
 #' coords(df, new.coords = "cartesian")
+#' # Notice that df is unchanged
+#' df
+#'
+#' # Instead, change df directly
+#' coords(df) <- "spherical"
 #'
 #' ## specify cartesian coordinates then convert to spherical
 #' hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
@@ -364,9 +373,9 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 #' hp1 <- coords(hp1, new.coords = "spherical")
 #'
 #' ## Instead, ignore/drop existing coordinates and use HEALPix only
-#' hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
+#' hp2 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
 #'                    nside = 1, auto.spix = TRUE)
-#' hp1 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
+#' hp2 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
 #'
 #'@export
 coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
@@ -458,7 +467,23 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 
 
 
-#' Assign new \code{\link{coords}} system to \code{\link{HPDataFrame}}
+#' Assign new coordinate system to a \code{\link{HPDataFrame}}
+#'
+#' @seealso \code{\link{coords.HPDataFrame}}
+#'
+#' @examples
+#'
+#' ## Create df with no coords, then create df2 with cartesian coords
+#' df <- HPDataFrame(I = rep(0,12), nside = 1)
+#' df
+#' df2 <- coords(df, new.coords = "cartesian")
+#' df2
+#' df
+#'
+#' ## Change the coords of df directly (to spherical)
+#' coords(df) <- "spherical"
+#' df
+#'
 #' @export
 `coords<-.HPDataFrame` <- function(hpdf,...,value) {
   return(coords(hpdf, new.coords = value))
@@ -513,8 +538,18 @@ print.HPDataFrame <- function(hpdf,...)
 #'
 #'@return the sum of the areas of all pixels (rows) in hpdf
 #'
+#'@examples
+#'
+#' ## At low resolution, a few data points can
+#' ## occupy a large pixel area, e.g.:
+#' hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
+#'                    nside = 1, auto.spix = TRUE)
+#' pix(hp1)
+#' geoArea(hp1) # pi = 1/4*(surface area of unit sphere)
+#' plot(hp1, size = 5, hp.boundaries = 1)
+#'
 #'@export
-geoArea.HPDataFrame <- function(cmbdf)
+geoArea.HPDataFrame <- function(hpdf)
 {
   nside <- rcosmo:::nside(hpdf)
   if ( !is.numeric(nside) ) stop("problem with hpdf nside attribute")

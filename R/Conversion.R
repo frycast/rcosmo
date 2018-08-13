@@ -237,7 +237,11 @@ mkxy2pix <- function() {
 }
 
 
-#' Change the coordinate system of a data.frame
+#' Create a new data.frame with a given coordinate system
+#'
+#' This does not affect the original object \code{df}.
+#' If you wish to affect \code{df} then use
+#' \code{\link{coords<-.data.frame}}
 #'
 #'
 #'@param df a data.frame with columns labelled x, y, z (for cartesian)
@@ -248,6 +252,18 @@ mkxy2pix <- function() {
 #'@return
 #' A new data.frame whose coordinates are as specified by
 #' \code{new.coords}
+#'
+#' @examples
+#'
+#' ## Create df with no coords, then create df2 with cartesian coords
+#' df <- data.frame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+#' df2 <- coords(df, new.coords = "spherical")
+#' df2
+#' df
+#'
+#' ## Change the coords of df directly (to spherical)
+#' coords(df) <- "spherical"
+#' df
 #'
 #'@export
 coords.data.frame <- function(df, new.coords)
@@ -299,5 +315,28 @@ coords.data.frame <- function(df, new.coords)
   }
 
   return(df)
+}
+
+
+
+#' Assign new coordinate system to a \code{\link{data.frame}}
+#'
+#' @seealso \code{\link{coords.data.frame}}
+#'
+#' @examples
+#'
+#' ## Create df with no coords, then create df2 with cartesian coords
+#' df <- data.frame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+#' df2 <- coords(df, new.coords = "cartesian")
+#' df2
+#' df
+#'
+#' ## Change the coords of df directly (to spherical)
+#' coords(df) <- "spherical"
+#' df
+#'
+#' @export
+`coords<-.data.frame` <- function(df,...,value) {
+  return(coords(df, new.coords = value))
 }
 

@@ -3,7 +3,36 @@ rm(list = ls())
 lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
        detach,character.only=TRUE,unload=TRUE)
 
-## Simple plot
+
+
+##############################################################
+#### investigating minDist, maxDist, geoDist #################
+##############################################################
+
+## minDist is a cpp function
+
+## maxDist is a generic function
+## maxDist.CMBWindow
+## maxDist.CMBDataFrame
+
+win <- CMBWindow(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+maxDist(win)
+
+## geoDist is in Geometry.R and can take two data.frames
+p1 <- data.frame(x = c(1, 0, 0), y = c(0, 1, 0), z = c(0, 0, 1))
+p2 <- data.frame(theta = c(pi/4, pi/4), phi = c(0,pi/2))
+geoDist(p1,p2, include.names = TRUE)
+
+
+
+m <- geoDist(p1,p2)
+
+
+
+##############################################################
+## Simple plot that isn't working on Andriy's PC #############
+##############################################################
+
 library(rcosmo)
 path <- "C:/Users/danie/Downloads/CMB_maps/"
 filename <- "COM_CMB_IQU-commander_1024_R2.02_full.fits"
@@ -54,7 +83,19 @@ hp3
 plot(hp3, size = 5, hp.boundaries = 1)
 print(hp3)
 
-print(tibble::as.tibble(hp3))
+## At low resolution, a few data points can
+## occupy a large pixel area, e.g.:
+hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
+                   nside = 1, auto.spix = TRUE)
+pix(hp1)
+geoArea(hp1) #1/4 of the surface area
+plot(hp1, size = 5, hp.boundaries = 1)
+
+
+hp1 <- CMBDataFrame(nside = 1, spix = c(1,2,3))
+pix(hp1)
+geoArea(hp1) # pi = 1/4*(surface area of unit sphere)
+plot(hp1, size = 5, hp.boundaries = 1)
 
 
 

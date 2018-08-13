@@ -4,21 +4,34 @@
 \alias{geoDist}
 \title{Geodesic distance on the unit sphere}
 \usage{
-geoDist(p1, p2)
+geoDist(p1, p2, include.names = FALSE)
 }
 \arguments{
-\item{p1}{a 3 element vector on the unit sphere
-given in Cartesian coordinates (x,y,z),
-or a 2 element vector (theta, phi) giving spherical coordinates,
-can also be a \code{\link{data.frame}} or matrix with rows specifying vectors}
+\item{p1}{A \code{\link{data.frame}} with rows
+specifying numeric points located on the unit sphere.
+It should have columns labelled x,y,z
+for Cartesian or theta, phi for spherical colatitude and
+longitude respectively.}
 
-\item{p2}{a vector on the unit sphere given in Cartesian coordinates (x,y,z)
-or a named vector (theta, phi) giving spherical coordinates,
-can also be a \code{\link{data.frame}} or matrix with rows specifying vectors}
+\item{p2}{Same as p1.}
+
+\item{include.names}{Boolean. If TRUE then the row and
+column names of the returned matrix will be taken from
+the points in \code{p1} and \code{p2} (see examples
+below).}
 }
 \value{
-The geodesic distance between \code{p1} and \code{p2}
+Let \eqn{n} denote the number of rows of \code{p1}
+and let \eqn{m} denote the number of rows of \code{p2}.
+Then the returned object is an \eqn{n} by \eqn{m} matrix
+whose entry in position \eqn{ij} is the geodesic distance
+from the \eqn{i}th row of \code{p1} to the
+\eqn{j}th row of \code{p2}.
 }
 \description{
 Geodesic distance on the unit sphere
+}
+\examples{
+
+
 }

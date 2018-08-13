@@ -2,7 +2,7 @@
 % Please edit documentation in R/Conversion.R
 \name{coords.data.frame}
 \alias{coords.data.frame}
-\title{Change the coordinate system of a data.frame}
+\title{Create a new data.frame with a given coordinate system}
 \usage{
 \method{coords}{data.frame}(df, new.coords)
 }
@@ -18,5 +18,20 @@ A new data.frame whose coordinates are as specified by
 \code{new.coords}
 }
 \description{
-Change the coordinate system of a data.frame
+This does not affect the original object \code{df}.
+If you wish to affect \code{df} then use
+\code{\link{coords<-.data.frame}}
+}
+\examples{
+
+## Create df with no coords, then create df2 with cartesian coords
+df <- data.frame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+df2 <- coords(df, new.coords = "spherical")
+df2
+df
+
+## Change the coords of df directly (to spherical)
+coords(df) <- "spherical"
+df
+
 }

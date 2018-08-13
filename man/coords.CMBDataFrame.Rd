@@ -7,9 +7,9 @@
 \method{coords}{CMBDataFrame}(cmbdf, new.coords)
 }
 \arguments{
-\item{cmbdf}{a CMBDataFrame.}
+\item{cmbdf}{A CMBDataFrame.}
 
-\item{new.coords}{specifies the new coordinate system ("spherical" or "cartesian")
+\item{new.coords}{Specifies the new coordinate system ("spherical" or "cartesian")
 if a change of coordinate system is desired.}
 }
 \value{
@@ -28,7 +28,7 @@ returns a new CMBDataFrame whose coordinates are of the specified
 type. The original CMBDataFrame, \code{cmbdf}, is unaffected.
 If you would like to change \code{cmbdf} without creating a new
 variable, then use \code{\link{coords<-.CMBDataFrame}} (see
-examples below)
+examples below).
 }
 \examples{
 

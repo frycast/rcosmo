@@ -23,3 +23,10 @@ Convert from "nested" to "ring" ordering
 in the "ring" ordering scheme from the pixel index
 in the "nested" ordering scheme.
 }
+\examples{
+# compute HEALPix indices in the ring ordering scheme
+nside <- 8
+pix <-c(1,2,23)
+nest2ring(nside,pix)
+
+}

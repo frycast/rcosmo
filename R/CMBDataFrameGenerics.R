@@ -299,7 +299,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 #'
 #' @examples
 #' a <- CMBDataFrame(nside = 2, ordering = "ring", coords = "cartesian")
-#' a <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
+#' b <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
 #' areCompatibleCMBDFs(a,b)
 #'
 #' suppressMessages(areCompatibleCMBDFs(a,b))
@@ -314,7 +314,7 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2)
 
   ns <- identical(nside(cmbdf1), nside(cmbdf2))
   ord <- identical(ordering(cmbdf1), ordering(cmbdf2))
-  crd <- identical(coords(cmbdf1), coords(cmbdf2))
+  pix <- identical(pix(cmbdf1), pix(cmbdf2))
 
   reasons <- ""
   if (!ns)
@@ -327,13 +327,12 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2)
     reasons <- paste0(reasons, "ordering mismatch (ordering1 = ", ordering(cmbdf1),
                       ", ordering2 = ", ordering(cmbdf2), ")\n")
   }
-  if (!crd)
+  if (!pix)
   {
-    reasons <- paste0(reasons, "coords mismatch (coords1 = ", coords(cmbdf1),
-                      ", coords2 = ", coords(cmbdf2), ")")
+    reasons <- paste0(reasons, "pixels mismatch pix(cmbdf1) != pix(cmbdf2)\n")
   }
 
-  if ( !(ns && ord && crd) )
+  if ( !(ns && ord && pix) )
   {
     message(reasons)
     return(FALSE)
@@ -524,8 +523,8 @@ is.CMBDat <- function(cmbdf)
 #'@export
 geoArea.CMBDataFrame <- function(cmbdf)
 {
-  nside <- nside(cmbdf)
-  if ( !is.numeric(nside) ) stop("problem with cmbdf nside parameter")
+  nside <- rcosmo:::nside(cmbdf)
+  if ( !is.numeric(nside) ) stop("problem with cmbdf nside attribute")
   return(pi/(3*nside^2)*nrow(cmbdf))
 }
 
@@ -537,13 +536,20 @@ geoArea.CMBDataFrame <- function(cmbdf)
 
 
 
-#' Coordinate system from a CMBDataFrame
+#' Coordinate system from a \code{\link{CMBDataFrame}}
 #'
-#' This function returns the coordinate system used in a CMBDataFrame.
-#' The coordinate system is either "cartesian" or "spherical"
+#' If \code{new.coords} is unspecified then
+#' this function returns the coordinate system used in the CMBDataFrame
+#' \code{cmbdf}.
+#' The coordinate system is either "cartesian" or "spherical".
+#' If a new coordinate system is specified, using e.g.
+#' \code{new.coords = "spherical"}, then this function instead
+#' returns a new CMBDataFrame whose coordinates are of the specified
+#' type. The original CMBDataFrame, \code{cmbdf}, is unaffected.
+#' If you would like to change \code{cmbdf} without creating a new
+#' variable, then use \code{\link{coords<-.CMBDataFrame}} (see
+#' examples below)
 #'
-#' If a new coordinate system is specified, using e.g. new.coords = "spherical", the
-#' coordinate system of the CMBDataFrame will be converted.
 #'
 #'@param cmbdf a CMBDataFrame.
 #'@param new.coords specifies the new coordinate system ("spherical" or "cartesian")
@@ -555,9 +561,20 @@ geoArea.CMBDataFrame <- function(cmbdf)
 #' equivalent to \code{cmbdf} but having the desired change of coordinates
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+#'
+#' ## Create df with no coords, then create df2 with cartesian coords
+#' df <- CMBDataFrame(nside = 16)
+#' df
 #' coords(df)
-#' coords(df, new.coords = "cartesian")
+#' df2 <- coords(df, new.coords = "cartesian")
+#' coords(df2)
+#' coords(df)
+#'
+#' ## Change the coords of df directly (to spherical)
+#' coords(df) <- "spherical"
+#' df
+#'
+#'
 #'
 #'@export
 coords.CMBDataFrame <- function( cmbdf, new.coords )
@@ -640,7 +657,24 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 
 
 
-#' Assign new \code{\link{coords}} system to \code{\link{CMBDataFrame}}
+#' Assign new coordinate system to a \code{\link{CMBDataFrame}}
+#'
+#' @seealso \code{\link{coords.CMBDataFrame}}
+#'
+#' @examples
+#'
+#' ## Create df with no coords, then create df2 with cartesian coords
+#' df <- CMBDataFrame(nside = 16)
+#' df
+#' coords(df)
+#' df2 <- coords(df, new.coords = "cartesian")
+#' coords(df2)
+#' coords(df)
+#'
+#' ## Change the coords of df directly (to spherical)
+#' coords(df) <- "spherical"
+#' df
+#'
 #' @export
 `coords<-.CMBDataFrame` <- function(cmbdf,...,value) {
   return(coords(cmbdf, new.coords = value))
@@ -895,6 +929,7 @@ print.summary.CMBDataFrame <- function(x, ...)
 #'@export
 print.CMBDataFrame <- function(cmbdf,...)
 {
+  cat("A CMBDataFrame\n")
   print(tibble::as.tibble(cmbdf), ...)
 }
 

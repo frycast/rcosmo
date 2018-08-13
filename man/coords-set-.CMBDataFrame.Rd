@@ -2,10 +2,28 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{coords<-.CMBDataFrame}
 \alias{coords<-.CMBDataFrame}
-\title{Assign new \code{\link{coords}} system to \code{\link{CMBDataFrame}}}
+\title{Assign new coordinate system to a \code{\link{CMBDataFrame}}}
 \usage{
 \method{coords}{CMBDataFrame}(cmbdf, ...) <- value
 }
 \description{
-Assign new \code{\link{coords}} system to \code{\link{CMBDataFrame}}
+Assign new coordinate system to a \code{\link{CMBDataFrame}}
+}
+\examples{
+
+## Create df with no coords, then create df2 with cartesian coords
+df <- CMBDataFrame(nside = 16)
+df
+coords(df)
+df2 <- coords(df, new.coords = "cartesian")
+coords(df2)
+coords(df)
+
+## Change the coords of df directly (to spherical)
+coords(df) <- "spherical"
+df
+
+}
+\seealso{
+\code{\link{coords.CMBDataFrame}}
 }

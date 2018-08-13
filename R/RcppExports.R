@@ -30,7 +30,7 @@ mkpix2xyC <- function(nside = 1024L) {
 #' @return the output is the corresponding set of pixel in
 #' the ring ordering scheme.
 #'
-#' @example
+#' @examples
 #' # compute HEALPix indices in the ring ordering scheme
 #' nside <- 8
 #' pix <-c(1,2,23)

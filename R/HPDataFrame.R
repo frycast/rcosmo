@@ -372,9 +372,9 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 {
 
-  ns <- nside(hpdf)
-  od <- ordering(hpdf)
-  pix <- pix(hpdf)
+  ns <- rcosmo:::nside(hpdf)
+  od <- rcosmo:::ordering(hpdf)
+  pix <- rcosmo:::pix(hpdf)
   nc <- (new.coords == "cartesian")
 
   if ( healpix.only == TRUE )
@@ -462,4 +462,61 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 #' @export
 `coords<-.HPDataFrame` <- function(hpdf,...,value) {
   return(coords(hpdf, new.coords = value))
+}
+
+
+#' Check if an object is of class \code{\link{HPDataFrame}}
+#'
+#' @param hpdf Any R object
+#'
+#' @return TRUE if \code{hpdf} is a HPDataFrame, otherwise FALSE
+#'
+#' @export
+is.HPDataFrame <- function(hpdf)
+{
+  identical(as.numeric(sum(class(hpdf) == "HPDataFrame")), 1)
+}
+
+
+
+#' Print a \code{\link{HPDataFrame}}
+#'
+#' This function neatly prints the contents of a HPDataFrame.
+#'
+#'@param hpdf a HPDataFrame.
+#'@param ... arguments passed to \code{\link{print.tbl_df}}
+#'
+#'@return
+#'Prints contents of the HPDataFrame to the console.
+#'
+#'@examples
+#' df <- HPDataFrame(I = rep(0,12), nside = 1, ordering = "nested")
+#' print(df)
+#' df
+#'
+#'@export
+print.HPDataFrame <- function(hpdf,...)
+{
+  cat("A HPDataFrame\n")
+  print(tibble::as.tibble(hpdf), ...)
+}
+
+
+
+
+#' Geodesic area covered by a \code{\link{HPDataFrame}}
+#'
+#' Gives the surface on the unit sphere
+#' that is encompassed by all pixels in \code{hpdf}
+#'
+#'@param hpdf a HPDataFrame
+#'
+#'@return the sum of the areas of all pixels (rows) in hpdf
+#'
+#'@export
+geoArea.HPDataFrame <- function(cmbdf)
+{
+  nside <- rcosmo:::nside(hpdf)
+  if ( !is.numeric(nside) ) stop("problem with hpdf nside attribute")
+  return(pi/(3*nside^2)*length(unique(rcosmo:::pix((hpdf)))))
 }

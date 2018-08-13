@@ -67,6 +67,7 @@ remotes::install_github("VidaliLama/rcosmo")
     >  'SMICA' indicates SMICA pipeline (others: COMMANDER, NILC, SEVEM).
     
 ## Useful links
+
 #### Data
   + [Planck legacy archive](http://pla.esac.esa.int/pla/#home)
 #### Related papers and wikis

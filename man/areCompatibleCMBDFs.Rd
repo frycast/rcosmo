@@ -21,7 +21,7 @@ To suppress this use the \code{\link{suppressMessages}} function
 }
 \examples{
 a <- CMBDataFrame(nside = 2, ordering = "ring", coords = "cartesian")
-a <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
+b <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
 areCompatibleCMBDFs(a,b)
 
 suppressMessages(areCompatibleCMBDFs(a,b))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{coords.CMBDataFrame}
 \alias{coords.CMBDataFrame}
-\title{Coordinate system from a CMBDataFrame}
+\title{Coordinate system from a \code{\link{CMBDataFrame}}}
 \usage{
 \method{coords}{CMBDataFrame}(cmbdf, new.coords)
 }
@@ -18,16 +18,32 @@ of \code{cmbdf} is returned. Otherwise a new CMBDataFrame is returned
 equivalent to \code{cmbdf} but having the desired change of coordinates
 }
 \description{
-This function returns the coordinate system used in a CMBDataFrame.
-The coordinate system is either "cartesian" or "spherical"
-}
-\details{
-If a new coordinate system is specified, using e.g. new.coords = "spherical", the
-coordinate system of the CMBDataFrame will be converted.
+If \code{new.coords} is unspecified then
+this function returns the coordinate system used in the CMBDataFrame
+\code{cmbdf}.
+The coordinate system is either "cartesian" or "spherical".
+If a new coordinate system is specified, using e.g.
+\code{new.coords = "spherical"}, then this function instead
+returns a new CMBDataFrame whose coordinates are of the specified
+type. The original CMBDataFrame, \code{cmbdf}, is unaffected.
+If you would like to change \code{cmbdf} without creating a new
+variable, then use \code{\link{coords<-.CMBDataFrame}} (see
+examples below)
 }
 \examples{
-df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+
+## Create df with no coords, then create df2 with cartesian coords
+df <- CMBDataFrame(nside = 16)
+df
 coords(df)
-coords(df, new.coords = "cartesian")
+df2 <- coords(df, new.coords = "cartesian")
+coords(df2)
+coords(df)
+
+## Change the coords of df directly (to spherical)
+coords(df) <- "spherical"
+df
+
+
 
 }

@@ -1,17 +1,31 @@
+## Clearn environment and detach all packages
+rm(list = ls())
+lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
+       detach,character.only=TRUE,unload=TRUE)
+
+## Simple plot
+library(rcosmo)
+path <- "C:/Users/danie/Downloads/CMB_maps/"
+filename <- "COM_CMB_IQU-commander_1024_R2.02_full.fits"
+map <- CMBReadFITS(paste0(path,filename), mmap = TRUE)
+sky.sample <- CMBDataFrame(map, sample.size = 100000)
+plot(sky.sample, back.col = "white")
 
 
 
 
-
-##### Examples
+##############################################################
+##### HPDataFrame Examples ###################################
+##############################################################
 
 ## Specify locations as vectors and use auto.spix
 hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
                    nside = 1, auto.spix = TRUE)
-class(hp)
-pix(hp)
-plot(hp, size = 5, hp.boundaries = 1)
+class(hp1)
+pix(hp1)
+plot(hp1, size = 5, hp.boundaries = 1)
 plotHPBoundaries(nside = 1, ordering = "nested", col = "gray")
+hp1
 
 ## Specify locations in data.frame and specify spix manually
 d <- data.frame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
@@ -36,7 +50,11 @@ plotHPBoundaries(nside = 2, ordering = "ring", col = "gray")
 
 ## Do not specify locations (get all pixels at nside)
 hp3 <- HPDataFrame(I = rep(0,12), nside = 1)
+hp3
 plot(hp3, size = 5, hp.boundaries = 1)
+print(hp3)
+
+print(tibble::as.tibble(hp3))
 
 
 

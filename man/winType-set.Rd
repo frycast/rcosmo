@@ -9,3 +9,6 @@ winType(win, ...) <- value
 \description{
 Assign new \code{\link{winType}} to a \code{\link{CMBWindow}}
 }
+\seealso{
+\code{\link{winType}}
+}

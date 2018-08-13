@@ -1,9 +1,23 @@
+## Clearn environment and detach all packages
+rm(list = ls())
+lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
+       detach,character.only=TRUE,unload=TRUE)
+
+## Simple plot
+library(rcosmo)
+path <- "C:/Users/danie/Downloads/CMB_maps/"
+filename <- "COM_CMB_IQU-commander_1024_R2.02_full.fits"
+map <- CMBReadFITS(paste0(path,filename), mmap = TRUE)
+sky.sample <- CMBDataFrame(map, sample.size = 100000)
+plot(sky.sample, back.col = "white")
 
 
 
 
 
-##### Examples
+##############################################################
+##### HPDataFrame Examples ###################################
+##############################################################
 
 ## Specify locations as vectors and use auto.spix
 hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),

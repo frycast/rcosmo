@@ -9,7 +9,27 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
 #### investigating minDist, maxDist, geoDist #################
 ##############################################################
 
-## minDist is a cpp function
+#### minDist was a cpp function but I converted internal
+## and used an R wrapper.
+## Gives the shortest distance from point to a data.frame
+## or a CMBDataFrame (very simple)
+
+cmbdf <- CMBDataFrame(nside = 1, spix = c(1,5,12), ordering = "ring")
+plot(cmbdf, hp.boundaries = 1, col = "blue", size = 5)
+p <- c(0,0,1)
+minDist(cmbdf, p) # no need to have coordinates
+
+hp <- HPDataFrame(nside = 1, I = rep(0,3), spix = c(1,5,12) )
+minDist(hp, p) # notice no need to have coordinates
+
+coords(hp) <- "cartesian"
+df <- data.frame(x = hp$x, y = hp$y, z = hp$z)
+minDist(df, p)
+
+coords(hp) <- "spherical"
+df <- data.frame(theta = hp$theta, phi = hp$phi)
+minDist(df, p)
+
 
 ## maxDist is a generic function
 ## maxDist.CMBWindow
@@ -18,14 +38,11 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
 win <- CMBWindow(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
 maxDist(win)
 
+#### New and improved geoDist
 ## geoDist is in Geometry.R and can take two data.frames
 p1 <- data.frame(x = c(1, 0, 0), y = c(0, 1, 0), z = c(0, 0, 1))
 p2 <- data.frame(theta = c(pi/4, pi/4), phi = c(0,pi/2))
 geoDist(p1,p2, include.names = TRUE)
-
-
-
-m <- geoDist(p1,p2)
 
 
 

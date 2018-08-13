@@ -160,7 +160,13 @@ assumedConvex <- function(win, assume.convex)
 
 
 
-#'Get the type (polygon or disk) of a \code{\link{CMBWindow}}
+#'winType
+#'
+#'Get/change the winType (polygon or disk) of a \code{\link{CMBWindow}}.
+#'If \code{new.type} is missing then the \code{winType} of win
+#'is returned. Otherwise, a new window is returned with \code{winType}
+#'equal to \code{new.type}. If you want to change the
+#'winType of \code{win} directly, then use \code{\link{winType<-}}.
 #'
 #'@param win a \code{CMBWindow} object or a list of such
 #'@param new.type optionally specify a new type. Use this to
@@ -200,7 +206,7 @@ winType <- function(win, new.type)
       }
       else
       {
-        stop("cannot change from disc types to the specified new type")
+        stop("cannot change from the specified type to a disc type")
       }
     } else if ( new.type == "polygon" || new.type == "minus.polygon" ) {
 
@@ -211,7 +217,7 @@ winType <- function(win, new.type)
       }
       else
       {
-        stop("cannot change from polygon types to the specified new type")
+        stop("cannot change from the specified type to a polygon type")
       }
     }
     else
@@ -225,6 +231,13 @@ winType <- function(win, new.type)
 #' Assign new \code{\link{winType}} to a \code{\link{CMBWindow}}
 #'
 #' @seealso \code{\link{winType}}
+#'
+#' @example
+#'
+#' win <- CMBWindow(x = 1, y = 0, z = 0, r = 0.5, set.minus = TRUE)
+#' winType(win)
+#' winType(win) <- "disc"
+#' winType(win)
 #'
 #' @export
 `winType<-` <- function(win, ..., value)

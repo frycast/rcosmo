@@ -29,7 +29,7 @@ from the \eqn{i}th row of \code{p1} to the
 \eqn{j}th row of \code{p2}.
 }
 \description{
-Geodesic distance on the unit sphere
+Get geodesic distance between points on the unit sphere
 }
 \examples{
 

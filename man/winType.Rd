@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindowHelpers.R
 \name{winType}
 \alias{winType}
-\title{Get the type (polygon or disk) of a \code{\link{CMBWindow}}}
+\title{winType}
 \usage{
 winType(win, new.type)
 }
@@ -19,5 +19,9 @@ is returned. Otherwise a new window is returned with \code{winType}
 equal to \code{new.type}
 }
 \description{
-Get the type (polygon or disk) of a \code{\link{CMBWindow}}
+Get/change the winType (polygon or disk) of a \code{\link{CMBWindow}}.
+If \code{new.type} is missing then the \code{winType} of win
+is returned. Otherwise, a new window is returned with \code{winType}
+equal to \code{new.type}. If you want to change the
+winType of \code{win} directly, then use \code{\link{winType<-}}.
 }

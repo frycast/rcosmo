@@ -151,15 +151,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// minDist
-double minDist(Rcpp::DataFrame cmbdf, NumericVector point);
-RcppExport SEXP _rcosmo_minDist(SEXP cmbdfSEXP, SEXP pointSEXP) {
+// minDist_internal
+double minDist_internal(Rcpp::DataFrame cmbdf, NumericVector point);
+RcppExport SEXP _rcosmo_minDist_internal(SEXP cmbdfSEXP, SEXP pointSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type point(pointSEXP);
-    rcpp_result_gen = Rcpp::wrap(minDist(cmbdf, point));
+    rcpp_result_gen = Rcpp::wrap(minDist_internal(cmbdf, point));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -177,7 +177,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_pointInConvexPolygon", (DL_FUNC) &_rcosmo_pointInConvexPolygon, 2},
     {"_rcosmo_pointInDisc", (DL_FUNC) &_rcosmo_pointInDisc, 2},
     {"_rcosmo_maxDist_internal", (DL_FUNC) &_rcosmo_maxDist_internal, 1},
-    {"_rcosmo_minDist", (DL_FUNC) &_rcosmo_minDist, 2},
+    {"_rcosmo_minDist_internal", (DL_FUNC) &_rcosmo_minDist_internal, 2},
     {NULL, NULL, 0}
 };
 

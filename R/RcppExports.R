@@ -74,18 +74,7 @@ maxDist_internal <- function(cmbdf) {
     .Call('_rcosmo_maxDist_internal', PACKAGE = 'rcosmo', cmbdf)
 }
 
-#'@title
-#'minDist
-#'
-#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
-#'@param point a point on the unit sphere in cartesian coordinates
-#'
-#'@return the shortest distance from \code{point} to \code{cmbdf}
-#'
-#'@name minDist
-#'
-#'@export
-minDist <- function(cmbdf, point) {
-    .Call('_rcosmo_minDist', PACKAGE = 'rcosmo', cmbdf, point)
+minDist_internal <- function(cmbdf, point) {
+    .Call('_rcosmo_minDist_internal', PACKAGE = 'rcosmo', cmbdf, point)
 }
 

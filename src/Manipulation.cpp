@@ -739,41 +739,38 @@ double maxDist_internal(Rcpp::DataFrame cmbdf) {
 
 
 
-
-//'@title
-//'minDist
-//'
-//'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
-//'@param point a point on the unit sphere in cartesian coordinates
-//'
-//'@return the shortest distance from \code{point} to \code{cmbdf}
-//'
-//'@name minDist
-//'
-//'@export
+// // '@title
+// // 'minDist
+// // '
+// // '@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
+// // '@param point a point on the unit sphere in cartesian coordinates
+// // '
+// // '@return the shortest distance from \code{point} to \code{cmbdf}
+// // '
+// // '@name minDist
+// // '
+// // '@export
 // [[Rcpp::export]]
-double minDist(Rcpp::DataFrame cmbdf, NumericVector point) {
+double minDist_internal(Rcpp::DataFrame cmbdf, NumericVector point) {
 
   int n = cmbdf.nrow();
   NumericVector x = cmbdf["x"];
   NumericVector y = cmbdf["y"];
   NumericVector z = cmbdf["z"];
-  NumericVector I = cmbdf["I"];
   double px = point[1];
   double py = point[2];
   double pz = point[3];
 
   // Find the maximum distance between any pair of points
-  double mindist = M_PI;
+  double maxdot = -1;
   for ( int i = 0; i < n; i++ )
   {
     // Find d(xi, xj)
     double dot = x[i]*px + y[i]*py + z[i]*pz;
-    double dist = acos( std::max<double>( dot, -1) );
 
-    if ( dist < mindist ) mindist = dist;
+    if ( dot > maxdot ) maxdot = dot;
   }
 
-  return mindist;
+  return acos(std::min<double>(std::max<double>( maxdot, -1),1));
 }
 

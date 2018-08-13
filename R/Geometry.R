@@ -1,5 +1,7 @@
 #' Geodesic distance on the unit sphere
 #'
+#' Get geodesic distance between points on the unit sphere
+#'
 #'@param p1 A \code{\link{data.frame}} with rows
 #'specifying numeric points located on the unit sphere.
 #'It should have columns labelled x,y,z
@@ -63,7 +65,49 @@ p1f <- function(p1, p2) {
 }
 
 
-
+#'minDist
+#'
+#'@param df A \code{data.frame} with columns x,y,z for cartesian
+#'or theta, phi for spherical colatitude and longitude respectively.
+#'The rows must correspond to points on the unit sphere.
+#'If this is a \code{\link{HPDataFrame}} or \code{\link{CMBDataFrame}}
+#'and coordinate columns are missing, then coordinates will be
+#'assigned based on HEALPix pixel indices.
+#'@param point A point on the unit sphere in cartesian coordinates.
+#'
+#'@return the shortest distance from \code{point} to the
+#'points specified by the rows of \code{df}
+#'
+#'@name minDist
+#'
+#'@examples
+#'
+#' ## Using a CMBDataFrame with HEALPix coordinates only
+#' cmbdf <- CMBDataFrame(nside = 1, spix = c(1,5,12), ordering = "ring")
+#' plot(cmbdf, hp.boundaries = 1, col = "blue", size = 5)
+#' p <- c(0,0,1)
+#' minDist(cmbdf, p) # no need to have coordinates
+#'
+#' ## Using a HPDataFrame with HEALPix coordinates only
+#' hp <- HPDataFrame(nside = 1, I = rep(0,3), spix = c(1,5,12) )
+#' minDist(hp, p) # notice no need to have coordinates
+#'
+#' ## Using a data.frame with cartesian coordinates
+#' coords(hp) <- "cartesian"
+#' df <- data.frame(x = hp$x, y = hp$y, z = hp$z)
+#' minDist(df, p)
+#'
+#' ## Using a data.frame with spherical coordinates
+#' coords(hp) <- "spherical"
+#' df <- data.frame(theta = hp$theta, phi = hp$phi)
+#' minDist(df, p)
+#'
+#'@export
+minDist <- function(df, point)
+{
+  df <- coords(df, new.coords = "cartesian")
+  minDist_internal(df[,c("x","y","z")], point)
+}
 
 
 # NEXT: geoAngle

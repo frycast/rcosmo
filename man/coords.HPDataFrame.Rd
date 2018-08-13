@@ -22,13 +22,17 @@ A \code{\link{HPDataFrame}} with columns x,y,z (cartesian)
 or theta, phi (colatitude and longitude respectively)
 }
 \description{
-Add or change coordinates in a \code{\link{HPDataFrame}}
+Add or change coordinates in a \code{\link{HPDataFrame}}.
+This does not affect the argument object \code{hpdf}.
+Instead it returns a new \code{\link{HPDataFrame}}
+with the desired coordinates. To change \code{hpdf}
+directly see \code{\link{coords<-.HPDataFrame}}.
 }
 \details{
 If columns exist labelled x,y,z (cartesian) or theta, phi
 (colatitude and longitude respectively), then these will be
 treated as the coordinates of \code{hpdf} and converted
-accordingly
+accordingly.
 If columns x,y,z or theta,phi are not present then the healpix
 pixel indices as given by \code{pix(hpdf)} are used for
 assigning coordinates.
@@ -36,6 +40,11 @@ assigning coordinates.
 \examples{
 df <- HPDataFrame(I = rep(0,12), nside = 1)
 coords(df, new.coords = "cartesian")
+# Notice that df is unchanged
+df
+
+# Instead, change df directly
+coords(df) <- "spherical"
 
 ## specify cartesian coordinates then convert to spherical
 hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
@@ -43,8 +52,8 @@ hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
 hp1 <- coords(hp1, new.coords = "spherical")
 
 ## Instead, ignore/drop existing coordinates and use HEALPix only
-hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
+hp2 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
                    nside = 1, auto.spix = TRUE)
-hp1 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
+hp2 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
 
 }

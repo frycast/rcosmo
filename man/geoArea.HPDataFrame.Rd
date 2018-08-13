@@ -4,7 +4,7 @@
 \alias{geoArea.HPDataFrame}
 \title{Geodesic area covered by a \code{\link{HPDataFrame}}}
 \usage{
-\method{geoArea}{HPDataFrame}(cmbdf)
+\method{geoArea}{HPDataFrame}(hpdf)
 }
 \arguments{
 \item{hpdf}{a HPDataFrame}
@@ -15,4 +15,15 @@ the sum of the areas of all pixels (rows) in hpdf
 \description{
 Gives the surface on the unit sphere
 that is encompassed by all pixels in \code{hpdf}
+}
+\examples{
+
+## At low resolution, a few data points can
+## occupy a large pixel area, e.g.:
+hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
+                   nside = 1, auto.spix = TRUE)
+pix(hp1)
+geoArea(hp1) # pi = 1/4*(surface area of unit sphere)
+plot(hp1, size = 5, hp.boundaries = 1)
+
 }

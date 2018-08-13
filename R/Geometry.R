@@ -1,64 +1,70 @@
 #' Geodesic distance on the unit sphere
 #'
-#'@param p1 a 3 element vector on the unit sphere
-#'given in Cartesian coordinates (x,y,z),
-#'or a 2 element vector (theta, phi) giving spherical coordinates,
-#'can also be a \code{\link{data.frame}} or matrix with rows specifying vectors
-#'@param p2 a vector on the unit sphere given in Cartesian coordinates (x,y,z)
-#'or a named vector (theta, phi) giving spherical coordinates,
-#'can also be a \code{\link{data.frame}} or matrix with rows specifying vectors
+#'@param p1 A \code{\link{data.frame}} with rows
+#'specifying numeric points located on the unit sphere.
+#'It should have columns labelled x,y,z
+#'for Cartesian or theta, phi for spherical colatitude and
+#'longitude respectively.
+#'@param p2 Same as p1.
+#'@param include.names Boolean. If TRUE then the row and
+#'column names of the returned matrix will be taken from
+#'the points in \code{p1} and \code{p2} (see examples
+#'below).
 #'
-#'@return The geodesic distance between \code{p1} and \code{p2}
+#'@return Let \eqn{n} denote the number of rows of \code{p1}
+#'and let \eqn{m} denote the number of rows of \code{p2}.
+#'Then the returned object is an \eqn{n} by \eqn{m} matrix
+#'whose entry in position \eqn{ij} is the geodesic distance
+#'from the \eqn{i}th row of \code{p1} to the
+#'\eqn{j}th row of \code{p2}.
+#'
+#'@examples
+#'
 #'
 #'@export
-geoDist <- function(p1,p2) {
+geoDist <- function(p1,p2, include.names = FALSE) {
 
-  if (is.matrix(p1)) p1 <- as.data.frame(p1)
-  if (is.matrix(p2)) p2 <- as.data.frame(p2)
+  p1 <- as.data.frame(p1)
+  p2 <- as.data.frame(p2)
 
-
-  p1 <- convertToXYZDataFrame(p1)
-  p2 <- convertToXYZDataFrame(p2)
-
-  if ( nrow(p1) != nrow(p2) )
+  if ( include.names )
   {
-    stop("p1 and p2 must have the same number of rows")
+    n1 <- paste(round(as.data.frame(t(p1)), digits = 2))
+    n1 <- substring(n1, 2)
+    n2 <- paste(round(as.data.frame(t(p2)), digits = 2))
+    n2 <- substring(n2, 2)
   }
 
+  p1 <- rcosmo::coords(p1, new.coords = "cartesian")
+  p2 <- rcosmo::coords(p2, new.coords = "cartesian")
 
-  return(acos(sapply(c(p1$x*p2$x + p1$y*p2$y + p1$z*p2$z),
-                     function(x) {max(-1,min(x,1))})))
+  # Dot product matrix using helper function pf1
+  dp <- t(apply(p1, MARGIN = 1, p1f, p2 = p2))
+  dp <- CleanFPErrors(dp)
+
+
+  if (include.names)
+  {
+    rownames(dp) <- n1
+    colnames(dp) <- n2
+  }
+
+  return(acos(dp))
 }
 
+## Helper function 1 for geoDist
+CleanFPErrors <- function(x) {pmin(pmax(x,-1.0),1.0)}
 
-# Helper function for geoDist
-convertToXYZDataFrame <- function(p)
-{
-  if ( (is.null(ncol(p)) && length(p) == 2)
-       || ncol(p) == 2 )
-  {
-    names(p) <- c("theta","phi")
-    return(rcosmo:::sph2car(data.frame(theta = p["theta"], phi = p["phi"])))
-  }
-  else if ( (is.null(ncol(p)) && length(p) == 3)
-             || ncol(p) == 3 )
-  {
-    names(p) <- c("x","y","z")
-    return(data.frame(x = p["x"], x = p["y"], x = p["z"]))
-  }
-  else
-  {
-    stop("points have have length 2 (theta, phi) or 3 (x,y,z)")
-  }
-
+## Helper function 2 for geoDist
+p1f <- function(p1, p2) {
+  apply(p2, MARGIN = 1, function(p2) {
+    sum(p1*p2)
+  })
 }
+
 
 
 
 
 # NEXT: geoAngle
 
-
-a <- c(1,2,3)
-p <- data.frame(theta = c(0,1,1), phi = c(0,0,1))
-p1 <- c(theta = 1, phi = 1)

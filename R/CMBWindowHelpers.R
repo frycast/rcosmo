@@ -223,6 +223,9 @@ winType <- function(win, new.type)
 
 
 #' Assign new \code{\link{winType}} to a \code{\link{CMBWindow}}
+#'
+#' @seealso \code{\link{winType}}
+#'
 #' @export
 `winType<-` <- function(win, ..., value)
 {

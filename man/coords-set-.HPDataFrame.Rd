@@ -2,10 +2,27 @@
 % Please edit documentation in R/HPDataFrame.R
 \name{coords<-.HPDataFrame}
 \alias{coords<-.HPDataFrame}
-\title{Assign new \code{\link{coords}} system to \code{\link{HPDataFrame}}}
+\title{Assign new coordinate system to a \code{\link{HPDataFrame}}}
 \usage{
 \method{coords}{HPDataFrame}(hpdf, ...) <- value
 }
 \description{
-Assign new \code{\link{coords}} system to \code{\link{HPDataFrame}}
+Assign new coordinate system to a \code{\link{HPDataFrame}}
+}
+\examples{
+
+## Create df with no coords, then create df2 with cartesian coords
+df <- HPDataFrame(I = rep(0,12), nside = 1)
+df
+df2 <- coords(df, new.coords = "cartesian")
+df2
+df
+
+## Change the coords of df directly (to spherical)
+coords(df) <- "spherical"
+df
+
+}
+\seealso{
+\code{\link{coords.HPDataFrame}}
 }

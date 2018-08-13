@@ -520,6 +520,14 @@ is.CMBDat <- function(cmbdf)
 #'
 #'@return the sum of the areas of all pixels (rows) in cmbdf
 #'
+#'@examples
+#' ## At low resolution, a few data points can
+#' ## occupy a large pixel area, e.g.:
+#' cmbdf <- CMBDataFrame(nside = 1, spix = c(1,2,3))
+#' pix(cmbdf)
+#' geoArea(cmbdf) # pi = 1/4*(surface area of unit sphere)
+#' plot(cmbdf, size = 5, hp.boundaries = 1)
+#'
 #'@export
 geoArea.CMBDataFrame <- function(cmbdf)
 {
@@ -548,11 +556,11 @@ geoArea.CMBDataFrame <- function(cmbdf)
 #' type. The original CMBDataFrame, \code{cmbdf}, is unaffected.
 #' If you would like to change \code{cmbdf} without creating a new
 #' variable, then use \code{\link{coords<-.CMBDataFrame}} (see
-#' examples below)
+#' examples below).
 #'
 #'
-#'@param cmbdf a CMBDataFrame.
-#'@param new.coords specifies the new coordinate system ("spherical" or "cartesian")
+#'@param cmbdf A CMBDataFrame.
+#'@param new.coords Specifies the new coordinate system ("spherical" or "cartesian")
 #'if a change of coordinate system is desired.
 #'
 #'@return
@@ -690,31 +698,35 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #'
 #' This function produces a plot from a \code{\link{CMBDataFrame}}.
 #'
-#'@param cmbdf a \code{\link{CMBDataFrame}}.
-#'@param intensities the name of a column that specifies CMB intensities.
-#'This is only used if \code{col} is unspecified
-#'@param add if TRUE then this plot will be added to any existing plot.
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param intensities The name of a column that specifies CMB intensities.
+#'This is only used if \code{col} is unspecified.
+#'@param add If TRUE then this plot will be added to any existing plot.
 #'Note that if \code{back.col} (see below) is specified then a new plot
-#'window will be opened and \code{add = TRUE} will have no effect
-#'@param sample.size optionally specifies the size of a simple random
+#'window will be opened and \code{add = TRUE} will have no effect.
+#'@param sample.size Optionally specifies the size of a simple random
 #'sample to take before plotting. This can make the plot less
-#'computationally intensive
-#'@param type a single character indicating the type of item to plot.
+#'computationally intensive.
+#'@param type A single character indicating the type of item to plot.
 #'Supported types are: 'p' for points, 's' for spheres, 'l' for lines,
 #''h' for line segments from z = 0, and 'n' for nothing.
-#'@param size the size of plotted points
-#'@param box whether to draw a box
-#'@param axes whether to draw axes
-#'@param aspect either a logical indicating whether to adjust the
+#'@param size The size of plotted points.
+#'@param box Whether to draw a box.
+#'@param axes Whether to draw axes.
+#'@param aspect Either a logical indicating whether to adjust the
 #'aspect ratio, or a new ratio.
-#'@param col specify the colour(s) of the plotted points
-#'@param back.col optionally specifies the background colour of
+#'@param col Specify the colour(s) of the plotted points.
+#'@param back.col Optionally specifies the background colour of
 #'the plot. This argument is passed to rgl::bg3d.
-#'@param labels optionally specify a vector of labels to plot,
+#'@param labels Optionally specify a vector of labels to plot,
 #'such as words or vertex indices. If this is specified then
 #'\code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
-#'\code{length(labels)} must equal \code{nrow(cmbdf)}
-#'@param ... arguments passed to rgl::plot3d
+#'\code{length(labels)} must equal \code{nrow(cmbdf)}.
+#'@param hp.boundaries Integer. If greater than 0 then HEALPix
+#'pixel boundaries at \code{nside = hp.boundaries} will be
+#'added to the plot.
+#'@param hpb.col Colour for the \code{hp.boundaries}.
+#'@param ... Arguments passed to rgl::plot3d.
 #'
 #'@return
 #'A plot of the CMB data
@@ -729,7 +741,9 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
                               add = FALSE, sample.size,
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
-                              col, back.col = "black", labels, ...)
+                              col, back.col = "black", labels,
+                              hp.boundaries = 0, hpb.col = "gray",
+                              ...)
 {
   if ( !missing(sample.size) )
   {
@@ -777,6 +791,11 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
     rgl::text3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z, labels,
                 col = col, type = type, size = size,
                 box = box, axes = axes, add = add, aspect = aspect, ...)
+  }
+
+  if ( hp.boundaries > 0 )
+  {
+    plotHPBoundaries(nside = hp.boundaries, col = hpb.col)
   }
 }
 

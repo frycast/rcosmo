@@ -58,7 +58,7 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering )
   }
 }
 
-#' Assign a new ordering scheme to CMBDataFrame
+#' Assign a new ordering scheme to \code{\link{CMBDataFrame}}
 #'
 #' @keywords internal
 #'

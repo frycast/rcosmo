@@ -64,6 +64,11 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering )
 #'
 #' @seealso \code{\link{ordering.CMBDataFrame}}
 #'
+#' @examples
+#' cmbdf <- CMBDataFrame(n = 1, ordering = "ring")
+#' ordering(cmbdf) <- "nested"
+#' ordering(cmbdf)
+#'
 #' @export
 `ordering<-.CMBDataFrame` <- function(cmbdf,...,value) {
   rcosmo:::ordering(cmbdf, new.ordering = value)

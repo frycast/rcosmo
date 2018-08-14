@@ -2,12 +2,18 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{ordering<-.CMBDataFrame}
 \alias{ordering<-.CMBDataFrame}
-\title{Assign new ordering scheme to CMBDataFrame}
+\title{Assign a new ordering scheme to CMBDataFrame}
 \usage{
 \method{ordering}{CMBDataFrame}(cmbdf, ...) <- value
 }
 \description{
-Assign new ordering scheme to CMBDataFrame
+Assign a new ordering scheme to CMBDataFrame
+}
+\examples{
+cmbdf <- CMBDataFrame(n = 1, ordering = "ring")
+ordering(cmbdf) <- "nested"
+ordering(cmbdf)
+
 }
 \seealso{
 \code{\link{ordering.CMBDataFrame}}

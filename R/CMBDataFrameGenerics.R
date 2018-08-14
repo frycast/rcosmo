@@ -59,6 +59,9 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering )
 }
 
 #' Assign new ordering scheme to CMBDataFrame
+#'
+#' @seealso \code{\link{ordering.CMBDataFrame}}
+#'
 #' @export
 `ordering<-.CMBDataFrame` <- function(cmbdf,...,value) {
   rcosmo:::ordering(cmbdf, new.ordering = value)

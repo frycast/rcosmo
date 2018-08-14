@@ -9,3 +9,6 @@
 \description{
 Assign new ordering scheme to CMBDataFrame
 }
+\seealso{
+\code{\link{ordering.CMBDataFrame}}
+}

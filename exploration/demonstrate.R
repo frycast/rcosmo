@@ -11,6 +11,14 @@ devtools::install_local("../mmap", force = TRUE)
 library(mmap)
 
 
+### GENERATE DOCUMENTATION
+pack <- "rcosmo"
+path <- find.package(pack)
+system(paste(shQuote(file.path(R.home("bin"), "R")),
+             "CMD", "Rd2pdf", shQuote(path)))
+
+
+
 
 
 
@@ -49,11 +57,6 @@ sky.t <- CMBDataFrame("C:\Users\dfryer\Downloads\CHIPASS_1_1024.fits",
                       coords = "cartesian")
 
 
-### GENERATE DOCUMENTATION
-pack <- "rcosmo"
-path <- find.package(pack)
-system(paste(shQuote(file.path(R.home("bin"), "R")),
-             "CMD", "Rd2pdf", shQuote(path)))
 
 
 ######## Experimenting code for thesis ################

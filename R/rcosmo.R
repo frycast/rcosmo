@@ -20,4 +20,5 @@
 #'@importFrom Rcpp evalCpp
 #'@useDynLib rcosmo
 #'@aliases rCosmo Rcosmo rcosmo-package
+#'
 NULL

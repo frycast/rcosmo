@@ -4,7 +4,8 @@
 \alias{window}
 \title{Window attribute of \code{\link{CMBDataFrame}}}
 \usage{
-window(cmbdf, new.window, intersect = TRUE, in.pixels, in.pixels.res = 0)
+window(cmbdf, new.window, intersect = TRUE, in.pixels,
+  in.pixels.res = 0)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}

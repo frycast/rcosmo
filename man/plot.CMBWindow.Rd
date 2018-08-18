@@ -5,7 +5,8 @@
 \title{visualise a \code{\link{CMBWindow}}}
 \usage{
 \method{plot}{CMBWindow}(win, add = TRUE, type = "l", col = "red",
-  size = 2, box = FALSE, axes = FALSE, aspect = FALSE, back.col, ...)
+  size = 2, box = FALSE, axes = FALSE, aspect = FALSE, back.col,
+  ...)
 }
 \arguments{
 \item{win}{a CMBWindow}

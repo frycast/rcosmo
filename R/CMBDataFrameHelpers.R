@@ -34,6 +34,12 @@ pixelArea <- function(cmbdf)
 #' The FITS headers belonging to the FITS file from which cmbdf
 #' data was imported
 #'
+#'
+#'@examples
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' df.sample <- CMBDataFrame(df, sample.size = 10000)
+#' header(df.sample)
+#'
 #'@export
 header <- function( cmbdf )
 {

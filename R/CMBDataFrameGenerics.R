@@ -498,6 +498,14 @@ as.CMBDataFrame <- function(df, ordering, nside, spix)
 #'
 #' @return TRUE if \code{cmbdf} is a CMBDataFrame, otherwise FALSE
 #'
+#'@examples
+#'
+#' df <- CMBDataFrame(nside = 16)
+#' is.CMBDataFrame(df)
+#' df2 <- coords(df, new.coords = "cartesian")
+#' is.CMBDataFrame(df2)
+#'
+#'
 #' @export
 is.CMBDataFrame <- function(cmbdf)
 {
@@ -838,7 +846,10 @@ colscheme <- function(I, breaks, colmap) {
 #'A summary includes window's type and area, total area covered by observations,
 #' and main statistcs for intensity values
 #'
-#' df <- CMBDataFrame("C:/Users/Andriy/Downloads/rcosmo tests/CMB_map_smica1024.fits")
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' df.sample <- CMBDataFrame(df, sample.size = 800000)
 #' summary(df.sample)
 #'

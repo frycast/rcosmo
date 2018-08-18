@@ -15,3 +15,12 @@ TRUE if \code{cmbdf} is a CMBDataFrame, otherwise FALSE
 \description{
 Check if an object is of class CMBDataFrame
 }
+\examples{
+
+df <- CMBDataFrame(nside = 16)
+is.CMBDataFrame(df)
+df2 <- coords(df, new.coords = "cartesian")
+is.CMBDataFrame(df2)
+
+
+}

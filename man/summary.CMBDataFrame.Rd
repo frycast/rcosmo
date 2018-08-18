@@ -15,15 +15,18 @@
 \value{
 A summary includes window's type and area, total area covered by observations,
 and main statistcs for intensity values
+}
+\description{
+This function produces a summary from a CMBDataFrame.
+}
+\examples{
 
-df <- CMBDataFrame("C:/Users/Andriy/Downloads/rcosmo tests/CMB_map_smica1024.fits")
+df <- CMBDataFrame("CMB_map_smica1024.fits")
 df.sample <- CMBDataFrame(df, sample.size = 800000)
 summary(df.sample)
 
 win1<- CMBWindow(x=0,y=3/5,z=4/5,r=0.8)
 df.sample1 <- window(df.sample, new.window = win1)
 summary(df.sample1)
-}
-\description{
-This function produces a summary from a CMBDataFrame.
+
 }

@@ -137,6 +137,11 @@ polygonMaxDist <- function(win)
 #'
 #' @return TRUE or FALSE depending if win is a CMBWindow
 #'
+#' @examples
+#'
+#' win <- CMBWindow(x=0,y=3/5,z=4/5,r=0.8, set.minus = TRUE)
+#' is.CMBWindow(win)
+#'
 #'@export
 is.CMBWindow <- function(win)
 {

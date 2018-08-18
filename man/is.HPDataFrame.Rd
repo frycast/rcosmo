@@ -15,3 +15,12 @@ TRUE if \code{hpdf} is a HPDataFrame, otherwise FALSE
 \description{
 Check if an object is of class \code{\link{HPDataFrame}}
 }
+\examples{
+
+df <- CMBDataFrame(nside = 16)
+is.HPDataFrame(df)
+
+df <- HPDataFrame(I = rep(0,12), nside = 1)
+is.HPDataFrame(df)
+
+}

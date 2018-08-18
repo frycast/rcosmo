@@ -496,6 +496,14 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 #'
 #' @return TRUE if \code{hpdf} is a HPDataFrame, otherwise FALSE
 #'
+#'@examples
+#'
+#' df <- CMBDataFrame(nside = 16)
+#' is.HPDataFrame(df)
+#'
+#' df <- HPDataFrame(I = rep(0,12), nside = 1)
+#' is.HPDataFrame(df)
+#'
 #' @export
 is.HPDataFrame <- function(hpdf)
 {

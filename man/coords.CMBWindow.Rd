@@ -29,8 +29,15 @@ new.coords = "spherical", the
 coordinate system of the CMBWindow will be converted
 }
 \examples{
-df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
-coords(df)
-coords(df, new.coords = "cartesian")
+## Create win with sperical coords, then change it to win1 with cartesian coords
+win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+coords(win)
+win1 <- coords(win, new.coords = "cartesian")
+coords(win1)
+
+## Change back to spherical coordinates
+
+coords(win1) <- "spherical"
+coords(win1)
 
 }

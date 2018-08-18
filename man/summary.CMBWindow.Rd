@@ -10,8 +10,18 @@
 \item{cmbdf}{a CMBWindow}
 }
 \value{
-A summary
+A summary includes window's type and area
 }
 \description{
 This function produces a summary from a CMBWindow
+}
+\examples{
+
+win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+summary(win)
+
+win1<- CMBWindow(x=0,y=3/5,z=4/5,r=0.8, set.minus = TRUE)
+summary(win1)
+
+
 }

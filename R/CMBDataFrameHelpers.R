@@ -381,8 +381,8 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #' window(cmbdf.win)
 #'
 #' ## Change the window of an existing CMBDataFrame
-#' window(cmbdf) <- CMBWindow(theta = rep(0.1, 10),
-#'                            phi = seq(0, 18*pi/10, length.out = 10))
+#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+#' window(cmbdf) <- CMBWindow(theta = c(pi/6,pi/6,pi/3,pi/3), phi = c(0,pi/6,pi/6,0))
 #' plot(cmbdf)
 #'
 #'@export

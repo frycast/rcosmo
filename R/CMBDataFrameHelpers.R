@@ -111,7 +111,8 @@ resolution <- function( cmbdf )
 #'respectively.
 #'@param win a \code{\link{CMBWindow}} or a list of CMBWindows
 #'@param intersect a boolean that determines
-#'the behaviour when \code{win} is a list (see details).
+#'the behaviour when \code{win} is a list containing BOTH
+#'regular type and "minus" type windows together (see details).
 #'@param in.pixels a vector of pixels at resolution
 #'\code{in.pixels.res} whose union contains the
 #'window(s) \code{win} entirely. This will only be used
@@ -350,15 +351,26 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #' a new CMBDataFrame whose CMBWindow attribute is new.window
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
-#'are treated differently from other windows. See \code{\link{subWindow}} for
-#'more details.
+#'are treated differently from other windows: Let \eqn{A} be the union of the
+#'interiors of all windows whose winType does not include "minus",
+#'and let \eqn{B} be the intersection of the exteriors of all the windows whose
+#'\code{winType} does include "minus". Then, provided that
+#'\code{intersect = TRUE} (the default), the returned CMBDataFrame will
+#'be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
+#'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
+#'be the intersection of the points in \code{cmbdf} with the union of
+#'\eqn{A} and \eqn{B}.
+#'Note that if \eqn{A} (resp. \eqn{B}) is empty
+#'then the returned CMBDataFrame will be the intersection of \eqn{B}
+#'(resp. \eqn{A}) with \code{cmbdf}.
 #'
 #'@param cmbdf a CMBDataFrame.
 #'@param new.window optionally specify a new window
 #'in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
 #'\code{new.window} may also be a list (see details section).
 #'@param intersect a boolean that determines
-#'the behaviour when \code{win} is a list (see details).
+#'the behaviour when \code{win} is a list containing BOTH
+#'regular type and "minus" type windows together (see details).
 #'@param in.pixels a vector of pixels at resolution
 #'\code{in.pixels.res} whose union contains the
 #'window(s) \code{win} entirely, or if \code{new.window} is

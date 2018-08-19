@@ -252,7 +252,7 @@ winType <- function(win, new.type)
 #'
 #' @seealso \code{\link{winType}}
 #'
-#' @example
+#' @examples
 #'
 #' win <- CMBWindow(x = 1, y = 0, z = 0, r = 0.5, set.minus = TRUE)
 #' winType(win)

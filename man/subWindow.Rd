@@ -16,7 +16,8 @@ respectively.}
 \item{win}{a \code{\link{CMBWindow}} or a list of CMBWindows}
 
 \item{intersect}{a boolean that determines
-the behaviour when \code{win} is a list (see details).}
+the behaviour when \code{win} is a list containing BOTH
+regular type and "minus" type windows together (see details).}
 
 \item{in.pixels}{a vector of pixels at resolution
 \code{in.pixels.res} whose union contains the

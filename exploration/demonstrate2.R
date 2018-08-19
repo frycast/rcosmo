@@ -4,6 +4,14 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
        detach,character.only=TRUE,unload=TRUE)
 
 
+##############################################################
+######### Object of class CMBDat #############################
+##############################################################
+
+cmbdat <- CMBReadFITS("../CMB_map_smica1024.fits", mmap = TRUE)
+class(cmbdat)
+is.CMBDat(cmbdat)
+str(cmbdat)
 
 ##############################################################
 #### investigating minDist, maxDist, geoDist #################

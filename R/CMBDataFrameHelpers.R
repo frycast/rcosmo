@@ -91,18 +91,21 @@ resolution <- function( cmbdf )
 #'argument.
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
-#'are treated differently from other windows: Let \eqn{A} be the union of the
-#'interiors of all windows whose winType does not include "minus",
-#'and let \eqn{B} be the intersection of the exteriors of all the windows whose
-#'\code{winType} does include "minus". Then, provided that
+#'are treated differently from other windows.
+#'
+#'If the argument is a list of CMBWindows, then interious of all windows whose
+#'winType does not include "minus" are united (let \eqn{A} be their union) and
+#'exteriors of all windows whose winType does include "minus" are intersected,
+#'(let \eqn{B} be their intersection). Then, provided that
 #'\code{intersect = TRUE} (the default), the returned CMBDataFrame will
-#'be the intersection of the points in \code{cmbdf} with \eqn{A} and \eqn{B}.
-#'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame will
-#'be the intersection of the points in \code{cmbdf} with the union of
+#'be the points of \code{cmbdf} in the the intersection of \eqn{A} and \eqn{B}.
+#'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame
+#'consists of the points of \code{cmbdf} in the union of
 #'\eqn{A} and \eqn{B}.
-#'Note that if \eqn{A} (resp. \eqn{B}) is empty
-#'then the returned CMBDataFrame will be the intersection of \eqn{B}
-#'(resp. \eqn{A}) with \code{cmbdf}.
+#'
+#'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned CMBDataFrame
+#'will be the points of \code{cmbdf} in \eqn{B} (resp. \eqn{A}).
+#'
 #'
 #'@param cmbdf a \code{\link{CMBDataFrame}}, a \code{data.frame},
 #'or CMBDat object. If this is a data.frame then it must have

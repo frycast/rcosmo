@@ -25,4 +25,7 @@ this function returns a new HPDataFrame with pixel indices new.pix
 df <- HPDataFrame(I = rep(0,12), nside = 1)
 pix(df)
 
+df.new <- pix(df, new.pix= c(1,3,5,10))
+pix(df.new)
+
 }

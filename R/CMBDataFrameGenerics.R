@@ -129,6 +129,9 @@ nside.CMBDataFrame <- function( cmbdf )
 #' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
 #' pix(df)
 #'
+#' df.new <- pix(df, new.pix= 1:10)
+#' pix(df.new)
+#'
 #'@export
 pix.CMBDataFrame <- function(cmbdf, new.pix)
 {

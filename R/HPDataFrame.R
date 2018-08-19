@@ -113,6 +113,9 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #' df <- HPDataFrame(I = rep(0,12), nside = 1)
 #' pix(df)
 #'
+#' df.new <- pix(df, new.pix= c(1,3,5,10))
+#' pix(df.new)
+#'
 #'@export
 pix.HPDataFrame <- function(hpdf, new.pix)
 {

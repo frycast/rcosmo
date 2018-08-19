@@ -6,7 +6,7 @@
 #' also holds an attribute called \code{nside} which stores the
 #' HEALPix Nside parameter (i.e., the resolution of the HEALPix grid
 #' that is being used).
-#' Unlike \code{\link{HPDataFrames}}, HPDataFrames may have
+#' Unlike \code{\link{CMBDataFrame}}, HPDataFrames may have
 #' repeated pixel indices. They are made this way so that
 #' multiple data points falling within a given pixel
 #' can be stored in different rows of any given HPDataFrame.
@@ -471,6 +471,8 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 
 
 #' Assign new coordinate system to a \code{\link{HPDataFrame}}
+#'
+#'@keywords internal
 #'
 #' @seealso \code{\link{coords.HPDataFrame}}
 #'

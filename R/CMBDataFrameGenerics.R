@@ -691,6 +691,8 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 
 #' Assign new coordinate system to a \code{\link{CMBDataFrame}}
 #'
+#'@keywords internal
+#'
 #' @seealso \code{\link{coords.CMBDataFrame}}
 #'
 #' @examples
@@ -906,10 +908,15 @@ summary.CMBDataFrame <- function(cmbdf, intensities = "I")
 
 #'Print a summary of a CMBDataFrame
 #'
+#'@keywords internal
+#'
+#'
 #'@param x a \code{summary.CMBDataFrame} object, i.e.,
 #'the output of \code{\link{summary.CMBDataFrame}}
 #'
 #'@export
+#'
+#'
 print.summary.CMBDataFrame <- function(x, ...)
 {
   cat(

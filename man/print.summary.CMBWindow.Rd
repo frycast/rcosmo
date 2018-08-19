@@ -13,3 +13,4 @@ the output of \code{\link{summary.CMBWindow}}}
 \description{
 Print a summary of a \code{\link{CMBWindow}}
 }
+\keyword{internal}

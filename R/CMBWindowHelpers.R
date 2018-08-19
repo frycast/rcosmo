@@ -250,6 +250,8 @@ winType <- function(win, new.type)
 
 #' Assign new \code{\link{winType}} to a \code{\link{CMBWindow}}
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{winType}}
 #'
 #' @examples

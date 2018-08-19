@@ -64,7 +64,7 @@ window(cmbdf.win)
 
 ## Change the window of an existing CMBDataFrame
 cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
-window(cmbdf) <- CMBWindow(theta = c(pi/6,pi/6,pi/3,pi/3), phi = c(0,pi/6,pi/6,0))
+window(cmbdf) <- win2 <- CMBWindow(theta = c(pi/6,pi/3,pi/3, pi/6), phi = c(0,0,pi/6,pi/6))
 plot(cmbdf)
 
 }

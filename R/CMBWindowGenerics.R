@@ -60,6 +60,8 @@ summary.CMBWindow <- function(win)
 #'@param x a \code{summary.CMBWindow} object, i.e.,
 #'the output of \code{\link{summary.CMBWindow}}
 #'
+#'@keywords internal
+#'
 #'@export
 print.summary.CMBWindow <- function(x, ...)
 {
@@ -461,6 +463,9 @@ coords.CMBWindow <- function( win, new.coords )
 
 
 #'Assign new coordinate system to CMBWindow
+#'
+#'@keywords internal
+#'
 #'@export
 `coords<-.CMBWindow` <- function(win,...,value) {
   value <- tolower(value)

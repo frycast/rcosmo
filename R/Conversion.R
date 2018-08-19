@@ -326,6 +326,8 @@ coords.data.frame <- function(df, new.coords)
 
 #' Assign new coordinate system to a \code{\link{data.frame}}
 #'
+#'@keywords internal
+#'
 #' @seealso \code{\link{coords.data.frame}}
 #'
 #' @examples

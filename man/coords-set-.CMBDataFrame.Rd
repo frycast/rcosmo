@@ -27,3 +27,4 @@ df
 \seealso{
 \code{\link{coords.CMBDataFrame}}
 }
+\keyword{internal}

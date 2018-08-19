@@ -1,21 +1,3 @@
-#' CMBDat class
-#'
-#' The function \code{CMBReadFITS} creates objects of class \code{CMBDat}.
-#' These are lists containing header information and other metadata as well
-#' as an element called data, whose columns may include, for example, the
-#' intensity (I), polarisation (Q, U), PMASK and TMASK. Also it can be
-#' \code{\link{mmap}} object that points to the CMB map data table in the FITS file.
-#'
-#'
-#'@examples
-#' cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
-#' class(cmbdat)
-#' str(cmbdat)
-#'@export
-CMBDat <- function(){}
-
-
-
 #' CMBDataFrame class
 #'
 #' The function \code{CMBDataFrame} creates objects of class \code{CMBDataFrame}.

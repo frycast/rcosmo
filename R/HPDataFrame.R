@@ -99,10 +99,14 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #'
 #' If new.pix is unspecified then this function returns the vector of
 #' HEALPix pixel indices from a HPDataFrame. If new.pix is specified then
-#' this function returns a new HPDataFrame with pixel indices new.pix
+#' this function returns a new HPDataFrame with the same number of rows
+#' as \code{hpdf}, but with pix attribute \code{new.pix}. Thus,
+#' \code{new.pix} must have length equal to \code{nrow(hpdf)}.
+#'
 #'
 #'@param hpdf a \code{\link{HPDataFrame}}.
-#'@param new.pix optional vector of pixel indices
+#'@param new.pix optional vector of pixel indices with
+#'length equal to \code{nrow(hpdf)}
 #'
 #'@return
 #' The vector of HEALPix pixel indices (integers) or,
@@ -113,14 +117,15 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #' df <- HPDataFrame(I = rep(0,12), nside = 1)
 #' pix(df)
 #'
-#' df.new <- pix(df, new.pix= c(1,3,5,10))
-#' pix(df.new)
-#'
 #'@export
 pix.HPDataFrame <- function(hpdf, new.pix)
 {
   if ( !missing(new.pix) )
   {
+    if (nrow(hpdf) != length(new.pix))
+    {
+      stop("nrow(hpdf) not equal to length(new.pix)")
+    }
     attr(hpdf, "pix") <- new.pix
     return(hpdf)
   }

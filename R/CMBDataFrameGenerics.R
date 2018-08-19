@@ -116,10 +116,13 @@ nside.CMBDataFrame <- function( cmbdf )
 #'
 #' If new.pix is unspecified then this function returns the vector of
 #' HEALPix pixel indices from a CMBDataFrame. If new.pix is specified then
-#' this function returns a new CMBDataFrame with pixel indices new.pix
+#' this function returns a new CMBDataFrame with the same number of rows
+#' as \code{cmbdf}, but with pix attribute \code{new.pix}. Thus,
+#' \code{new.pix} must have length equal to \code{nrow(cmbdf)}.
 #'
 #'@param cmbdf a CMBDataFrame.
-#'@param new.pix optional vector of pixel indices
+#'@param new.pix optional vector of pixel indices with
+#'length equal to \code{nrow(cmbdf)}
 #'
 #'@return
 #' The vector of HEALPix pixel indices or, if new.pix is specified,
@@ -128,9 +131,6 @@ nside.CMBDataFrame <- function( cmbdf )
 #'@examples
 #' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
 #' pix(df)
-#'
-#' df.new <- pix(df, new.pix= 1:10)
-#' pix(df.new)
 #'
 #'@export
 pix.CMBDataFrame <- function(cmbdf, new.pix)
@@ -148,6 +148,9 @@ pix.CMBDataFrame <- function(cmbdf, new.pix)
 
 
 #' Assign new pixel indices to a CMBDataFrame
+#'
+#' @keywords internal
+#'
 #' @export
 `pix<-.CMBDataFrame` <- function(cmbdf,...,value) {
   row.names(cmbdf) <- value

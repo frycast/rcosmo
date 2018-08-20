@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindowHelpers.R
 \name{assumedConvex}
 \alias{assumedConvex}
-\title{Check if a \code{\link{CMBWindow}} is assumed convex}
+\title{Check if a \code{\link{CMBWindow}} is assumed convex.}
 \usage{
 assumedConvex(win, assume.convex)
 }
@@ -13,5 +13,16 @@ assumedConvex(win, assume.convex)
 attribute to TRUE or FALSE}
 }
 \description{
-Check if a \code{\link{CMBWindow}} is assumed convex
+Initially any \code{\link{CMBWindow}} is not assumed convex. The assumedConvex
+attribute can be change for any \code{\link{CMBWindow}}.
+}
+\examples{
+
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+assumedConvex(win1)
+win2 <- assumedConvex(win1, assume.convex = TRUE)
+assumedConvex(win2)
+assumedConvex(win1) <- TRUE
+assumedConvex(win1)
+
 }

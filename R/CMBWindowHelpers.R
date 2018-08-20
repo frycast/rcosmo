@@ -140,11 +140,23 @@ triangulate <- function(win)
 
 
 
-#'Check if a \code{\link{CMBWindow}} is assumed convex
+#'Check if a \code{\link{CMBWindow}} is assumed convex.
+#'
+#'Initially any \code{\link{CMBWindow}} is not assumed convex. The assumedConvex
+#' attribute can be change for any \code{\link{CMBWindow}}.
 #'
 #'@param win a CMBWindow object
 #'@param assume.convex optionally change the assumedConvex
 #'attribute to TRUE or FALSE
+#'
+#'@examples
+#'
+#'win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#'assumedConvex(win1)
+#'win2 <- assumedConvex(win1, assume.convex = TRUE)
+#'assumedConvex(win2)
+#'assumedConvex(win1) <- TRUE
+#'assumedConvex(win1)
 #'
 #'@export
 assumedConvex <- function(win, assume.convex)
@@ -176,6 +188,9 @@ assumedConvex <- function(win, assume.convex)
 
 
 #' Change the \code{\link{assumedConvex}} boolean of a \code{\link{CMBWindow}}
+#'
+#' @keywords internal
+#'
 #' @export
 `assumedConvex<-` <- function(win, ..., value)
 {

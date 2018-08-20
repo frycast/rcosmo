@@ -7,7 +7,6 @@ coords <- function(x, ...) UseMethod("coords", x)
 #'@export
 geoArea <- function(x) UseMethod("geoArea", x)
 
-
 #'@export
 maxDist <- function(x) UseMethod("maxDist", x)
 
@@ -25,3 +24,9 @@ ordering <- function(x, ...) UseMethod("ordering", x)
 
 #'@export
 `ordering<-` <- function(x, ..., value) UseMethod("ordering<-", x)
+
+#'@export
+window <- function(x, ...) UseMethod("window", x)
+
+#'@export
+`window<-` <- function(x, ..., value) UseMethod("window<-", x)

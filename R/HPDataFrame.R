@@ -23,6 +23,12 @@
 #' pixel locations of the data. Note that \code{spix} is ignored
 #' if \code{auto.spix = TRUE}
 #'
+#' @examples
+#' hpdf <- HPDataFrame(I = 1:12, nside = 1)
+#' class(hpdf)
+#' nside(hpdf)
+#' ordering(hpdf)
+#'
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix)
@@ -572,4 +578,73 @@ geoArea.HPDataFrame <- function(hpdf)
   nside <- rcosmo:::nside(hpdf)
   if ( !is.numeric(nside) ) stop("problem with hpdf nside attribute")
   return(pi/(3*nside^2)*length(unique(rcosmo:::pix((hpdf)))))
+}
+
+
+
+
+
+
+
+#' Get a sub window from a \code{\link{HPDataFrame}}
+#'
+#' This function returns a
+#' HPDataFrame containing the data in \code{hpdf} restricted to the
+#' CMBWindow \code{new.window}. If the HPDataFrame has columns x,y,z
+#' or theta, phi then these will be used to determine locations
+#' with priority over the HEALPix indices in \code{pix(hpdf)}
+#' unless \code{healpix.only = TRUE} is given. Note that
+#' if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
+#' will be discarded and replaced with pixel center locations.
+#'
+#'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
+#'are treated differently from other windows.
+#'
+#'If the argument is a list of CMBWindows, then interiors of all windows whose
+#'winType does not include "minus" are united (let \eqn{A} be their union) and
+#'exteriors of all windows whose winType does include "minus" are intersected,
+#'(let \eqn{B} be their intersection). Then, provided that
+#'\code{intersect = TRUE} (the default), the returned data.frame will
+#'be the points of \code{df} in the the intersection of
+#'\eqn{A} and \eqn{B}.
+#'Otherwise, if \code{intersect = FALSE}, the returned data.frame
+#'consists of the points of \code{df} in the union of
+#'\eqn{A} and \eqn{B}.
+#'
+#'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
+#'will be the points of \code{df} in \eqn{B} (resp. \eqn{A}).
+#'
+#'@param hpdf A HPDataFrame.
+#'@param new.window A single \code{\link{CMBWindow}} object or a list of them.
+#'@param intersect A boolean that determines
+#'the behaviour when \code{win} is a list containing BOTH
+#'regular type and "minus" type windows together (see details).
+#'@param healpix.only A boolean. If the HPDataFrame has columns x,y,z
+#' or theta, phi then these will be used to determine locations
+#' with priority over the HEALPix indices in \code{pix(hpdf)}
+#' unless \code{healpix.only = TRUE} is given. Note that
+#' if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
+#' will be discarded and replaced with pixel center locations.
+#'
+#'@return
+#' A HPDataFrame containing the data in \code{hpdf} restricted to the
+#' CMBWindow \code{new.window}
+#'
+#'@examples
+#'
+#'ns <- 16
+#'hpdf <- HPDataFrame(nside = ns, I = 1:(12*ns^2))
+#'plot(hpdf)
+#'
+#'
+#'
+#'@export
+window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE, healpix.only = FALSE)
+{
+  if ( healpix.only )
+  {
+    hpdf <- rcosmo:::coords(hpdf, new.coords = "cartesian", healpix.only = TRUE)
+  }
+
+  return(subWindow(hpdf, win = new.window, intersect = intersect))
 }

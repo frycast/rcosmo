@@ -7,11 +7,11 @@
 pixelWindow(j1, j2, pix.j1)
 }
 \arguments{
-\item{j1}{is the lower resolution, with j1 =< j2}
+\item{j1}{An integer. The lower resolution, with j1 =< j2.}
 
-\item{j2}{the upper resolution}
+\item{j2}{An integer. The upper resolution.}
 
-\item{pix.j1}{the pixel index at resolution j1 within which
+\item{pix.j1}{An integer. The pixel index at resolution j1 within which
 all pixels from resolution j2 will be returned. \code{pix.j1} can
 also be a vector of non-zero pixel indices.}
 }

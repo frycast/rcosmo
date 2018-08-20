@@ -35,3 +35,10 @@ repeated pixel indices. They are made this way so that
 multiple data points falling within a given pixel
 can be stored in different rows of any given HPDataFrame.
 }
+\examples{
+hpdf <- HPDataFrame(I = 1:12, nside = 1)
+class(hpdf)
+nside(hpdf)
+ordering(hpdf)
+
+}

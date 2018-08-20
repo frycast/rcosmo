@@ -242,10 +242,39 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 #'
 #'Add a new row or rows to a \code{\link{CMBDataFrame}}.
 #'All arguments passed to \code{...} must be CMBDataFrames.
+#'If the CMBDataFrame arguments have overlapping pixel
+#'indices then all but one of the non-unique rows will be
+#'deleted unless \code{unsafe = TRUE}. If \code{unsafe = TRUE}
+#'then a \code{\link{HPDataFrame}} will be returned instead
+#'of a \code{\link{CMBDataFrame}}.
 #'
 #'@param ... A number of CMBDataFrames
+#'@param unsafe A boolean. If the CMBDataFrame arguments have
+#'overlapping pixel
+#'indices then all but one of the non-unique rows will be
+#'deleted unless \code{unsafe = TRUE}. If \code{unsafe = TRUE}
+#'then a \code{\link{HPDataFrame}} will be returned instead
+#'of a \code{\link{CMBDataFrame}}.
 #'
 #'@seealso See the documentation for \code{\link{rbind}}
+#'
+#'@examples
+#' df <- CMBDataFrame(nside = 1, I = 1:12)
+#'
+#' df.123 <- CMBDataFrame(df, spix = c(1,2,3))
+#' df.123
+#' df.234 <- CMBDataFrame(df, spix = c(2,3,4))
+#' df.234
+#'
+#' df.1234 <- rbind(df.123, df.234)
+#' df.1234
+#' class(df.1234) # A CMBDataFrame
+#' pix(df.1234)
+#'
+#' df.123234 <- rbind(df.123, df.234, unsafe = TRUE)
+#' df.123234
+#' class(df.123234) # A HPDataFrame
+#' pix(df.123234)
 #'
 #'@export
 rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
@@ -263,7 +292,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
                 "You may need to convert coordinates or ordering"))
   }
 
-  if ( unsafe == FALSE )
+  if ( !unsafe )
   {
     # Make sure that no pixels are repeated, using pairwise intersections
     for (i in 1:(length(args)-1))
@@ -285,18 +314,37 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
   cmbdf <- args[[1]]
   wins <- sapply(args, rcosmo:::window)
 
+  if ( unsafe )
+  {
+    # Get pix before we convert to data.frames
+    pix <- unlist(lapply(args, pix))
+  }
+
   args <- lapply(args, as.data.frame)
   df <- do.call(rbind, c(args, deparse.level = deparse.level))
 
+  if ( !unsafe )
+  {
+    class(df) <- class(cmbdf)
+    attr(df, "nside") <- nside(cmbdf)
+    attr(df, "ordering") <- ordering(cmbdf)
+    attr(df, "coords") <- coords(cmbdf)
+    attr(df, "window") <- wins
+    attr(df, "header1") <- attr(cmbdf, "header1")
+    attr(df, "header2") <- attr(cmbdf, "header2")
+    attr(df, "resolution") <- attr(cmbdf, "resolution")
+  }
+  else
+  {
+    len <- nrow(df)
+    if (len != length(pix)) stop("(development stage) unexpected error")
 
-  class(df) <- class(cmbdf)
-  attr(df, "nside") <- nside(cmbdf)
-  attr(df, "ordering") <- ordering(cmbdf)
-  attr(df, "coords") <- coords(cmbdf)
-  attr(df, "window") <- wins
-  attr(df, "header1") <- attr(cmbdf, "header1")
-  attr(df, "header2") <- attr(cmbdf, "header2")
-  attr(df, "resolution") <- attr(cmbdf, "resolution")
+    row.names(df) <- 1:len
+    attr(df, "pix") <- pix
+    attr(df, "nside") <- nside(cmbdf)
+    attr(df, "ordering") <- ordering(cmbdf)
+    class(df) <- unique(c("HPDataFrame", class(df)))
+  }
 
   return(df)
 }

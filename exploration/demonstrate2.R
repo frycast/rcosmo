@@ -14,6 +14,13 @@ df.234
 
 df.1234 <- rbind(df.123, df.234)
 df.1234
+class(df.1234) # A CMBDataFrame
+pix(df.1234)
+
+df.123234 <- rbind(df.123, df.234, unsafe = TRUE)
+df.123234
+class(df.123234) # A HPDataFrame
+pix(df.123234)
 
 
 rcosmo:::areCompatibleCMBDFs(df.sample1, df.sample2)

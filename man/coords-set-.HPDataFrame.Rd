@@ -26,3 +26,4 @@ df
 \seealso{
 \code{\link{coords.HPDataFrame}}
 }
+\keyword{internal}

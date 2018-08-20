@@ -9,3 +9,4 @@
 \description{
 Assign new pixel indices to a CMBDataFrame
 }
+\keyword{internal}

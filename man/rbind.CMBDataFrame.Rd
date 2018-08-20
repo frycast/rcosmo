@@ -7,12 +7,43 @@
 \method{rbind}{CMBDataFrame}(..., deparse.level = 1, unsafe = FALSE)
 }
 \arguments{
-\item{unsafe}{defaults to FALSE. If \code{unsafe = TRUE} then
-overlapping pixel coordinates will not throw an error (faster).
+\item{...}{A number of CMBDataFrames}
 
-See the documentation for \code{\link{rbind}}}
+\item{unsafe}{A boolean. If the CMBDataFrame arguments have
+overlapping pixel
+indices then all but one of the non-unique rows will be
+deleted unless \code{unsafe = TRUE}. If \code{unsafe = TRUE}
+then a \code{\link{HPDataFrame}} will be returned instead
+of a \code{\link{CMBDataFrame}}.}
 }
 \description{
 Add a new row or rows to a \code{\link{CMBDataFrame}}.
 All arguments passed to \code{...} must be CMBDataFrames.
+If the CMBDataFrame arguments have overlapping pixel
+indices then all but one of the non-unique rows will be
+deleted unless \code{unsafe = TRUE}. If \code{unsafe = TRUE}
+then a \code{\link{HPDataFrame}} will be returned instead
+of a \code{\link{CMBDataFrame}}.
+}
+\examples{
+df <- CMBDataFrame(nside = 1, I = 1:12)
+
+df.123 <- CMBDataFrame(df, spix = c(1,2,3))
+df.123
+df.234 <- CMBDataFrame(df, spix = c(2,3,4))
+df.234
+
+df.1234 <- rbind(df.123, df.234)
+df.1234
+class(df.1234) # A CMBDataFrame
+pix(df.1234)
+
+df.123234 <- rbind(df.123, df.234, unsafe = TRUE)
+df.123234
+class(df.123234) # A HPDataFrame
+pix(df.123234)
+
+}
+\seealso{
+See the documentation for \code{\link{rbind}}
 }

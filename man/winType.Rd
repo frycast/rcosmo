@@ -25,3 +25,23 @@ is returned. Otherwise, a new window is returned with \code{winType}
 equal to \code{new.type}. If you want to change the
 winType of \code{win} directly, then use \code{\link{winType<-}}.
 }
+\examples{
+
+win <- CMBWindow(theta = c(pi/2,pi/2,pi/3, pi/3), phi = c(0,pi/3,pi/3,0))
+winType(win)
+
+win1 <- CMBWindow(x=0,y=3/5,z=4/5,r=0.8)
+winType(win1)
+cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1)
+
+
+winType(win1) <- "minus.disc"
+winType(win1)
+cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+cmbdf.win1 <- window(cmbdf, new.window = win1)
+plot(cmbdf.win1)
+
+
+}

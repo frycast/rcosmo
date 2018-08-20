@@ -38,11 +38,11 @@ df
 coords(df)
 df2 <- coords(df, new.coords = "cartesian")
 coords(df2)
-coords(df)
+
 
 ## Change the coords of df directly (to spherical)
 coords(df) <- "spherical"
-df
+coords(df)
 
 
 

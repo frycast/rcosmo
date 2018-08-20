@@ -9,3 +9,4 @@ window(cmbdf, ...) <- value
 \description{
 Assign a new \code{\link{CMBWindow}} to a \code{\link{CMBDataFrame}}
 }
+\keyword{internal}

@@ -2,6 +2,7 @@
 % Please edit documentation in R/CMBReadFITS.R
 \name{CMBReadFITS}
 \alias{CMBReadFITS}
+\alias{CMBDat}
 \title{Read CMB data from a FITS file.}
 \usage{
 CMBReadFITS(filename, mmap = FALSE, spix)
@@ -24,14 +25,28 @@ If \code{mmap = TRUE} then a \code{\link{mmap}} object is returned
 that points to the CMB map data table in the FITS file.
 }
 \description{
-\code{CMBReadFITS} is adapted from the \code{\link{readFITS} }function in package
+\code{CMBReadFITS} is adapted from the \code{\link{readFITS}}
+function in package
   \href{https://cran.r-project.org/web/packages/FITSio/index.html}{FITSio}.
-  \code{CMBReadFITS} is in development stage and will only work with 'CMB_map_smica1024.fits'.
-  When it works, \code{CMBReadFITS} is much faster than \code{\link{readFITS}}.
-  However, \code{\link{readFITS}} is more general and so is more likely to work.
+  \code{CMBReadFITS} is in development stage and will only work with
+  'CMB_map_smica1024.fits'.
+  When it works, \code{CMBReadFITS} is much faster than
+  \code{\link{readFITS}}.
+  However, \code{\link{readFITS}} is more general and so is more
+  likely to work.
+}
+\details{
+The function \code{CMBReadFITS} creates objects of class \code{CMBDat}.
+These are lists containing header information and other metadata as well
+as an element called data, whose columns may include, for example, the
+intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
+\code{\link{mmap}} object that points to the CMB map data table in the FITS
+file.
 }
 \examples{
-dat <- CMBReadFITS("CMB_map_smica1024.fits")
+cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+class(cmbdat)
+str(cmbdat)
 
 # View metadata
 dat$header1

@@ -7,7 +7,7 @@
 pixelWindow(j1, j2, pix.j1)
 }
 \arguments{
-\item{j1}{is the lower resolution, with j1 < j2}
+\item{j1}{is the lower resolution, with j1 =< j2}
 
 \item{j2}{the upper resolution}
 
@@ -21,4 +21,11 @@ pix.j1 specified at resolution j1
 }
 \description{
 All pixels are assumed to be in nested ordering
+}
+\examples{
+
+pixelWindow(3, 3, 2)
+pixelWindow(3, 4, 2)
+pixelWindow(3, 5, 2)
+
 }

@@ -6,7 +6,7 @@
 #' also holds an attribute called \code{nside} which stores the
 #' HEALPix Nside parameter (i.e., the resolution of the HEALPix grid
 #' that is being used).
-#' Unlike \code{\link{HPDataFrames}}, HPDataFrames may have
+#' Unlike \code{\link{CMBDataFrame}}, HPDataFrames may have
 #' repeated pixel indices. They are made this way so that
 #' multiple data points falling within a given pixel
 #' can be stored in different rows of any given HPDataFrame.
@@ -99,10 +99,14 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #'
 #' If new.pix is unspecified then this function returns the vector of
 #' HEALPix pixel indices from a HPDataFrame. If new.pix is specified then
-#' this function returns a new HPDataFrame with pixel indices new.pix
+#' this function returns a new HPDataFrame with the same number of rows
+#' as \code{hpdf}, but with pix attribute \code{new.pix}. Thus,
+#' \code{new.pix} must have length equal to \code{nrow(hpdf)}.
+#'
 #'
 #'@param hpdf a \code{\link{HPDataFrame}}.
-#'@param new.pix optional vector of pixel indices
+#'@param new.pix optional vector of pixel indices with
+#'length equal to \code{nrow(hpdf)}
 #'
 #'@return
 #' The vector of HEALPix pixel indices (integers) or,
@@ -118,6 +122,10 @@ pix.HPDataFrame <- function(hpdf, new.pix)
 {
   if ( !missing(new.pix) )
   {
+    if (nrow(hpdf) != length(new.pix))
+    {
+      stop("nrow(hpdf) not equal to length(new.pix)")
+    }
     attr(hpdf, "pix") <- new.pix
     return(hpdf)
   }
@@ -469,6 +477,8 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 
 #' Assign new coordinate system to a \code{\link{HPDataFrame}}
 #'
+#'@keywords internal
+#'
 #' @seealso \code{\link{coords.HPDataFrame}}
 #'
 #' @examples
@@ -495,6 +505,14 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 #' @param hpdf Any R object
 #'
 #' @return TRUE if \code{hpdf} is a HPDataFrame, otherwise FALSE
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame(nside = 16)
+#' is.HPDataFrame(df)
+#'
+#' df <- HPDataFrame(I = rep(0,12), nside = 1)
+#' is.HPDataFrame(df)
 #'
 #' @export
 is.HPDataFrame <- function(hpdf)

@@ -1,4 +1,3 @@
-
 #' CMBDataFrame class
 #'
 #' The function \code{CMBDataFrame} creates objects of class \code{CMBDataFrame}.
@@ -55,7 +54,7 @@
 #'
 #' # Access HEALPix pixel indices using pix function
 #' # (these are stored in the row.names attribute)
-#' pix(df)
+#' pix(df.subset)
 #'
 #'
 #'

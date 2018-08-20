@@ -9,7 +9,8 @@
 \arguments{
 \item{hpdf}{a \code{\link{HPDataFrame}}.}
 
-\item{new.pix}{optional vector of pixel indices}
+\item{new.pix}{optional vector of pixel indices with
+length equal to \code{nrow(hpdf)}}
 }
 \value{
 The vector of HEALPix pixel indices (integers) or,
@@ -19,7 +20,9 @@ a new HPDataFrame.
 \description{
 If new.pix is unspecified then this function returns the vector of
 HEALPix pixel indices from a HPDataFrame. If new.pix is specified then
-this function returns a new HPDataFrame with pixel indices new.pix
+this function returns a new HPDataFrame with the same number of rows
+as \code{hpdf}, but with pix attribute \code{new.pix}. Thus,
+\code{new.pix} must have length equal to \code{nrow(hpdf)}.
 }
 \examples{
 df <- HPDataFrame(I = rep(0,12), nside = 1)

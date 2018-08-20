@@ -25,3 +25,4 @@ df
 \seealso{
 \code{\link{coords.data.frame}}
 }
+\keyword{internal}

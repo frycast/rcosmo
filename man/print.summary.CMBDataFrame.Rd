@@ -13,3 +13,4 @@ the output of \code{\link{summary.CMBDataFrame}}}
 \description{
 Print a summary of a CMBDataFrame
 }
+\keyword{internal}

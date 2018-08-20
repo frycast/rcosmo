@@ -16,3 +16,12 @@ at the \code{nside} resolution of \code{cmbdf}
 \description{
 Get the area of a single HEALPix pixel
 }
+\examples{
+
+df <- CMBDataFrame("CMB_map_smica1024.fits")
+pixelArea(df)
+
+df1 <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+pixelArea(df1)
+
+}

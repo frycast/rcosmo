@@ -42,6 +42,17 @@ if \code{r} is specified then \code{...} must specify just one row, and this
 row is taken to be the center of a disc of radius \code{r}
 }
 \examples{
-win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+win <- CMBWindow(theta = c(pi/2,pi/2,pi/3, pi/3), phi = c(0,pi/3,pi/3,0))
+plot(win)
 
+
+## Create a disc type window
+win1<- CMBWindow(x=0,y=3/5,z=4/5,r=0.8, set.minus =TRUE)
+plot(win1)
+
+
+## Apply a disc type window to CMBDataFrame
+cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+window(cmbdf) <- CMBWindow(x=0,y=3/5,z=4/5,r=0.8, set.minus =TRUE)
+plot(cmbdf)
 }

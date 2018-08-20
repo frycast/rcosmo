@@ -9,3 +9,4 @@
 \description{
 Assign new coordinate system to CMBWindow
 }
+\keyword{internal}

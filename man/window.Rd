@@ -134,7 +134,7 @@ cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
 cmbdf.win <- window(cmbdf, new.window = list(win1, win2), intersect = TRUE)
 plot(cmbdf.win)
 
-#'## Example 7: union of windows with different types
+## Example 7: union of windows with different types
 
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2), set.minus =TRUE)
 win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3))

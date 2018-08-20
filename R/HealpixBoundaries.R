@@ -22,7 +22,12 @@
 #' used if \code{ordering} is specified
 #' @param ... arguments passed to \code{rgl::plot3d}
 #'
-#' @return produces a plot
+#' @return produces a plot of the HEALPix pixel boundaries
+#'
+#' @examples
+#'
+#' plotHPBoundaries(1, eps = pi/90, col = "red")
+#' plotHPBoundaries(2, eps = pi/90, col = "green")
 #'
 #' @export
 plotHPBoundaries <- function(nside, eps = pi/90,

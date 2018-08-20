@@ -32,7 +32,7 @@ Then use devtools to install rcosmo:
 ```
 devtools::install_github("VidaliLama/rcosmo")
 ```
-If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::github_install("VidaliLama/rcosmo")` again.
+If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::install_github("VidaliLama/rcosmo")` again.
 
 ## Installation (Linux)
 

@@ -149,7 +149,7 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
 #'
 #' All pixels are assumed to be in nested ordering
 #'
-#'@param j1 is the lower resolution, with j1 < j2
+#'@param j1 is the lower resolution, with j1 =< j2
 #'@param j2 the upper resolution
 #'@param pix.j1 the pixel index at resolution j1 within which
 #'all pixels from resolution j2 will be returned. \code{pix.j1} can
@@ -157,6 +157,12 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
 #'
 #'@return All pixels in resolution j2 that fall within the pixel
 #'pix.j1 specified at resolution j1
+#'
+#'@examples
+#'
+#' pixelWindow(3, 3, 2)
+#' pixelWindow(3, 4, 2)
+#' pixelWindow(3, 5, 2)
 #'
 #'@export
 pixelWindow <- function(j1, j2, pix.j1)

@@ -4,26 +4,25 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
        detach,character.only=TRUE,unload=TRUE)
 
 
+df <- CMBDataFrame("../CMB_map_smica1024.fits")
 
-df <- CMBDataFrame(nside = 1, I = 1:12)
+df.sample1 <- CMBDataFrame(df, sample.size = 10)
+df.sample1
+df.sample2 <- CMBDataFrame(df, sample.size = 10)
+df.sample2
+rbind(df.sample1, df.sample2)
 
-df.123 <- CMBDataFrame(df, spix = c(1,2,3))
-df.123
-df.234 <- CMBDataFrame(df, spix = c(2,3,4))
-df.234
 
-df.1234 <- rbind(df.123, df.234)
-df.1234
-class(df.1234) # A CMBDataFrame
-pix(df.1234)
+##############################################################
+######### Using the window generic ###########################
+##############################################################
 
-df.123234 <- rbind(df.123, df.234, unsafe = TRUE)
-df.123234
-class(df.123234) # A HPDataFrame
-pix(df.123234)
-
-rcosmo:::areCompatibleCMBDFs(df.sample1, df.sample2)
-
+hpdf <- HPDataFrame(nside = 16, I = 1:(12*16^2))
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+plot(hpdf); plot(win1)
+hpdf.win <- window(hpdf, new.window = win1)
+plot(hpdf.win, col = "yellow", size = 4, add = TRUE)
+attributes(hpdf.win)
 
 ##############################################################
 ######### Object of class CMBDat #############################

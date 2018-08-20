@@ -7,6 +7,14 @@
 #'@return the area of a single HEALPix pixel
 #' at the \code{nside} resolution of \code{cmbdf}
 #'
+#' @examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' pixelArea(df)
+#'
+#' df1 <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+#' pixelArea(df1)
+#'
 #'@export
 pixelArea <- function(cmbdf)
 {
@@ -62,6 +70,11 @@ header <- function( cmbdf )
 #'@return
 #' The arcmin resolution as specified by the FITS file where the
 #' data was sourced
+#'
+#' @examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' resolution(df)
 #'
 #'@export
 resolution <- function( cmbdf )

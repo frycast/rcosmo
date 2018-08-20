@@ -16,3 +16,9 @@ data was sourced
 \description{
 Get the arcmin resolution from a \code{\link{CMBDataFrame}}
 }
+\examples{
+
+df <- CMBDataFrame("CMB_map_smica1024.fits")
+resolution(df)
+
+}

@@ -149,9 +149,9 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
 #'
 #' All pixels are assumed to be in nested ordering
 #'
-#'@param j1 is the lower resolution, with j1 =< j2
-#'@param j2 the upper resolution
-#'@param pix.j1 the pixel index at resolution j1 within which
+#'@param j1 An integer. The lower resolution, with j1 =< j2.
+#'@param j2 An integer. The upper resolution.
+#'@param pix.j1 An integer. The pixel index at resolution j1 within which
 #'all pixels from resolution j2 will be returned. \code{pix.j1} can
 #'also be a vector of non-zero pixel indices.
 #'
@@ -167,6 +167,15 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
 #'@export
 pixelWindow <- function(j1, j2, pix.j1)
 {
+  if ( j2 < 0 || j1 < 0 || pix.j1 < 0 )
+  {
+    stop("j1, j2, and pix.j1 must all be non-negative")
+  }
+
+  if ( j2 < j1 ) stop("j2 cannot be less than j1")
+
+  if ( pix.j1 > 12*4^(j1) ) stop("pix.j1 index out of bounds")
+
   if ( length(pix.j1) == 1 && pix.j1 == 0 ) {
     # pix indices at level j2
     spix.j2 <- 1:(12*2^(2*j2)) #= 12*nside.j2^2

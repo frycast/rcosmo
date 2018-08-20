@@ -22,7 +22,6 @@ df.123234
 class(df.123234) # A HPDataFrame
 pix(df.123234)
 
-
 rcosmo:::areCompatibleCMBDFs(df.sample1, df.sample2)
 
 

@@ -322,6 +322,15 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'
 #'@examples
 #'
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#'
+#' cmbdf <- CMBDataFrame(nside = 3)
+#' df2 <- coords(cmbdf, new.coords = "cartesian")
+#' df <- as.data.frame(df2[,1:3])
+#' df
+#' df.win <- window(df, new.window = win1)
+#' df.win
+#'
 #'@export
 window.data.frame <- function(df, new.window, intersect = TRUE)
 {

@@ -1,4 +1,4 @@
-#' Window attribute of \code{\link{CMBDataFrame}}
+#' Get a sub window from \code{\link{CMBDataFrame}}
 #'
 #' When new.window or in.pixels is unspecified this function returns the
 #' \code{\link{CMBWindow}} attribute of a

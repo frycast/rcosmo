@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{window.CMBDataFrame}
 \alias{window.CMBDataFrame}
-\title{Window attribute of \code{\link{CMBDataFrame}}}
+\title{Get a sub window from \code{\link{CMBDataFrame}}}
 \usage{
 \method{window}{CMBDataFrame}(cmbdf, new.window, intersect = TRUE,
   in.pixels, in.pixels.res = 0)

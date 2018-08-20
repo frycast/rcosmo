@@ -213,10 +213,16 @@ CTypeExpression <- function(TTYPEn, btype)
 #'regular type and "minus" type windows together (see details).
 #'
 #'@return
-#' A data.frame containing the data in \code{cmbdat} restricted to the
+#' A CMBDataFrame containing the data in \code{cmbdat} restricted to the
 #' CMBWindow \code{new.window}
 #'
 #'@examples
+#'
+#'win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#'cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+#'class(cmbdat)
+#'cmbdat.win <- window(cmbdat, new.window = win1)
+#'class(cmbdat.win)
 #'
 #'@export
 window.CMBDat <- function(cmbdat, new.window, intersect = TRUE)

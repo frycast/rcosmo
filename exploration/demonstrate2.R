@@ -5,6 +5,18 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
 
 
 
+df <- CMBDataFrame(nside = 1, I = 1:12)
+
+df.123 <- CMBDataFrame(df, spix = c(1,2,3))
+df.123
+df.234 <- CMBDataFrame(df, spix = c(2,3,4))
+df.234
+
+df.1234 <- rbind(df.123, df.234)
+df.1234
+
+
+rcosmo:::areCompatibleCMBDFs(df.sample1, df.sample2)
 
 
 ##############################################################

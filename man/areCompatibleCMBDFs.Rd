@@ -4,12 +4,16 @@
 \alias{areCompatibleCMBDFs}
 \title{areCompatibleCMBDFs}
 \usage{
-areCompatibleCMBDFs(cmbdf1, cmbdf2)
+areCompatibleCMBDFs(cmbdf1, cmbdf2, compare.pix = FALSE)
 }
 \arguments{
 \item{cmbdf1}{a \code{\link{CMBDataFrame}}}
 
 \item{cmbdf2}{a \code{\link{CMBDataFrame}}}
+
+\item{compare.pix}{A boolean. If TRUE then cmbdf1 and
+cmbdf2 must share the same pixel indices to be considered
+compatible}
 }
 \description{
 Compare attributes to decide if two CMBDataFrames are compatible

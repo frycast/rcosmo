@@ -243,10 +243,9 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 #'Add a new row or rows to a \code{\link{CMBDataFrame}}.
 #'All arguments passed to \code{...} must be CMBDataFrames.
 #'
-#'@param unsafe defaults to FALSE. If \code{unsafe = TRUE} then
-#'overlapping pixel coordinates will not throw an error (faster).
+#'@param ... A number of CMBDataFrames
 #'
-#'See the documentation for \code{\link{rbind}}
+#'@seealso See the documentation for \code{\link{rbind}}
 #'
 #'@export
 rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
@@ -271,11 +270,12 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
     {
       for (j in (i+1):length(args))
       {
-        len <- length(intersect(pix(args[[i]]), pix(args[[j]])))
+        cap.ij <- intersect(pix(args[[i]]), pix(args[[j]]))
 
-        if ( len != 0 )
+        if ( length(cap.ij) != 0 )
         {
-          stop("The CMBDataFrames passed to rbind overlap somewhere")
+          to.drop <- which(pix(args[[i]]) %in% cap.ij)
+          args[[i]] <- args[[i]][-to.drop,]
         }
       }
     }
@@ -315,6 +315,9 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 #'
 #' @param cmbdf1 a \code{\link{CMBDataFrame}}
 #' @param cmbdf2 a \code{\link{CMBDataFrame}}
+#' @param compare.pix A boolean. If TRUE then cmbdf1 and
+#' cmbdf2 must share the same pixel indices to be considered
+#' compatible
 #'
 #' @examples
 #' a <- CMBDataFrame(nside = 2, ordering = "ring", coords = "cartesian")
@@ -324,7 +327,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 #' suppressMessages(areCompatibleCMBDFs(a,b))
 #'
 #' @export
-areCompatibleCMBDFs <- function(cmbdf1, cmbdf2)
+areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 {
   if ( !is.CMBDataFrame(cmbdf1) || !is.CMBDataFrame(cmbdf1) )
   {
@@ -346,12 +349,12 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2)
     reasons <- paste0(reasons, "ordering mismatch (ordering1 = ", ordering(cmbdf1),
                       ", ordering2 = ", ordering(cmbdf2), ")\n")
   }
-  if (!pix)
+  if (!pix && compare.pix)
   {
     reasons <- paste0(reasons, "pixels mismatch pix(cmbdf1) != pix(cmbdf2)\n")
   }
 
-  if ( !(ns && ord && pix) )
+  if ( !(ns && ord && (pix || !compare.pix) ) )
   {
     message(reasons)
     return(FALSE)

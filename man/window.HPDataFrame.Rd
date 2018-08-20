@@ -57,4 +57,10 @@ will be the points of \code{df} in \eqn{B} (resp. \eqn{A}).
 }
 \examples{
 
+ns <- 16
+hpdf <- HPDataFrame(nside = ns, I = 1:(12*ns^2))
+plot(hpdf)
+
+
+
 }

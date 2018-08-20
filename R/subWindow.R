@@ -65,6 +65,11 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     {
       # Note that HPDataFrames end up in here too
       cmbdf <- rcosmo:::coords(cmbdf, new.coords = "cartesian")
+
+      if ( is.HPDataFrame(cmbdf) )
+      {
+        spx <- rcosmo:::pix(cmbdf)
+      }
     }
     else
     {
@@ -252,6 +257,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     if ( is.HPDataFrame(cmbdf) )
     {
       attr(cmbdf.new, "pix") <- spx[keep]
+      row.names(cmbdf.new) <- 1:nrow(cmbdf.new)
     }
   }
   else if ( is.CMBDat(cmbdf) )

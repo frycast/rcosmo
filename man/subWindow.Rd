@@ -60,3 +60,4 @@ will be the points of \code{cmbdf} in \eqn{B} (resp. \eqn{A}).
 \examples{
 
 }
+\keyword{internal}

@@ -1,6 +1,12 @@
 #' Download CMB Power Spectra from Planck Legacy Archive.
 #'
 #' The function \code{DownloadCMBPS} download CMB power spectra components from \url{http://pla.esac.esa.int/pla/#cosmology}.
+#'
+#' \code{link = 1:} describe
+#'
+#' \code{link = 2:} describe
+#'
+#'
 #' @param link  The URL to download the file
 #' @param items  Column names to specify the obtained data frame
 #' @return The CMB power spectra data frame
@@ -36,7 +42,27 @@
 #' @references Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
 #' @export
 #'
-DownloadCMBPS <- function(link,items){
-  CMB_PowerSpectra=read.table(link,quote="\"",col.names = items)
+DownloadCMBPS <- function(link = 1){
+
+
+  items <- switch(link,
+                  1 = items1,
+                  2 = items2)
+
+  link.str <- switch(link,
+                     1 = link1,
+                     2 = link2)
+
+  CMB_PowerSpectra <- read.table(link.str, quote="\"", col.names = items)
   return(CMB_PowerSpectra)
 }
+
+
+link1 <- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+               "COM_PowerSpect_CMB-TT-full_R3.01.txt",sep = "")
+items1 <- c("L","DL","Minus_dDL","Plus_dDL")
+
+
+## Choose default items
+# DownloadCMBPS(link = 1)
+## usage...

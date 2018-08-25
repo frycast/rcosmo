@@ -15,10 +15,11 @@ as.CMBDataFrame(df, ordering, nside, spix)
 \item{nside}{an integer that specifies the Nside (resolution)
 HEALPix parameter}
 
-\item{spix}{a vector that specifies the HEALPix pixel index
+\item{spix}{an integer vector that specifies the HEALPix pixel index
 corresponding to each row of \code{df}. If \code{spix} is left blank and
 \code{df} is a \code{data.frame}, then \code{df} is assumed to contain data
-for every pixel at resolution parameter \code{nside} (the full sky).
+for every pixel at resolution parameter \code{nside} (the full sky). It means
+that in this case the number of rows of \code{df} must be equal 12*nside^2.
 However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
 then \code{spix} is set equal to \code{pix(df)}}
 }
@@ -32,4 +33,29 @@ given by \code{ordering}, and at the HEALPix resolution given
 by \code{nside}. Coordinates, if present, are checked to correspond
 to HEALPix pixel centers. The coordinates must be named either x,y,z
 (cartesian) or theta, phi (spherical colatitude and longitude respectively).
+}
+\examples{
+
+## Example 1: Create df with no coords, then create CMBDataFrames cmbdf and
+## df2 with spherical coords
+
+df <- data.frame(I=rnorm(12))
+df
+
+cmbdf <- as.CMBDataFrame(df,ordering= "ring", nside=1)
+summary(cmbdf)
+pix(cmbdf)
+coords(cmbdf)
+
+df2 <- coords(cmbdf, new.coords = "spherical")
+df2
+
+## Example 2: Create CMBDataFrames for first 10 Healpix centers
+
+df <- data.frame(I=rnorm(10))
+df
+cmbdf <- as.CMBDataFrame(df,ordering= "ring", nside=2, spix=1:10)
+summary(cmbdf)
+pix(cmbdf)
+
 }

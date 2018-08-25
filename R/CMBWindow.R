@@ -1,6 +1,7 @@
-#' CMBWindow
+#' CMBWindow class.
 #'
-#' Create a CMBWindow: Either a polygon or a disc type
+#' The function \code{CMBWindow} creates objects of class \code{CMBWindow}.
+#' It is either a polygon or a disc type.
 #'
 #'If \code{r} is unspecified then the rows of \code{...} correspond to
 #'counter-clockwise ordered vertices defining a spherical polygon

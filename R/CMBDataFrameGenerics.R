@@ -549,7 +549,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 
 #Reduce(intersect, list(pix(a.w1),pix(a.w2),pix(a.w3)))
 
-#' areCompatibleCMBDFs
+#' Check compatibleness of CMBDataFrames
 #'
 #' Compare attributes to decide if two CMBDataFrames are compatible
 #'
@@ -629,7 +629,7 @@ maxDist.CMBDataFrame <- function(cmbdf)
 
 
 
-#' as.CMBDataFrame
+#' Convert dataframes to CMBDataFrames
 #'
 #' Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
 #' rows of the data.frame are assumed to be in the HEALPix order

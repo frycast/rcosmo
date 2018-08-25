@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindow.R
 \name{CMBWindow}
 \alias{CMBWindow}
-\title{CMBWindow}
+\title{CMBWindow class.}
 \usage{
 CMBWindow(..., r, set.minus = FALSE, assume.convex = FALSE)
 }
@@ -27,7 +27,8 @@ is not a polygon}
 
 }
 \description{
-Create a CMBWindow: Either a polygon or a disc type
+The function \code{CMBWindow} creates objects of class \code{CMBWindow}.
+It is either a polygon or a disc type.
 }
 \details{
 If \code{r} is unspecified then the rows of \code{...} correspond to

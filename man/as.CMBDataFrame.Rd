@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{as.CMBDataFrame}
 \alias{as.CMBDataFrame}
-\title{as.CMBDataFrame}
+\title{Convert dataframes to CMBDataFrames}
 \usage{
 as.CMBDataFrame(df, ordering, nside, spix)
 }

@@ -1,4 +1,44 @@
-
+############################################################################
+#' CMBDat class.
+#'
+#'
+#' The function \code{CMBReadFITS} creates objects of class \code{CMBDat}.
+#' These are lists containing header information and other metadata as well
+#' as an element called data, whose columns may include, for example, the
+#' intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
+#' \code{\link{mmap}} object that points to the CMB map data table in the FITS
+#' file.
+#'
+#'@aliases CMBDat
+#'
+#'@param filename The path to the fits file.
+#'@param mmap A boolean indicating whether to use memory mapping.
+#'@param spix The sample pixels (rows) to read from the FITS file
+#'binary data table (optional)
+#'@return A list containing header information and other metadata
+#'as well as an element called \code{data} where:
+#'If \code{mmap = FALSE} then a \code{data.frame} is
+#'included, named \code{data}, whose columns may include, for
+#'example, the intensity (I), polarisation (Q, U), PMASK and TMASK.
+#'If \code{mmap = TRUE} then a \code{\link{mmap}} object is returned
+#'that points to the CMB map data table in the FITS file.
+#'
+#'@examples
+#' cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+#' class(cmbdat)
+#' str(cmbdat)
+#'
+#'# View metadata
+#'dat$header1
+#'dat$header2
+#'dat$resoln
+#'dat$method
+#'dat$coordsys
+#'dat$nside
+#'dat$hdr
+#'
+#'@name CMBDat
+NULL
 
 
 
@@ -28,7 +68,7 @@
 #' \code{\link{mmap}} object that points to the CMB map data table in the FITS
 #' file.
 #'
-#'@aliases CMBDat
+#'@aliases CMBReadFITS
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.

@@ -221,7 +221,8 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #'@examples
 #' df <- CMBDataFrame(nside = 1, ordering = "nested")
 #' ordering(df)
-#' ordering(df, new.ordering = "ring")
+#' df1 <- ordering(df, new.ordering = "ring")
+#' ordering(df1)
 #'
 #'@export
 ordering.CMBDataFrame <- function( cmbdf, new.ordering )

@@ -17,11 +17,17 @@ Gives the surface on the unit sphere
 that is encompassed by all pixels in \code{cmbdf}
 }
 \examples{
+
 ## At low resolution, a few data points can
 ## occupy a large pixel area, e.g.:
+
 cmbdf <- CMBDataFrame(nside = 1, spix = c(1,2,3))
 pix(cmbdf)
-geoArea(cmbdf) # pi = 1/4*(surface area of unit sphere)
+
+## The total number of Healpix points at nside=1 equals 12. As cmbdf has 3 Helpix
+## it occupies pi = 1/4*(surface area of unit sphere)
+
+geoArea(cmbdf)
 plot(cmbdf, size = 5, hp.boundaries = 1)
 
 }

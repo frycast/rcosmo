@@ -300,6 +300,14 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 #'
 #' @return Tthe spherical area inside win
 #'
+#'@examples
+#'
+#' ## A window that covers 1/8 of the unit sphere is constructed and its area is
+#' ## pi/2 = 1/8*(surface area of unit sphere)
+#'
+#' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' geoArea(win)
+#'
 #'@export
 geoArea.CMBWindow <- function(win)
 {

@@ -18,12 +18,15 @@ that is encompassed by all pixels in \code{hpdf}
 }
 \examples{
 
-## At low resolution, a few data points can
-## occupy a large pixel area, e.g.:
-hp1 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
-                   nside = 1, auto.spix = TRUE)
+## Generate random I for HPDataFrame
+hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
 pix(hp1)
-geoArea(hp1) # pi = 1/4*(surface area of unit sphere)
+
+## The total number of Healpix points at nside=1 equals 12. As hp1 has five
+## I values at 3 Helpix points, then the occupied area is
+## pi = 1/4*(surface area of unit sphere)
+
+geoArea(hp1)
 plot(hp1, size = 5, hp.boundaries = 1)
 
 }

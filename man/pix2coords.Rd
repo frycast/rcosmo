@@ -2,7 +2,7 @@
 % Please edit documentation in R/Conversion.R
 \name{pix2coords}
 \alias{pix2coords}
-\title{pix2coords}
+\title{Convert pixel indices to cartesian/spherical coordinates}
 \usage{
 pix2coords(nside, coords = "cartesian", ordering = "nested", spix)
 }
@@ -20,5 +20,11 @@ a data.frame with columns 'x', 'y', 'z' (cartesian) or
 'theta', 'phi' (spherical)
 }
 \description{
-convert HEALPix pixel indices to cartesian or spherical coordinates
+Convert HEALPix pixel indices to cartesian or spherical coordinates
+}
+\examples{
+
+pix2coords(nside=1, spix=c(2,5))
+pix2coords(nside=1,  coords = "spherical", spix=c(2,5))
+
 }

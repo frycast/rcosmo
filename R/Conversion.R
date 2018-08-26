@@ -1,6 +1,6 @@
-#' pix2coords
+#' Convert pixel indices to cartesian/spherical coordinates
 #'
-#' convert HEALPix pixel indices to cartesian or spherical coordinates
+#' Convert HEALPix pixel indices to cartesian or spherical coordinates
 #'
 #' @param nside the nside parameter (integer number \eqn{2^k})
 #' @param coords 'cartesian' or 'spherical' coordinates
@@ -9,6 +9,11 @@
 #'
 #' @return a data.frame with columns 'x', 'y', 'z' (cartesian) or
 #' 'theta', 'phi' (spherical)
+#'
+#' @examples
+#'
+#' pix2coords(nside=1, spix=c(2,5))
+#' pix2coords(nside=1,  coords = "spherical", spix=c(2,5))
 #'
 #' @export
 pix2coords <- function(nside, coords = "cartesian", ordering = "nested", spix)

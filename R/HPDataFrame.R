@@ -24,10 +24,10 @@
 #' if \code{auto.spix = TRUE}
 #'
 #' @examples
-#' hpdf <- HPDataFrame(I = 1:12, nside = 1)
-#' class(hpdf)
-#' nside(hpdf)
-#' ordering(hpdf)
+#'
+#'  hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
+#' pix(hp1)
+#' coords(hp1, new.coords = "cartesian")
 #'
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",

@@ -162,7 +162,7 @@ is.CMBWindow <- function(win)
 
 
 
-#' visualise a \code{\link{CMBWindow}}
+#' Visualise a \code{\link{CMBWindow}}
 #'
 #'@param win a CMBWindow
 #'@param add if TRUE then this plot will be added to any existing plot.

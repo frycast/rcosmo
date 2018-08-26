@@ -1,7 +1,7 @@
 
-#' plotHPBoundaries
+#' PlotHPBoundaries
 #'
-#' plot the HEALPix pixel boundaries at \code{nside}
+#' Plot the HEALPix pixel boundaries at \code{nside}
 #'
 #' @param nside the HEALPix nside parameter (integer number \eqn{2^k})
 #' @param eps controls the smoothness of the plot, smaller eps

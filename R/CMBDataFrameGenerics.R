@@ -617,6 +617,21 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #'
 #'@param cmbdf a CMBDataFrame object
 #'
+#'@return maximum distance between all points
+#'
+#'@examples
+#'
+#' ## For CMBDataFrame with all Healpix ponts included it must be pi
+#' cmbdf <- CMBDataFrame(nside = 4)
+#' pix(cmbdf)
+#' maxDist(cmbdf)
+#'
+#' ## Example for CMBDataFrame with Healpix only ponts 1 and 2 included
+#'
+#' cmbdf <- CMBDataFrame(nside = 4, spix =c(1,2))
+#' pix(cmbdf)
+#' maxDist(cmbdf)
+#'
 #'@export
 maxDist.CMBDataFrame <- function(cmbdf)
 {

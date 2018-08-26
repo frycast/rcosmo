@@ -2,7 +2,7 @@
 % Please edit documentation in R/Geometry.R
 \name{minDist}
 \alias{minDist}
-\title{minDist}
+\title{Get the minimum distance between points}
 \usage{
 minDist(df, point)
 }
@@ -21,7 +21,7 @@ the shortest distance from \code{point} to the
 points specified by the rows of \code{df}
 }
 \description{
-minDist
+Get the minimum distance between a point and points in a data frame
 }
 \examples{
 

@@ -85,6 +85,14 @@ print.summary.CMBWindow <- function(x, ...)
 #'
 #'@param win a CMBWindow object
 #'
+#'@return the maximum distance between window's points
+#'
+#'@examples
+#'
+#' ## win is a equilateral spherical triangle which sides are pi/2
+#' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' maxDist(win)
+#'
 #'@export
 maxDist.CMBWindow <- function(win)
 {
@@ -294,7 +302,7 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 
 
 
-#' Get the geodesic area of a \code{\link{CMBWindow}}
+#' Geodesic area of a \code{\link{CMBWindow}}
 #'
 #' @param win a CMBWindow
 #'

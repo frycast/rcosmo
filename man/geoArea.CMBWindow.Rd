@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindowGenerics.R
 \name{geoArea.CMBWindow}
 \alias{geoArea.CMBWindow}
-\title{Get the geodesic area of a \code{\link{CMBWindow}}}
+\title{Geodesic area of a \code{\link{CMBWindow}}}
 \usage{
 \method{geoArea}{CMBWindow}(win)
 }
@@ -13,7 +13,7 @@
 Tthe spherical area inside win
 }
 \description{
-Get the geodesic area of a \code{\link{CMBWindow}}
+Geodesic area of a \code{\link{CMBWindow}}
 }
 \examples{
 

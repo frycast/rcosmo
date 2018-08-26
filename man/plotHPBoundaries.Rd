@@ -2,7 +2,7 @@
 % Please edit documentation in R/HealpixBoundaries.R
 \name{plotHPBoundaries}
 \alias{plotHPBoundaries}
-\title{PlotHPBoundaries}
+\title{Plot HEALPix pixel boundaries}
 \usage{
 plotHPBoundaries(nside, eps = pi/90, col = "gray", lwd = 1, ordering,
   incl.labels = 1:(12 * nside^2), nums.col = col, nums.size = 1,

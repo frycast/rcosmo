@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindowGenerics.R
 \name{geoArea.CMBWindow}
 \alias{geoArea.CMBWindow}
-\title{Get the geodesic area of a \code{\link{CMBWindow}}}
+\title{Geodesic area of a \code{\link{CMBWindow}}}
 \usage{
 \method{geoArea}{CMBWindow}(win)
 }
@@ -13,5 +13,14 @@
 Tthe spherical area inside win
 }
 \description{
-Get the geodesic area of a \code{\link{CMBWindow}}
+Geodesic area of a \code{\link{CMBWindow}}
+}
+\examples{
+
+## A window that covers 1/8 of the unit sphere is constructed and its area is
+## pi/2 = 1/8*(surface area of unit sphere)
+
+win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+geoArea(win)
+
 }

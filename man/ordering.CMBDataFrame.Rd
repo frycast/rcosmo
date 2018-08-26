@@ -28,6 +28,7 @@ ordering scheme of the CMBDataFrame will be converted.
 \examples{
 df <- CMBDataFrame(nside = 1, ordering = "nested")
 ordering(df)
-ordering(df, new.ordering = "ring")
+df1 <- ordering(df, new.ordering = "ring")
+ordering(df1)
 
 }

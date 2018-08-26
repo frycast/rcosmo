@@ -1,14 +1,19 @@
-#' pix2coords
+#' Convert pixel indices to cartesian/spherical coordinates
 #'
-#' convert HEALPix pixel indices to cartesian or spherical coordinates
+#' Convert HEALPix pixel indices to cartesian or spherical coordinates
 #'
-#' @param nside the nside parameter
+#' @param nside the nside parameter (integer number \eqn{2^k})
 #' @param coords 'cartesian' or 'spherical' coordinates
 #' @param ordering 'ring' or 'nested' ordering
 #' @param spix optional integer or vector of sample pixel indices
 #'
 #' @return a data.frame with columns 'x', 'y', 'z' (cartesian) or
 #' 'theta', 'phi' (spherical)
+#'
+#' @examples
+#'
+#' pix2coords(nside=1, spix=c(2,5))
+#' pix2coords(nside=1,  coords = "spherical", spix=c(2,5))
 #'
 #' @export
 pix2coords <- function(nside, coords = "cartesian", ordering = "nested", spix)
@@ -46,18 +51,20 @@ pix2coords <- function(nside, coords = "cartesian", ordering = "nested", spix)
 
 
 
-#' Ring to Nest.
+#' Convert ring to nest ordering.
 #'
-#' \code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme to
-#' HEALPix pixel indices in the 'nested' ordering scheme.
+#' \code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme
+#'  to HEALPix pixel indices in the 'nested' ordering scheme.
 #'
-#' @param nside is the HEALPix nside parameter.
+#' @param nside is the HEALPix nside parameter (integer number \eqn{2^k})
 #' @param pix is a vector of HEALPix pixel indices, in the 'ring' ordering scheme.
 #'
-#' @return the output is a vector of HEALPix pixel indices in the 'nested' ordering scheme.
+#' @return the output is a vector of HEALPix pixel indices in the 'nested'
+#' ordering scheme.
 #'
 #' @examples
-#' # compute HEALPix indices in the ring order of the set pix given in the nest order at nside
+#' # compute HEALPix indices in the ring order of the set pix given in the nest
+#' order at nside
 #' nside <- 8
 #' pix <-c(1,2,23)
 #' ring2nest(nside,pix)

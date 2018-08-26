@@ -26,7 +26,7 @@ window(s) \code{win} entirely. This will only be used
 if \code{cmbdf} is a \code{CMBDataFrame}}
 
 \item{in.pixels.res}{a resolution
-(i.e., \eqn{j} such that nside = \code{2^j|}) at
+(i.e., \eqn{j} such that nside = \code{2^j}) at
 which the \code{in.pixels} parameter is specified}
 }
 \value{

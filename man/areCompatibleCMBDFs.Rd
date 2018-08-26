@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{areCompatibleCMBDFs}
 \alias{areCompatibleCMBDFs}
-\title{areCompatibleCMBDFs}
+\title{Check compatibleness of CMBDataFrames}
 \usage{
 areCompatibleCMBDFs(cmbdf1, cmbdf2, compare.pix = FALSE)
 }

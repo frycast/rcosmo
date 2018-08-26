@@ -2,14 +2,14 @@
 % Please edit documentation in R/HealpixBoundaries.R
 \name{plotHPBoundaries}
 \alias{plotHPBoundaries}
-\title{plotHPBoundaries}
+\title{Plot HEALPix pixel boundaries}
 \usage{
 plotHPBoundaries(nside, eps = pi/90, col = "gray", lwd = 1, ordering,
   incl.labels = 1:(12 * nside^2), nums.col = col, nums.size = 1,
   font = 2, ...)
 }
 \arguments{
-\item{nside}{the HEALPix nside parameter}
+\item{nside}{the HEALPix nside parameter (integer number \eqn{2^k})}
 
 \item{eps}{controls the smoothness of the plot, smaller eps
 implies more samples}
@@ -41,7 +41,7 @@ used if \code{ordering} is specified}
 produces a plot of the HEALPix pixel boundaries
 }
 \description{
-plot the HEALPix pixel boundaries at \code{nside}
+Plot the HEALPix pixel boundaries at \code{nside}
 }
 \examples{
 

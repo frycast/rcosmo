@@ -22,6 +22,12 @@
 #'
 #'@examples
 #'
+#' p1 <- data.frame(diag(3))
+#' colnames(p1) <- c("x", "y", "z")
+#' p1
+#' p2 <- data.frame(x=c(1,0), y=c(0,3/5), z=c(0,4/5))
+#' p2
+#' geoDist(p1, p2, include.names = FALSE)
 #'
 #'@export
 geoDist <- function(p1,p2, include.names = FALSE) {
@@ -65,7 +71,10 @@ p1f <- function(p1, p2) {
 }
 
 
-#'minDist
+#'Get the minimum distance between points
+#'
+#'
+#'Get the minimum distance between a point and points in a data frame
 #'
 #'@param df A \code{data.frame} with columns x,y,z for cartesian
 #'or theta, phi for spherical colatitude and longitude respectively.

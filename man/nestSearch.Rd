@@ -11,7 +11,7 @@ nestSearch(target, nside, index.only = FALSE, j = 0:log2(nside),
 \item{target}{is a vector of Cartesian coordinates for the target
 point on S^2}
 
-\item{nside}{is the nside for which the HEALPix points are searched}
+\item{nside}{is an integer number \eqn{2^k} for which the HEALPix points are searched}
 
 \item{demo.plot}{If TRUE then a plot will be produced with
 target pixel in yellow and closest pixel at each step in red}

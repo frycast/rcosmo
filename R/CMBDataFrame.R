@@ -19,7 +19,7 @@
 #'@param sample.size If a positive integer is given, a simple random
 #'sample of size equal to sample.size will be taken from CMBData. If
 #'spix is specified then \code{sample.size} must be unspecified.
-#'@param nside Optionally specify the nside parameter manually
+#'@param nside Optionally specify the nside parameter manually nside=\eqn{2^k}
 #'(usually 1024 or 2048).
 #'@param ordering Specifies the desired HEALPix ordering scheme
 #'("ring" or "nested") for the output CMBDataFrame.

@@ -9,7 +9,7 @@ HPDataFrame(..., nside, ordering = "nested", auto.spix = FALSE, spix)
 \arguments{
 \item{...}{data, can be named vectors or a data.frame}
 
-\item{nside}{integer, the nside parameter, i.e, resolution}
+\item{nside}{integer number \eqn{2^k}, the nside parameter, i.e, resolution}
 
 \item{ordering}{the HEALPix ordering scheme ("ring" or "nested")}
 
@@ -36,9 +36,10 @@ multiple data points falling within a given pixel
 can be stored in different rows of any given HPDataFrame.
 }
 \examples{
-hpdf <- HPDataFrame(I = 1:12, nside = 1)
-class(hpdf)
-nside(hpdf)
-ordering(hpdf)
+
+hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
+pix(hp1)
+coords(hp1, new.coords = "cartesian")
+class(hp1)
 
 }

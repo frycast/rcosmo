@@ -1,4 +1,4 @@
-#' Window attribute of \code{\link{CMBDataFrame}}
+#' Get a sub window from \code{\link{CMBDataFrame}}
 #'
 #' When new.window or in.pixels is unspecified this function returns the
 #' \code{\link{CMBWindow}} attribute of a
@@ -230,7 +230,8 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #'@examples
 #' df <- CMBDataFrame(nside = 1, ordering = "nested")
 #' ordering(df)
-#' ordering(df, new.ordering = "ring")
+#' df1 <- ordering(df, new.ordering = "ring")
+#' ordering(df1)
 #'
 #'@export
 ordering.CMBDataFrame <- function( cmbdf, new.ordering )
@@ -558,7 +559,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 
 #Reduce(intersect, list(pix(a.w1),pix(a.w2),pix(a.w3)))
 
-#' areCompatibleCMBDFs
+#' Check compatibleness of CMBDataFrames
 #'
 #' Compare attributes to decide if two CMBDataFrames are compatible
 #'
@@ -627,6 +628,21 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #'
 #'@param cmbdf a CMBDataFrame object
 #'
+#'@return maximum distance between all points
+#'
+#'@examples
+#'
+#' ## For CMBDataFrame with all Healpix ponts included it must be pi
+#' cmbdf <- CMBDataFrame(nside = 4)
+#' pix(cmbdf)
+#' maxDist(cmbdf)
+#'
+#' ## Example for CMBDataFrame with Healpix only ponts 1 and 2 included
+#'
+#' cmbdf <- CMBDataFrame(nside = 4, spix =c(1,2))
+#' pix(cmbdf)
+#' maxDist(cmbdf)
+#'
 #'@export
 maxDist.CMBDataFrame <- function(cmbdf)
 {
@@ -636,32 +652,55 @@ maxDist.CMBDataFrame <- function(cmbdf)
 
 
 
-
-
-
-#' as.CMBDataFrame
+#' Convert dataframes to CMBDataFrames
+#'
 #'
 #' Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
 #' rows of the data.frame are assumed to be in the HEALPix order
 #' given by \code{ordering}, and at the HEALPix resolution given
-#' by \code{nside}. Coordinates, if present, are checked to correspond
-#' to HEALPix pixel centers. The coordinates must be named either x,y,z
+#' by \code{nside}. Coordinates, if present,  are assumed to correspond to
+#' HEALPix pixel centers. The coordinates must be named either x,y,z
 #' (cartesian) or theta, phi (spherical colatitude and longitude respectively).
 #'
 #' @param df Any \code{data.frame} whose rows are in HEALPix order
 #' @param ordering character string that specifies the ordering scheme
 #' ("ring" or "nested")
-#' @param nside an integer that specifies the Nside (resolution)
+#' @param nside an integer \eqn{2^k} that specifies the Nside (resolution)
 #' HEALPix parameter
-#' @param spix a vector that specifies the HEALPix pixel index
+#' @param spix an integer vector that specifies the HEALPix pixel index
 #' corresponding to each row of \code{df}. If \code{spix} is left blank and
 #' \code{df} is a \code{data.frame}, then \code{df} is assumed to contain data
 #' for every pixel at resolution parameter \code{nside} (the full sky).
-#' However, if \code{spix} is left blank and \code{df}
-#' is a \code{CMBDataFrame},
+#' In other words,
+#' in this case, the number of rows of \code{df} must be equal to 12*nside^2.
+#' However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
 #' then \code{spix} is set equal to \code{pix(df)}
 #'
 #' @return A CMBDataFrame
+#'
+#' @examples
+#'
+#' ## Example 1: Create df with no coords, then create CMBDataFrames cmbdf and
+#' ## df2 with spherical coords
+#'
+#' df <- data.frame(I=rnorm(12))
+#' df
+#'
+#' cmbdf <- as.CMBDataFrame(df,ordering= "ring", nside=1)
+#' summary(cmbdf)
+#' pix(cmbdf)
+#' coords(cmbdf)
+#'
+#' df2 <- coords(cmbdf, new.coords = "spherical")
+#' df2
+#'
+#' ## Example 2: Create CMBDataFrames for first 10 Healpix centers
+#'
+#' df <- data.frame(I=rnorm(10))
+#' df
+#' cmbdf <- as.CMBDataFrame(df,ordering= "ring", nside=2, spix=1:10)
+#' summary(cmbdf)
+#' pix(cmbdf)
 #'
 #' @export
 as.CMBDataFrame <- function(df, ordering, nside, spix)
@@ -811,11 +850,17 @@ is.CMBDat <- function(cmbdf)
 #'@return the sum of the areas of all pixels (rows) in cmbdf
 #'
 #'@examples
+#'
 #' ## At low resolution, a few data points can
 #' ## occupy a large pixel area, e.g.:
+#'
 #' cmbdf <- CMBDataFrame(nside = 1, spix = c(1,2,3))
 #' pix(cmbdf)
-#' geoArea(cmbdf) # pi = 1/4*(surface area of unit sphere)
+#'
+#' ## The total number of Healpix points at nside=1 equals 12. As cmbdf has 3 Helpix
+#' ## it occupies pi = 1/4*(surface area of unit sphere)
+#'
+#' geoArea(cmbdf)
 #' plot(cmbdf, size = 5, hp.boundaries = 1)
 #'
 #'@export

@@ -30,8 +30,8 @@ A CMBDataFrame
 Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
 rows of the data.frame are assumed to be in the HEALPix order
 given by \code{ordering}, and at the HEALPix resolution given
-by \code{nside}. Coordinates, if present, are checked to correspond
-to HEALPix pixel centers. The coordinates must be named either x,y,z
+by \code{nside}. Coordinates, if present,  are assumed to correspond to
+HEALPix pixel centers. The coordinates must be named either x,y,z
 (cartesian) or theta, phi (spherical colatitude and longitude respectively).
 }
 \examples{

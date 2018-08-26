@@ -9,7 +9,8 @@
 \arguments{
 \item{cmbdf}{A CMBDataFrame.}
 
-\item{new.coords}{Specifies the new coordinate system ("spherical" or "cartesian")
+\item{new.coords}{Specifies the new coordinate
+system ("spherical" or "cartesian")
 if a change of coordinate system is desired.}
 }
 \value{

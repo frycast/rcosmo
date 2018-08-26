@@ -13,7 +13,8 @@
 (or potentially another numeric quantity of interest)}
 }
 \value{
-A summary includes window's type and area, total area covered by observations,
+A summary includes window's type and area,
+total area covered by observations,
 and main statistcs for intensity values
 }
 \description{

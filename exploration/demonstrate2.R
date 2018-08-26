@@ -4,14 +4,10 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
        detach,character.only=TRUE,unload=TRUE)
 
 
-df <- CMBDataFrame("../CMB_map_smica1024.fits")
-
-df.sample1 <- CMBDataFrame(df, sample.size = 10)
-df.sample1
-df.sample2 <- CMBDataFrame(df, sample.size = 10)
-df.sample2
-rbind(df.sample1, df.sample2)
-
+df <- CMBDataFrame(nside = 1, I = 1:12)
+plotHPBoundaries(nside = 1, ordering = "nested")
+plotHPBoundaries(nside = 2, ordering = "nested", col = "blue")
+plotHPBoundaries(nside = 4, ordering = "nested", col = "red")
 
 ##############################################################
 ######### Using the window generic ###########################

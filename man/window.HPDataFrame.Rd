@@ -56,11 +56,17 @@ Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
 will be the points of \code{df} in \eqn{B} (resp. \eqn{A}).
 }
 \examples{
-
 ns <- 16
 hpdf <- HPDataFrame(nside = ns, I = 1:(12*ns^2))
-plot(hpdf)
+hpdf
 
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+plot(hpdf); plot(win1)
+
+hpdf.win <- window(hpdf, new.window = win1)
+plot(hpdf.win, col = "yellow", size = 4, add = TRUE)
+attributes(hpdf.win)
+hpdf.win
 
 
 }

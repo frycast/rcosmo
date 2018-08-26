@@ -172,9 +172,9 @@ pixelWindow <- function(j1, j2, pix.j1)
     stop("j1, j2, and pix.j1 must all be non-negative")
   }
 
-  if ( j2 < j1 ) stop("j2 cannot be less than j1")
+  if ( any(j2 < j1) ) stop("j2 cannot be less than j1")
 
-  if ( pix.j1 > 12*4^(j1) ) stop("pix.j1 index out of bounds")
+  if ( any(pix.j1 > 12*4^(j1)) ) stop("pix.j1 index out of bounds")
 
   if ( length(pix.j1) == 1 && pix.j1 == 0 ) {
     # pix indices at level j2
@@ -182,7 +182,7 @@ pixelWindow <- function(j1, j2, pix.j1)
 
   } else {
   # Number of pixels at level j2 in each pixel from level j1
-    lev.diff <- 2^((j2-j1)*2)
+    lev.diff <- 4^(j2-j1)
     # pix indices at level j2
     spix.j2 <- unlist(mapply(seq, from = (lev.diff*(pix.j1-1)+1),
                              to = (lev.diff*pix.j1),

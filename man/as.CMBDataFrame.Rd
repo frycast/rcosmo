@@ -19,7 +19,8 @@ HEALPix parameter}
 corresponding to each row of \code{df}. If \code{spix} is left blank and
 \code{df} is a \code{data.frame}, then \code{df} is assumed to contain data
 for every pixel at resolution parameter \code{nside} (the full sky).
-However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
+However, if \code{spix} is left blank and \code{df}
+is a \code{CMBDataFrame},
 then \code{spix} is set equal to \code{pix(df)}}
 }
 \value{

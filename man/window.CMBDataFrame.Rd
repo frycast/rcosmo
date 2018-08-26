@@ -69,14 +69,16 @@ window(cmbdf.win)
 ## Example 2: Change the window of an existing CMBDataFrame
 
 cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
-window(cmbdf) <- win2 <- CMBWindow(theta = c(pi/6,pi/3,pi/3, pi/6), phi = c(0,0,pi/6,pi/6))
+window(cmbdf) <- win2 <- CMBWindow(theta = c(pi/6,pi/3,pi/3, pi/6),
+                                   phi = c(0,0,pi/6,pi/6))
 plot(cmbdf)
 
 ## Example 3: union of windows
 
 ## Create 2 windows
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3), phi = c(pi/4,pi/4,pi/3,pi/3))
+win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+                            phi = c(pi/4,pi/4,pi/3,pi/3))
 plot(win1)
 plot(win2)
 
@@ -90,7 +92,8 @@ plot(cmbdf.win)
 
 ## Create 2 windows
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3))
+win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
+                  phi = c(pi/4,pi/4,pi/3,pi/3))
 plot(win1)
 plot(win2)
 
@@ -108,7 +111,9 @@ plot(win2)
 
 ## Create 2 windows with "minus" type
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2), set.minus =TRUE)
-win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3), set.minus =TRUE)
+win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
+                  phi = c(pi/4,pi/4,pi/3,pi/3),
+                  set.minus =TRUE)
 plot(win1)
 plot(win2)
 
@@ -124,7 +129,9 @@ plot(cmbdf.win)
 ##Create 2 windows, one with "minus" type
 
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3), set.minus =TRUE)
+win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
+                  phi = c(pi/4,pi/4,pi/3,pi/3),
+                  set.minus =TRUE)
 plot(win1)
 plot(win2)
 

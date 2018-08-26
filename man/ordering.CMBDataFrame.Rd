@@ -9,11 +9,13 @@
 \arguments{
 \item{cmbdf}{a CMB Data Frame.}
 
-\item{new.ordering}{specifies the new ordering ("ring" or "nest") if a change of ordering
+\item{new.ordering}{specifies the new ordering ("ring" or "nest")
+if a change of ordering
 scheme is desired.}
 }
 \value{
-The name of the HEALPix ordering scheme that is used in the CMBDataFrame cmbdf
+The name of the HEALPix ordering scheme that is
+used in the CMBDataFrame cmbdf
 }
 \description{
 This function returns the HEALPix ordering scheme from a CMBDataFrame.

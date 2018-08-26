@@ -55,14 +55,16 @@
 #' ## Example 2: Change the window of an existing CMBDataFrame
 #'
 #' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
-#' window(cmbdf) <- win2 <- CMBWindow(theta = c(pi/6,pi/3,pi/3, pi/6), phi = c(0,0,pi/6,pi/6))
+#' window(cmbdf) <- win2 <- CMBWindow(theta = c(pi/6,pi/3,pi/3, pi/6),
+#'                                    phi = c(0,0,pi/6,pi/6))
 #' plot(cmbdf)
 #'
 #' ## Example 3: union of windows
 #'
 #' ## Create 2 windows
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3), phi = c(pi/4,pi/4,pi/3,pi/3))
+#' win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+#'                             phi = c(pi/4,pi/4,pi/3,pi/3))
 #' plot(win1)
 #' plot(win2)
 #'
@@ -76,7 +78,8 @@
 #'
 #' ## Create 2 windows
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3))
+#' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
+#'                   phi = c(pi/4,pi/4,pi/3,pi/3))
 #' plot(win1)
 #' plot(win2)
 #'
@@ -94,7 +97,9 @@
 #'
 #' ## Create 2 windows with "minus" type
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2), set.minus =TRUE)
-#' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3), set.minus =TRUE)
+#' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
+#'                   phi = c(pi/4,pi/4,pi/3,pi/3),
+#'                   set.minus =TRUE)
 #' plot(win1)
 #' plot(win2)
 #'
@@ -110,7 +115,9 @@
 #' ##Create 2 windows, one with "minus" type
 #'
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4), phi = c(pi/4,pi/4,pi/3,pi/3), set.minus =TRUE)
+#' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
+#'                   phi = c(pi/4,pi/4,pi/3,pi/3),
+#'                   set.minus =TRUE)
 #' plot(win1)
 #' plot(win2)
 #'
@@ -212,11 +219,13 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #' ordering scheme of the CMBDataFrame will be converted.
 #'
 #'@param cmbdf a CMB Data Frame.
-#'@param new.ordering specifies the new ordering ("ring" or "nest") if a change of ordering
+#'@param new.ordering specifies the new ordering ("ring" or "nest")
+#'if a change of ordering
 #'scheme is desired.
 #'
 #'@return
-#' The name of the HEALPix ordering scheme that is used in the CMBDataFrame cmbdf
+#' The name of the HEALPix ordering scheme that is
+#' used in the CMBDataFrame cmbdf
 #'
 #'@examples
 #' df <- CMBDataFrame(nside = 1, ordering = "nested")
@@ -590,7 +599,8 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
   }
   if (!ord)
   {
-    reasons <- paste0(reasons, "ordering mismatch (ordering1 = ", ordering(cmbdf1),
+    reasons <- paste0(reasons, "ordering mismatch (ordering1 = ",
+                      ordering(cmbdf1),
                       ", ordering2 = ", ordering(cmbdf2), ")\n")
   }
   if (!pix && compare.pix)
@@ -647,7 +657,8 @@ maxDist.CMBDataFrame <- function(cmbdf)
 #' corresponding to each row of \code{df}. If \code{spix} is left blank and
 #' \code{df} is a \code{data.frame}, then \code{df} is assumed to contain data
 #' for every pixel at resolution parameter \code{nside} (the full sky).
-#' However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
+#' However, if \code{spix} is left blank and \code{df}
+#' is a \code{CMBDataFrame},
 #' then \code{spix} is set equal to \code{pix(df)}
 #'
 #' @return A CMBDataFrame
@@ -839,7 +850,8 @@ geoArea.CMBDataFrame <- function(cmbdf)
 #'
 #'
 #'@param cmbdf A CMBDataFrame.
-#'@param new.coords Specifies the new coordinate system ("spherical" or "cartesian")
+#'@param new.coords Specifies the new coordinate
+#'system ("spherical" or "cartesian")
 #'if a change of coordinate system is desired.
 #'
 #'@return
@@ -1103,7 +1115,8 @@ colscheme <- function(I, breaks, colmap) {
 #'(or potentially another numeric quantity of interest)
 #'
 #'@return
-#'A summary includes window's type and area, total area covered by observations,
+#'A summary includes window's type and area,
+#' total area covered by observations,
 #' and main statistcs for intensity values
 #'
 #'

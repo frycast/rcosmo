@@ -13,7 +13,7 @@ mkpix2xyC <- function(nside = 1024L) {
     .Call('_rcosmo_mkpix2xyC', PACKAGE = 'rcosmo', nside)
 }
 
-#' @title Convert from "nested" to "ring" ordering
+#' @title nest2ring
 #'
 #' @description
 #' Convert from "nested" to "ring" ordering

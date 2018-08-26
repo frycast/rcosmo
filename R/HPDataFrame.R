@@ -52,7 +52,11 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     nargs <- length(args)
     if ( nargs == 0 )
     {
-      df <- data.frame(rep(NA), length(pix))
+      df <- data.frame(I = rep(NA, length(pix)))
+    }
+    else
+    {
+      df <- data.frame(args)
     }
   }
   else # auto.spix = TRUE. So, use nestSearch to determine pixel centers
@@ -85,7 +89,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     }
   }
 
-  if (length(pix) != nrow(df))
+  if ( length(pix) != nrow(df) )
   {
     stop(paste0("There should be a pixel index assigned to each row. ",
                 "Perhaps use spix; perhaps specify nside correctly; ",

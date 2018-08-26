@@ -1,12 +1,5 @@
-
-
-
-# We specify p at resolution j >= 1 so nside = 2^j >= 2.
-# We want all neighbours n of p at resolution j.
-p <- 26
-
 # We start by finding the pixel h at resolution j-1
-# that contains p.
+# that contains p, where p is specified at resolution j >= 1.
 # Pixel h contains pixels h*4 - 1:4 + 1 at resolution j.
 # Of these, t = p - p %% 4 + (p %% 4 != 0)*4 is the top pixel.
 # Thus h = t/4.
@@ -31,9 +24,46 @@ siblings <- function(p) {
 }
 
 
-siblings(4)
+# We test siblings by colouring the siblings of some pixels at level j
+displaySiblings <- function(p, j, plot.j = 5)
+{
+  plotHPBoundaries(nside = 2^j, ordering = "nested", nums.col = "red")
 
-# plot.ns <- 5
-# hp <- HPDataFrame(nside = plot.ns,
-#                   spix = pixelWindow(j1 = 2, j2 = plot.ns,
-#                                      pix.j1 = siblings(4)))
+  # We do this by plotting great-great-grandchildren of the siblings
+  hp <- HPDataFrame(nside = 2^plot.j,
+                    spix = pixelWindow(j1 = j, j2 = plot.ns,
+                                       pix.j1 = siblings(p)))
+  plot(hp, size = 3, add = TRUE)
+}
+
+# Looks good:
+displaySiblings(4, 1)
+displaySiblings(4, 2)
+displaySiblings(27, 1)
+displaySiblings(28, 1)
+displaySiblings(28, 2)
+displaySiblings(127, 3)
+
+
+# We have the siblings of p, but
+# it remains to find all neighbours of p at resolution j
+plotHPBoundaries(nside = 1, ordering = "nested")
+
+# We may need siblings at base pixel resolution
+baseSiblings <- function(p)
+{
+  switch(p,
+         c(2,3,4,5,6,9),
+         c(1,3,4,6,7,10),
+         c(1,2,4,7,8,11),
+         c(1,2,3,5,8,12),
+         c(1,4,6,8,9,12),
+         c(1,2,5,7,9,10),
+         c(2,3,6,8,10,11),
+         c(3,4,5,7,9,10),
+         c(1,5,6,10,11,12),
+         c(2,6,7,9,11,12),
+         c(3,7,8,9,10,12),
+         c(4,5,8,9,10,11))
+}
+

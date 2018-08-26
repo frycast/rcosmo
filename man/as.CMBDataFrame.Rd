@@ -12,7 +12,7 @@ as.CMBDataFrame(df, ordering, nside, spix)
 \item{ordering}{character string that specifies the ordering scheme
 ("ring" or "nested")}
 
-\item{nside}{an integer that specifies the Nside (resolution)
+\item{nside}{an integer \eqn{2^k} that specifies the Nside (resolution)
 HEALPix parameter}
 
 \item{spix}{an integer vector that specifies the HEALPix pixel index

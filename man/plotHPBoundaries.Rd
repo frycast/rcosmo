@@ -9,7 +9,7 @@ plotHPBoundaries(nside, eps = pi/90, col = "gray", lwd = 1, ordering,
   font = 2, ...)
 }
 \arguments{
-\item{nside}{the HEALPix nside parameter}
+\item{nside}{the HEALPix nside parameter (integer number \eqn{2^k})}
 
 \item{eps}{controls the smoothness of the plot, smaller eps
 implies more samples}

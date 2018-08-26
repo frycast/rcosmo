@@ -9,18 +9,23 @@ DownloadCMBmap(link = 1, destfile = getwd())
 \arguments{
 \item{link}{A character string naming the URL of a resource to be downloaded.}
 
-\item{destfile}{A character string with the name where the downloaded file is saved. Tilde-expansion is performed.}
+\item{destfile}{A character string with the name where the downloaded file
+is saved. Tilde-expansion is performed.}
 }
 \value{
 The CMB Map Fits File
 }
 \description{
-The function \code{DownloadCMBmap} download CMB maps from \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
+The function \code{DownloadCMBmap} download CMB maps from
+\url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
 }
 \details{
-CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA pipelines, respectively.
+CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA
+pipelines, respectively.
 
-For each pipeline, the intensity maps are provided at Nside = 2048, at 5 arcmin resolution, and the polarization maps are provided at Nside = 1024 at 10 arcmin resolution.
+For each pipeline, the intensity maps are provided at Nside = 2048, at
+5 arcmin resolution, and the polarization maps are provided at Nside = 1024
+at 10 arcmin resolution.
 
 \code{link = 1:} CMB Maps produced by Commander with Nside=1024;
 
@@ -44,7 +49,8 @@ DownloadCMBmap(link=1)
 
 }
 \references{
-Planck Public Data Release 2 Maps \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
+Planck Public Data Release 2 Maps
+\url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 
 \code{\link{download.file}}.
 }

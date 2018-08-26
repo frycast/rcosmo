@@ -9,7 +9,7 @@ HPDataFrame(..., nside, ordering = "nested", auto.spix = FALSE, spix)
 \arguments{
 \item{...}{data, can be named vectors or a data.frame}
 
-\item{nside}{integer, the nside parameter, i.e, resolution}
+\item{nside}{integer number \eqn{2^k}, the nside parameter, i.e, resolution}
 
 \item{ordering}{the HEALPix ordering scheme ("ring" or "nested")}
 

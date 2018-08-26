@@ -7,19 +7,21 @@
 ring2nest(nside, pix)
 }
 \arguments{
-\item{nside}{is the HEALPix nside parameter.}
+\item{nside}{is the HEALPix nside parameter (integer number \eqn{2^k})}
 
 \item{pix}{is a vector of HEALPix pixel indices, in the 'ring' ordering scheme.}
 }
 \value{
-the output is a vector of HEALPix pixel indices in the 'nested' ordering scheme.
+the output is a vector of HEALPix pixel indices in the 'nested'
+ordering scheme.
 }
 \description{
-\code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme to
-HEALPix pixel indices in the 'nested' ordering scheme.
+\code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme
+ to HEALPix pixel indices in the 'nested' ordering scheme.
 }
 \examples{
-# compute HEALPix indices in the ring order of the set pix given in the nest order at nside
+# compute HEALPix indices in the ring order of the set pix given in the nest
+order at nside
 nside <- 8
 pix <-c(1,2,23)
 ring2nest(nside,pix)

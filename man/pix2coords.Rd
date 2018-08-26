@@ -7,7 +7,7 @@
 pix2coords(nside, coords = "cartesian", ordering = "nested", spix)
 }
 \arguments{
-\item{nside}{the nside parameter}
+\item{nside}{the nside parameter (integer number \eqn{2^k})}
 
 \item{coords}{'cartesian' or 'spherical' coordinates}
 

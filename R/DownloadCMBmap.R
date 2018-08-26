@@ -1,10 +1,14 @@
 #' Download CMB Maps from Planck Public Data Release.
 #'
-#' The function \code{DownloadCMBmap} download CMB maps from \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
+#' The function \code{DownloadCMBmap} download CMB maps from
+#' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
 #'
-#' CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA pipelines, respectively.
+#' CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA
+#' pipelines, respectively.
 #'
-#' For each pipeline, the intensity maps are provided at Nside = 2048, at 5 arcmin resolution, and the polarization maps are provided at Nside = 1024 at 10 arcmin resolution.
+#' For each pipeline, the intensity maps are provided at Nside = 2048, at
+#' 5 arcmin resolution, and the polarization maps are provided at Nside = 1024
+#' at 10 arcmin resolution.
 #'
 #' \code{link = 1:} CMB Maps produced by Commander with Nside=1024;
 #'
@@ -23,14 +27,16 @@
 #' \code{link = 8:} CMB Maps produced by SMICA with Nside=2048;
 #'
 #' @param link  A character string naming the URL of a resource to be downloaded.
-#' @param destfile  A character string with the name where the downloaded file is saved. Tilde-expansion is performed.
+#' @param destfile  A character string with the name where the downloaded file
+#' is saved. Tilde-expansion is performed.
 #' @return The CMB Map Fits File
 #' @examples
 #' ## Download Commander with Nside=1024
 #' DownloadCMBmap(link=1)
 #'
 #' @keywords CMB Maps
-#' @references Planck Public Data Release 2 Maps \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
+#' @references Planck Public Data Release 2 Maps
+#' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 #' @references \code{\link{download.file}}.
 #' @export
 #'

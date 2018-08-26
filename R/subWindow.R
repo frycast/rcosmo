@@ -43,7 +43,7 @@
 #'window(s) \code{win} entirely. This will only be used
 #'if \code{cmbdf} is a \code{CMBDataFrame}
 #'@param in.pixels.res a resolution
-#'(i.e., \eqn{j} such that nside = \code{2^j|}) at
+#'(i.e., \eqn{j} such that nside = \code{2^j}) at
 #'which the \code{in.pixels} parameter is specified
 #'
 #'@keywords internal
@@ -324,7 +324,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #'
-#' cmbdf <- CMBDataFrame(nside = 3)
+#' cmbdf <- CMBDataFrame(nside = 4)
 #' df2 <- coords(cmbdf, new.coords = "cartesian")
 #' df <- as.data.frame(df2[,1:3])
 #' df

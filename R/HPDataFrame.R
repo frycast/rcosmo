@@ -12,7 +12,7 @@
 #' can be stored in different rows of any given HPDataFrame.
 #'
 #' @param ... data, can be named vectors or a data.frame
-#' @param nside integer, the nside parameter, i.e, resolution
+#' @param nside integer number \eqn{2^k}, the nside parameter, i.e, resolution
 #' @param ordering the HEALPix ordering scheme ("ring" or "nested")
 #' @param auto.spix boolean. If TRUE then spix will be found from
 #' the coordinates provided in the data. That is, each row of

@@ -641,7 +641,7 @@ maxDist.CMBDataFrame <- function(cmbdf)
 #' @param df Any \code{data.frame} whose rows are in HEALPix order
 #' @param ordering character string that specifies the ordering scheme
 #' ("ring" or "nested")
-#' @param nside an integer that specifies the Nside (resolution)
+#' @param nside an integer \eqn{2^k} that specifies the Nside (resolution)
 #' HEALPix parameter
 #' @param spix an integer vector that specifies the HEALPix pixel index
 #' corresponding to each row of \code{df}. If \code{spix} is left blank and

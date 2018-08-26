@@ -7,7 +7,7 @@
 #'
 #' @param target is a vector of Cartesian coordinates for the target
 #' point on S^2
-#' @param nside is the nside for which the HEALPix points are searched
+#' @param nside is an integer number \eqn{2^k} for which the HEALPix points are searched
 #' @param demo.plot If TRUE then a plot will be produced with
 #' target pixel in yellow and closest pixel at each step in red
 #'

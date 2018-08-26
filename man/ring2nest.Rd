@@ -2,7 +2,7 @@
 % Please edit documentation in R/Conversion.R
 \name{ring2nest}
 \alias{ring2nest}
-\title{Ring to Nest.}
+\title{Convert ring to nest ordering.}
 \usage{
 ring2nest(nside, pix)
 }

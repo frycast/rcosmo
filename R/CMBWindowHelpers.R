@@ -206,7 +206,7 @@ assumedConvex <- function(win, assume.convex)
 
 
 
-#'winType
+#'Get/change winType
 #'
 #'Get/change the winType (polygon or disk) of a \code{\link{CMBWindow}}.
 #'If \code{new.type} is missing then the \code{winType} of win

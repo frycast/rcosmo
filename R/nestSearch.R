@@ -145,9 +145,10 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
 }
 
 
-#' Pixel window
+#' Find high resolution pixels falling in a lower resolution window
 #'
-#' All pixels are assumed to be in nested ordering
+#' Find all pixels in a higher resolution that fall within the specified pixel
+#' area at a lower resolution. All pixels are assumed to be in nested ordering.
 #'
 #'@param j1 An integer. The lower resolution, with j1 =< j2.
 #'@param j2 An integer. The upper resolution.

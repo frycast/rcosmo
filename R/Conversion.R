@@ -46,7 +46,7 @@ pix2coords <- function(nside, coords = "cartesian", ordering = "nested", spix)
 
 
 
-#' Ring to Nest.
+#' Convert ring to nest ordering.
 #'
 #' \code{ring2nest} converts HEALPix pixel indices in the 'ring' ordering scheme
 #'  to HEALPix pixel indices in the 'nested' ordering scheme.

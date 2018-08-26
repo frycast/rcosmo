@@ -33,8 +33,6 @@
 HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix)
 {
-  df <- data.frame(...)
-
   if ( missing(nside) ) {
     stop("nside must be specified")
   }
@@ -49,9 +47,17 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     {
       pix <- spix
     }
+
+    args <- list(...)
+    nargs <- length(args)
+    if ( nargs == 0 )
+    {
+      df <- data.frame(rep(NA), length(pix))
+    }
   }
   else # auto.spix = TRUE. So, use nestSearch to determine pixel centers
   {
+    df <- data.frame(...)
 
     if (all(c("x","y","z") %in% names(df)))
     {

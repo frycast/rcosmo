@@ -33,4 +33,7 @@ siblings <- function(p) {
 
 siblings(4)
 
-pixelWindow(j1 = 2, j2 = 3, pix.j1 = 1)
+# plot.ns <- 5
+# hp <- HPDataFrame(nside = plot.ns,
+#                   spix = pixelWindow(j1 = 2, j2 = plot.ns,
+#                                      pix.j1 = siblings(4)))

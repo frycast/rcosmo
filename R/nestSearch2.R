@@ -23,7 +23,7 @@ siblings <- function(p) {
   1:4 + (h-1)*4
 }
 
-#
+
 # # We test siblings by colouring the siblings of some pixels at level j
 # displaySiblings <- function(p, j, plot.j = 5)
 # {

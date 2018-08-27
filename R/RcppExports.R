@@ -42,189 +42,38 @@ nest2ring <- function(nside, pix) {
     .Call('_rcosmo_nest2ring', PACKAGE = 'rcosmo', nside, pix)
 }
 
-#'@title
-#'pix2coords_internal
-#'@description
-#'Converts HEALPix pixel scheme to spherical or
-#'Cartesian coordinates.
-#'
-#'@param nside The number of cuts to a HEALPix base resolution pixel.
-#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING.
-#'@param spix Optional integer or vector of sample pixel indices.
-#'@param cartesian Set to FALSE to output spherical coordinates
-#'or else TRUE for cartesian.
-#'
-#'@details
-#'This is a place holder
-#'
-#'@return A matrix with columns theta and phi (in that order), or
-#' x, y, z (if cartesian = TRUE). Theta (in [0,pi]) is the colatitude
-#' in radians measured from the North Pole and phi (in [0, 2*pi])
-#' is the longitude in radians measured Eastward. The remaining 3 columns
-#' returned are i, j, and p which represent the HEALPix ring index,
-#' pixel-in-ring index, and pixel index respectively.
-#'
-#'@name pix2coords_internal
-#'
-#'@keywords internal
-#'
-#'@export
 pix2coords_internal <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
     .Call('_rcosmo_pix2coords_internal', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
 }
 
-#'@title
-#'car2sph
-#'
-#'@param df a data.frame with columns labelled x, y and z
-#'
-#'@return a data.frame with columns theta and phi for colatitude and
-#'longitude in ranges \eqn{[0,pi]} and \eqn{[0,2pi]} respectively
-#'
-#'@name car2sph
-#'
-#'@keywords internal
-#'
-#'@export
 car2sph <- function(df) {
     .Call('_rcosmo_car2sph', PACKAGE = 'rcosmo', df)
 }
 
-#'@title
-#'sph2car
-#'
-#'@param df a data.frame with columns labelled \code{theta} and \code{phi}
-#'for colatitude and longitude respectively
-#'
-#'@return a data.frame with columns x, y, z (cartesian coordinates)
-#'
-#'@name sph2car
-#'
-#'@keywords internal
-#'
-#'@export
 sph2car <- function(df) {
     .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
 }
 
-#'@title
-#'pointInConvexPolygonHP
-#'
-#'@param nside the nside parameter at which to find pixels
-#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING
-#'@param win a data.frame with columns x, y, z for cartesian coordinates
-#'The rows represent clockwise oriented vertices of a convex spherical
-#'polygon that lies entirely within one open hemisphere of the unit sphere
-#'@param spix Optional integer or vector of sample pixel indices. If \code{spix}
-#'is unspecified then all pixels at \code{nside} are used
-#'
-#'@return a logical vector indicated which pixels in \code{spix}
-#'lie within the spherical convex polygon determined by \code{win}
-#'
-#'@name pointInConvexPolygonHP
-#'
-#'@keywords internal
-#'
-#'@export
 pointInConvexPolygonHP <- function(nside, nested, win, spix = NULL) {
     .Call('_rcosmo_pointInConvexPolygonHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
 }
 
-#'@title
-#'pointInDiscHP
-#'
-#'@param nside the nside parameter at which to find pixels
-#'@param nested Set to TRUE for NESTED ordering scheme and FALSE for RING
-#'@param win a data.frame with columns x, y, z for the cartesian coordinates
-#'of a point on the unit sphere, representing a disc center, and column r for
-#'the radius or that disc
-#'@param spix Optional integer or vector of sample pixel indices. If \code{spix}
-#'is unspecified then all pixels at \code{nside} are used
-#'
-#'@return a logical vector indicated which pixels in \code{spix}
-#'lie within the spherical disc determined by \code{win}
-#'
-#'@name pointInDiscHP
-#'
-#'@keywords internal
-#'
-#'@export
 pointInDiscHP <- function(nside, nested, win, spix = NULL) {
     .Call('_rcosmo_pointInDiscHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
 }
 
-#'@title
-#'pointInConvexPolygon
-#'
-#'@param df a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent points on the surface of a unit sphere
-#'@param win a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent clockwise oriented vertices of a convex spherical
-#'polygon that lies entirely within one open hemisphere of the unit sphere.
-#'
-#'@return a logical vector indicated which rows of \code{df}
-#'lie within the spherical convex polygon determined by \code{win}
-#'
-#'@name pointInConvexPolygon
-#'
-#'@keywords internal
-#'
-#'@export
 pointInConvexPolygon <- function(df, win) {
     .Call('_rcosmo_pointInConvexPolygon', PACKAGE = 'rcosmo', df, win)
 }
 
-#'@title
-#'pointInDisc
-#'
-#'@param df a data.frame with columns x, y, z for cartesian coordinates.
-#'The rows represent points on the surface of a unit sphere
-#'@param win a data.frame with columns x, y, z for the cartesian coordinates
-#'of a point on the unit sphere, representing a disc center, and column r for
-#'the radius or that disc.
-#'
-#'@return a logical vector indicated which rows of \code{df}
-#'lie within the spherical disc determined by \code{win}
-#'
-#'@name pointInDisc
-#'
-#'@keywords internal
-#'
-#'@export
 pointInDisc <- function(df, win) {
     .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
 }
 
-#'@title
-#'maxDist_internal
-#'
-#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
-#'
-#'@return the maximum distance between any of the
-#'points in \code{cmbdf}
-#'
-#'@name maxDist_internal
-#'
-#'@keywords internal
-#'
-#'@export
 maxDist_internal <- function(cmbdf) {
     .Call('_rcosmo_maxDist_internal', PACKAGE = 'rcosmo', cmbdf)
 }
 
-#'@title
-#'minDist_internal
-#'
-#'@param cmbdf a \code{data.frame} or \code{\link{CMBDataFrame}}
-#'@param point a point on the unit sphere in cartesian coordinates
-#'
-#'@return the shortest distance from \code{point} to \code{cmbdf}
-#'
-#'@name minDist_internal
-#'
-#'@keywords internal
-#'
-#'@export
 minDist_internal <- function(cmbdf, point) {
     .Call('_rcosmo_minDist_internal', PACKAGE = 'rcosmo', cmbdf, point)
 }

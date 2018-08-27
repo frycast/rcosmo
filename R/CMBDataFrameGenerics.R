@@ -640,6 +640,7 @@ maxDist.CMBDataFrame <- function(cmbdf)
 
 
 
+
 #' as.CMBDataFrame
 #'
 #' Convert dataframes to CMBDataFrames

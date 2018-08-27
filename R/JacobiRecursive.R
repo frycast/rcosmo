@@ -1,22 +1,17 @@
-#' Calculate Jacobi polynomial values
-#'
-#' Calculate Jacobi polynomial values of degree L at given point T in [-1,1].
-#'
-#' @param (a,b) The parameters of Jacobi polynomial
+#' Calculate Jacobi polynomial values of degree L at given point T in [-1,1]. 
+#' 
+#' @param (a,b) The parameters of Jacobi polynomial  
 #' @param L  The degree of Jacobi polynomial
-#' @param T Given point in [-1,1].
-#' @return Jacobi polynomial values
-#' @examples
-#'
-#' jacobiPol(0,0,5,0)
-#' jacobiPol(2,-5,2,-1)
-#' jacobiPol(1,2,4,0.5)
-#'
+#' @param T Given point in [-1,1]. 
+#' @return Jacobi polynomial values 
+#' @examples 
+#' JacobiRecursive(0,0,5,0)
+#' JacobiRecursive(1,2,4,0.5)
 #' @keywords Jacobi,Orthogonal polynomials.
 #' @source \url{http://dlmf.nist.gov/18.9}
 #' @export
-jacobiPol<-function (a,b,L,T){
-
+JacobiRecursive<-function (a,b,L,T){
+  
 if (L==0){
   YJ<-matrix(1,length(T),1)
 }else if (L==1){

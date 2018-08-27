@@ -2,6 +2,7 @@
 % Please edit documentation in R/CMBReadFITS.R
 \name{CMBReadFITS}
 \alias{CMBReadFITS}
+\alias{CMBDat}
 \title{Read CMB data from a FITS file.}
 \usage{
 CMBReadFITS(filename, mmap = FALSE, spix)

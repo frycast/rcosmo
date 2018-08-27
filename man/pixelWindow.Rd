@@ -2,7 +2,7 @@
 % Please edit documentation in R/nestSearch.R
 \name{pixelWindow}
 \alias{pixelWindow}
-\title{Find high resolution pixels falling in a lower resolution window}
+\title{Pixel window}
 \usage{
 pixelWindow(j1, j2, pix.j1)
 }
@@ -20,8 +20,7 @@ All pixels in resolution j2 that fall within the pixel
 pix.j1 specified at resolution j1
 }
 \description{
-Find all pixels in a higher resolution that fall within the specified pixel
-area at a lower resolution. All pixels are assumed to be in nested ordering.
+All pixels are assumed to be in nested ordering
 }
 \examples{
 

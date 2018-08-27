@@ -9,4 +9,3 @@
 \description{
 Assign new ordering scheme to HPDataFrame
 }
-\keyword{internal}

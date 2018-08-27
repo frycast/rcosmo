@@ -30,7 +30,7 @@ scheme is then assumed to match that of CMBData.}
 sample of size equal to sample.size will be taken from CMBData. If
 spix is specified then \code{sample.size} must be unspecified.}
 
-\item{nside}{Optionally specify the nside parameter manually nside=\eqn{2^k}
+\item{nside}{Optionally specify the nside parameter manually
 (usually 1024 or 2048).}
 
 \item{ordering}{Specifies the desired HEALPix ordering scheme

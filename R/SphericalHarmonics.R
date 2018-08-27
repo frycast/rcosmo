@@ -50,13 +50,13 @@ SphericalHarmonics <- function(L,m,xyz){
     phi[logic_x2_2] <- 2*pi-acos(t[logic_x2_2])
     if (m>0){
     # Compute Y_{L,k}
-    Y <- c_ellm*(1-z^2)^(m_abs/2)*jacobiPol(m_abs,m_abs,L-m_abs,z)*cos(m_abs*phi)
+    Y <- c_ellm*(1-z^2)^(m_abs/2)*JacobiRecursive(m_abs,m_abs,L-m_abs,z)*cos(m_abs*phi)
     # The m-th derivative of the Legendre polynomial
     # P_L^(m)(z) = P_{L-m}^(m,m)(z)
     }else if (m==0){
-      Y <- sqrt((2*L+1)/(4*pi))*jacobiPol(0,0,L,z)
+      Y <- sqrt((2*L+1)/(4*pi))*JacobiRecursive(0,0,L,z)
     }else{
-    Y <- c_ellm*(1-z^2)^(m_abs/2)*jacobiPol(m_abs,m_abs,L-m_abs,z)*sin(m_abs*phi)
+    Y <- c_ellm*(1-z^2)^(m_abs/2)*JacobiRecursive(m_abs,m_abs,L-m_abs,z)*sin(m_abs*phi)
     }
     Y <- Y*sqrt(4*pi)
   }

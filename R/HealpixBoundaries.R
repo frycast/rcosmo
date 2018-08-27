@@ -1,9 +1,9 @@
 
-#' Plot HEALPix pixel boundaries
+#' plotHPBoundaries
 #'
-#' Plot the HEALPix pixel boundaries at \code{nside}
+#' plot the HEALPix pixel boundaries at \code{nside}
 #'
-#' @param nside the HEALPix nside parameter (integer number \eqn{2^k})
+#' @param nside the HEALPix nside parameter
 #' @param eps controls the smoothness of the plot, smaller eps
 #' implies more samples
 #' @param col the colour of plotted boundary lines

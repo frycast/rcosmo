@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindowHelpers.R
 \name{winType}
 \alias{winType}
-\title{Get/change winType}
+\title{winType}
 \usage{
 winType(win, new.type)
 }

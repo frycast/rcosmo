@@ -10,17 +10,7 @@ in a \code{\link{CMBWindow}}}
 \arguments{
 \item{win}{a CMBWindow object}
 }
-\value{
-the maximum distance between window's points
-}
 \description{
 Get the maximum distance between all points
 in a \code{\link{CMBWindow}}
-}
-\examples{
-
-## win is a equilateral spherical triangle which sides are pi/2
-win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-maxDist(win)
-
 }

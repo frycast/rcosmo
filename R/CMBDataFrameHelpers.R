@@ -1,4 +1,4 @@
-#' Area of a HEALPix pixel
+#' pixelArea
 #'
 #' Get the area of a single HEALPix pixel
 #'

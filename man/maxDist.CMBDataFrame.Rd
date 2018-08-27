@@ -10,24 +10,7 @@ in a \code{\link{CMBDataFrame}}}
 \arguments{
 \item{cmbdf}{a CMBDataFrame object}
 }
-\value{
-maximum distance between all points
-}
 \description{
 Get the maximum distance between all points
 in a \code{\link{CMBDataFrame}}
-}
-\examples{
-
-## For CMBDataFrame with all Healpix ponts included it must be pi
-cmbdf <- CMBDataFrame(nside = 4)
-pix(cmbdf)
-maxDist(cmbdf)
-
-## Example for CMBDataFrame with Healpix only ponts 1 and 2 included
-
-cmbdf <- CMBDataFrame(nside = 4, spix =c(1,2))
-pix(cmbdf)
-maxDist(cmbdf)
-
 }

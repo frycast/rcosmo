@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDataFrameHelpers.R
 \name{pixelArea}
 \alias{pixelArea}
-\title{Area of a HEALPix pixel}
+\title{pixelArea}
 \usage{
 pixelArea(cmbdf)
 }

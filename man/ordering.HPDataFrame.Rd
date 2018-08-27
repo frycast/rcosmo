@@ -23,10 +23,17 @@ is specified, using e.g. \code{new.ordering = "ring"}, the
 ordering scheme of the HPDataFrame will be converted.
 }
 \examples{
-
+## Plot using indices
 df <- HPDataFrame(I = rep(0,12), nside = 1, ordering = "nested")
 ordering(df)
-df1 <- ordering(df, new.ordering = "ring")
-ordering(df1)
+ordering(df, new.ordering = "ring")
+
+## Plot using coordinates
+hp1 <- HPDataFrame(x = c(1,0,0),
+                   y = c(0,1,0),
+                   z = c(0,0,1),
+                   nside = 1,
+                   auto.spix = TRUE)
+plot(hp, size = 5, hp.boundaries = 1)
 
 }

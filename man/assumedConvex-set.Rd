@@ -9,4 +9,3 @@ assumedConvex(win, ...) <- value
 \description{
 Change the \code{\link{assumedConvex}} boolean of a \code{\link{CMBWindow}}
 }
-\keyword{internal}

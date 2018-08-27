@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBWindowGenerics.R
 \name{plot.CMBWindow}
 \alias{plot.CMBWindow}
-\title{Visualise a \code{\link{CMBWindow}}}
+\title{visualise a \code{\link{CMBWindow}}}
 \usage{
 \method{plot}{CMBWindow}(win, add = TRUE, type = "l", col = "red",
   size = 2, box = FALSE, axes = FALSE, aspect = FALSE, back.col,
@@ -39,7 +39,7 @@ the plot. This argument is passed to rgl::bg3d.}
 on the window boundary}
 }
 \description{
-Visualise a \code{\link{CMBWindow}}
+visualise a \code{\link{CMBWindow}}
 }
 \examples{
 

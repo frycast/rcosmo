@@ -16,7 +16,7 @@ the behaviour when \code{win} is a list containing BOTH
 regular type and "minus" type windows together (see details).}
 }
 \value{
-A CMBDataFrame containing the data in \code{cmbdat} restricted to the
+A data.frame containing the data in \code{cmbdat} restricted to the
 CMBWindow \code{new.window}
 }
 \description{
@@ -43,11 +43,5 @@ Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
 will be the points of \code{cmbdat} in \eqn{B} (resp. \eqn{A}).
 }
 \examples{
-
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
-class(cmbdat)
-cmbdat.win <- window(cmbdat, new.window = win1)
-class(cmbdat.win)
 
 }

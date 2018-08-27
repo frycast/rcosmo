@@ -639,7 +639,10 @@ maxDist.CMBDataFrame <- function(cmbdf)
 
 
 
+
 #' as.CMBDataFrame
+#'
+#' Convert dataframes to CMBDataFrames
 #'
 #' Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
 #' rows of the data.frame are assumed to be in the HEALPix order

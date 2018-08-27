@@ -1,4 +1,5 @@
 
+
 #' plotHPBoundaries
 #'
 #' plot the HEALPix pixel boundaries at \code{nside}

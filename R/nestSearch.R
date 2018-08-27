@@ -190,6 +190,3 @@ pixelWindow <- function(j1, j2, pix.j1)
   }
   return(spix.j2)
 }
-
-
-

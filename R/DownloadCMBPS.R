@@ -1,6 +1,6 @@
 #' Download CMB Power Spectra from Planck Legacy Archive.
 #'
-#' The function \code{DownloadCMBPS} download CMB power spectra components from \url{http://pla.esac.esa.int/pla/#cosmology}.
+#' The function \code{downloadCMBPS} download CMB power spectra components from \url{http://pla.esac.esa.int/pla/#cosmology}.
 #'
 #' \code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck TT,TE,EE+lowE+lensing (2 <= ell <= 2508).
 #'
@@ -18,7 +18,7 @@
 #' @return The CMB Power Spectra Data Frame
 #' @examples
 #' ## Download the Best-fit LCDM CMB power spectra and plot
-#' CMBPS<- DownloadCMBPS(link=1)
+#' CMBPS<- downloadCMBPS(link=1)
 #' plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
 #'      main="CMB Angular Power Spectra",xlab=expression(l),ylab=expression(paste(D[l],"(",mu,K^2,")")))
 #'
@@ -26,7 +26,7 @@
 #' @references Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
 #' @export
 #'
-DownloadCMBPS <- function(link=1){
+downloadCMBPS <- function(link=1){
 
   items <- switch(link,
                   items1,

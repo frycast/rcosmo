@@ -4,7 +4,7 @@
 \alias{downloadCMBmap}
 \title{Download CMB Maps from Planck Public Data Release.}
 \usage{
-downloadCMBmap(link = 1, destfile = 1)
+downloadCMBmap(link = 1, destfile)
 }
 \arguments{
 \item{link}{A character string naming the URL of a resource to be downloaded.}
@@ -44,11 +44,12 @@ at 10 arcmin resolution.
 \code{link = 8:} CMB Maps produced by SMICA with Nside=2048;
 }
 \examples{
-## Download Commander with Nside=1024
-downloadCMBmap(link=1, destfile=1) # obtain 'CMB_map_commander1024.fits' and save in the folder
-## Download SMICA with Nside=2048
-downloadCMBmap(link=8, destfile=8) # obtain 'CMB_map_smica2048.fits' and save in the folder
-
+## Download Commander with Nside=1024 and save in the dafualt folder as "../rcosmo/CMB_map_commander1024.fits"
+downloadCMBmap(link=1)
+## Download SMICA with Nside=2048 and save in the dafualt folder as "../rcosmo/CMB_map_smica2048.fits"
+downloadCMBmap(link=8)
+## Download SMICA with Nside=1024 and save in the specified folder as "..your file path../CMB_map_smica1024.fits"
+downloadCMBmap(link=8, destfile="..your file path../CMB_map_smica1024.fits")
 }
 \references{
 Planck Public Data Release 2 Maps

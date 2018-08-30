@@ -31,18 +31,20 @@
 #' is saved. Tilde-expansion is performed.
 #' @return The CMB Map Fits File
 #' @examples
-#' ## Download Commander with Nside=1024
-#' downloadCMBmap(link=1, destfile=1) # obtain 'CMB_map_commander1024.fits' and save in the folder
-#' ## Download SMICA with Nside=2048
-#' downloadCMBmap(link=8, destfile=8) # obtain 'CMB_map_smica2048.fits' and save in the folder
-#'
+#' ## Download Commander with Nside=1024 and save in the dafualt folder as "../rcosmo/CMB_map_commander1024.fits"
+#' downloadCMBmap(link=1)
+#' ## Download SMICA with Nside=2048 and save in the dafualt folder as "../rcosmo/CMB_map_smica2048.fits"
+#' downloadCMBmap(link=8)
+#' ## Download SMICA with Nside=1024 and save in the specified folder as "..your file path../CMB_map_smica1024.fits"
+#' downloadCMBmap(link=8, destfile="..your file path../CMB_map_smica1024.fits")
+#
 #' @keywords CMB Maps
 #' @references Planck Public Data Release 2 Maps
 #' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 #' @references \code{\link{download.file}}.
 #' @export
 #'
-downloadCMBmap <- function(link=1,destfile=1){
+downloadCMBmap <- function(link=1,destfile){
 
   url <- switch(link,
                 link1,
@@ -53,7 +55,8 @@ downloadCMBmap <- function(link=1,destfile=1){
                 link6,
                 link7,
                 link8)
-  destfile_location<- switch(destfile,
+  if ( missing(destfile) ) {
+    destfile<- switch(link,
           destfile1,
           destfile2,
           destfile3,
@@ -62,7 +65,10 @@ downloadCMBmap <- function(link=1,destfile=1){
           destfile6,
           destfile7,
           destfile8)
-  download.file(url, destfile_location)
+  }
+
+  download.file(url, destfile)
+
 
 }
 

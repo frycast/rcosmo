@@ -1,19 +1,19 @@
 #' Compute spherical harmonic values at given points on the sphere.
 #'
-#' The function \code{SphericalHarmonics} computes the spherical harmonic values on the given 3D Cartesian coordinates.
+#' The function \code{sphericalharmonics} computes the spherical harmonic values on the given 3D Cartesian coordinates.
 #' @param L  The degree of spherical harmonic
 #' @param m  The order number of the degree-L spherical harmonic
 #' @param xyz Given points in 3D cartesian coordinates
 #' @return The spherical harmonic values
 #' @examples
-#' SphericalHarmonics(5,2,c(0,1,0))
-#' SphericalHarmonics(5,2,diag(3))
+#' sphericalharmonics(5,2,c(0,1,0))
+#' sphericalharmonics(5,2,diag(3))
 #' @keywords spherical harmonic
-#' @references Hesse, K., Sloan, I. H., & Womersley, R. S. (2010).
+#' @references  Equation (7) in Hesse, K., Sloan, I. H., & Womersley, R. S. (2010).
 #' Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219).
 #' Springer Berlin Heidelberg.
 #' @export
-SphericalHarmonics <- function(L,m,xyz){
+sphericalharmonics <- function(L,m,xyz){
   if (L==0){
       Y <- matrix(1,dim(xyz)[1],1)
       return (Y)

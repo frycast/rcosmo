@@ -3,11 +3,16 @@
 #' The function \code{sphericalharmonics} computes the spherical harmonic values on the given 3D Cartesian coordinates.
 #' @param L  The degree of spherical harmonic
 #' @param m  The order number of the degree-L spherical harmonic
-#' @param xyz Given points in 3D cartesian coordinates
+#' @param xyz Dataframe for given points in 3D cartesian coordinates
 #' @return The spherical harmonic values
 #' @examples
-#' sphericalharmonics(5,2,c(0,1,0))
-#' sphericalharmonics(5,2,diag(3))
+#' ## Calculate spherical harmonic value at the point (0,1,0) with L=5, m=2
+#' point<-data.frame(x=0,y=1,z=0)
+#' SH_value<-sphericalharmonics(5,2,point)
+#' ## Calculate spherical harmonic values at the point (1,0,0), (0,1,0), (0,0,1) with L=5, m=2
+#' points<-data.frame(diag(3))
+#' SH_values<-sphericalharmonics(5,2,points)
+#'
 #' @keywords spherical harmonic
 #' @references  Equation (7) in Hesse, K., Sloan, I. H., & Womersley, R. S. (2010).
 #' Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219).

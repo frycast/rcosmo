@@ -13,10 +13,12 @@ downloadCMBPS(link = 1)
 The CMB Power Spectra Data Frame
 }
 \description{
-The function \code{downloadCMBPS} download CMB power spectra components from \url{http://pla.esac.esa.int/pla/#cosmology}.
+The function \code{downloadCMBPS} download CMB power spectra components from
+ \url{http://pla.esac.esa.int/pla/#cosmology}.
 }
 \details{
-\code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck TT,TE,EE+lowE+lensing (2 <= ell <= 2508).
+\code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck
+ TT,TE,EE+lowE+lensing (2 <= ell <= 2508).
 
 \code{link = 2}: Baseline high-ell Planck TT power spectra (2 <= ell <= 2508).
 
@@ -32,7 +34,8 @@ The function \code{downloadCMBPS} download CMB power spectra components from \ur
 ## Download the Best-fit LCDM CMB power spectra and plot
 CMBPS<- downloadCMBPS(link=1)
 plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
-     main="CMB Angular Power Spectra",xlab=expression(l),ylab=expression(paste(D[l],"(",mu,K^2,")")))
+     main="CMB Angular Power Spectra",xlab=expression(l),
+     ylab=expression(paste(D[l],"(",mu,K^2,")")))
 
 }
 \references{

@@ -31,11 +31,14 @@
 #' is saved. Tilde-expansion is performed.
 #' @return The CMB Map Fits File
 #' @examples
-#' ## Download Commander with Nside=1024 and save in the dafualt folder as "../rcosmo/CMB_map_commander1024.fits"
+#' ## Download Commander with Nside=1024 and save in the dafualt folder
+#' ## as "../rcosmo/CMB_map_commander1024.fits"
 #' downloadCMBmap(link=1)
-#' ## Download SMICA with Nside=2048 and save in the dafualt folder as "../rcosmo/CMB_map_smica2048.fits"
+#' ## Download SMICA with Nside=2048 and save in the dafualt folder
+#' ## as "../rcosmo/CMB_map_smica2048.fits"
 #' downloadCMBmap(link=8)
-#' ## Download SMICA with Nside=1024 and save in the specified folder as "..your file path../CMB_map_smica1024.fits"
+#' ## Download SMICA with Nside=1024 and save in the specified folder
+#' ## as "..your file path../CMB_map_smica1024.fits"
 #' downloadCMBmap(link=8, destfile="..your file path../CMB_map_smica1024.fits")
 #
 #' @keywords CMB Maps
@@ -66,26 +69,35 @@ downloadCMBmap <- function(link=1,destfile){
           destfile7,
           destfile8)
   }
-
-  download.file(url, destfile)
-
-
+   download.file(url, destfile)
 }
 
-link1<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-commander_1024_R2.02_full/index.html"
+link1<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+            "maps/component-maps/cmb/COM_CMB_IQU-commander_1024_R2.02_full.fits",sep = "")
 destfile1=paste(getwd(),"/CMB_map_commander1024.fits",sep = "")
-link2<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-nilc_1024_R2.02_full/index.html"
+link2<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+            "maps/component-maps/cmb/COM_CMB_IQU-nilc_1024_R2.02_full.fits",sep = "")
 destfile2=paste(getwd(),"/CMB_map_nilc1024.fits",sep = "")
-link3<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-sevem_1024_R2.02_full/index.html"
+link3<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+           "maps/component-maps/cmb/COM_CMB_IQU-sevem_1024_R2.02_full.fits",sep = "")
 destfile3=paste(getwd(),"/CMB_map_sevem1024.fits",sep = "")
-link4<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-smica_1024_R2.02_full/index.html"
+link4<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+           "maps/component-maps/cmb/COM_CMB_IQU-smica_1024_R2.02_full.fits",sep = "")
 destfile4=paste(getwd(),"/CMB_map_smica1024.fits",sep = "")
-link5<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-commander-field-Int_2048_R2.01_full/index.html"
+link5<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+           "maps/component-maps/cmb/",
+           "COM_CMB_IQU-commander-field-Int_2048_R2.01_full.fits",sep = "")
 destfile5=paste(getwd(),"/CMB_map_commander2048.fits",sep = "")
-link6<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-nilc-field-Int_2048_R2.01_full/index.html"
+link6<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+              "maps/component-maps/cmb/",
+              "COM_CMB_IQU-nilc-field-Int_2048_R2.01_full.fits",sep = "")
 destfile6=paste(getwd(),"/CMB_map_nilc2048.fits",sep = "")
-link7<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-sevem-field-Int_2048_R2.01_full/index.html"
+link7<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+              "maps/component-maps/cmb/",
+              "COM_CMB_IQU-sevem-field-Int_2048_R2.01_full.fits",sep = "")
 destfile7=paste(getwd(),"/CMB_map_sevem2048.fits",sep = "")
-link8<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-smica-field-Int_2048_R2.01_full/index.html"
+link8<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+              "maps/component-maps/cmb/",
+              "COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits",sep = "")
 destfile8=paste(getwd(),"/CMB_map_smica2048.fits",sep = "")
 

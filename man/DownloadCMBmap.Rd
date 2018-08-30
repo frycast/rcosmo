@@ -44,11 +44,14 @@ at 10 arcmin resolution.
 \code{link = 8:} CMB Maps produced by SMICA with Nside=2048;
 }
 \examples{
-## Download Commander with Nside=1024 and save in the dafualt folder as "../rcosmo/CMB_map_commander1024.fits"
+## Download Commander with Nside=1024 and save in the dafualt folder
+## as "../rcosmo/CMB_map_commander1024.fits"
 downloadCMBmap(link=1)
-## Download SMICA with Nside=2048 and save in the dafualt folder as "../rcosmo/CMB_map_smica2048.fits"
+## Download SMICA with Nside=2048 and save in the dafualt folder
+## as "../rcosmo/CMB_map_smica2048.fits"
 downloadCMBmap(link=8)
-## Download SMICA with Nside=1024 and save in the specified folder as "..your file path../CMB_map_smica1024.fits"
+## Download SMICA with Nside=1024 and save in the specified folder
+## as "..your file path../CMB_map_smica1024.fits"
 downloadCMBmap(link=8, destfile="..your file path../CMB_map_smica1024.fits")
 }
 \references{

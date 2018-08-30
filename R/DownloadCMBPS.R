@@ -1,8 +1,10 @@
 #' Download CMB Power Spectra from Planck Legacy Archive.
 #'
-#' The function \code{downloadCMBPS} download CMB power spectra components from \url{http://pla.esac.esa.int/pla/#cosmology}.
+#' The function \code{downloadCMBPS} download CMB power spectra components from
+#'  \url{http://pla.esac.esa.int/pla/#cosmology}.
 #'
-#' \code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck TT,TE,EE+lowE+lensing (2 <= ell <= 2508).
+#' \code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck
+#'  TT,TE,EE+lowE+lensing (2 <= ell <= 2508).
 #'
 #' \code{link = 2}: Baseline high-ell Planck TT power spectra (2 <= ell <= 2508).
 #'
@@ -20,7 +22,8 @@
 #' ## Download the Best-fit LCDM CMB power spectra and plot
 #' CMBPS<- downloadCMBPS(link=1)
 #' plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
-#'      main="CMB Angular Power Spectra",xlab=expression(l),ylab=expression(paste(D[l],"(",mu,K^2,")")))
+#'      main="CMB Angular Power Spectra",xlab=expression(l),
+#'      ylab=expression(paste(D[l],"(",mu,K^2,")")))
 #'
 #' @keywords CMB Power Spectra
 #' @references Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
@@ -49,7 +52,8 @@ downloadCMBPS <- function(link=1){
 }
 
 link1 <- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-                "COM_PowerSpect_CMB-base-plikHM-","TTTEEE-lowl-lowE-lensing-minimum-theory_R3.01.txt",sep = "")
+                "COM_PowerSpect_CMB-base-plikHM-",
+               "TTTEEE-lowl-lowE-lensing-minimum-theory_R3.01.txt",sep = "")
 items1 <- c("L","TT","TE","EE","BB","PP")
 
 link2<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",

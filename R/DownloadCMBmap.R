@@ -1,6 +1,6 @@
 #' Download CMB Maps from Planck Public Data Release.
 #'
-#' The function \code{DownloadCMBmap} download CMB maps from
+#' The function \code{downloadCMBmap} download CMB maps from
 #' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
 #'
 #' CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA
@@ -32,7 +32,9 @@
 #' @return The CMB Map Fits File
 #' @examples
 #' ## Download Commander with Nside=1024
-#' DownloadCMBmap(link=1)
+#' downloadCMBmap(link=1, destfile=1) # obtain 'CMB_map_commander1024.fits' and save in the folder
+#' ## Download SMICA with Nside=2048
+#' downloadCMBmap(link=8, destfile=8) # obtain 'CMB_map_smica2048.fits' and save in the folder
 #'
 #' @keywords CMB Maps
 #' @references Planck Public Data Release 2 Maps
@@ -40,7 +42,7 @@
 #' @references \code{\link{download.file}}.
 #' @export
 #'
-DownloadCMBmap <- function(link = 1,destfile=getwd()){
+downloadCMBmap <- function(link=1,destfile=1){
 
   url <- switch(link,
                 link1,
@@ -50,17 +52,34 @@ DownloadCMBmap <- function(link = 1,destfile=getwd()){
                 link5,
                 link6,
                 link7,
-                like8)
-  download.file(url, destfile)
+                link8)
+  destfile_location<- switch(destfile,
+          destfile1,
+          destfile2,
+          destfile3,
+          destfile4,
+          destfile5,
+          destfile6,
+          destfile7,
+          destfile8)
+  download.file(url, destfile_location)
 
 }
 
 link1<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-commander_1024_R2.02_full/index.html"
+destfile1=paste(getwd(),"/CMB_map_commander1024.fits",sep = "")
 link2<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-nilc_1024_R2.02_full/index.html"
+destfile2=paste(getwd(),"/CMB_map_nilc1024.fits",sep = "")
 link3<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-sevem_1024_R2.02_full/index.html"
+destfile3=paste(getwd(),"/CMB_map_sevem1024.fits",sep = "")
 link4<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-smica_1024_R2.02_full/index.html"
+destfile4=paste(getwd(),"/CMB_map_smica1024.fits",sep = "")
 link5<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-commander-field-Int_2048_R2.01_full/index.html"
+destfile5=paste(getwd(),"/CMB_map_commander2048.fits",sep = "")
 link6<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-nilc-field-Int_2048_R2.01_full/index.html"
+destfile6=paste(getwd(),"/CMB_map_nilc2048.fits",sep = "")
 link7<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-sevem-field-Int_2048_R2.01_full/index.html"
+destfile7=paste(getwd(),"/CMB_map_sevem2048.fits",sep = "")
 link8<- "http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/cmbpreviews/COM_CMB_IQU-smica-field-Int_2048_R2.01_full/index.html"
+destfile8=paste(getwd(),"/CMB_map_smica2048.fits",sep = "")
 

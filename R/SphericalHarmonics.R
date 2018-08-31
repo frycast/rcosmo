@@ -63,7 +63,6 @@ sphericalharmonics <- function(L,m,xyz){
     }else{
     Y <- c_ellm*(1-z^2)^(m_abs/2)*jacobiPol(m_abs,m_abs,L-m_abs,z)*sin(m_abs*phi)
     }
-    Y <- Y*sqrt(4*pi)
   }
   return (Y)
 }

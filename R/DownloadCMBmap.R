@@ -1,6 +1,6 @@
 #' Download CMB Maps from Planck Public Data Release.
 #'
-#' The function \code{downloadCMBmap} download CMB maps from
+#' The function \code{downloadCMBmap} downloads CMB maps from
 #' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
 #'
 #' CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA
@@ -27,24 +27,24 @@
 #' \code{link = 8:} CMB Maps produced by SMICA with Nside=2048;
 #'
 #' @param link  A character string naming the URL of a resource to be downloaded.
-#' @param destfile  A character string with the name where the downloaded file
-#' is saved. Tilde-expansion is performed.
-#' @return The CMB Map Fits File
+#' @param destfile  A character string with the file name for the downloaded file
+#' to be saved. Tilde-expansion is performed.
+#' @return  CMB Map Fits File
 #' @examples
-#' ## Download Commander with Nside=1024 and save in the dafualt folder
+#' ## Download Commander with Nside=1024 and save in the default folder
 #' ## as "../rcosmo/CMB_map_commander1024.fits"
 #' downloadCMBmap(link=1)
-#' ## Download SMICA with Nside=2048 and save in the dafualt folder
+#' ## Download SMICA with Nside=2048 and save in the default folder
 #' ## as "../rcosmo/CMB_map_smica2048.fits"
 #' downloadCMBmap(link=8)
-#' ## Download SMICA with Nside=1024 and save in the specified folder
-#' ## as "..your file path../CMB_map_smica1024.fits"
-#' downloadCMBmap(link=8, destfile="..your file path../CMB_map_smica1024.fits")
+#' ## Download SMICA with Nside=1024 and save in the specified folder,
+#' ## fpr example, "C:/CMB_map_smica1024.fits"
+#' downloadCMBmap(link=8, destfile="C:/CMB_map_smica1024.fits")
 #
 #' @keywords CMB Maps
 #' @references Planck Public Data Release 2 Maps
 #' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
-#' @references \code{\link{download.file}}.
+#' @references Other fits maps can also be downloaded using the general command \code{\link{download.file}}.
 #' @export
 #'
 downloadCMBmap <- function(link=1,destfile){

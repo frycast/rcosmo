@@ -80,7 +80,7 @@ IntegerMatrix mkpix2xyC(int nside = 1024) {
 
 
 
-//' @title nest2ring
+//' @title Convert nest to ring ordering
 //'
 //' @description
 //' Convert from "nested" to "ring" ordering

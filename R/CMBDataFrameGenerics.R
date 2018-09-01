@@ -444,7 +444,7 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 
 
 
-#'Like \code{\link{rbind}} for CMBDataFrames
+#'\code{\link{rbind}} for CMBDataFrames
 #'
 #'Add a new row or rows to a \code{\link{CMBDataFrame}}.
 #'All arguments passed to \code{...} must be CMBDataFrames.

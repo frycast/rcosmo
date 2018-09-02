@@ -26,9 +26,10 @@
 #'      ylab=expression(paste(D[l],"(",mu,K^2,")")))
 #'
 #' @keywords CMB Power Spectra
-#' @references Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
-#' @export
 #'
+#' @references Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
+#'
+#' @export
 downloadCMBPS <- function(link=1){
 
   items <- switch(link,
@@ -40,39 +41,39 @@ downloadCMBPS <- function(link=1){
                   items6)
 
   link.str <- switch(link,
-                     link1,
-                     link2,
-                     link3,
-                     link4,
-                     link5,
-                     link6)
+                     l1,
+                     l2,
+                     l3,
+                     l4,
+                     l5,
+                     l6)
 
   CMB_PowerSpectra <- read.table(link.str, quote="\"", col.names = items)
   return(CMB_PowerSpectra)
 }
 
-link1 <- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+l1 <- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
                 "COM_PowerSpect_CMB-base-plikHM-",
                "TTTEEE-lowl-lowE-lensing-minimum-theory_R3.01.txt",sep = "")
 items1 <- c("L","TT","TE","EE","BB","PP")
 
-link2<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+l2<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
               "COM_PowerSpect_CMB-TT-full_R3.01.txt",sep = "")
 items2<- c("L","DL","Minus_dDL","Plus_dDL")
 
-link3<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+l3<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
               "COM_PowerSpect_CMB-EE-full_R3.01.txt",sep = "")
 items3<- c("L","DL","Minus_dDL","Plus_dDL")
 
-link4<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+l4<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
                "COM_PowerSpect_CMB-TE-full_R3.01.txt",sep = "")
 items4<- c("L","DL","Minus_dDL","Plus_dDL")
 
-link5<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+l5<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
               "COM_PowerSpect_CMB-low-ell-EB-full_R3.01.txt",sep = "")
 items5<- c("L","DL","dDL")
 
-link6<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
+l6<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
               "COM_PowerSpect_CMB-low-ell-BB-full_R3.01.txt",sep = "")
 items6<- c("L","DL","dDL")
 

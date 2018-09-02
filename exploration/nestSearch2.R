@@ -374,8 +374,6 @@ neighbours <- function(p, j)
   # Base pixel targets after crossing border (zero means drop the pixel)
   bpt <- baseSiblings(bp)[bcross]
 
-  #
-
 
 }
 dec2bin(bin2dec(bin2f(dec2bin(p-1,2*j), j)$odd, digits = j) + 1, j)

@@ -20,7 +20,7 @@
 #' @export
 sphericalharmonics <- function(L,m,xyz){
   if (L==0){
-      Y <- matrix(1,dim(xyz)[1],1)
+      Y <- matrix(1,dim(xyz)[1],1)/sqrt(4*pi)
       return (Y)
   }
 

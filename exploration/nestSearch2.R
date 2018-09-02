@@ -1,5 +1,5 @@
 rcosmo::plotHPBoundaries(nside = 4)
-rcosmo::plotHPBoundaries(nside = 2, col = "blue", lwd = 2)
+rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 2, ordering = "nested")
 
 
 # We start by finding the pixel h at resolution j-1
@@ -98,27 +98,32 @@ displaySiblings <- function(p, j, boundary.j = j,
 # displaySiblings(28, 1)
 # displaySiblings(28, 2)
 # displaySiblings(127, 3)
-displaySiblings(4, 1)
+# displaySiblings(4, 1)
 
 # We have the siblings of p, but
 # it remains to find all neighbours of p at resolution j
 
 # We may need siblings at base pixel resolution
-baseSiblings <- function(p)
+baseSiblings <- function(bp)
 {
-  switch(p,
-         c(2,3,4,5,6,9),
-         c(1,3,4,6,7,10),
-         c(1,2,4,7,8,11),
-         c(1,2,3,5,8,12),
-         c(1,4,6,8,9,12),
-         c(1,2,5,7,9,10),
-         c(2,3,6,8,10,11),
-         c(3,4,5,7,9,10),
-         c(1,5,6,10,11,12),
-         c(2,6,7,9,11,12),
-         c(3,7,8,9,10,12),
-         c(4,5,8,9,10,11))
+  # order: S,SE,E,NE,N,NW,W,SW
+  # corners: S,E,N,W
+  switch(bp,
+         # north pole
+         c(9 ,6,0,2,3,4,0,5),
+         c(10,7,0,3,4,1,0,6),
+         c(11,8,0,4,1,2,0,7),
+         c(12,5,0,1,2,3,0,8),
+         # equatorial
+         c(0,9 ,6,1,0,4,8,12),
+         c(0,10,7,2,0,1,5,9),
+         c(0,11,8,3,0,2,6,10),
+         c(0,12,5,4,0,3,7,11),
+         # south pole
+         c(11,10,0,6,1,5,0,12),
+         c(12,11,0,7,2,6,0,9),
+         c(9 ,12,0,8,3,7,0,10),
+         c(10,9 ,0,5,4,8,0,11))
 }
 
 # The number of pixels at resolution j,
@@ -128,26 +133,26 @@ baseSiblings <- function(p)
 # index of pixel p, within its base pixel,
 # at resolution j. The decimal representation
 # of b is given by
-indexInBP <- function(p, j)
+p2ibp <- function(p, j) #indexInBP
 {
   (p-1) %% 4^j + 1
 }
-# indexInBP(2, 1) # index of pixel 2 at j = 1 (within base pixel 1)
-# indexInBP(5, 1) # index of pixel 5 at j = 1 (within base pixel 2)
+# p2ibp(2, 1) # index of pixel 2 at j = 1 (within base pixel 1)
+# p2ibp(5, 1) # index of pixel 5 at j = 1 (within base pixel 2)
 
 # The base pixel to which p belongs is
-basePixel <- function(p, j)
+p2bp <- function(p, j)
 {
   floor((p-1) / (4^j)) + 1
 }
-# basePixel(1,1)
-# basePixel(4,1)
-# basePixel(5,1)
-# basePixel(5,2)
+# p2bp(1,1)
+# p2bp(4,1)
+# p2bp(5,1)
+# p2bp(5,2)
 
 # Note that for all p we have
 alwaysTrue <- function(p, j) {
-  all((basePixel(p, j) - 1)*4^j + indexInBP(p, j) == p)
+  all((p2bp(p, j) - 1)*4^j + p2ibp(p, j) == p)
 }
 # Check:
 # j <- 3
@@ -182,10 +187,17 @@ f2bin <- function(f, j)
 
 
 
+
+
+
 #' onBPBoundary
 #'
 #' Check if the pixel p at resolution j is on the boundary of a base pixel,
-#' note \code{nside = 2^j}.
+#' note \code{nside = 2^j}. If \code{p} is on the boundary then a number
+#' is returned corresponding to the boundary position,
+#' in order from 1 to 8 this is S, SE, E, NE, N, NW, W, SW,
+#' where S,E,N,W are corners and SE, NE, NW, SW are edges.
+#' If \code{p} is not on the boundary then 0 is returned.
 #'
 #' Pixel p is on the boundary of a base pixel if and only if
 #' the binary representation of \eqn{p - 1} has either
@@ -194,25 +206,83 @@ f2bin <- function(f, j)
 #' @param p Integer vector. The pixel index (or indices) at resolution j .
 #' @param j The resolution within which to specify p.
 #'
-#' @examples
-#' j <- 3
-#' spix <- 17:32 #try 1:16
-#' on.b <- onBPBoundary(spix,j)
+#' @return
+#' If \code{p} is on the boundary then a number
+#' is returned corresponding to the boundary position,
+#' in order from 1 to 8 this is S, SE, E, NE, N, NW, W, SW,
+#' where S,E,N,W are corners and SE, NE, NW, SW are edges.
+#' If \code{p} is not on the boundary then 0 is returned.
+#'
+#'@examples
+#'
+#' # Visualise to see which are on boundary
+#' j <- 2
+#' spix <- 1:16
 #' rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
-#' displayPixels(boundary.j = j, j = j, spix = spix[on.b],
+#' displayPixels(boundary.j = j, j = j, spix = spix,
 #'               boundary.col = "gray", incl.labels = spix)
 #'
-#' @return A logical vector.
+#' # Corner pixels counter-clockwise S, E, N, W
+#' onBPBoundary(c(1,6,16,11),j)
+#'
+#' # Edge pixels counter-clockwise SE, NE, NW, SW
+#' onBPBoundary(c(2,8,16,9),j)
+#'
+#' # Non-boundary pixels
+#' onBPBoundary(c(4,7,10,13),j)
 #'
 onBPBoundary <- function(p,j)
 {
-  result <- logical(1)
+  result <- integer(1)
   # The number of bits in the binary representation is 2*j (giving 4^j pixels).
   vapply(p, function(x) {
-    bin <- dec2bin(indexInBP(x, j) - 1, digits = 2*j)
+    bin <- dec2bin(p2ibp(x, j) - 1, digits = 2*j)
     f <- bin2f(bin, j = j)
-    return(sum(f$even) %in% c(0,j)
-           || sum(f$odd) %in% c(0,j))
+    se <- sum( f$even )
+    so <- sum( f$odd )
+
+    b <- 0L
+    # south corner
+    if ( se == 0 && so == 0 )
+    {
+      b <- 1L
+    }
+    # east corner
+    else if ( se == 0 && so == j )
+    {
+      b <- 3L
+    }
+    # north corner
+    else if ( se == j && so == j )
+    {
+      b <- 5L
+    }
+    # west corner
+    else if ( se == j && so == 0 )
+    {
+      b <- 7L
+    }
+    # south east wall
+    else if ( se == 0 )
+    {
+      b <- 2L
+    }
+    # north east wall
+    else if ( so == j )
+    {
+      b <- 4L
+    }
+    # north west wall
+    else if ( se == j )
+    {
+      b <- 6L
+    }
+    # south west wall
+    else if ( so == 0 )
+    {
+      b <- 8L
+    }
+    return(b)
   }, FUN.VALUE = result)
 }
 
@@ -229,7 +299,8 @@ onBPBoundary <- function(p,j)
 # convert each to binary again, recombine to decimal
 
 # Return neighbours of p assuming p does not border a BP boundary
-neighbours <- function(p, j)
+# and only working with index in BP
+neighboursInBP <- function(p, j)
 {
   f <- bin2f(dec2bin(p-1, digits = 2*j), j = j)
 
@@ -254,7 +325,7 @@ neighbours <- function(p, j)
 }
 
 j <- 2
-p <- 11
+p <- 6
 displayPixels(boundary.j = j, j = j, plot.j = 5,
               spix = neighbours(p, j),
               boundary.col = "gray",
@@ -263,3 +334,48 @@ displayPixels(boundary.j = j, j = j, plot.j = 5,
               col = "blue",
               size = 3)
 rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+
+
+
+# Find the pixel index p of a given pixel at ibp in bp
+ibp2p <- function(ibp, bp, j)
+{
+  (bp - 1)*4^j + ibp
+}
+
+
+neighbours <- function(p, j)
+{
+  # Get the index in BP and the BP
+  ibp <- p2ibp(p, j)
+  bp <- p2bp
+
+  # Get even and odd binary digits
+  f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
+
+  # separately increment/decrement the decimal representation of evens & odds
+  even.dec <- bin2dec(f$even, digits = j)
+  odd.dec <- bin2dec(f$odd, digits = j)
+
+  #        S, SE, E, NE, N, NW, W, SW,
+  ei <- c(-1, -1,-1,  0, 1,  1, 1,  0)
+  oi <- c(-1,  0, 1,  1, 1,  0,-1, -1)
+
+  nbrs <- data.frame(even = rep(even.dec,8) + ei,
+                     odd  = rep(odd.dec, 8) + oi)
+
+  # This df has all boundary crossing info in anti-clockwise order.
+  # TRUE in 2 columns implies a corner pixel. TRUE in either column
+  # implies the corresponding row number will give the correct
+  # base pixel change when index from output of baseSiblings
+  border <- nbrs < 0 | nbrs >= 2^j
+  bcross <- apply(border, any, MARGIN = 1)
+
+  # Base pixel targets after crossing border (zero means drop the pixel)
+  bpt <- baseSiblings(bp)[bcross]
+
+  #
+
+
+}
+dec2bin(bin2dec(bin2f(dec2bin(p-1,2*j), j)$odd, digits = j) + 1, j)

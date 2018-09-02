@@ -6,7 +6,7 @@
 
 #### WARNING: THE LAST BIN IS NOT THE RIGHT SIZE AS IT CONTAINS ALL
 #### DISTANCES GREATER THAN max.dist SO IT SHOULD PERHAPS BE DISCARDED
-#' Covariance for CMB
+#' Sample covariance for CMB
 #'
 #' This function provides an empirical covariance estimate for data
 #' in a CMBDataFrame or data.frame. It places data into bins.
@@ -121,5 +121,49 @@ covCMB <- function(cmbdf,
   return(result)
 }
 
+
+#' Covariance estimate via power spectra
+#'
+#'This function provides a covariance estimate using the values of the estimated
+#'power spectra.
+#'
+#'
+#'@param PowerSpectra a data frame which first column lists values of multipole
+#'moments and the second column gives the corresponding values of CMB power
+#'spectra.
+#'@param N a number of points in which the covariance estimate is computed on
+#'the interval [-1,1]
+#'
+#'
+#'@return
+#' A data frame which first column is 1-d grid starting at -1+1/Ns and
+#' finishing at 1 with the step 2/Ns. The second column is the values of
+#' estimated covariances on this grid.
+#'
+#'@references Formula (2.1) in Baran A., Terdik G. Power spectrum estimation
+#' of spherical random fields based on covariances. Annales Mathematicae et
+#' Informaticae 44 (2015) pp. 15–22.
+#'
+#'@examples
+#' N <- 20000
+#'  COM_PowerSpectra <- read.table("COM_PowerSpect_CMB.txt", quote="\"",
+#'                     col.names = c("L","TT","TE","EE","BB","PP"))
+#'
+#' Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
+#' plot(Cov_est, type="l")
+#'
+#' ## Plot the covariance estimate as a function of angular distances
+#' plot(acos(Cov_est[,1]), Cov_est[,2], type ="l", xlab ="angular distance", ylab ="Estimated Covariance")
+#'
+#'@export
+covPwSp <- function(PowerSpectra, Ns)
+{
+  Nl <- length(PowerSpectra[,1])
+  Pls <- legendre_Pl_array(lmax = PowerSpectra[Nl,1], x = seq(-1+1/Ns,1,2/Ns))
+  Cov_func <- function(mat, Dfl , l)  { apply(mat[l+1,], function(col) {sum(Dfl*(2*l+1)/(4*pi*l*(l+1))*col)}, MARGIN = 2)    }
+  Cov_est <- Cov_func(Pls, PowerSpectra[,2], PowerSpectra[,1])
+  df <- data.frame(t=seq(-1+1/Ns,1,2/Ns), Estimated_Cov=Cov_est)
+  return(df)
+}
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/CovCMB.R
 \name{covCMB}
 \alias{covCMB}
-\title{Covariance for CMB}
+\title{Sample covariance for CMB}
 \usage{
 covCMB(cmbdf, num.bins = 10, sample.size, max.dist = pi, breaks,
   equiareal = TRUE, calc.max.dist = FALSE)

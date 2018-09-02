@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{nest2ring}
 \alias{nest2ring}
-\title{nest2ring}
+\title{Convert nest to ring ordering}
 \usage{
 nest2ring(nside, pix)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{rbind.CMBDataFrame}
 \alias{rbind.CMBDataFrame}
-\title{Like \code{\link{rbind}} for CMBDataFrames}
+\title{\code{\link{rbind}} for CMBDataFrames}
 \usage{
 \method{rbind}{CMBDataFrame}(..., deparse.level = 1, unsafe = FALSE)
 }

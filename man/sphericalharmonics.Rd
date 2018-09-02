@@ -29,11 +29,13 @@ sphericalharmonics(5,2,points)
 
 }
 \references{
-See also https://en.wikipedia.org/wiki/Table_of_spherical_harmonics
+See https://en.wikipedia.org/wiki/Table_of_spherical_harmonics
+
 It uses equation (7) in Hesse, K., Sloan, I. H., & Womersley, R. S. (2010).
 Numerical integration on the sphere. In Handbook of Geomathematics (pp. 1185-1219).
-Springer Berlin Heidelberg.
-but instead of the order k=1,...,2L+1 in this book we use m=k-L-1.
+Springer Berlin Heidelberg,
+
+but instead of the order k=1,...,2L+1 in the book we use m=k-L-1.
 }
 \keyword{harmonic}
 \keyword{spherical}

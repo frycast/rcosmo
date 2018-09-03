@@ -230,7 +230,7 @@ f2bin <- function(f, j)
 #' # Non-boundary pixels
 #' onBPBoundary(c(4,7,10,13),j)
 #'
-onBPBoundary <- function(p,j)
+onBPBoundary_old <- function(p,j)
 {
   result <- integer(1)
   # The number of bits in the binary representation is 2*j (giving 4^j pixels).
@@ -286,54 +286,60 @@ onBPBoundary <- function(p,j)
 }
 
 
-## So far we can check if a pixel is on a boundary of a base pixel
-# and we can find the siblings of a pixel.
-# Now we want to find all neighbours of a pixel p that is not
-# on the boundary of a base pixel.
 
-# displaySiblings(26, 3, col = "red", size = 4)
-
-## Convert p-1 to binary, separate even and odd digits,
-# convert each to decimal, add {-1,0,1} to each,
-# convert each to binary again, recombine to decimal
-
-# Return neighbours of p assuming p does not border a BP boundary
-# and only working with index in BP
-neighboursInBP <- function(p, j)
+#' a version of onBPBoundary to use with neighbours
+#'
+#' @param se The sum of even bits, e.g. sum( f$even )
+#' @param so The sum of odd bits, e.g. sum( f$odd )
+#' @param j The resolution parameter nside = 2^j
+#'
+onBPBoundary <- function(se, so, j)
 {
-  f <- bin2f(dec2bin(p-1, digits = 2*j), j = j)
-
-  # increment/decrement each binary representation
-  even.dec <- bin2dec(f$even, digits = j)
-  odd.dec <- bin2dec(f$odd, digits = j)
-  nbrs.f <- expand.grid(even = list(e = f$even,
-                                    eu = dec2bin(even.dec + 1, digits = j),
-                                    ed = dec2bin(even.dec - 1, digits = j)),
-                        odd = list(o = f$odd,
-                                   ou = dec2bin(odd.dec + 1, digits = j),
-                                   od = dec2bin(odd.dec - 1, digits = j)))
-
-  # convert the cartesian product of the list of evens/odds back to decimal
-  unlist(
-  mapply(FUN = function(even,odd) {
-           bin <- f2bin(list(even = even, odd = odd), j = j)
-           p <- bin2dec(bin, digits = 2*j) + 1
-           return(p)
-         },
-         nbrs.f$even, nbrs.f$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+    b <- 0L
+    # south corner
+    if ( se == 0 && so == 0 )
+    {
+      b <- 1L
+    }
+    # east corner
+    else if ( se == 0 && so == j )
+    {
+      b <- 3L
+    }
+    # north corner
+    else if ( se == j && so == j )
+    {
+      b <- 5L
+    }
+    # west corner
+    else if ( se == j && so == 0 )
+    {
+      b <- 7L
+    }
+    # south east wall
+    else if ( se == 0 )
+    {
+      b <- 2L
+    }
+    # north east wall
+    else if ( so == j )
+    {
+      b <- 4L
+    }
+    # north west wall
+    else if ( se == j )
+    {
+      b <- 6L
+    }
+    # south west wall
+    else if ( so == 0 )
+    {
+      b <- 8L
+    }
+    return(b)
 }
 
-j <- 2
-p <- 6
-displayPixels(boundary.j = j, j = j, plot.j = 5,
-              spix = neighboursInBP(p, j),
-              boundary.col = "gray",
-              boundary.lwd = 1,
-              incl.labels = neighboursInBP(p, j),
-              col = "blue",
-              size = 3)
-rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
-rcosmo::plotHPBoundaries(nside = 4, ordering = "nested")
+
 
 
 # Find the pixel index p of a given pixel at ibp in bp
@@ -343,49 +349,199 @@ ibp2p <- function(ibp, bp, j)
 }
 
 
+#' Border pattern is resolution independent
+#'
+#' @param pype is the output of onBPBoundary
+#'
+#' @return the output is useful as an index
+#' to the output of baseSiblings. It will
+#' return the correct neighbouring base
+#' pixel in each direction. The
+#' 0 indicates to stay in current BP.
+#'
+borderPattern <- function(ptype)
+{
+  switch(ptype + 1,
+         # S SE  E NE  N NW  W SW
+         c(0, 0, 0, 0, 0, 0, 0, 0),
+         c(1, 2, 2, 0, 0, 0, 8, 8),
+         c(2, 2, 2, 0, 0, 0, 0, 0),
+         c(2, 2, 3, 4, 4, 0, 0, 0),
+         c(0, 0, 4, 4, 4, 0, 0, 0),
+         c(0, 0, 4, 4, 5, 6, 6, 0),
+         c(0, 0, 0, 0, 6, 6, 6, 0),
+         c(8, 0, 0, 0, 6, 6, 7, 8),
+         c(8, 0, 0, 0, 0, 0, 8, 8))
+}
+
+
 neighbours <- function(p, j)
 {
   # Get the index in BP and the BP
   ibp <- p2ibp(p, j)
   bp <- p2bp(p, j)
 
-  # Get even and odd binary digits
+  # Get even and odd binary digit information
   f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
+  se <- sum( f$even )
+  so <- sum( f$odd )
 
-  # separately increment/decrement the decimal representation of evens & odds
+  # Get the BP border crossing info: target border pixels
+  bdr <- borderPattern(onBPBoundary(se, so, j))
+  target.bp <- rep(bp, 9)
+  target.bp[which(bdr != 0)] <- baseSiblings(bp)[bdr]
+
+  # Separately increment/decrement the odd/even binary reps
   even.dec <- bin2dec(f$even, digits = j)
   odd.dec <- bin2dec(f$odd, digits = j)
+  # Order: S,SE, E,NE, N,NW, W,SW,self
+  ei <- c(-1,-1,-1, 0, 1, 1, 1, 0,   0)
+  oi <- c(-1, 0, 1, 1, 1, 0,-1,-1,   0)
+  nbrs <- data.frame(even = I(lapply(rep(even.dec,9) + ei,
+                                     dec2bin, digits = j)),
+                     odd  = I(lapply(rep(odd.dec, 9) + oi,
+                                     dec2bin, digits = j)))
 
-  #        S, SE, E, NE, N, NW, W, SW,
-  ei <- c(-1, -1,-1,  0, 1,  1, 1,  0, 0)
-  oi <- c(-1,  0, 1,  1, 1,  0,-1, -1, 0)
+  # Swap some north <-> south depending on region of bp
+  if ( bp %in% c(1,2,3,4) ) {
+    # North pole
 
-  nbrs <- data.frame(even = rep(even.dec,9) + ei,
-                     odd  = rep(odd.dec, 9) + oi)
+  } else if ( bp %in% c(9,10,11,12) ) {
+    # South pole
 
-  # This df has all boundary crossing info in anti-clockwise order.
-  # TRUE in 2 columns implies a corner pixel. TRUE in either column
-  # implies the corresponding row number will give the correct
-  # base pixel change when index from output of baseSiblings
-  border <- nbrs < 0 | nbrs >= 2^j
+  }
 
-  bc <- apply(border, any, MARGIN = 1)
+  # Recombine even and odd
+  nbrs <- recombineEvenOdd(nbrs, j)
 
-  # Base pixel targets after crossing border
-  # (-1 means drop pixel, 0 means current)
-  bptarget <- c(baseSiblings(bp),0)*bc
-
-  np <- unlist(
-    apply(FUN = function(x) {
-      # recombine even and odd
-      bin <- f2bin(list(even = dec2bin(x[1], j),
-                        odd =  dec2bin(x[2], j)), j = j)
-      p <- bin2dec(bin, digits = 2*j) + 1
-      return(p)
-    }, nbrs, MARGIN = 1))
-
-  bptarget[bptarget == 0] <- bp
-  np <- ibp2p(np, bptarget, j)
+  # Convert indices in BP to actual indices p
+  np <- ibp2p(nbrs, target.bp, j)
+  return(np[np > 0])
 }
 
-dec2bin(bin2dec(bin2f(dec2bin(p-1,2*j), j)$odd, digits = j) + 1, j)
+# Takes a data.frame with column for even binary and column for odd.
+# Returns the recombined digits in decimal as vector
+recombineEvenOdd <- function(nbrs, j)
+{
+  unlist(
+    mapply(FUN = function(even,odd) {
+      bin <- f2bin(list(even = even, odd = odd), j = j)
+      p <- bin2dec(bin, digits = 2*j) + 1
+      return(p)
+    },
+    nbrs$even, nbrs$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+}
+
+
+j <- 2
+p <- 182
+neighbours(p, j)
+displayPixels(boundary.j = j, j = j, plot.j = 5,
+              spix = neighbours(p, j),
+              boundary.col = "gray",
+              boundary.lwd = 1,
+              incl.labels = neighbours(p, j),
+              col = "blue",
+              size = 3)
+rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+rcosmo::plotHPBoundaries(nside = 4, ordering = "nested")
+
+
+
+
+# neighbours <- function(p, j)
+# {
+#   # Get the index in BP and the BP
+#   ibp <- p2ibp(p, j)
+#   bp <- p2bp(p, j)
+#
+#   # Get even and odd binary digits
+#   f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
+#
+#   # separately increment/decrement the decimal representation of evens & odds
+#   even.dec <- bin2dec(f$even, digits = j)
+#   odd.dec <- bin2dec(f$odd, digits = j)
+#   #        S, SE, E, NE, N, NW, W, SW,
+#   ei <- c(-1, -1,-1,  0, 1,  1, 1,  0, 0)
+#   oi <- c(-1,  0, 1,  1, 1,  0,-1, -1, 0)
+#   nbrs <- data.frame(even = rep(even.dec,9) + ei,
+#                      odd  = rep(odd.dec, 9) + oi)
+#
+#   # This df has all boundary crossing info in anti-clockwise order.
+#   # TRUE in 2 columns implies a corner pixel. TRUE in either column
+#   # implies the corresponding row number will give the correct
+#   # base pixel change when index from output of baseSiblings
+#   border <- nbrs < 0 | nbrs >= 2^j
+#
+#   bc <- apply(border, any, MARGIN = 1)
+#
+#   # Base pixel targets after crossing border
+#   # (-1 means drop pixel, 0 means current)
+#   bptarget <- c(baseSiblings(bp),0)*bc
+#
+#   np <- unlist(
+#     apply(FUN = function(x) {
+#       # recombine even and odd
+#       bin <- f2bin(list(even = dec2bin(x[1], j),
+#                         odd =  dec2bin(x[2], j)), j = j)
+#       p <- bin2dec(bin, digits = 2*j) + 1
+#       return(p)
+#     }, nbrs, MARGIN = 1))
+#
+#   bptarget[bptarget == 0] <- bp
+#   np <- ibp2p(np, bptarget, j)
+# }
+
+
+
+
+# ## So far we can check if a pixel is on a boundary of a base pixel
+# # and we can find the siblings of a pixel.
+# # Now we want to find all neighbours of a pixel p that is not
+# # on the boundary of a base pixel.
+#
+# # displaySiblings(26, 3, col = "red", size = 4)
+#
+# ## Convert p-1 to binary, separate even and odd digits,
+# # convert each to decimal, add {-1,0,1} to each,
+# # convert each to binary again, recombine to decimal
+#
+# # Return neighbours of p assuming p does not border a BP boundary
+# # and only working with index in BP
+# neighboursInBP <- function(p, j)
+# {
+#   f <- bin2f(dec2bin(p-1, digits = 2*j), j = j)
+#
+#   # increment/decrement each binary representation
+#   even.dec <- bin2dec(f$even, digits = j)
+#   odd.dec <- bin2dec(f$odd, digits = j)
+#   nbrs.f <- expand.grid(even = list(e = f$even,
+#                                     eu = dec2bin(even.dec + 1, digits = j),
+#                                     ed = dec2bin(even.dec - 1, digits = j)),
+#                         odd = list(o = f$odd,
+#                                    ou = dec2bin(odd.dec + 1, digits = j),
+#                                    od = dec2bin(odd.dec - 1, digits = j)))
+#
+#   # convert the cartesian product of the list of evens/odds back to decimal
+#   unlist(
+#     mapply(FUN = function(even,odd) {
+#       bin <- f2bin(list(even = even, odd = odd), j = j)
+#       p <- bin2dec(bin, digits = 2*j) + 1
+#       return(p)
+#     },
+#     nbrs.f$even, nbrs.f$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+# }
+#
+# j <- 2
+# p <- 6
+# displayPixels(boundary.j = j, j = j, plot.j = 5,
+#               spix = neighboursInBP(p, j),
+#               boundary.col = "gray",
+#               boundary.lwd = 1,
+#               incl.labels = neighboursInBP(p, j),
+#               col = "blue",
+#               size = 3)
+# rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+# rcosmo::plotHPBoundaries(nside = 4, ordering = "nested")
+
+# dec2bin(bin2dec(bin2f(dec2bin(p-1,2*j), j)$odd, digits = j) + 1, j)

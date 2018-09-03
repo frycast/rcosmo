@@ -1,27 +1,36 @@
-rcosmo::plotHPBoundaries(nside = 4)
-rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 2, ordering = "nested")
 
 
-# We start by finding the pixel h at resolution j-1
-# that contains p, where p is specified at resolution j >= 1.
-# Pixel h contains pixels h*4 - 1:4 + 1 at resolution j.
-# Of these, t = p - p %% 4 + (p %% 4 != 0)*4 is the top pixel.
-# Thus h = t/4.
-#
-# Parent gives the pixel h at resolution j - 1 that contains p,
-# where p is specified at resoution j (notice it does not depend on j).
+#' parent
+#'
+#' Gives the pixel at resolution j - 1 that contains p,
+#' where p is specified at resoution j (notice it does not depend on j).
+#'
+#' @param p A pixel index specified in nested order.
+#'
 parent <- function(p)
 {
   (p - p %% 4 + (p %% 4 != 0)*4)/4
 }
 
-children <- function(h)
+#' children
+#'
+#' Gives the pixels at resolution j + 1 that are contained in p,
+#' where p is specified at resoution j (notice it does not depend on j).
+#'
+#' @param p A pixel index specified in nested order.
+#'
+children <- function(p)
 {
-  1:4 + (h-1)*4
+  1:4 + (p-1)*4
 }
 
-# Hence, children(parent(p)) gives siblings of p.
-# We thus define,
+#' siblings
+#'
+#' The siblings of pixel p are defined as the
+#' children of the parent of p. Note this is resolution independent.
+#'
+#' @p Pixel index in nested order.
+#'
 siblings <- function(p) {
   h <- (p - p %% 4 + (p %% 4 != 0)*4)/4
   1:4 + (h-1)*4
@@ -30,21 +39,39 @@ siblings <- function(p) {
 #' displayPixels
 #'
 #' Display the pixels spix at resolution j by colouring
-#' in the grandchildren of spixat resolution plot.j
+#' in the grandchildren of spix at resolution plot.j
 #'
 #' @param j The resolution that spix are specified at.
 #' @param boundary.j The resolution to display boundaries at. If
 #' this is missing then boundaries will not be plotted.
 #' @param plot.j The resolution to plot grandchildren at
-#' @spix Integer vector. The pixel indices to display.
-#' @incl.labels Integer vector of pixel indices to label at
+#' @param spix Integer vector. The pixel indices to display.
+#' These must be in nested order.
+#' @param incl.labels Integer vector of pixel indices to label at
 #' resolution j.
-#' @boundary.col The boundary colour.
-#' @boundary.lwd The boundary line width.
-#' @col The colour to make the grandchildren.
-#' @size The size to make the grandchildren.
+#' @param boundary.col The boundary colour.
+#' @param boundary.lwd The boundary line width.
+#' @param col The colour to make the grandchildren.
+#' @param size The size to make the grandchildren.
 #'
-#
+#'
+#'@examples
+#'
+#' demoNeighbours <- function(p,j) {
+#'   neighbours(p, j)
+#'   displayPixels(boundary.j = j, j = j, plot.j = 5,
+#'                 spix = neighbours(p, j),
+#'                 boundary.col = "gray",
+#'                 boundary.lwd = 1,
+#'                 incl.labels = neighbours(p, j),
+#'                 col = "blue",
+#'                 size = 3)
+#'   rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#' }
+#'
+#'
+#'
+#'
 displayPixels <- function(boundary.j, j, plot.j = 5, spix,
                           boundary.col = "gray",
                           boundary.lwd = 1,
@@ -71,6 +98,9 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
   plot(hp, add = TRUE, col = col, size = size)
 }
 
+
+
+
 # We test siblings by colouring the siblings of some pixels at level j
 displaySiblings <- function(p, j, boundary.j = j,
                             plot.j = 5, col = "blue",
@@ -90,7 +120,6 @@ displaySiblings <- function(p, j, boundary.j = j,
                 plot.j = plot.j, spix = spix, col = col, size = size,
                 incl.labels = labels)
 }
-
 # Looks good:
 # displaySiblings(4, 1)
 # displaySiblings(4, 2)
@@ -100,10 +129,15 @@ displaySiblings <- function(p, j, boundary.j = j,
 # displaySiblings(127, 3)
 # displaySiblings(4, 1)
 
-# We have the siblings of p, but
-# it remains to find all neighbours of p at resolution j
 
-# We may need siblings at base pixel resolution
+#' baseSiblings
+#'
+#' A map from the base pixel index bp to the vector of base pixels
+#' that are neighbours of bp, in counterclockwise order of
+#' direction: S,SE,E,NE,N,NW,W,SW
+#'
+#' @param bp The base pixel index
+#'
 baseSiblings <- function(bp)
 {
   # order: S,SE,E,NE,N,NW,W,SW
@@ -125,49 +159,62 @@ baseSiblings <- function(bp)
          c(9 ,12,-1,8,3,7,-1,10),
          c(10,9 ,-1,5,4,8,-1,11))
 }
-# The number of pixels at resolution j,
-# within each base pixel, is 4^j
 
-# Let b be the binary representation of the
-# index of pixel p, within its base pixel,
-# at resolution j. The decimal representation
-# of b is given by
+
+#' p2ibp
+#'
+#' Convert a pixel index p to its index within
+#' the base pixel to which p belongs
+#'
+#' @param p The pixel index at resolution j, in nested order.
+#' @param j The resolution parameter nside = 2^j
+#'
 p2ibp <- function(p, j) #indexInBP
 {
   (p-1) %% 4^j + 1
 }
-# p2ibp(2, 1) # index of pixel 2 at j = 1 (within base pixel 1)
-# p2ibp(5, 1) # index of pixel 5 at j = 1 (within base pixel 2)
 
-# The base pixel to which p belongs is
+
+#' p2bp
+#'
+#' The base pixel to which pixel p belongs at resolution j
+#'
+#' @param p The pixel index at resolution j, in nested order.
+#' @param j The resolution parameter nside = 2^j
+#'
 p2bp <- function(p, j)
 {
   floor((p-1) / (4^j)) + 1
 }
-# p2bp(1,1)
-# p2bp(4,1)
-# p2bp(5,1)
-# p2bp(5,2)
 
-# Note that for all p we have
-alwaysTrue <- function(p, j) {
-  all((p2bp(p, j) - 1)*4^j + p2ibp(p, j) == p)
+# Find the pixel index p of a given pixel at ibp in bp
+ibp2p <- function(ibp, bp, j)
+{
+  (bp - 1)*4^j + ibp
 }
-# Check:
-# j <- 3
-# all(alwaysTrue(1:(12*2^j^2), j))
 
+# # Note that for all p we have
+# alwaysTrue <- function(p, j) {
+#   all((p2bp(p, j) - 1)*4^j + p2ibp(p, j) == p)
+# }
+# # Check:
+# # j <- 3
+# # all(alwaysTrue(1:(12*2^j^2), j))
 
+# Convert binary to decimal
 bin2dec <- function(x, digits)
 {
   pow <- 2^(0:31)[1:digits]
   sum(pow[as.logical(x)])
 }
 
+# Convert decimal to binary
 dec2bin = function(number, digits) {
   as.numeric(intToBits(number))[1:digits]
 }
 
+# Separate a binary number (e.g., output of dec2bin)
+# into its even and odd digits
 bin2f <- function(bin, j)
 {
   even.bits <- bin[seq(2,2*j  , by = 2)]
@@ -176,6 +223,7 @@ bin2f <- function(bin, j)
   return(list(even = even.bits, odd = odd.bits))
 }
 
+# Recombine even and odd digits into a binary number
 f2bin <- function(f, j)
 {
   bin <- vector(mode = "integer", length = 2*j)
@@ -183,10 +231,6 @@ f2bin <- function(f, j)
   bin[seq(1,2*j-1, by = 2)] <- f$odd
   return(bin)
 }
-
-
-
-
 
 
 #' onBPBoundary
@@ -202,7 +246,8 @@ f2bin <- function(f, j)
 #' the binary representation of \eqn{p - 1} has either
 #' its even bits or its odd bits (or both) all zeros or all ones.
 #'
-#' @param p Integer vector. The pixel index (or indices) at resolution j .
+#' @param p Integer vector. The pixel index (or indices) at resolution j,
+#' in nested order.
 #' @param j The resolution within which to specify p.
 #'
 #' @return
@@ -341,14 +386,6 @@ onBPBoundary <- function(se, so, j)
 
 
 
-
-# Find the pixel index p of a given pixel at ibp in bp
-ibp2p <- function(ibp, bp, j)
-{
-  (bp - 1)*4^j + ibp
-}
-
-
 #' Border pattern is resolution independent
 #'
 #' @param pype is the output of onBPBoundary
@@ -459,7 +496,8 @@ neighbours <- function(p, j)
 }
 
 # Takes a data.frame with column for even binary and column for odd.
-# Returns the recombined digits in decimal as vector
+# Returns the recombined digits in decimal as vector. This is
+# a helper function for neighbours.
 recombineEvenOdd <- function(nbrs, j)
 {
   unlist(
@@ -472,115 +510,21 @@ recombineEvenOdd <- function(nbrs, j)
 }
 
 
-j <- 2
-p <- 11
-neighbours(p, j)
-displayPixels(boundary.j = j, j = j, plot.j = 5,
-              spix = neighbours(p, j),
-              boundary.col = "gray",
-              boundary.lwd = 1,
-              incl.labels = neighbours(p, j),
-              col = "blue",
-              size = 3)
-rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
-rcosmo::plotHPBoundaries(nside = 4, ordering = "nested")
+demoNeighbours <- function(p,j) {
+  neighbours(p, j)
+  displayPixels(boundary.j = j, j = j, plot.j = 5,
+                spix = neighbours(p, j),
+                boundary.col = "gray",
+                boundary.lwd = 1,
+                incl.labels = neighbours(p, j),
+                col = "blue",
+                size = 3)
+  rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+}
 
 
-
-
-# neighbours <- function(p, j)
-# {
-#   # Get the index in BP and the BP
-#   ibp <- p2ibp(p, j)
-#   bp <- p2bp(p, j)
-#
-#   # Get even and odd binary digits
-#   f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
-#
-#   # separately increment/decrement the decimal representation of evens & odds
-#   even.dec <- bin2dec(f$even, digits = j)
-#   odd.dec <- bin2dec(f$odd, digits = j)
-#   #        S, SE, E, NE, N, NW, W, SW,
-#   ei <- c(-1, -1,-1,  0, 1,  1, 1,  0, 0)
-#   oi <- c(-1,  0, 1,  1, 1,  0,-1, -1, 0)
-#   nbrs <- data.frame(even = rep(even.dec,9) + ei,
-#                      odd  = rep(odd.dec, 9) + oi)
-#
-#   # This df has all boundary crossing info in anti-clockwise order.
-#   # TRUE in 2 columns implies a corner pixel. TRUE in either column
-#   # implies the corresponding row number will give the correct
-#   # base pixel change when index from output of baseSiblings
-#   border <- nbrs < 0 | nbrs >= 2^j
-#
-#   bc <- apply(border, any, MARGIN = 1)
-#
-#   # Base pixel targets after crossing border
-#   # (-1 means drop pixel, 0 means current)
-#   bptarget <- c(baseSiblings(bp),0)*bc
-#
-#   np <- unlist(
-#     apply(FUN = function(x) {
-#       # recombine even and odd
-#       bin <- f2bin(list(even = dec2bin(x[1], j),
-#                         odd =  dec2bin(x[2], j)), j = j)
-#       p <- bin2dec(bin, digits = 2*j) + 1
-#       return(p)
-#     }, nbrs, MARGIN = 1))
-#
-#   bptarget[bptarget == 0] <- bp
-#   np <- ibp2p(np, bptarget, j)
-# }
-
-
-
-
-# ## So far we can check if a pixel is on a boundary of a base pixel
-# # and we can find the siblings of a pixel.
-# # Now we want to find all neighbours of a pixel p that is not
-# # on the boundary of a base pixel.
-#
-# # displaySiblings(26, 3, col = "red", size = 4)
-#
-# ## Convert p-1 to binary, separate even and odd digits,
-# # convert each to decimal, add {-1,0,1} to each,
-# # convert each to binary again, recombine to decimal
-#
-# # Return neighbours of p assuming p does not border a BP boundary
-# # and only working with index in BP
-# neighboursInBP <- function(p, j)
-# {
-#   f <- bin2f(dec2bin(p-1, digits = 2*j), j = j)
-#
-#   # increment/decrement each binary representation
-#   even.dec <- bin2dec(f$even, digits = j)
-#   odd.dec <- bin2dec(f$odd, digits = j)
-#   nbrs.f <- expand.grid(even = list(e = f$even,
-#                                     eu = dec2bin(even.dec + 1, digits = j),
-#                                     ed = dec2bin(even.dec - 1, digits = j)),
-#                         odd = list(o = f$odd,
-#                                    ou = dec2bin(odd.dec + 1, digits = j),
-#                                    od = dec2bin(odd.dec - 1, digits = j)))
-#
-#   # convert the cartesian product of the list of evens/odds back to decimal
-#   unlist(
-#     mapply(FUN = function(even,odd) {
-#       bin <- f2bin(list(even = even, odd = odd), j = j)
-#       p <- bin2dec(bin, digits = 2*j) + 1
-#       return(p)
-#     },
-#     nbrs.f$even, nbrs.f$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
-# }
-#
-# j <- 2
-# p <- 6
-# displayPixels(boundary.j = j, j = j, plot.j = 5,
-#               spix = neighboursInBP(p, j),
-#               boundary.col = "gray",
-#               boundary.lwd = 1,
-#               incl.labels = neighboursInBP(p, j),
-#               col = "blue",
-#               size = 3)
-# rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
-# rcosmo::plotHPBoundaries(nside = 4, ordering = "nested")
-
-# dec2bin(bin2dec(bin2f(dec2bin(p-1,2*j), j)$odd, digits = j) + 1, j)
+# demoNeighbours(1, 2)
+# demoNeighbours(6, 2)
+# demoNeighbours(16, 2)
+# demoNeighbours(11, 2)
+# demoNeighbours(172, 3)

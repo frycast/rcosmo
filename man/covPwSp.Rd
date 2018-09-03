@@ -23,8 +23,22 @@ estimated covariances on this grid.
 This function provides a covariance estimate using the values of the estimated
 power spectra.
 }
+\examples{
+N <- 20000
+COM_PowerSpectra <- downloadCMBPS(link=1)
+
+Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
+plot(Cov_est, type="l")
+
+## Plot the covariance estimate as a function of angular distances
+plot(acos(Cov_est[,1]), Cov_est[,2], type ="l", xlab ="angular distance", ylab ="Estimated Covariance")
+
+}
 \references{
 Formula (2.1) in Baran A., Terdik G. Power spectrum estimation
 of spherical random fields based on covariances. Annales Mathematicae et
 Informaticae 44 (2015) pp. 15–22.
+
+Power Spectra data are from Planck Legacy Archive
+\url{http://pla.esac.esa.int/pla/#cosmology}
 }

@@ -144,10 +144,13 @@ covCMB <- function(cmbdf,
 #' of spherical random fields based on covariances. Annales Mathematicae et
 #' Informaticae 44 (2015) pp. 15–22.
 #'
+#' Power Spectra data are from Planck Legacy Archive
+#' \url{http://pla.esac.esa.int/pla/#cosmology}
+#'
+#'
 #'@examples
 #' N <- 20000
-#'  COM_PowerSpectra <- read.table("COM_PowerSpect_CMB.txt", quote="\"",
-#'                     col.names = c("L","TT","TE","EE","BB","PP"))
+#' COM_PowerSpectra <- downloadCMBPS(link=1)
 #'
 #' Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
 #' plot(Cov_est, type="l")

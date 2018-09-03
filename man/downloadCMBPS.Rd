@@ -4,21 +4,24 @@
 \alias{downloadCMBPS}
 \title{Download CMB Power Spectra from Planck Legacy Archive.}
 \usage{
-downloadCMBPS(link = 1)
+downloadCMBPS(link = 1, destfile)
 }
 \arguments{
 \item{link}{The URL to download the file}
+
+\item{destfile}{A character string with the file name for the downloaded
+file  to be saved. Tilde-expansion is performed.}
 }
 \value{
-The CMB Power Spectra Data Frame
+The Data Frame with CMB Power Spectra and a txt file in destfile
 }
 \description{
-The function \code{downloadCMBPS} download CMB power spectra components from
+The function \code{downloadCMBPS} downloads CMB power spectra components from
  \url{http://pla.esac.esa.int/pla/#cosmology}.
 }
 \details{
 \code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck
- TT,TE,EE+lowE+lensing (2 <= ell <= 2508).
+ TT, TE, EE+lowE+lensing (2 <= ell <= 2508).
 
 \code{link = 2}: Baseline high-ell Planck TT power spectra (2 <= ell <= 2508).
 
@@ -31,7 +34,12 @@ The function \code{downloadCMBPS} download CMB power spectra components from
 \code{link = 6}: Low-ell Planck BB power spectra (2 <= ell <= 29).
 }
 \examples{
-## Download the Best-fit LCDM CMB power spectra and plot
+## Download the Low-ell Planck BB power spectra (2 <= ell <= 29) and
+## save it to C:/PW.txt
+downloadCMBPS(link=6, destfile="C:/PW.txt")
+
+## Download the Best-fit LCDM CMB power spectra to the working directory
+## and plot it
 CMBPS<- downloadCMBPS(link=1)
 plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
      main="CMB Angular Power Spectra",xlab=expression(l),

@@ -161,12 +161,104 @@ covCMB <- function(cmbdf,
 #'@export
 covPwSp <- function(PowerSpectra, Ns)
 {
-  Nl <- length(PowerSpectra[,1])
-  Pls <- legendre_Pl_array(lmax = PowerSpectra[Nl,1], x = seq(-1+1/Ns,1,2/Ns))
-  Cov_func <- function(mat, Dfl , l)  { apply(mat[l+1,], function(col) {sum(Dfl*(2*l+1)/(4*pi*l*(l+1))*col)}, MARGIN = 2)    }
-  Cov_est <- Cov_func(Pls, PowerSpectra[,2], PowerSpectra[,1])
-  df <- data.frame(t=seq(-1+1/Ns,1,2/Ns), Estimated_Cov=Cov_est)
+  Nl <- length(PowerSpectra[, 1])
+  Pls <-
+    legendre_Pl_array(lmax = PowerSpectra[Nl, 1], x = seq(-1 + 1 / Ns, 1, 2 /
+                                                            Ns))
+  Cov_func <-
+    function(mat, Dfl , l)  {
+      apply(mat[l + 1, ], function(col) {
+        sum(Dfl * (2 * l + 1) / (4 * pi * l * (l + 1)) * col)
+      }, MARGIN = 2)
+    }
+  Cov_est <- Cov_func(Pls, PowerSpectra[, 2], PowerSpectra[, 1])
+  df <- data.frame(t = seq(-1 + 1 / Ns, 1, 2 / Ns), Estimated_Cov = Cov_est)
   return(df)
+}
+
+#'Plot angular scaterplots and means
+#'
+#'For specified measurements from \code{\link{CMBDataFrame}} this function
+#'produces scaterplots and binned means versus theta and phi angles.
+#'
+#'
+#'@param cmbdf A  full \code{\link{CMBDataFrame}} or a windowed
+#'\code{\link{CMBDataFrame}}
+#'
+#'@param colindex An index of CMBDataFrame column with measured values
+#'
+#'
+#'@return
+#' 2x2 plot. The first row shows scaterplots. The second row gives
+#' barplots of the corresponding means computed over bins. The first column
+#' corresponds to the values of theta  and the second one is for psi.
+#'
+#'
+#'@examples
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' df.sample <- CMBDataFrame(df, sample.size = 80000)
+#' win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
+#' cmbdf.win <- window(df.sample, new.window = win)
+#'
+#' colindex <- 3
+#' plotAngDis(cmbdf.win,colindex)
+#'
+#'@export
+plotAngDis <- function(cmbdf, colindex)
+{
+  coords(cmbdf) <- "spherical"
+
+  thetabreaks <-
+    cut(
+      cmbdf$theta,
+      breaks = hist(cmbdf$theta, plot = FALSE)$breaks,
+      right = FALSE
+    )
+  theta.mean <-
+    t(tapply(as.data.frame(cmbdf)[, colindex], thetabreaks, mean,
+             na.rm = TRUE))
+
+  phibreaks <-
+    cut(cmbdf$phi,
+        breaks = hist(cmbdf$phi, plot = FALSE)$breaks,
+        right = FALSE)
+  phi.mean <-
+    t(tapply(as.data.frame(cmbdf)[, colindex], phibreaks, mean,
+             na.rm = TRUE))
+
+  par(mfrow = c(2, 2), mar = c(1, 4, 1, 1) + 0.5)
+  plot(as.data.frame(cmbdf[, c(1, colindex)]), type = "p", col = "red")
+  plot(
+    as.data.frame(cmbdf[, c(2, colindex)]),
+    ylab = "",
+    type = "p",
+    col = "blue"
+  )
+
+  barplot(
+    theta.mean,
+    legend = rownames(theta.mean),
+    col = "red",
+    ylim = 1.1 * range(theta.mean),
+    xlab = "",
+    ylab = "Mean Values",
+    xaxt = 'n'
+  )
+  title(xlab = "theta",
+        line = 0,
+        cex.lab = 1)
+  barplot(
+    phi.mean,
+    legend = rownames(phi.mean),
+    col = "blue",
+    ylim = 1.1 * range(phi.mean),
+    xlab = "",
+    ylab = "",
+    xaxt = 'n'
+  )
+  title(xlab = "phi",
+        line = 0,
+        cex.lab = 1)
 }
 
 

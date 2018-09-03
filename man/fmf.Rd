@@ -4,12 +4,12 @@
 \alias{fmf}
 \title{First Minkowski functional}
 \usage{
-fmf(cmbdf, alpha, var)
+fmf(cmbdf, alpha, varindex)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame.}
 
-\item{var}{an index of CMBDataFrame column with measured values}
+\item{varindex}{an index of CMBDataFrame column with measured values}
 
 \item{\eqn{alpha}}{a threshold level}
 }

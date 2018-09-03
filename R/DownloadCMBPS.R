@@ -40,8 +40,7 @@
 #' @references Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
 #'
 #' @export
-downloadCMBPS <- function(link=1, destfile){
-
+downloadCMBPS <- function(link = 1, destfile) {
   items <- switch(link,
                   items1,
                   items2,
@@ -57,18 +56,19 @@ downloadCMBPS <- function(link=1, destfile){
                      l4,
                      l5,
                      l6)
-  if ( missing(destfile) ) {
-    destfile<- switch(link,
-                      destfile11,
-                      destfile21,
-                      destfile31,
-                      destfile41,
-                      destfile51,
-                      destfile61)
+  if (missing(destfile)) {
+    destfile <- switch(link,
+                       destfile11,
+                       destfile21,
+                       destfile31,
+                       destfile41,
+                       destfile51,
+                       destfile61)
   }
 
-  CMB_PowerSpectra <- read.table(link.str, quote="\"", col.names = items)
-  write.table(CMB_PowerSpectra, file=destfile)
+  CMB_PowerSpectra <-
+    read.table(link.str, quote = "\"", col.names = items)
+  write.table(CMB_PowerSpectra, file = destfile)
   invisible(CMB_PowerSpectra)
 }
 

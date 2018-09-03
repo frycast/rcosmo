@@ -131,7 +131,7 @@ sampleCMB <- function(cmbdf, sample.size)
 #'
 #'@param cmbdf a CMB Data Frame.
 #'@param \eqn{alpha} a threshold level
-#'@param var an index of CMBDataFrame column with measured values
+#'@param varindex an index of CMBDataFrame column with measured values
 #'@return
 #' The area of the exceedance region
 #'
@@ -150,12 +150,12 @@ sampleCMB <- function(cmbdf, sample.size)
 #' fmf(cmbdf.win, 0, 4)
 #'
 #'@export
-fmf <- function(cmbdf, alpha, var)
+fmf <- function(cmbdf, alpha, varindex)
 {
   if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
-  pixelArea(cmbdf)*sum(cmbdf[,var] > alpha)
+  pixelArea(cmbdf)*sum(cmbdf[,varindex] > alpha)
 }
 

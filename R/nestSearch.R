@@ -5,43 +5,56 @@
 #' algorithm. HEALPix indices are all assumed to be in the "nested"
 #' ordering scheme.
 #'
-#' @param target is a vector of Cartesian coordinates for the target
-#' point on S^2
-#' @param nside is an integer number \eqn{2^k} for which the HEALPix points are searched
-#' @param demo.plot If TRUE then a plot will be produced with
-#' target pixel in yellow and closest pixel at each step in red
+#' @param target A vector of Cartesian coordinates (x,y,z) for the target
+#' point.
+#' @param nside An integer, the target resolution at which the
+#' resulting pixels are returned.
+#' @param j A vector of the resolutions to use in each
+#' \code{\link{nestSearch_step}}. This is usually best left as the default.
+#' Changing this parameter is for experienced users only.
 #'
 #' @return if \code{index.only = TRUE} then the output will be a HEALPix index.
 #' If \code{index.only} FALSE then the output is the list containing the HEALPix index
-#' and Cartesian coordinate vector of the HEALPix point closest to \code{target}.
+#' and Cartesian coordinate vector of the HEALPix point closest to \code{target}
+#' at resolution \code{nside}.
 #'
 #' @examples
-#' # Find the pix index and Cartesian coordinates of the HEALPix point
-#' # at nside closest to the target point c(0,0,1)
-#' h <- nestSearch(c(0,0,1), nside=1024)
-#' cat("Closest HEALPix point to (0,0,1) at nside = 1024 is (",h$xyz,")")
 #'
 #' @export
 nestSearch <- function(target, nside,
                        index.only = FALSE,
-                       j = 0:log2(nside),
-                       demo.plot = FALSE)
+                       j = 0:log2(nside))
 {
-  j <- c(0,j)
-  h <- list(pix = 0)
+  j <- c(j[1], j, j[length(j)]+1)
+  h <- 0
   for ( i in 2:length(j) )
   {
-    h <- rcosmo:::nestSearch_step( target, j2=j[i],
-                                  j1 = j[i-1], pix.j1 = h$pix,
-                                  demo.plot = demo.plot)
+    h <- rcosmo:::nestSearch_step( target, j2 = j[i],
+                                   j1 = j[i-1], pix.j1 = h)
   }
 
-  if (index.only==TRUE) {
-    return(h$pix)
-  }
-  else {
-    return(list( xyz=h$xyz, pix=h$pix ))
-  }
+  # Note h is now one level deeper than the target resolution.
+  # Convert h to Cartesian coordinates.
+  h.xyz <- rcosmo:::pix2coords_internal(nside = 2^(j[length(j)]),
+                                        nested = TRUE,
+                                        cartesian = TRUE,
+                                        spix = h)[,1:3]
+
+  dists <-  apply(h.xyz, MARGIN = 1,
+                  function(point) {
+                    sum((point - target)^2)
+                  } )
+  index.min <- which.min(dists)
+
+  # Find the parent of h, which is at the target resolution
+  h <- parent(h[index.min])
+  h.xyz <- rcosmo:::pix2coords_internal(nside = nside,
+                                        nested = TRUE,
+                                        cartesian = TRUE,
+                                        spix = h)[,1:3]
+
+  return(list(xyz = as.numeric( h.xyz ),
+              pix = h))
 }
 
 
@@ -51,10 +64,7 @@ nestSearch <- function(target, nside,
 #'
 #' Search for the closest HEALPix pixel to a \code{target} point,
 #' where the search is restricted to within HEALPix pixel,
-#' \code{pix.j1}, at resolution j1. The returned value is a
-#' HEALPix pixel (and, optionally, the cartesian coordinates of
-#' its center) at resolution j2, where j2 > j1. All pixels are
-#' assumed to be in nested ordering scheme.
+#' \code{pix.j1}, at resolution j1.
 #'
 #' j1 and j2 are HEALPix resolution parameters, i.e., \eqn{nside = 2^j}.
 #'
@@ -67,39 +77,33 @@ nestSearch <- function(target, nside,
 #' to \code{target} at resolution j2, among all HEALPix points at resolution j1.
 #'
 #' @param target is the target point on S^2 in spherical coordinates.
-#' @param j1 is the lower resolution, with j1 < j2.
+#' @param j1 is the lower resolution, with j1 <= j2.
 #' @param j2 is the upper resolution.
 #' @param pix.j1 is the initial pix index at resolution j1,
 #' i.e., the j1-level pixel to search in. If \code{pix.j1 = 0} then
 #' all pixels will be searched (slow).
-#' @param demo.plot If TRUE then a plot will be produced with
-#' target pixel in yellow and closest pixel in red
 #'
-#' @return A list containing the Cartesian coordinates, \code{xyz},
-#' and the HEALPix pixel index, \code{pix}, of the closest HEALPix
-#' pixel center to the target point, \code{target}, at resolution j2
+#' @return A vector containing the HEALPix pixel index, \code{pix},
+#' of the closest HEALPix pixel center to the target point,
+#' \code{target}, at resolution j2, and its neighbours.
 #'
 #' @examples
-#' # search for the HEALPix pixel center closest to North pole
-#' # (0,0,1) at level 3
-#' nestSearch_step(target = c(0,0,1), j2 = 3, j1 = -1, demo.plot = TRUE )
 #'
 #' @export
-nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
-                            demo.plot = FALSE) {
+nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0) {
 
   if ( j1 > j2 ) stop("j1 must be less than or equal to j2")
 
   # nside at level j2
   nside.j2 <- 2^j2
 
-  spix.j2 <- pixelWindow(j1, j2, pix.j1)
+  spix.j2 <- rcosmo:::pixelWindow(j1, j2, pix.j1)
 
   # Convert spix.j2 to Cartesian coordinates
   xyz.j2 <- rcosmo:::pix2coords_internal(nside = nside.j2,
-                                        nested = TRUE,
-                                        cartesian = TRUE,
-                                        spix = spix.j2)[,1:3]
+                                         nested = TRUE,
+                                         cartesian = TRUE,
+                                         spix = spix.j2)[,1:3]
 
   dists <-  apply(xyz.j2, MARGIN = 1,
                   function(point) {
@@ -107,41 +111,7 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0,
                   } )
   index.min <- which.min(dists)
 
-
-  if ( demo.plot ){
-    ### -------- JUST FOR VISUALISATION ---------- ###
-    ###      PLOT TO VISUALISE THE RESULTS         ###
-    # HEALPix points at level j2
-    hp.j2 <- rcosmo:::pix2coords(nside = nside.j2,
-                                order = "nested",
-                                coords = "cartesian")
-    rgl::plot3d(hp.j2, col="black", size = 2,
-                type = 'p', pch = 2,  add = TRUE)
-
-    # HEALPix points in window
-    pixelWin <- rcosmo:::pixelWindow(j1, j2, pix.j1)
-    pixelWin <- rcosmo:::pix2coords(nside = nside.j2,
-                                   order = "nested",
-                                   coords = "cartesian",
-                                   spix = pixelWin)
-    rgl::plot3d(pixelWin, col="green", size = 12,
-                type = 'p', pch = 2,  add = TRUE)
-
-    # # add the target point target
-    rgl::plot3d(target[1], target[2], target[3],
-                col="yellow", size = 12,
-                type = 'p', pch = 2,  add = TRUE)
-    #
-    # # add the closest HEALPix point to target
-    xyz <- as.numeric(xyz.j2[index.min,])
-    rgl::plot3d(xyz[1], xyz[2], xyz[3],
-                col="red", size = 13,
-                type = 'p', pch = 2,  add = TRUE)
-    ### ----------------------------------------- ###
-  }
-
-  return( list(xyz = as.numeric( xyz.j2[index.min,] ),
-               pix = spix.j2[index.min] ) )
+  return( neighbours(spix.j2[index.min], j2) )
 }
 
 
@@ -194,3 +164,387 @@ pixelWindow <- function(j1, j2, pix.j1)
 
 
 
+#######################################################################
+###############  HELPER FUNCTIONS AND DEVELOPER TOOLS.#################
+###############     POSSIBLY EXPORT SOME OF THESE??   #################
+#######################################################################
+
+
+#' parent
+#'
+#' Gives the pixel at resolution j - 1 that contains p,
+#' where p is specified at resoution j (notice it does not depend on j).
+#'
+#' @param p A pixel index specified in nested order.
+#'
+parent <- function(p)
+{
+  (p - p %% 4 + (p %% 4 != 0)*4)/4
+}
+
+#' children
+#'
+#' Gives the pixels at resolution j + 1 that are contained in p,
+#' where p is specified at resoution j (notice it does not depend on j).
+#'
+#' @param p A pixel index specified in nested order.
+#'
+children <- function(p)
+{
+  1:4 + (p-1)*4
+}
+
+#' siblings
+#'
+#' The siblings of pixel p are defined as the
+#' children of the parent of p. Note this is resolution independent.
+#'
+#' @param p Pixel index in nested order.
+#'
+siblings <- function(p) {
+  h <- (p - p %% 4 + (p %% 4 != 0)*4)/4
+  1:4 + (h-1)*4
+}
+
+#' displayPixels
+#'
+#' Display the pixels spix at resolution j by colouring
+#' in the grandchildren of spix at resolution plot.j
+#'
+#' @param j The resolution that spix are specified at.
+#' @param boundary.j The resolution to display boundaries at. If
+#' this is missing then boundaries will not be plotted.
+#' @param plot.j The resolution to plot grandchildren at
+#' @param spix Integer vector. The pixel indices to display.
+#' These must be in nested order.
+#' @param incl.labels Integer vector of pixel indices to label at
+#' resolution j.
+#' @param boundary.col The boundary colour.
+#' @param boundary.lwd The boundary line width.
+#' @param col The colour to make the grandchildren.
+#' @param size The size to make the grandchildren.
+#'
+#'
+#'@examples
+#'
+#' demoNeighbours <- function(p,j) {
+#'   neighbours(p, j)
+#'   displayPixels(boundary.j = j, j = j, plot.j = 5,
+#'                 spix = neighbours(p, j),
+#'                 boundary.col = "gray",
+#'                 boundary.lwd = 1,
+#'                 incl.labels = neighbours(p, j),
+#'                 col = "blue",
+#'                 size = 3)
+#'   rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#' }
+#'
+#'
+#'
+#'
+displayPixels <- function(boundary.j, j, plot.j = 5, spix,
+                          boundary.col = "gray",
+                          boundary.lwd = 1,
+                          incl.labels = 1:(12*4^boundary.j),
+                          col = "blue",
+                          size = 3)
+{
+  if ( !missing(boundary.j) ) {
+    rcosmo::plotHPBoundaries(nside = 2^boundary.j,
+                             ordering = "nested",
+                             nums.col = "red",
+                             col = boundary.col,
+                             lwd = boundary.lwd,
+                             incl.labels = incl.labels)
+  }
+
+  # We do this by plotting grandchildren of the siblings
+  gchild <- rcosmo::pixelWindow(j1 = j,
+                                j2 = plot.j,
+                                pix.j1 = spix)
+
+  hp <- rcosmo::HPDataFrame(nside = 2^plot.j,
+                            spix = gchild)
+  plot(hp, add = TRUE, col = col, size = size)
+}
+
+
+#' baseSiblings
+#'
+#' A map from the base pixel index bp to the vector of base pixels
+#' that are neighbours of bp, in counterclockwise order of
+#' direction: S,SE,E,NE,N,NW,W,SW. The presence of -1 indicates
+#' that the corresponding direction is empty.
+#'
+#' @param bp The base pixel index
+#'
+baseSiblings <- function(bp)
+{
+  # order: S,SE,E,NE,N,NW,W,SW
+  # corners: S,E,N,W
+  switch(bp,
+         # north pole
+         c(9 ,6,-1,2,3,4,-1,5),
+         c(10,7,-1,3,4,1,-1,6),
+         c(11,8,-1,4,1,2,-1,7),
+         c(12,5,-1,1,2,3,-1,8),
+         # equatorial
+         c(-1,9 ,6,1,-1,4,8,12),
+         c(-1,10,7,2,-1,1,5,9),
+         c(-1,11,8,3,-1,2,6,10),
+         c(-1,12,5,4,-1,3,7,11),
+         # south pole
+         c(11,10,-1,6,1,5,-1,12),
+         c(12,11,-1,7,2,6,-1,9),
+         c(9 ,12,-1,8,3,7,-1,10),
+         c(10,9 ,-1,5,4,8,-1,11))
+}
+
+
+#' p2ibp
+#'
+#' Convert a pixel index p to its index within
+#' the base pixel to which p belongs
+#'
+#' @param p The pixel index at resolution j, in nested order.
+#' @param j The resolution parameter nside = 2^j
+#'
+p2ibp <- function(p, j) #indexInBP
+{
+  (p-1) %% 4^j + 1
+}
+
+
+#' p2bp
+#'
+#' The base pixel to which pixel p belongs at resolution j
+#'
+#' @param p The pixel index at resolution j, in nested order.
+#' @param j The resolution parameter nside = 2^j
+#'
+p2bp <- function(p, j)
+{
+  floor((p-1) / (4^j)) + 1
+}
+
+# Find the pixel index p of a given pixel at ibp in bp
+ibp2p <- function(ibp, bp, j)
+{
+  (bp - 1)*4^j + ibp
+}
+
+# Convert binary to decimal
+bin2dec <- function(x, digits)
+{
+  pow <- 2^(0:31)[1:digits]
+  sum(pow[as.logical(x)])
+}
+
+# Convert decimal to binary
+dec2bin = function(number, digits) {
+  as.numeric(intToBits(number))[1:digits]
+}
+
+# Separate a binary number (e.g., output of dec2bin)
+# into its even and odd digits
+bin2f <- function(bin, j)
+{
+  even.bits <- bin[seq(2,2*j  , by = 2)]
+  odd.bits  <- bin[seq(1,2*j-1, by = 2)]
+
+  return(list(even = even.bits, odd = odd.bits))
+}
+
+# Recombine even and odd digits into a binary number
+f2bin <- function(f, j)
+{
+  bin <- vector(mode = "integer", length = 2*j)
+  bin[seq(2,2*j  , by = 2)] <- f$even
+  bin[seq(1,2*j-1, by = 2)] <- f$odd
+  return(bin)
+}
+
+
+
+#' a version of onBPBoundary to use with neighbours
+#'
+#' @param se The sum of even bits, e.g. sum( f$even )
+#' @param so The sum of odd bits, e.g. sum( f$odd )
+#' @param j The resolution parameter nside = 2^j
+#'
+onBPBoundary <- function(se, so, j)
+{
+  b <- 0L
+  # south corner
+  if ( se == 0 && so == 0 )
+  {
+    b <- 1L
+  }
+  # east corner
+  else if ( se == 0 && so == j )
+  {
+    b <- 3L
+  }
+  # north corner
+  else if ( se == j && so == j )
+  {
+    b <- 5L
+  }
+  # west corner
+  else if ( se == j && so == 0 )
+  {
+    b <- 7L
+  }
+  # south east wall
+  else if ( se == 0 )
+  {
+    b <- 2L
+  }
+  # north east wall
+  else if ( so == j )
+  {
+    b <- 4L
+  }
+  # north west wall
+  else if ( se == j )
+  {
+    b <- 6L
+  }
+  # south west wall
+  else if ( so == 0 )
+  {
+    b <- 8L
+  }
+  return(b)
+}
+
+
+
+#' Border pattern is resolution independent
+#'
+#' @param pype is the output of onBPBoundary
+#'
+#' @return the output is useful as an index
+#' to the output of baseSiblings. It will
+#' return the correct neighbouring base
+#' pixel in each direction. The
+#' 0 indicates to stay in current BP.
+#'
+borderPattern <- function(ptype)
+{
+  switch(ptype + 1,
+         # S SE  E NE  N NW  W SW
+         c(0, 0, 0, 0, 0, 0, 0, 0),
+         c(1, 2, 2, 0, 0, 0, 8, 8),
+         c(2, 2, 2, 0, 0, 0, 0, 0),
+         c(2, 2, 3, 4, 4, 0, 0, 0),
+         c(0, 0, 4, 4, 4, 0, 0, 0),
+         c(0, 0, 4, 4, 5, 6, 6, 0),
+         c(0, 0, 0, 0, 6, 6, 6, 0),
+         c(8, 0, 0, 0, 6, 6, 7, 8),
+         c(8, 0, 0, 0, 0, 0, 8, 8))
+}
+
+
+neighbours <- function(p, j)
+{
+  if ( j == 0 )
+  {
+    bs <- baseSiblings(p)
+    return(bs[bs > 0])
+  }
+
+  # Get the index in BP and the BP
+  ibp <- p2ibp(p, j)
+  bp <- p2bp(p, j)
+
+  # Get even and odd binary digit information
+  f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
+  se <- sum( f$even )
+  so <- sum( f$odd )
+
+  # Get the BP border crossing info: target border pixels
+  # bdr is the direction of crossing:
+  # 0,1,2,3,4,5,6,7,8 = none, S, SE, E, NE, N, NW, W, SW
+  bdr <- borderPattern(onBPBoundary(se, so, j))
+  target.bp <- rep(bp, 9)
+  target.bp[which(bdr != 0)] <- baseSiblings(bp)[bdr]
+
+  # Separately increment/decrement the odd/even binary reps
+  even.dec <- bin2dec(f$even, digits = j)
+  odd.dec <- bin2dec(f$odd, digits = j)
+  # Order: S,SE, E,NE, N,NW, W,SW,self
+  ei <- c(-1,-1,-1, 0, 1, 1, 1, 0,   0)
+  oi <- c(-1, 0, 1, 1, 1, 0,-1,-1,   0)
+  nbrs <- data.frame(even = I(lapply(rep(even.dec,9) + ei,
+                                     dec2bin, digits = j)),
+                     odd  = I(lapply(rep(odd.dec, 9) + oi,
+                                     dec2bin, digits = j)))
+
+  # Swap some nbrs N<->S depending on region of bp
+  if ( bp %in% c(1,2,3,4) ) {
+    # North pole, swap S->N in directions 4, 5 and 6 (NE, N, NW)
+    i4 <- which(bdr == 4)
+    i5 <- which(bdr == 5)
+    i6 <- which(bdr == 6)
+
+    #SW->NW
+    if (length(i4)!=0) {
+      nbrs[i4,]$odd  <- nbrs[i4,]$even
+      nbrs[i4,]$even <- list(rep(1,j))
+    }
+    #S->N
+    if (length(i5) != 0) {
+      nbrs[i5,]$even <- list(rep(1,j))
+      nbrs[i5,]$odd  <- list(rep(1,j))
+    }
+    #SE->NE
+    if (length(i6)!=0) {
+      nbrs[i6,]$even <- nbrs[i6,]$odd
+      nbrs[i6,]$odd  <- list(rep(1,j))
+    }
+
+  } else if ( bp %in% c(9,10,11,12) ) {
+    # South pole, swap N->S in directions 1, 2 and 8 (S, SE, SW)
+    i1 <- which(bdr == 1)
+    i2 <- which(bdr == 2)
+    i8 <- which(bdr == 8)
+
+    #N->S
+    if (length(i1) != 0) {
+      nbrs[i1,]$even <- list(rep(0,j))
+      nbrs[i1,]$odd <- list(rep(0,j))
+    }
+    #NW->SW
+    if (length(i2) != 0) {
+      nbrs[i2,]$even <- nbrs[i2,]$odd
+      nbrs[i2,]$odd <- list(rep(0,j))
+    }
+    #NE->SE
+    if (length(i8) != 0) {
+      nbrs[i8,]$odd <- nbrs[i8,]$even
+      nbrs[i8,]$even <- list(rep(0,j))
+    }
+  }
+
+  # Recombine even and odd
+  nbrs <- recombineEvenOdd(nbrs, j)
+
+  # Convert indices in BP to actual indices p
+  np <- ibp2p(nbrs, target.bp, j)
+  return(np[np > 0])
+}
+
+# Takes a data.frame with column for even binary and column for odd.
+# Returns the recombined digits in decimal as vector. This is
+# a helper function for neighbours.
+recombineEvenOdd <- function(nbrs, j)
+{
+  unlist(
+    mapply(FUN = function(even,odd) {
+      bin <- f2bin(list(even = even, odd = odd), j = j)
+      p <- bin2dec(bin, digits = 2*j) + 1
+      return(p)
+    },
+    nbrs$even, nbrs$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+}

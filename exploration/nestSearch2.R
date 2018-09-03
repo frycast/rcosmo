@@ -387,6 +387,8 @@ neighbours <- function(p, j)
   so <- sum( f$odd )
 
   # Get the BP border crossing info: target border pixels
+  # bdr is the direction of crossing:
+  # 0,1,2,3,4,5,6,7,8 = none, S, SE, E, NE, N, NW, W, SW
   bdr <- borderPattern(onBPBoundary(se, so, j))
   target.bp <- rep(bp, 9)
   target.bp[which(bdr != 0)] <- baseSiblings(bp)[bdr]
@@ -402,13 +404,50 @@ neighbours <- function(p, j)
                      odd  = I(lapply(rep(odd.dec, 9) + oi,
                                      dec2bin, digits = j)))
 
-  # Swap some north <-> south depending on region of bp
+  # Swap some nbrs N<->S depending on region of bp
   if ( bp %in% c(1,2,3,4) ) {
-    # North pole
+    # North pole, swap S->N in directions 4, 5 and 6 (NE, N, NW)
+    i4 <- which(bdr == 4)
+    i5 <- which(bdr == 5)
+    i6 <- which(bdr == 6)
+
+    #SW->NW
+    if (length(i4)!=0) {
+      nbrs[i4,]$odd  <- nbrs[i4,]$even
+      nbrs[i4,]$even <- list(rep(1,j))
+    }
+    #S->N
+    if (length(i5) != 0) {
+      nbrs[i5,]$even <- list(rep(1,j))
+      nbrs[i5,]$odd  <- list(rep(1,j))
+    }
+    #SE->NE
+    if (length(i6)!=0) {
+      nbrs[i6,]$even <- nbrs[i6,]$odd
+      nbrs[i6,]$odd  <- list(rep(1,j))
+    }
 
   } else if ( bp %in% c(9,10,11,12) ) {
-    # South pole
+    # South pole, swap N->S in directions 1, 2 and 8 (S, SE, SW)
+    i1 <- which(bdr == 1)
+    i2 <- which(bdr == 2)
+    i8 <- which(bdr == 8)
 
+    #N->S
+    if (length(i1) != 0) {
+      nbrs[i1,]$even <- list(rep(0,j))
+      nbrs[i1,]$odd <- list(rep(0,j))
+    }
+    #NW->SW
+    if (length(i2) != 0) {
+      nbrs[i2,]$even <- nbrs[i2,]$odd
+      nbrs[i2,]$odd <- list(rep(0,j))
+    }
+    #NE->SE
+    if (length(i8) != 0) {
+      nbrs[i8,]$odd <- nbrs[i8,]$even
+      nbrs[i8,]$even <- list(rep(0,j))
+    }
   }
 
   # Recombine even and odd
@@ -434,7 +473,7 @@ recombineEvenOdd <- function(nbrs, j)
 
 
 j <- 2
-p <- 182
+p <- 11
 neighbours(p, j)
 displayPixels(boundary.j = j, j = j, plot.j = 5,
               spix = neighbours(p, j),

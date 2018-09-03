@@ -134,7 +134,8 @@ displaySiblings <- function(p, j, boundary.j = j,
 #'
 #' A map from the base pixel index bp to the vector of base pixels
 #' that are neighbours of bp, in counterclockwise order of
-#' direction: S,SE,E,NE,N,NW,W,SW
+#' direction: S,SE,E,NE,N,NW,W,SW. The presence of -1 indicates
+#' that the corresponding direction is empty.
 #'
 #' @param bp The base pixel index
 #'
@@ -414,6 +415,12 @@ borderPattern <- function(ptype)
 
 neighbours <- function(p, j)
 {
+  if ( j == 0 )
+  {
+    bs <- baseSiblings(p)
+    return(bs[bs > 0])
+  }
+
   # Get the index in BP and the BP
   ibp <- p2ibp(p, j)
   bp <- p2bp(p, j)
@@ -528,3 +535,172 @@ demoNeighbours <- function(p,j) {
 # demoNeighbours(16, 2)
 # demoNeighbours(11, 2)
 # demoNeighbours(172, 3)
+
+
+nestSearch2_step <- function(target, j1 = j2, j2, pix.j1 = 0) {
+
+  if ( j1 > j2 ) stop("j1 must be less than or equal to j2")
+
+  # nside at level j2
+  nside.j2 <- 2^j2
+
+  spix.j2 <- rcosmo:::pixelWindow(j1, j2, pix.j1)
+
+  # Convert spix.j2 to Cartesian coordinates
+  xyz.j2 <- rcosmo:::pix2coords_internal(nside = nside.j2,
+                                         nested = TRUE,
+                                         cartesian = TRUE,
+                                         spix = spix.j2)[,1:3]
+
+  dists <-  apply(xyz.j2, MARGIN = 1,
+                  function(point) {
+                    sum((point - target)^2)
+                  } )
+  index.min <- which.min(dists)
+
+  return( neighbours(spix.j2[index.min], j2) )
+}
+
+# It is advised that j should start at 0
+nestSearch2 <- function(target, nside,
+                        index.only = FALSE,
+                        j = 0:log2(nside))
+{
+  j <- c(j[1],j)
+  h <- 0
+  for ( i in 2:length(j) )
+  {
+    h <- nestSearch2_step( target, j2 = j[i],
+                           j1 = j[i-1], pix.j1 = h)
+  }
+
+  return(h)
+}
+
+# j <- 3
+# spix <- nestSearch2(c(0,0,1), nside = 2^3)
+# displayPixels(boundary.j = j, j = j, plot.j = 5,
+#               spix = spix,
+#               boundary.col = "gray",
+#               boundary.lwd = 1,
+#               incl.labels = spix,
+#               col = "blue",
+#               size = 3)
+# rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+
+
+
+########################################################################
+########################## DEMO OF RESULTS #############################
+########################################################################
+
+nestSearch_step_old <- function(target, j1 = j2, j2, pix.j1 = 0,
+                            demo.plot = FALSE) {
+
+  if ( j1 > j2 ) stop("j1 must be less than or equal to j2")
+
+  # nside at level j2
+  nside.j2 <- 2^j2
+
+  spix.j2 <- rcosmo:::pixelWindow(j1, j2, pix.j1)
+
+  # Convert spix.j2 to Cartesian coordinates
+  xyz.j2 <- rcosmo:::pix2coords_internal(nside = nside.j2,
+                                         nested = TRUE,
+                                         cartesian = TRUE,
+                                         spix = spix.j2)[,1:3]
+
+  dists <-  apply(xyz.j2, MARGIN = 1,
+                  function(point) {
+                    sum((point - target)^2)
+                  } )
+  index.min <- which.min(dists)
+
+
+  if ( demo.plot ){
+    ### -------- JUST FOR VISUALISATION ---------- ###
+    ###      PLOT TO VISUALISE THE RESULTS         ###
+    # HEALPix points at level j2
+    hp.j2 <- rcosmo:::pix2coords(nside = nside.j2,
+                                 order = "nested",
+                                 coords = "cartesian")
+    rgl::plot3d(hp.j2, col="black", size = 2,
+                type = 'p', pch = 2,  add = TRUE)
+
+    # HEALPix points in window
+    pixelWin <- rcosmo:::pixelWindow(j1, j2, pix.j1)
+    pixelWin <- rcosmo:::pix2coords(nside = nside.j2,
+                                    order = "nested",
+                                    coords = "cartesian",
+                                    spix = pixelWin)
+    rgl::plot3d(pixelWin, col="green", size = 12,
+                type = 'p', pch = 2,  add = TRUE)
+
+    # # add the target point target
+    rgl::plot3d(target[1], target[2], target[3],
+                col="yellow", size = 12,
+                type = 'p', pch = 2,  add = TRUE)
+    #
+    # # add the closest HEALPix point to target
+    xyz <- as.numeric(xyz.j2[index.min,])
+    rgl::plot3d(xyz[1], xyz[2], xyz[3],
+                col="red", size = 13,
+                type = 'p', pch = 2,  add = TRUE)
+    ### ----------------------------------------- ###
+  }
+
+  return( list(xyz = as.numeric( xyz.j2[index.min,] ),
+               pix = spix.j2[index.min] ) )
+}
+
+
+nestSearch_old <- function(target, nside, index.only = FALSE,
+                          j = 0:log2(nside), demo.plot = FALSE)
+{
+  j <- c(0,j)
+  h <- list(pix = 0)
+  for ( i in 2:length(j) )
+  {
+    h <- nestSearch_step_old( target, j2=j[i],
+                              j1 = j[i-1], pix.j1 = h$pix,
+                              demo.plot = demo.plot)
+  }
+
+  if (index.only==TRUE) {
+    return(h$pix)
+  }
+  else {
+    return(list( xyz=h$xyz, pix=h$pix ))
+  }
+}
+
+
+# A demo of the new nestSearch versus the old nestSearch
+demoNestSearch <- function()
+{
+  nside <- 64
+  # The problematic pixel is located at (theta, phi) = (0.95, 0)
+  theta <- 0.95
+  # Conduct nested search for the nearest neighbour to
+  # the problematic pixel, starting at base pixel resolution
+  t <- c(sin(theta), 0, cos(theta))
+  j <- log2(nside)
+  spix1 <- nestSearch_old(t, nside = 2^j, demo.plot = TRUE)$pix
+  spix2 <- rcosmo::nestSearch(t, nside = 2^j)$pix
+  rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+  displayPixels(j = j, plot.j = 8,
+                spix = spix1,
+                boundary.col = "gray",
+                boundary.lwd = 1,
+                incl.labels = spix1,
+                col = "blue",
+                size = 3)
+  displayPixels(j = j, plot.j = 8,
+                spix = spix2,
+                boundary.col = "gray",
+                boundary.lwd = 1,
+                incl.labels = spix1,
+                col = "red",
+                size = 3)
+}
+demoNestSearch()

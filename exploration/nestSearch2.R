@@ -110,22 +110,21 @@ baseSiblings <- function(bp)
   # corners: S,E,N,W
   switch(bp,
          # north pole
-         c(9 ,6,0,2,3,4,0,5),
-         c(10,7,0,3,4,1,0,6),
-         c(11,8,0,4,1,2,0,7),
-         c(12,5,0,1,2,3,0,8),
+         c(9 ,6,-1,2,3,4,-1,5),
+         c(10,7,-1,3,4,1,-1,6),
+         c(11,8,-1,4,1,2,-1,7),
+         c(12,5,-1,1,2,3,-1,8),
          # equatorial
-         c(0,9 ,6,1,0,4,8,12),
-         c(0,10,7,2,0,1,5,9),
-         c(0,11,8,3,0,2,6,10),
-         c(0,12,5,4,0,3,7,11),
+         c(-1,9 ,6,1,-1,4,8,12),
+         c(-1,10,7,2,-1,1,5,9),
+         c(-1,11,8,3,-1,2,6,10),
+         c(-1,12,5,4,-1,3,7,11),
          # south pole
-         c(11,10,0,6,1,5,0,12),
-         c(12,11,0,7,2,6,0,9),
-         c(9 ,12,0,8,3,7,0,10),
-         c(10,9 ,0,5,4,8,0,11))
+         c(11,10,-1,6,1,5,-1,12),
+         c(12,11,-1,7,2,6,-1,9),
+         c(9 ,12,-1,8,3,7,-1,10),
+         c(10,9 ,-1,5,4,8,-1,11))
 }
-
 # The number of pixels at resolution j,
 # within each base pixel, is 4^j
 
@@ -327,14 +326,14 @@ neighboursInBP <- function(p, j)
 j <- 2
 p <- 6
 displayPixels(boundary.j = j, j = j, plot.j = 5,
-              spix = neighbours(p, j),
+              spix = neighboursInBP(p, j),
               boundary.col = "gray",
               boundary.lwd = 1,
-              incl.labels = neighbours(p, j),
+              incl.labels = neighboursInBP(p, j),
               col = "blue",
               size = 3)
 rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
-
+rcosmo::plotHPBoundaries(nside = 4, ordering = "nested")
 
 
 # Find the pixel index p of a given pixel at ibp in bp
@@ -348,7 +347,7 @@ neighbours <- function(p, j)
 {
   # Get the index in BP and the BP
   ibp <- p2ibp(p, j)
-  bp <- p2bp
+  bp <- p2bp(p, j)
 
   # Get even and odd binary digits
   f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
@@ -358,22 +357,35 @@ neighbours <- function(p, j)
   odd.dec <- bin2dec(f$odd, digits = j)
 
   #        S, SE, E, NE, N, NW, W, SW,
-  ei <- c(-1, -1,-1,  0, 1,  1, 1,  0)
-  oi <- c(-1,  0, 1,  1, 1,  0,-1, -1)
+  ei <- c(-1, -1,-1,  0, 1,  1, 1,  0, 0)
+  oi <- c(-1,  0, 1,  1, 1,  0,-1, -1, 0)
 
-  nbrs <- data.frame(even = rep(even.dec,8) + ei,
-                     odd  = rep(odd.dec, 8) + oi)
+  nbrs <- data.frame(even = rep(even.dec,9) + ei,
+                     odd  = rep(odd.dec, 9) + oi)
 
   # This df has all boundary crossing info in anti-clockwise order.
   # TRUE in 2 columns implies a corner pixel. TRUE in either column
   # implies the corresponding row number will give the correct
   # base pixel change when index from output of baseSiblings
   border <- nbrs < 0 | nbrs >= 2^j
-  bcross <- apply(border, any, MARGIN = 1)
 
-  # Base pixel targets after crossing border (zero means drop the pixel)
-  bpt <- baseSiblings(bp)[bcross]
+  bc <- apply(border, any, MARGIN = 1)
 
+  # Base pixel targets after crossing border
+  # (-1 means drop pixel, 0 means current)
+  bptarget <- c(baseSiblings(bp),0)*bc
 
+  np <- unlist(
+    apply(FUN = function(x) {
+      # recombine even and odd
+      bin <- f2bin(list(even = dec2bin(x[1], j),
+                        odd =  dec2bin(x[2], j)), j = j)
+      p <- bin2dec(bin, digits = 2*j) + 1
+      return(p)
+    }, nbrs, MARGIN = 1))
+
+  bptarget[bptarget == 0] <- bp
+  np <- ibp2p(np, bptarget, j)
 }
+
 dec2bin(bin2dec(bin2f(dec2bin(p-1,2*j), j)$odd, digits = j) + 1, j)

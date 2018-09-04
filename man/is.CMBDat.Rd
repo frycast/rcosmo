@@ -16,7 +16,7 @@ TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
 Check if an object is of class CMBDat
 }
 \examples{
-cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
 class(cmbdat)
 is.CMBDat(cmbdat)
 

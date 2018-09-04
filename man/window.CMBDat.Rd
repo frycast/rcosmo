@@ -45,7 +45,7 @@ will be the points of \code{cmbdat} in \eqn{B} (resp. \eqn{A}).
 \examples{
 
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
 class(cmbdat)
 cmbdat.win <- window(cmbdat, new.window = win1)
 class(cmbdat.win)

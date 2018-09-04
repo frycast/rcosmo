@@ -2,7 +2,7 @@
 #' CMBDat class.
 #'
 #'
-#' The function \code{CMBReadFITS} creates objects of class \code{CMBDat}.
+#' The function \code{CMBDat} creates objects of class \code{CMBDat}.
 #' These are lists containing header information and other metadata as well
 #' as an element called data, whose columns may include, for example, the
 #' intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
@@ -24,7 +24,7 @@
 #'that points to the CMB map data table in the FITS file.
 #'
 #'@examples
-#' cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+#' cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
 #' class(cmbdat)
 #' str(cmbdat)
 #'
@@ -50,25 +50,25 @@ NULL
 ############################################################################
 #' Read CMB data from a FITS file.
 #'
-#' \code{CMBReadFITS} is adapted from the \code{\link{readFITS}}
+#' \code{CMBDat} is adapted from the \code{\link{readFITS}}
 #' function in package
 #'   \href{https://cran.r-project.org/web/packages/FITSio/index.html}{FITSio}.
-#'   \code{CMBReadFITS} is in development stage and will only work with
+#'   \code{CMBDat} is in development stage and will only work with
 #'   'CMB_map_smica1024.fits'.
-#'   When it works, \code{CMBReadFITS} is much faster than
+#'   When it works, \code{CMBDat} is much faster than
 #'   \code{\link{readFITS}}.
 #'   However, \code{\link{readFITS}} is more general and so is more
 #'   likely to work.
 #'
 #'
-#' The function \code{CMBReadFITS} creates objects of class \code{CMBDat}.
+#' The function \code{CMBDat} creates objects of class \code{CMBDat}.
 #' These are lists containing header information and other metadata as well
 #' as an element called data, whose columns may include, for example, the
 #' intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
 #' \code{\link{mmap}} object that points to the CMB map data table in the FITS
 #' file.
 #'
-#'@aliases CMBReadFITS
+#'@aliases CMBReadFITS, readFITS
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.
@@ -83,7 +83,7 @@ NULL
 #'that points to the CMB map data table in the FITS file.
 #'
 #'@examples
-#' cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+#' cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
 #' class(cmbdat)
 #' str(cmbdat)
 #'
@@ -97,7 +97,7 @@ NULL
 #'dat$hdr
 #'
 #'@export
-CMBReadFITS <- function(filename, mmap = FALSE, spix) {
+CMBDat <- function(filename, mmap = FALSE, spix) {
 
   # FITS standard: 2880byte blocks, 80char keyword strings
   chars <- 80L
@@ -263,7 +263,7 @@ CTypeExpression <- function(TTYPEn, btype)
 #'@examples
 #'
 #'win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#'cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+#'cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
 #'class(cmbdat)
 #'cmbdat.win <- window(cmbdat, new.window = win1)
 #'class(cmbdat.win)

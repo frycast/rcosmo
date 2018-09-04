@@ -240,7 +240,7 @@ CMBDataFrame <- function(CMBData,
   ########################################################################
   if (CMBData.is.path) {
 
-    CMBData <- CMBReadFITS(CMBData)
+    CMBData <- CMBDat(CMBData)
 
     data <- as.data.frame(CMBData$data)
     names(data) <- CMBData$colnames

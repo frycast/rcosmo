@@ -824,7 +824,7 @@ is.CMBDataFrame <- function(cmbdf)
 #' @return TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
 #'
 #'@examples
-#'cmbdat <- CMBReadFITS("CMB_map_smica1024.fits", mmap = TRUE)
+#'cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
 #'class(cmbdat)
 #'is.CMBDat(cmbdat)
 #'

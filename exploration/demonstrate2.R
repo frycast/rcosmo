@@ -24,7 +24,7 @@ attributes(hpdf.win)
 ######### Object of class CMBDat #############################
 ##############################################################
 
-cmbdat <- CMBReadFITS("../CMB_map_smica1024.fits", mmap = TRUE)
+cmbdat <- CMBDat("../CMB_map_smica1024.fits", mmap = TRUE)
 class(cmbdat)
 is.CMBDat(cmbdat)
 str(cmbdat)
@@ -77,7 +77,7 @@ geoDist(p1,p2, include.names = TRUE)
 library(rcosmo)
 path <- "C:/Users/danie/Downloads/CMB_maps/"
 filename <- "COM_CMB_IQU-commander_1024_R2.02_full.fits"
-map <- CMBReadFITS(paste0(path,filename), mmap = TRUE)
+map <- CMBDat(paste0(path,filename), mmap = TRUE)
 sky.sample <- CMBDataFrame(map, sample.size = 100000)
 plot(sky.sample, back.col = "white")
 

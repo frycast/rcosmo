@@ -189,6 +189,7 @@ parent <- function(p)
 #'
 #' @param p A pixel index specified in nested order.
 #'
+#'@export
 children <- function(p)
 {
   1:4 + (p-1)*4
@@ -201,6 +202,7 @@ children <- function(p)
 #'
 #' @param p Pixel index in nested order.
 #'
+#'@export
 siblings <- function(p) {
   h <- (p - p %% 4 + (p %% 4 != 0)*4)/4
   1:4 + (h-1)*4
@@ -241,7 +243,7 @@ siblings <- function(p) {
 #'
 #'
 #'
-#'
+#'@export
 displayPixels <- function(boundary.j, j, plot.j = 5, spix,
                           boundary.col = "gray",
                           boundary.lwd = 1,
@@ -269,7 +271,7 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
 }
 
 
-#' baseSiblings
+#' baseNeighbours
 #'
 #' A map from the base pixel index bp to the vector of base pixels
 #' that are neighbours of bp, in counterclockwise order of
@@ -278,7 +280,9 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
 #'
 #' @param bp The base pixel index
 #'
-baseSiblings <- function(bp)
+#'
+#'@export
+baseNeighbours <- function(bp)
 {
   # order: S,SE,E,NE,N,NW,W,SW
   # corners: S,E,N,W
@@ -309,6 +313,8 @@ baseSiblings <- function(bp)
 #' @param p The pixel index at resolution j, in nested order.
 #' @param j The resolution parameter nside = 2^j
 #'
+#'
+#'@xport
 p2ibp <- function(p, j) #indexInBP
 {
   (p-1) %% 4^j + 1
@@ -322,12 +328,24 @@ p2ibp <- function(p, j) #indexInBP
 #' @param p The pixel index at resolution j, in nested order.
 #' @param j The resolution parameter nside = 2^j
 #'
+#'@export
 p2bp <- function(p, j)
 {
   floor((p-1) / (4^j)) + 1
 }
 
-# Find the pixel index p of a given pixel at ibp in bp
+
+#' ibp2p
+#'
+#' Find the pixel index p of a given pixel at whose
+#' index in base pixel bp is equal to ibp
+#'
+#' @param ibp The pixel index within base pixel bp, at resolution j, in nested order.
+#' @param bp The base pixel index
+#' @param j The resolution parameter nside = 2^j
+#'
+#'
+#'@xport
 ibp2p <- function(ibp, bp, j)
 {
   (bp - 1)*4^j + ibp
@@ -371,6 +389,8 @@ f2bin <- function(f, j)
 #' @param se The sum of even bits, e.g. sum( f$even )
 #' @param so The sum of odd bits, e.g. sum( f$odd )
 #' @param j The resolution parameter nside = 2^j
+#'
+#'@keywords internal
 #'
 onBPBoundary <- function(se, so, j)
 {
@@ -425,10 +445,12 @@ onBPBoundary <- function(se, so, j)
 #' @param pype is the output of onBPBoundary
 #'
 #' @return the output is useful as an index
-#' to the output of baseSiblings. It will
+#' to the output of baseNeighbours. It will
 #' return the correct neighbouring base
 #' pixel in each direction. The
 #' 0 indicates to stay in current BP.
+#'
+#'@keywords internal
 #'
 borderPattern <- function(ptype)
 {
@@ -446,11 +468,34 @@ borderPattern <- function(ptype)
 }
 
 
+
+# THIS NEEDS TO BE DOCUMENTED AND EXPORTED
+#'neighbours
+#'
+#'Return the neighbouring pixels to a given pixel p
+#'that is specified at resolution j, in the nested order.
+#'
+#'@param p Pixel index p at resolution j.
+#'@param j The resolution parameter with nside = 2^j.
+#'
+#'@examples
+#' demoNeighbours <- function(p,j) {
+#'   neighbours(p, j)
+#'   displayPixels(boundary.j = j, j = j, plot.j = 5,
+#'                 spix = neighbours(p, j),
+#'                 boundary.col = "gray",
+#'                 boundary.lwd = 1,
+#'                 incl.labels = neighbours(p, j),
+#'                 col = "blue",
+#'                 size = 3)
+#'   rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#' }
+#'
 neighbours <- function(p, j)
 {
   if ( j == 0 )
   {
-    bs <- baseSiblings(p)
+    bs <- baseNeighbours(p)
     return(bs[bs > 0])
   }
 
@@ -468,7 +513,7 @@ neighbours <- function(p, j)
   # 0,1,2,3,4,5,6,7,8 = none, S, SE, E, NE, N, NW, W, SW
   bdr <- borderPattern(onBPBoundary(se, so, j))
   target.bp <- rep(bp, 9)
-  target.bp[which(bdr != 0)] <- baseSiblings(bp)[bdr]
+  target.bp[which(bdr != 0)] <- baseNeighbours(bp)[bdr]
 
   # Separately increment/decrement the odd/even binary reps
   even.dec <- bin2dec(f$even, digits = j)

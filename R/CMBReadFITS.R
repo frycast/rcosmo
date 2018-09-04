@@ -160,12 +160,15 @@ CMBReadFITS <- function(filename, mmap = FALSE, spix) {
 
   swap <- "big" != .Platform$endian
 
+
   mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
   map <- mmap::mmap(file = filename,
                     mode = mystruct,
                     off = blocks*bytes,
                     endian = "big")
   mmap::extractFUN(map) <- function(X) do.call(data.frame, X)
+
+
 
   if ( mmap == FALSE )
   {
@@ -178,6 +181,7 @@ CMBReadFITS <- function(filename, mmap = FALSE, spix) {
   } else {
     col <- map
   }
+
 
 
   close(zz)

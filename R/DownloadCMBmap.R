@@ -69,7 +69,7 @@ downloadCMBMap <- function(link=1,destfile){
           destfile7,
           destfile8)
   }
-   download.file(url, destfile)
+   download.file(url, destfile, mode = "wb")
 }
 
 link1<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",

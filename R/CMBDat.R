@@ -68,7 +68,7 @@ NULL
 #' \code{\link{mmap}} object that points to the CMB map data table in the FITS
 #' file.
 #'
-#'@aliases CMBReadFITS, readFITS
+#'@aliases readFITS
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.

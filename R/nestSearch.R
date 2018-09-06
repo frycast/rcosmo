@@ -314,7 +314,7 @@ baseNeighbours <- function(bp)
 #' @param j The resolution parameter nside = 2^j
 #'
 #'
-#'@xport
+#'@export
 p2ibp <- function(p, j) #indexInBP
 {
   (p-1) %% 4^j + 1
@@ -345,7 +345,7 @@ p2bp <- function(p, j)
 #' @param j The resolution parameter nside = 2^j
 #'
 #'
-#'@xport
+#'@export
 ibp2p <- function(ibp, bp, j)
 {
   (bp - 1)*4^j + ibp

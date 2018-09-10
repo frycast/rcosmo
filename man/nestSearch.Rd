@@ -2,7 +2,7 @@
 % Please edit documentation in R/NestSearch.R
 \name{nestSearch}
 \alias{nestSearch}
-\title{Nested Search}
+\title{Finds the closest pixel center to a point}
 \usage{
 nestSearch(target, nside, index.only = FALSE, j = 0:log2(nside))
 }
@@ -30,5 +30,17 @@ algorithm. HEALPix indices are all assumed to be in the "nested"
 ordering scheme.
 }
 \examples{
+
+#' ## Find the closest HEALPix pixel center at resolution k=1 for
+## the point (0.6,0.8,0)
+
+point <- c(0.6,0.8,0)
+k <- 1
+cpoint <- nestSearch(point, nside=k)
+
+## Plot the closest pixel center in blue and the point (0.6,0.8,0) in red
+displayPixels(k,k,plot.j=k, spix=c(cpoint$pix), size=5, incl.labels =FALSE)
+rgl::plot3d(point[1], point[2], point[3], col="red", size = 5, add = TRUE)
+
 
 }

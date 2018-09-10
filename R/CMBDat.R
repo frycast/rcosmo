@@ -29,18 +29,23 @@
 #'that points to the CMB map data table in the FITS file.
 #'
 #'@examples
-#' cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-#' class(cmbdat)
-#' str(cmbdat)
 #'
-#'# View metadata
-#'dat$header1
-#'dat$header2
-#'dat$resoln
-#'dat$method
-#'dat$coordsys
-#'dat$nside
-#'dat$hdr
+#' ## Ensure you have a FITS file with the correct path
+#' ## before running the example:
+#' ## download a FITS file and use real data
+#' # downloadCMBMap()
+#' # cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
+#' # class(cmbdat)
+#' # str(cmbdat)
+#'
+#'## View metadata
+#'# cmbdat$header1
+#'# cmbdat$header2
+#'# cmbdat$resoln
+#'# cmbdat$method
+#'# cmbdat$coordsys
+#'# cmbdat$nside
+#'# cmbdat$hdr
 #'
 #'@export
 CMBDat <- function(filename, mmap = FALSE, spix) {
@@ -215,10 +220,13 @@ CTypeExpression <- function(TTYPEn, btype) {
 #'@examples
 #'
 #'win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#'cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-#'class(cmbdat)
-#'cmbdat.win <- window(cmbdat, new.window = win1)
-#'class(cmbdat.win)
+#'
+#'## Ensure you have a FITS file with correct path
+#'## before uncommenting and running the rest of the example:
+#'# cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
+#'# class(cmbdat)
+#'# cmbdat.win <- window(cmbdat, new.window = win1)
+#'# class(cmbdat.win)
 #'
 #'@export
 window.CMBDat <- function(x, new.window, intersect = TRUE, ...) {

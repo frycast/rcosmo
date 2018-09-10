@@ -27,18 +27,18 @@
 #' ## Download SMICA with \code{nside = 1024}
 #' ## and save in working directory
 #' ## as "CMB_map_smica1024.fits"
-#' downloadCMBMap(foreground = "smica", nside = 1024)
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
 #' ## Load the downloaded map into a CMBDataFrame
-#' sky <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # sky <- CMBDataFrame("CMB_map_smica1024.fits")
 #'
 #' ## Download SMICA with Nside=2048 and save in the working directory
 #' ## as "CMB_map_smica2048.fits"
-#' downloadCMBMap(foreground = "smica", nside = 2048)
+#' # downloadCMBMap(foreground = "smica", nside = 2048)
 #'
 #' ## Download COMMANDER with Nside=1024 and save in a specified folder,
 #' ## for example,
-#' dest <- "C:/CMB_map_commander1024.fits"
-#' downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
+#' # dest <- "C:/CMB_map_commander1024.fits"
+#' # downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
 #
 #' @keywords CMB Maps
 #' @references Planck Public Data Release 2 Maps
@@ -141,14 +141,14 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
 #' @examples
 #' ## Download the Low-ell Planck BB power spectra (2 <= ell <= 29) and
 #' ## save it to C:/PW.txt
-#' downloadCMBPS(link=6, destfile="C:/PW.txt")
+#' # downloadCMBPS(link=6, destfile="C:/PW.txt")
 #'
 #' ## Download the Best-fit LCDM CMB power spectra
 #' ## and plot it
-#' CMBPS <- downloadCMBPS(link=1, save = FALSE)
-#' plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
-#'      main="CMB Angular Power Spectra",xlab=expression(l),
-#'      ylab=expression(paste(D[l],"(",mu,K^2,")")))
+#' # CMBPS <- downloadCMBPS(link=1, save = FALSE)
+#' # plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
+#' #      main="CMB Angular Power Spectra",xlab=expression(l),
+#' #      ylab=expression(paste(D[l],"(",mu,K^2,")")))
 #'
 #' @keywords CMB Power Spectra
 #'

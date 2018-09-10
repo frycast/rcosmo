@@ -18,7 +18,7 @@
 #'@docType package
 #'@name rcosmo
 #'@importFrom Rcpp evalCpp
-#'@useDynLib rcosmo
+#'@useDynLib rcosmo, .registration = TRUE
 #'@aliases rCosmo Rcosmo rcosmo-package
 #'
 NULL

@@ -4,7 +4,7 @@
 \alias{ordering.CMBDataFrame}
 \title{HEALPix ordering scheme from a CMBDataFrame}
 \usage{
-\method{ordering}{CMBDataFrame}(cmbdf, new.ordering)
+\method{ordering}{CMBDataFrame}(cmbdf, new.ordering, ...)
 }
 \arguments{
 \item{cmbdf}{a CMB Data Frame.}

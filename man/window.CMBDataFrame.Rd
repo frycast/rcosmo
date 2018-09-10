@@ -5,7 +5,7 @@
 \title{Get a sub window from \code{\link{CMBDataFrame}}}
 \usage{
 \method{window}{CMBDataFrame}(cmbdf, new.window, intersect = TRUE,
-  in.pixels, in.pixels.res = 0)
+  in.pixels, in.pixels.res = 0, ...)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}

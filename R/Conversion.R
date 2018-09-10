@@ -250,7 +250,8 @@ mkxy2pix <- function() {
 #' directly assigned.
 #'
 #'
-#'@param df a data.frame with columns labelled x, y, z (for cartesian)
+#'@param x a data.frame with columns
+#' labelled x, y, z (for cartesian)
 #' or theta, phi (for spherical colatitude and longitude respectively)
 #'@param new.coords specifies the new coordinate system
 #'("spherical" or "cartesian").
@@ -278,8 +279,10 @@ mkxy2pix <- function() {
 #' df
 #'
 #'@export
-coords.data.frame <- function(df, new.coords)
+coords.data.frame <- function(x, new.coords, ...)
 {
+  df <- x
+
   if ( new.coords == "spherical" )
   {
     if ( all(c("theta","phi") %in% names(df)) )
@@ -350,8 +353,8 @@ coords.data.frame <- function(df, new.coords)
 #' df
 #'
 #' @export
-`coords<-.data.frame` <- function(df,...,value) {
-  return(coords(df, new.coords = value))
+`coords<-.data.frame` <- function(x,...,value) {
+  return(coords(x, new.coords = value))
 }
 
 

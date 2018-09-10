@@ -4,7 +4,7 @@
 \alias{pix.HPDataFrame}
 \title{HEALPix pixel indices from \code{\link{HPDataFrame}}}
 \usage{
-\method{pix}{HPDataFrame}(hpdf, new.pix)
+\method{pix}{HPDataFrame}(hpdf, new.pix, ...)
 }
 \arguments{
 \item{hpdf}{a \code{\link{HPDataFrame}}.}

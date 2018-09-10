@@ -137,7 +137,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #' pix(df)
 #'
 #'@export
-pix.HPDataFrame <- function(hpdf, new.pix)
+pix.HPDataFrame <- function(hpdf, new.pix, ...)
 {
   if ( !missing(new.pix) )
   {
@@ -304,7 +304,7 @@ plot.HPDataFrame <- function(hpdf, intensities = "I",
 #' ordering(df1)
 #'
 #'@export
-ordering.HPDataFrame <- function( hpdf, new.ordering )
+ordering.HPDataFrame <- function( hpdf, new.ordering, ... )
 {
   if ( missing(new.ordering) )
   {
@@ -368,7 +368,7 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 #' pixel indices as given by \code{pix(hpdf)} are used for
 #' assigning coordinates.
 #'
-#'@param hpdf a HPDataFrame.
+#'@param x a HPDataFrame, \code{hpdf}.
 #'@param new.coords specifies the new coordinate system
 #'("spherical" or "cartesian")
 #'@param healpix.only boolean. If TRUE then columns x,y,z
@@ -401,8 +401,9 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 #' hp2 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
 #'
 #'@export
-coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
+coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
 {
+  hpdf <- x
 
   ns <- rcosmo::nside(hpdf)
   od <- rcosmo::ordering(hpdf)
@@ -514,8 +515,8 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 #' df
 #'
 #' @export
-`coords<-.HPDataFrame` <- function(hpdf,...,value) {
-  return(coords(hpdf, new.coords = value))
+`coords<-.HPDataFrame` <- function(x,...,value) {
+  return(coords(x, new.coords = value))
 }
 
 
@@ -663,7 +664,7 @@ geoArea.HPDataFrame <- function(hpdf)
 #'
 #'@export
 window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
-                               healpix.only = FALSE)
+                               healpix.only = FALSE, ...)
 {
   if ( missing(new.window) )
   {
@@ -703,7 +704,7 @@ window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
 #' summary(hpdf.win)
 #'
 #'@export
-summary.HPDataFrame <- function(hpdf, intensities = "I")
+summary.HPDataFrame <- function(hpdf, intensities = "I", ...)
 {
   ans <- list(intensities = summary(hpdf[,intensities, drop = TRUE]))
 
@@ -740,7 +741,7 @@ summary.HPDataFrame <- function(hpdf, intensities = "I")
 #'@export
 #'
 #'
-print.summary.HPDataFrame <- function(x)
+print.summary.HPDataFrame <- function(x, ...)
 {
   cat(
     cli::rule(center = " HPDataFrame Object ", line = "bar4"), "\n",

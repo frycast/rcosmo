@@ -4,7 +4,7 @@
 \alias{coords<-.CMBWindow}
 \title{Assign new coordinate system to CMBWindow}
 \usage{
-\method{coords}{CMBWindow}(win, ...) <- value
+\method{coords}{CMBWindow}(x, ...) <- value
 }
 \description{
 Assign new coordinate system to CMBWindow

@@ -4,10 +4,10 @@
 \alias{coords.HPDataFrame}
 \title{Coordinate system from a \code{\link{HPDataFrame}}}
 \usage{
-\method{coords}{HPDataFrame}(hpdf, new.coords, healpix.only = FALSE)
+\method{coords}{HPDataFrame}(x, new.coords, healpix.only = FALSE, ...)
 }
 \arguments{
-\item{hpdf}{a HPDataFrame.}
+\item{x}{a HPDataFrame, \code{hpdf}.}
 
 \item{new.coords}{specifies the new coordinate system
 ("spherical" or "cartesian")}

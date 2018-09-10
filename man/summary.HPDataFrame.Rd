@@ -4,7 +4,7 @@
 \alias{summary.HPDataFrame}
 \title{Summarise a \code{\link{HPDataFrame}}}
 \usage{
-\method{summary}{HPDataFrame}(hpdf, intensities = "I")
+\method{summary}{HPDataFrame}(hpdf, intensities = "I", ...)
 }
 \arguments{
 \item{hpdf}{a HPDataFrame.}

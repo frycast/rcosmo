@@ -4,7 +4,7 @@
 \alias{print.summary.HPDataFrame}
 \title{Print a summary of a HPDataFrame}
 \usage{
-\method{print}{summary.HPDataFrame}(x)
+\method{print}{summary.HPDataFrame}(x, ...)
 }
 \arguments{
 \item{x}{a \code{summary.HPDataFrame} object, i.e.,

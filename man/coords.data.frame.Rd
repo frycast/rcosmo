@@ -4,10 +4,11 @@
 \alias{coords.data.frame}
 \title{Create a new data.frame with a given coordinate system}
 \usage{
-\method{coords}{data.frame}(df, new.coords)
+\method{coords}{data.frame}(x, new.coords, ...)
 }
 \arguments{
-\item{df}{a data.frame with columns labelled x, y, z (for cartesian)
+\item{x}{a data.frame with columns
+labelled x, y, z (for cartesian)
 or theta, phi (for spherical colatitude and longitude respectively)}
 
 \item{new.coords}{specifies the new coordinate system

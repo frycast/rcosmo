@@ -4,14 +4,14 @@
 \alias{coords.CMBWindow}
 \title{Coordinate system from a \code{\link{CMBWindow}}}
 \usage{
-\method{coords}{CMBWindow}(win, new.coords)
+\method{coords}{CMBWindow}(x, new.coords, ...)
 }
 \arguments{
+\item{x}{a CMBWindow, \code{win}.}
+
 \item{new.coords}{specifies the new coordinate system
 ("spherical" or "cartesian")
 if a change of coordinate system is desired}
-
-\item{cmbdf}{a CMBWindow.}
 }
 \value{
 If new.coords is unspecified, then the name of the coordinate system

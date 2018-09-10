@@ -4,7 +4,7 @@
 \alias{pix.CMBDataFrame}
 \title{HEALPix pixel indices from \code{\link{CMBDataFrame}}}
 \usage{
-\method{pix}{CMBDataFrame}(cmbdf, new.pix)
+\method{pix}{CMBDataFrame}(cmbdf, new.pix, ...)
 }
 \arguments{
 \item{cmbdf}{a CMBDataFrame.}

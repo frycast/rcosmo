@@ -4,7 +4,7 @@
 \alias{coords<-.data.frame}
 \title{Assign new coordinate system to a \code{\link{data.frame}}}
 \usage{
-\method{coords}{data.frame}(df, ...) <- value
+\method{coords}{data.frame}(x, ...) <- value
 }
 \description{
 Assign new coordinate system to a \code{\link{data.frame}}

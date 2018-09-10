@@ -4,7 +4,7 @@
 \alias{ordering.HPDataFrame}
 \title{HEALPix ordering scheme from a HPDataFrame}
 \usage{
-\method{ordering}{HPDataFrame}(hpdf, new.ordering)
+\method{ordering}{HPDataFrame}(hpdf, new.ordering, ...)
 }
 \arguments{
 \item{hpdf}{a \code{\link{HPDataFrame}}.}

@@ -4,7 +4,7 @@
 \alias{coords<-.HPDataFrame}
 \title{Assign new coordinate system to a \code{\link{HPDataFrame}}}
 \usage{
-\method{coords}{HPDataFrame}(hpdf, ...) <- value
+\method{coords}{HPDataFrame}(x, ...) <- value
 }
 \description{
 Assign new coordinate system to a \code{\link{HPDataFrame}}

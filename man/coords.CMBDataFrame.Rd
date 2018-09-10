@@ -4,10 +4,10 @@
 \alias{coords.CMBDataFrame}
 \title{Coordinate system from a \code{\link{CMBDataFrame}}}
 \usage{
-\method{coords}{CMBDataFrame}(cmbdf, new.coords)
+\method{coords}{CMBDataFrame}(x, new.coords, ...)
 }
 \arguments{
-\item{cmbdf}{A CMBDataFrame.}
+\item{x}{A CMBDataFrame, \code{cmbdf}.}
 
 \item{new.coords}{Specifies the new coordinate
 system ("spherical" or "cartesian")

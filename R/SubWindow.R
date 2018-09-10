@@ -327,7 +327,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #' df.win
 #'
 #'@export
-window.data.frame <- function(df, new.window, intersect = TRUE)
+window.data.frame <- function(df, new.window, intersect = TRUE, ...)
 {
   return(subWindow(df, win = new.window, intersect = intersect))
 }

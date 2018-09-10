@@ -220,7 +220,7 @@ CTypeExpression <- function(TTYPEn, btype) {
 #'class(cmbdat.win)
 #'
 #'@export
-window.CMBDat <- function(cmbdat, new.window, intersect = TRUE) {
+window.CMBDat <- function(cmbdat, new.window, intersect = TRUE, ...) {
 
   return(subWindow(cmbdat, win = new.window, intersect = intersect))
 }

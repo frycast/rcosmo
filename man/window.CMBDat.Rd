@@ -4,7 +4,7 @@
 \alias{window.CMBDat}
 \title{Get a sub window from a \code{\link{CMBDat}} object}
 \usage{
-\method{window}{CMBDat}(cmbdat, new.window, intersect = TRUE)
+\method{window}{CMBDat}(cmbdat, new.window, intersect = TRUE, ...)
 }
 \arguments{
 \item{cmbdat}{a \code{\link{CMBDat}} object.}

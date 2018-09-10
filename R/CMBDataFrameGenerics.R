@@ -144,7 +144,7 @@
 #'
 #'@export
 window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
-                                in.pixels, in.pixels.res = 0)
+                                in.pixels, in.pixels.res = 0, ...)
 {
   if ( !missing(new.window) )
   {
@@ -235,7 +235,7 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #' ordering(df1)
 #'
 #'@export
-ordering.CMBDataFrame <- function( cmbdf, new.ordering )
+ordering.CMBDataFrame <- function( cmbdf, new.ordering, ... )
 {
 
   if ( missing(new.ordering) )
@@ -340,7 +340,7 @@ nside.CMBDataFrame <- function( cmbdf )
 #' pix(df)
 #'
 #'@export
-pix.CMBDataFrame <- function(cmbdf, new.pix)
+pix.CMBDataFrame <- function(cmbdf, new.pix, ...)
 {
 
   if ( !missing(new.pix) )
@@ -876,11 +876,6 @@ geoArea.CMBDataFrame <- function(cmbdf)
 
 
 
-
-
-
-
-
 #' Coordinate system from a \code{\link{CMBDataFrame}}
 #'
 #' If \code{new.coords} is unspecified then
@@ -896,7 +891,7 @@ geoArea.CMBDataFrame <- function(cmbdf)
 #' examples below).
 #'
 #'
-#'@param cmbdf A CMBDataFrame.
+#'@param x A CMBDataFrame, \code{cmbdf}.
 #'@param new.coords Specifies the new coordinate
 #'system ("spherical" or "cartesian")
 #'if a change of coordinate system is desired.
@@ -923,8 +918,10 @@ geoArea.CMBDataFrame <- function(cmbdf)
 #'
 #'
 #'@export
-coords.CMBDataFrame <- function( cmbdf, new.coords )
+coords.CMBDataFrame <- function( x, new.coords, ... )
 {
+  cmbdf <- x
+
   # If new.coords argument is missing then return the coordinate type
   if ( missing(new.coords) )
   {
@@ -1024,8 +1021,8 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
 #' df
 #'
 #' @export
-`coords<-.CMBDataFrame` <- function(cmbdf,...,value) {
-  return(coords(cmbdf, new.coords = value))
+`coords<-.CMBDataFrame` <- function(x, ..., value) {
+  return(coords(x, new.coords = value))
 }
 
 

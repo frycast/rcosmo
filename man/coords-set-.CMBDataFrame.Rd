@@ -4,7 +4,7 @@
 \alias{coords<-.CMBDataFrame}
 \title{Assign new coordinate system to a \code{\link{CMBDataFrame}}}
 \usage{
-\method{coords}{CMBDataFrame}(cmbdf, ...) <- value
+\method{coords}{CMBDataFrame}(x, ...) <- value
 }
 \description{
 Assign new coordinate system to a \code{\link{CMBDataFrame}}

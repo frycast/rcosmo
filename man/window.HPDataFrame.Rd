@@ -5,7 +5,7 @@
 \title{Get a sub window from a \code{\link{HPDataFrame}}}
 \usage{
 \method{window}{HPDataFrame}(hpdf, new.window, intersect = TRUE,
-  healpix.only = FALSE)
+  healpix.only = FALSE, ...)
 }
 \arguments{
 \item{hpdf}{A HPDataFrame.}

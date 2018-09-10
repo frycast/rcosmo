@@ -394,7 +394,7 @@ polygonArea <- function(win)
 #' new.coords = "spherical", the
 #' coordinate system of the CMBWindow will be converted
 #'
-#'@param cmbdf a CMBWindow.
+#'@param x a CMBWindow, \code{win}.
 #'@param new.coords specifies the new coordinate system
 #'("spherical" or "cartesian")
 #'if a change of coordinate system is desired
@@ -417,8 +417,9 @@ polygonArea <- function(win)
 #' coords(win1)
 #'
 #'@export
-coords.CMBWindow <- function( win, new.coords )
+coords.CMBWindow <- function( x, new.coords, ... )
 {
+  win <- x
 
   # If new.coords argument is missing then return the coordinate type
   if ( missing(new.coords) )
@@ -490,14 +491,14 @@ coords.CMBWindow <- function( win, new.coords )
 #'@keywords internal
 #'
 #'@export
-`coords<-.CMBWindow` <- function(win,...,value) {
+`coords<-.CMBWindow` <- function(x,...,value) {
   value <- tolower(value)
-  if (rcosmo::coords(win) == value)
+  if (rcosmo::coords(x) == value)
   {
-    return(win)
+    return(x)
 
   } else {
 
-    return(rcosmo::coords(win, new.coords = value))
+    return(rcosmo::coords(x, new.coords = value))
   }
 }

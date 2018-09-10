@@ -13,7 +13,8 @@ assumedConvex(win, assume.convex)
 attribute to TRUE or FALSE}
 }
 \description{
-Initially any \code{\link{CMBWindow}} is not assumed convex. The assumedConvex
+Initially any \code{\link{CMBWindow}} is not assumed convex.
+The assumedConvex
 attribute can be change for any \code{\link{CMBWindow}}.
 }
 \examples{

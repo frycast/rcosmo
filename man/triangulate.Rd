@@ -12,10 +12,13 @@ triangulate(win)
 \value{
 a list of CMBWindow polygons or minus.polygons,
 each having 3 vertices and representing a triangle.
-If winType of \code{win} does not include "minus" then these triangles have
-pairwise disjoint interiors and their union is equal to the original polygon,
+If winType of \code{win} does not include
+"minus" then these triangles have
+pairwise disjoint interiors and their union
+is equal to the original polygon,
 \code{win}.
-Otherwise, if winType of \code{win} does include "minus" the triangles are
+Otherwise, if winType of \code{win}
+does include "minus" the triangles are
 the same as for the non-minus type above, but have "minus" types.
 }
 \description{
@@ -25,7 +28,8 @@ Triangulate a polygonal \code{\link{CMBWindow}}
 
 ## Example 1
 
-win <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3), phi = c(pi/4,pi/4,pi/3,pi/3))
+win <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+                 phi = c(pi/4,pi/4,pi/3,pi/3))
 win
 plot(win)
 win1 <- triangulate(win)
@@ -36,7 +40,8 @@ plot(win1[[2]], col="blue")
 
 ## Example 2: triangilation minus-type polygon
 
-win <- CMBWindow(theta = c(pi/5,pi/3,pi/4, pi/3, pi/5), phi = c(pi/5,pi/5, pi/4 ,pi/3,pi/3), set.minus =TRUE)
+win <- CMBWindow(theta = c(pi/5,pi/3,pi/4, pi/3, pi/5),
+                 phi = c(pi/5,pi/5, pi/4 ,pi/3,pi/3), set.minus =TRUE)
 win
 plot(win)
 summary(win)

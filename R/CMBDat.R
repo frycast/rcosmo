@@ -2,12 +2,11 @@
 #' CMBDat class.
 #'
 #'
-#' The function \code{CMBDat} creates objects of class \code{CMBDat}.
-#' These are lists containing header information and other metadata as well
-#' as an element called data, whose columns may include, for example, the
-#' intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
-#' \code{\link{mmap}} object that points to the CMB map data table in the FITS
-#' file.
+#' Objects of class \code{CMBDat} are lists containing header information and
+#' other metadata as well as an element called data, whose columns may include,
+#' for example, the intensity (I), polarisation (Q, U), PMASK and TMASK.
+#' It also may contain an \code{\link{mmap}} object that points to the CMB map
+#' data table in the FITS file.
 #'
 #'@aliases CMBDat
 #'
@@ -48,7 +47,7 @@ NULL
 ############################################################################
 ## WARNING: THIS FUNCTION IS INCOMPLETE: THE mmap PARAMETER REQUIRES WORK ##
 ############################################################################
-#' Read CMB data from a FITS file.
+#' ???? Read CMB data from a FITS file.
 #'
 #' \code{CMBDat} is adapted from the \code{\link{readFITS}}
 #' function in package
@@ -68,7 +67,7 @@ NULL
 #' \code{\link{mmap}} object that points to the CMB map data table in the FITS
 #' file.
 #'
-#'@aliases readFITS
+#'@aliases readFITS????
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.

@@ -9,36 +9,37 @@
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 #'are treated differently from other windows.
 #'
-#'If the argument is a list of CMBWindows, then interious of all windows whose
+#'If the argument \code{new.window} is a list of CMBWindows,
+#'then interious of all windows whose
 #'winType does not include "minus" are united (let \eqn{A} be their union) and
 #'exteriors of all windows whose winType does include "minus" are intersected,
 #'(let \eqn{B} be their intersection). Then, provided that
 #'\code{intersect = TRUE} (the default), the returned CMBDataFrame will
 #'be the points of \code{cmbdf} in the the intersection of \eqn{A} and \eqn{B}.
 #'Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame
-#'consists of the points of \code{cmbdf} in the union of
+#'consists of the points of \code{x} in the union of
 #'\eqn{A} and \eqn{B}.
 #'
 #'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned CMBDataFrame
-#'will be the points of \code{cmbdf} in \eqn{B} (resp. \eqn{A}).
+#'will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 #'
-#'@param cmbdf a CMBDataFrame.
-#'@param new.window optionally specify a new window
+#'@param x A \code{\link{CMBDataFrame}}.
+#'@param new.window Optionally specify a new window
 #'in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
 #'\code{new.window} may also be a list (see details section and examples).
 #'@param intersect A boolean that determines
-#'the behaviour when \code{win} is a list containing BOTH
+#'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
 #'@param in.pixels A vector of pixels at resolution
 #'\code{in.pixels.res} whose union contains the
-#'window(s) \code{win} entirely, or if \code{new.window} is
+#'window(s) \code{new.window} entirely, or if \code{new.window} is
 #'unspecified then this whole pixel is returned.
 #'@param in.pixels.res An integer. Resolution
 #'(i.e., \eqn{j} such that nside = \code{2^j}) at
 #'which the \code{in.pixels} parameter is specified
 #'
 #'@return
-#' The window attribute of cmbdf or, if new.window/in.pixels is specified,
+#' The window attribute of \code{x} or, if new.window/in.pixels is specified,
 #' a new CMBDataFrame.
 #'
 #'@examples
@@ -143,9 +144,11 @@
 #'
 #'
 #'@export
-window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
+window.CMBDataFrame <- function(x, new.window, intersect = TRUE,
                                 in.pixels, in.pixels.res = 0, ...)
 {
+  cmbdf <- x
+
   if ( !missing(new.window) )
   {
     if ( !missing(in.pixels) )
@@ -203,9 +206,9 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #'
 #'@export
 #'
-`window<-.CMBDataFrame` <- function(cmbdf,...,value)
+`window<-.CMBDataFrame` <- function(x, ..., value)
 {
-  return(rcosmo::window(cmbdf, new.window = value))
+  return(rcosmo::window(x, new.window = value))
 }
 
 
@@ -219,14 +222,14 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #' If a new ordering is specified, using e.g. new.ordering = "ring", the
 #' ordering scheme of the CMBDataFrame will be converted.
 #'
-#'@param cmbdf a CMB Data Frame.
-#'@param new.ordering specifies the new ordering ("ring" or "nest")
+#'@param x A \code{\link{CMBDataFrame}}.
+#'@param new.ordering Specifies the new ordering ("ring" or "nest")
 #'if a change of ordering
 #'scheme is desired.
 #'
 #'@return
 #' The name of the HEALPix ordering scheme that is
-#' used in the CMBDataFrame cmbdf
+#' used in the CMBDataFrame x.
 #'
 #'@examples
 #' df <- CMBDataFrame(nside = 1, ordering = "nested")
@@ -235,8 +238,9 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #' ordering(df1)
 #'
 #'@export
-ordering.CMBDataFrame <- function( cmbdf, new.ordering, ... )
+ordering.CMBDataFrame <- function( x, new.ordering, ... )
 {
+  cmbdf <- x
 
   if ( missing(new.ordering) )
   {
@@ -288,9 +292,8 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering, ... )
 #' ordering(cmbdf)
 #'
 #' @export
-`ordering<-.CMBDataFrame` <- function(cmbdf,...,value) {
-  rcosmo::ordering(cmbdf, new.ordering = value)
-  cmbdf
+`ordering<-.CMBDataFrame` <- function(x,...,value) {
+  rcosmo::ordering(x, new.ordering = value)
 }
 
 
@@ -301,19 +304,19 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering, ... )
 #'
 #' This function returns the HEALPix Nside parameter of a CMBDataFrame
 #'
-#'@param cmbdf a CMB Data Frame.
+#'@param x A \code{\link{CMBDataFrame}}.
 #'
 #'@return
-#' The HEALPix Nside parameter
+#' The HEALPix Nside parameter.
 #'
 #'@examples
 #' df <- CMBDataFrame(nside = 16)
 #' nside(df)
 #'
 #'@export
-nside.CMBDataFrame <- function( cmbdf )
+nside.CMBDataFrame <- function( x )
 {
-  return( as.integer(attr( cmbdf, "nside" )) )
+  return( as.integer(attr( x, "nside" )) )
 }
 
 
@@ -327,9 +330,9 @@ nside.CMBDataFrame <- function( cmbdf )
 #' as \code{cmbdf}, but with pix attribute \code{new.pix}. Thus,
 #' \code{new.pix} must have length equal to \code{nrow(cmbdf)}.
 #'
-#'@param cmbdf a CMBDataFrame.
-#'@param new.pix optional vector of pixel indices with
-#'length equal to \code{nrow(cmbdf)}
+#'@param x A CMBDataFrame.
+#'@param new.pix Optional vector of pixel indices with
+#'length equal to \code{nrow(x)}.
 #'
 #'@return
 #' The vector of HEALPix pixel indices or, if new.pix is specified,
@@ -340,16 +343,16 @@ nside.CMBDataFrame <- function( cmbdf )
 #' pix(df)
 #'
 #'@export
-pix.CMBDataFrame <- function(cmbdf, new.pix, ...)
+pix.CMBDataFrame <- function(x, new.pix, ...)
 {
 
   if ( !missing(new.pix) )
   {
-    row.names(cmbdf) <- new.pix
-    return(cmbdf)
+    row.names(x) <- new.pix
+    return(x)
   }
 
-  return(as.integer( row.names(cmbdf) ))
+  return(as.integer( row.names(x) ))
 }
 
 
@@ -359,9 +362,9 @@ pix.CMBDataFrame <- function(cmbdf, new.pix, ...)
 #' @keywords internal
 #'
 #' @export
-`pix<-.CMBDataFrame` <- function(cmbdf,...,value) {
-  row.names(cmbdf) <- value
-  cmbdf
+`pix<-.CMBDataFrame` <- function(x,...,value) {
+  row.names(x) <- value
+  x
 }
 
 
@@ -627,9 +630,9 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #'Get the maximum distance between all points
 #'in a \code{\link{CMBDataFrame}}
 #'
-#'@param cmbdf a CMBDataFrame object
+#'@param x A CMBDataFrame object.
 #'
-#'@return maximum distance between all points
+#'@return Maximum distance between all points.
 #'
 #'@examples
 #'
@@ -645,10 +648,10 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #' maxDist(cmbdf)
 #'
 #'@export
-maxDist.CMBDataFrame <- function(cmbdf)
+maxDist.CMBDataFrame <- function(x)
 {
-  coords(cmbdf) <- "cartesian"
-  return(maxDist_internal(cmbdf))
+  coords(x) <- "cartesian"
+  return(maxDist_internal(x))
 }
 
 
@@ -847,9 +850,9 @@ is.CMBDat <- function(cmbdf)
 #' Gives the surface on the unit sphere
 #' that is encompassed by all pixels in \code{cmbdf}
 #'
-#'@param cmbdf a CMBDataFrame
+#'@param x a CMBDataFrame.
 #'
-#'@return the sum of the areas of all pixels (rows) in cmbdf
+#'@return The sum of the areas of all pixels (rows) in x.
 #'
 #'@examples
 #'
@@ -866,11 +869,11 @@ is.CMBDat <- function(cmbdf)
 #' plot(cmbdf, size = 5, hp.boundaries = 1)
 #'
 #'@export
-geoArea.CMBDataFrame <- function(cmbdf)
+geoArea.CMBDataFrame <- function(x)
 {
-  nside <- rcosmo::nside(cmbdf)
+  nside <- rcosmo::nside(x)
   if ( !is.numeric(nside) ) stop("problem with cmbdf nside attribute")
-  return(pi/(3*nside^2)*nrow(cmbdf))
+  return(pi/(3*nside^2)*nrow(x))
 }
 
 
@@ -1035,7 +1038,7 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #'
 #' This function produces a plot from a \code{\link{CMBDataFrame}}.
 #'
-#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param x A \code{\link{CMBDataFrame}}.
 #'@param intensities The name of a column that specifies CMB intensities.
 #'This is only used if \code{col} is unspecified.
 #'@param add If TRUE then this plot will be added to any existing plot.
@@ -1058,7 +1061,7 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #'@param labels Optionally specify a vector of labels to plot,
 #'such as words or vertex indices. If this is specified then
 #'\code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
-#'\code{length(labels)} must equal \code{nrow(cmbdf)}.
+#'\code{length(labels)} must equal \code{nrow(x)}.
 #'@param hp.boundaries Integer. If greater than 0 then HEALPix
 #'pixel boundaries at \code{nside = hp.boundaries} will be
 #'added to the plot.
@@ -1074,7 +1077,7 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #' plot(sky, sample.size = 800000)
 #'
 #'@export
-plot.CMBDataFrame <- function(cmbdf, intensities = "I",
+plot.CMBDataFrame <- function(x, intensities = "I",
                               add = FALSE, sample.size,
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
@@ -1082,6 +1085,7 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
                               hp.boundaries = 0, hpb.col = "gray",
                               ...)
 {
+  cmbdf <- x
   if ( !missing(sample.size) )
   {
     spix <- sample(pix(cmbdf), sample.size)
@@ -1155,7 +1159,7 @@ colscheme <- function(I, breaks, colmap) {
 #'
 #' This function produces a summary from a CMBDataFrame.
 #'
-#'@param cmbdf a CMBDataFrame.
+#'@param object A \code{\link{CMBDataFrame}}.
 #'@param intensities the name of a column specifying CMB intensities
 #'(or potentially another numeric quantity of interest)
 #'
@@ -1176,8 +1180,9 @@ colscheme <- function(I, breaks, colmap) {
 #' summary(df.sample1)
 #'
 #'@export
-summary.CMBDataFrame <- function(cmbdf, intensities = "I")
+summary.CMBDataFrame <- function(object, intensities = "I", ...)
 {
+  cmbdf <- object
   ans <- list(intensities = summary(cmbdf[,intensities, drop = TRUE]))
 
   if ( is.null(coords(cmbdf)) )
@@ -1273,11 +1278,11 @@ print.summary.CMBDataFrame <- function(x, ...)
 }
 
 
-#' Print CMB Data
+#' Print CMBDataFrame
 #'
-#' This function neatly prints the contents of a CMB Data Frame.
+#' This function neatly prints the contents of a CMBDataFrame.
 #'
-#'@param cmbdf a CMB Data Frame.
+#'@param x A \code{\link{CMBDataFrame}}.
 #'@param ... arguments passed to \code{\link{print.tbl_df}}
 #'
 #'@return
@@ -1289,10 +1294,10 @@ print.summary.CMBDataFrame <- function(x, ...)
 #' df
 #'
 #'@export
-print.CMBDataFrame <- function(cmbdf,...)
+print.CMBDataFrame <- function(x, ...)
 {
   cat("A CMBDataFrame\n")
-  print(tibble::as.tibble(cmbdf), ...)
+  print(tibble::as.tibble(x), ...)
 }
 
 

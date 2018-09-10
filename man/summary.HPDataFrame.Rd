@@ -4,10 +4,10 @@
 \alias{summary.HPDataFrame}
 \title{Summarise a \code{\link{HPDataFrame}}}
 \usage{
-\method{summary}{HPDataFrame}(hpdf, intensities = "I", ...)
+\method{summary}{HPDataFrame}(object, intensities = "I", ...)
 }
 \arguments{
-\item{hpdf}{a HPDataFrame.}
+\item{object}{A HPDataFrame.}
 
 \item{intensities}{the name of a column specifying intensities
 (or potentially another numeric quantity of interest)}

@@ -4,13 +4,13 @@
 \alias{pix.CMBDataFrame}
 \title{HEALPix pixel indices from \code{\link{CMBDataFrame}}}
 \usage{
-\method{pix}{CMBDataFrame}(cmbdf, new.pix, ...)
+\method{pix}{CMBDataFrame}(x, new.pix, ...)
 }
 \arguments{
-\item{cmbdf}{a CMBDataFrame.}
+\item{x}{A CMBDataFrame.}
 
-\item{new.pix}{optional vector of pixel indices with
-length equal to \code{nrow(cmbdf)}}
+\item{new.pix}{Optional vector of pixel indices with
+length equal to \code{nrow(x)}.}
 }
 \value{
 The vector of HEALPix pixel indices or, if new.pix is specified,

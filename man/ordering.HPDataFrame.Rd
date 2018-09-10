@@ -4,17 +4,18 @@
 \alias{ordering.HPDataFrame}
 \title{HEALPix ordering scheme from a HPDataFrame}
 \usage{
-\method{ordering}{HPDataFrame}(hpdf, new.ordering, ...)
+\method{ordering}{HPDataFrame}(x, new.ordering, ...)
 }
 \arguments{
-\item{hpdf}{a \code{\link{HPDataFrame}}.}
+\item{x}{a \code{\link{HPDataFrame}}.}
 
-\item{new.ordering}{specifies the new ordering ("ring" or "nest")
+\item{new.ordering}{Specifies the new ordering ("ring" or "nest")
 if a change of ordering scheme is desired.}
 }
 \value{
 The name of the HEALPix ordering scheme that is used in the
-HPDataFrame hpdf, or a new hpdf with the desired new.ordering
+HPDataFrame x, or a new HPDataFrame
+with the desired new.ordering
 }
 \description{
 This function returns the HEALPix ordering scheme from a HPDataFrame.

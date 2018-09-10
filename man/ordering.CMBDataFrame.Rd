@@ -4,18 +4,18 @@
 \alias{ordering.CMBDataFrame}
 \title{HEALPix ordering scheme from a CMBDataFrame}
 \usage{
-\method{ordering}{CMBDataFrame}(cmbdf, new.ordering, ...)
+\method{ordering}{CMBDataFrame}(x, new.ordering, ...)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{x}{A \code{\link{CMBDataFrame}}.}
 
-\item{new.ordering}{specifies the new ordering ("ring" or "nest")
+\item{new.ordering}{Specifies the new ordering ("ring" or "nest")
 if a change of ordering
 scheme is desired.}
 }
 \value{
 The name of the HEALPix ordering scheme that is
-used in the CMBDataFrame cmbdf
+used in the CMBDataFrame x.
 }
 \description{
 This function returns the HEALPix ordering scheme from a CMBDataFrame.

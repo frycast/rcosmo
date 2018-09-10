@@ -4,13 +4,13 @@
 \alias{geoArea.CMBDataFrame}
 \title{Geodesic area covered by a \code{\link{CMBDataFrame}}}
 \usage{
-\method{geoArea}{CMBDataFrame}(cmbdf)
+\method{geoArea}{CMBDataFrame}(x)
 }
 \arguments{
-\item{cmbdf}{a CMBDataFrame}
+\item{x}{a CMBDataFrame.}
 }
 \value{
-the sum of the areas of all pixels (rows) in cmbdf
+The sum of the areas of all pixels (rows) in x.
 }
 \description{
 Gives the surface on the unit sphere

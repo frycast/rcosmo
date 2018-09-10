@@ -4,30 +4,30 @@
 \alias{window.HPDataFrame}
 \title{Get a sub window from a \code{\link{HPDataFrame}}}
 \usage{
-\method{window}{HPDataFrame}(hpdf, new.window, intersect = TRUE,
+\method{window}{HPDataFrame}(x, new.window, intersect = TRUE,
   healpix.only = FALSE, ...)
 }
 \arguments{
-\item{hpdf}{A HPDataFrame.}
+\item{x}{A \code{\link{HPDataFrame}}.}
 
 \item{new.window}{Optional.
 A single \code{\link{CMBWindow}} object or a list of them.}
 
 \item{intersect}{A boolean that determines
-the behaviour when \code{win} is a list containing BOTH
+the behaviour when \code{new.window} is a list containing BOTH
 regular type and "minus" type windows together (see details).}
 
 \item{healpix.only}{A boolean. If the HPDataFrame has columns x,y,z
 or theta, phi then these will be used to determine locations
-with priority over the HEALPix indices in \code{pix(hpdf)}
+with priority over the HEALPix indices in \code{pix(x)}
 unless \code{healpix.only = TRUE} is given. Note that
 if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
 will be discarded and replaced with pixel center locations.}
 }
 \value{
-A HPDataFrame containing the data in \code{hpdf} restricted to the
+A HPDataFrame containing the data in \code{x} restricted to the
 CMBWindow \code{new.window}. Or, if \code{new.window} is
-unspecified, then the window attribute of \code{hpdf}
+unspecified, then the window attribute of \code{x}
 is returned instead (and may be NULL).
 }
 \description{

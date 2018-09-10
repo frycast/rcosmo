@@ -105,7 +105,7 @@ CMBDataFrame <- function(CMBData,
 
       # If spix is a string then assume it is a path to file:
       message("Reading sample pixel indices from file...\n")
-      spix <- read.table(spix, sep = ",")[, 1]
+      spix <- utils::read.table(spix, sep = ",")[, 1]
     }
 
     if (any(spix %% 1 != 0)) {

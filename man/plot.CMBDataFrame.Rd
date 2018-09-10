@@ -4,13 +4,13 @@
 \alias{plot.CMBDataFrame}
 \title{Plot CMB Data}
 \usage{
-\method{plot}{CMBDataFrame}(cmbdf, intensities = "I", add = FALSE,
+\method{plot}{CMBDataFrame}(x, intensities = "I", add = FALSE,
   sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
   aspect = FALSE, col, back.col = "black", labels, hp.boundaries = 0,
   hpb.col = "gray", ...)
 }
 \arguments{
-\item{cmbdf}{A \code{\link{CMBDataFrame}}.}
+\item{x}{A \code{\link{CMBDataFrame}}.}
 
 \item{intensities}{The name of a column that specifies CMB intensities.
 This is only used if \code{col} is unspecified.}
@@ -44,7 +44,7 @@ the plot. This argument is passed to rgl::bg3d.}
 \item{labels}{Optionally specify a vector of labels to plot,
 such as words or vertex indices. If this is specified then
 \code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
-\code{length(labels)} must equal \code{nrow(cmbdf)}.}
+\code{length(labels)} must equal \code{nrow(x)}.}
 
 \item{hp.boundaries}{Integer. If greater than 0 then HEALPix
 pixel boundaries at \code{nside = hp.boundaries} will be

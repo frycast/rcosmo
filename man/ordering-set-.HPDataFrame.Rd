@@ -4,7 +4,7 @@
 \alias{ordering<-.HPDataFrame}
 \title{Assign new ordering scheme to HPDataFrame}
 \usage{
-\method{ordering}{HPDataFrame}(hpdf, ...) <- value
+\method{ordering}{HPDataFrame}(x, ...) <- value
 }
 \description{
 Assign new ordering scheme to HPDataFrame

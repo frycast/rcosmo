@@ -4,17 +4,17 @@
 \alias{geoArea.HPDataFrame}
 \title{Geodesic area covered by a \code{\link{HPDataFrame}}}
 \usage{
-\method{geoArea}{HPDataFrame}(hpdf)
+\method{geoArea}{HPDataFrame}(x)
 }
 \arguments{
-\item{hpdf}{a HPDataFrame}
+\item{x}{A HPDataFrame.}
 }
 \value{
-the sum of the areas of all pixels (rows) in hpdf
+The sum of the areas of all pixels (rows) in \code{x}.
 }
 \description{
 Gives the surface on the unit sphere
-that is encompassed by all pixels in \code{hpdf}
+that is encompassed by all pixels in \code{x}.
 }
 \examples{
 

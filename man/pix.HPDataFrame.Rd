@@ -4,13 +4,13 @@
 \alias{pix.HPDataFrame}
 \title{HEALPix pixel indices from \code{\link{HPDataFrame}}}
 \usage{
-\method{pix}{HPDataFrame}(hpdf, new.pix, ...)
+\method{pix}{HPDataFrame}(x, new.pix, ...)
 }
 \arguments{
-\item{hpdf}{a \code{\link{HPDataFrame}}.}
+\item{x}{a \code{\link{HPDataFrame}}.}
 
 \item{new.pix}{optional vector of pixel indices with
-length equal to \code{nrow(hpdf)}}
+length equal to \code{nrow(x)}}
 }
 \value{
 The vector of HEALPix pixel indices (integers) or,
@@ -21,8 +21,8 @@ a new HPDataFrame.
 If new.pix is unspecified then this function returns the vector of
 HEALPix pixel indices from a HPDataFrame. If new.pix is specified then
 this function returns a new HPDataFrame with the same number of rows
-as \code{hpdf}, but with pix attribute \code{new.pix}. Thus,
-\code{new.pix} must have length equal to \code{nrow(hpdf)}.
+as \code{x}, but with pix attribute \code{new.pix}. Thus,
+\code{new.pix} must have length equal to \code{nrow(x)}.
 }
 \examples{
 df <- HPDataFrame(I = rep(0,12), nside = 1)

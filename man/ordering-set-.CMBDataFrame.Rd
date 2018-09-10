@@ -4,7 +4,7 @@
 \alias{ordering<-.CMBDataFrame}
 \title{Assign a new ordering scheme to a \code{\link{CMBDataFrame}}}
 \usage{
-\method{ordering}{CMBDataFrame}(cmbdf, ...) <- value
+\method{ordering}{CMBDataFrame}(x, ...) <- value
 }
 \description{
 Assign a new ordering scheme to a \code{\link{CMBDataFrame}}

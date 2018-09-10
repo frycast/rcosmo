@@ -4,24 +4,24 @@
 \alias{window.CMBDat}
 \title{Get a sub window from a \code{\link{CMBDat}} object}
 \usage{
-\method{window}{CMBDat}(cmbdat, new.window, intersect = TRUE, ...)
+\method{window}{CMBDat}(x, new.window, intersect = TRUE, ...)
 }
 \arguments{
-\item{cmbdat}{a \code{\link{CMBDat}} object.}
+\item{x}{a \code{\link{CMBDat}} object.}
 
 \item{new.window}{A single \code{\link{CMBWindow}} object or a list of them.}
 
 \item{intersect}{A boolean that determines
-the behaviour when \code{win} is a list containing BOTH
+the behaviour when \code{new.window} is a list containing BOTH
 regular type and "minus" type windows together (see details).}
 }
 \value{
-A CMBDataFrame containing the data in \code{cmbdat} restricted to the
+A CMBDataFrame containing the data in \code{x} restricted to the
 CMBWindow \code{new.window}
 }
 \description{
 This function returns a
-data.frame containing the data in \code{cmbdat} restricted to the
+data.frame containing the data in \code{x} restricted to the
 CMBWindow \code{new.window}
 }
 \details{
@@ -36,11 +36,11 @@ exteriors of all windows whose winType does include "minus" are intersected,
 be the points of \code{cmbdat$data} in the the intersection of
 \eqn{A} and \eqn{B}.
 Otherwise, if \code{intersect = FALSE}, the returned data.frame
-consists of the points of \code{cmbdat$data} in the union of
+consists of the points of \code{x$data} in the union of
 \eqn{A} and \eqn{B}.
 
 Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
-will be the points of \code{cmbdat} in \eqn{B} (resp. \eqn{A}).
+will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 }
 \examples{
 

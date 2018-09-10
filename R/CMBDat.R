@@ -181,7 +181,7 @@ CTypeExpression <- function(TTYPEn, btype) {
 #' Get a sub window from a \code{\link{CMBDat}} object
 #'
 #' This function returns a
-#' data.frame containing the data in \code{cmbdat} restricted to the
+#' data.frame containing the data in \code{x} restricted to the
 #' CMBWindow \code{new.window}
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
@@ -195,20 +195,20 @@ CTypeExpression <- function(TTYPEn, btype) {
 #'be the points of \code{cmbdat$data} in the the intersection of
 #'\eqn{A} and \eqn{B}.
 #'Otherwise, if \code{intersect = FALSE}, the returned data.frame
-#'consists of the points of \code{cmbdat$data} in the union of
+#'consists of the points of \code{x$data} in the union of
 #'\eqn{A} and \eqn{B}.
 #'
 #'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
-#'will be the points of \code{cmbdat} in \eqn{B} (resp. \eqn{A}).
+#'will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 #'
-#'@param cmbdat a \code{\link{CMBDat}} object.
+#'@param x a \code{\link{CMBDat}} object.
 #'@param new.window A single \code{\link{CMBWindow}} object or a list of them.
 #'@param intersect A boolean that determines
-#'the behaviour when \code{win} is a list containing BOTH
+#'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
 #'
 #'@return
-#' A CMBDataFrame containing the data in \code{cmbdat} restricted to the
+#' A CMBDataFrame containing the data in \code{x} restricted to the
 #' CMBWindow \code{new.window}
 #'
 #'@examples
@@ -220,7 +220,7 @@ CTypeExpression <- function(TTYPEn, btype) {
 #'class(cmbdat.win)
 #'
 #'@export
-window.CMBDat <- function(cmbdat, new.window, intersect = TRUE, ...) {
+window.CMBDat <- function(x, new.window, intersect = TRUE, ...) {
 
-  return(subWindow(cmbdat, win = new.window, intersect = intersect))
+  return(subWindow(x, win = new.window, intersect = intersect))
 }

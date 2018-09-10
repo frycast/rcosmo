@@ -4,7 +4,7 @@
 \alias{window<-.CMBDataFrame}
 \title{Assign a new \code{\link{CMBWindow}} to a \code{\link{CMBDataFrame}}}
 \usage{
-\method{window}{CMBDataFrame}(cmbdf, ...) <- value
+\method{window}{CMBDataFrame}(x, ...) <- value
 }
 \description{
 Assign a new \code{\link{CMBWindow}} to a \code{\link{CMBDataFrame}}

@@ -3,19 +3,6 @@ rm(list = ls())
 lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
        detach,character.only=TRUE,unload=TRUE)
 
-point <- c(0.6,0.8,0)
-k <- 1
-cpoint <- nestSearch(point, nside=k)
-
-## Plot the closest pixel center in blue
-# and the point (0.6,0.8,0) in red
-displayPixels(k, k, plot.j=k,
-              spix= c(cpoint$pix),
-              size=5, incl.labels =FALSE)
-rgl::plot3d(point[1], point[2], point[3],
-            col="red", size = 5, add = TRUE)
-
-
 
 df <- CMBDataFrame(nside = 1, I = 1:12)
 plotHPBoundaries(nside = 1, ordering = "nested")

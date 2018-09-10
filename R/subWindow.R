@@ -282,7 +282,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #' Get a sub window from a data.frame
 #'
 #' This function returns a
-#' data.frame containing the data in \code{df} restricted to the
+#' data.frame containing the data in \code{x} restricted to the
 #' CMBWindow \code{new.window}
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
@@ -293,26 +293,26 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'exteriors of all windows whose winType does include "minus" are intersected,
 #'(let \eqn{B} be their intersection). Then, provided that
 #'\code{intersect = TRUE} (the default), the returned data.frame will
-#'be the points of \code{df} in the the intersection of
+#'be the points of \code{x} in the the intersection of
 #'\eqn{A} and \eqn{B}.
 #'Otherwise, if \code{intersect = FALSE}, the returned data.frame
-#'consists of the points of \code{df} in the union of
+#'consists of the points of \code{x} in the union of
 #'\eqn{A} and \eqn{B}.
 #'
 #'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
-#'will be the points of \code{df} in \eqn{B} (resp. \eqn{A}).
+#'will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 #'
-#'@param df a data.frame. Must have
+#'@param x a data.frame. Must have
 #'columns labelled x,y,z specifying cartesian coordinates, or
 #'columns labelled theta, phi specifying colatitude and longitude
 #'respectively.
 #'@param new.window A single \code{\link{CMBWindow}} object or a list of them.
 #'@param intersect A boolean that determines
-#'the behaviour when \code{win} is a list containing BOTH
+#'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
 #'
 #'@return
-#' A data.frame containing the data in \code{df} restricted to the
+#' A data.frame containing the data in \code{x} restricted to the
 #' CMBWindow \code{new.window}
 #'
 #'@examples
@@ -327,7 +327,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #' df.win
 #'
 #'@export
-window.data.frame <- function(df, new.window, intersect = TRUE, ...)
+window.data.frame <- function(x, new.window, intersect = TRUE, ...)
 {
-  return(subWindow(df, win = new.window, intersect = intersect))
+  return(subWindow(x, win = new.window, intersect = intersect))
 }

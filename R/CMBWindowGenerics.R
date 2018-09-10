@@ -2,7 +2,7 @@
 #'
 #' This function produces a summary from a CMBWindow
 #'
-#'@param cmbdf a CMBWindow
+#'@param object a CMBWindow
 #'
 #'@return
 #'A summary includes window's type and area
@@ -17,8 +17,9 @@
 #'
 #'
 #'@export
-summary.CMBWindow <- function(win)
+summary.CMBWindow <- function(object, ...)
 {
+  win <- object
   ans <- list()
   ans$area <- geoArea(win)
   ans$coords <- coords(win)
@@ -83,9 +84,9 @@ print.summary.CMBWindow <- function(x, ...)
 #'Get the maximum distance between all points
 #'in a \code{\link{CMBWindow}}
 #'
-#'@param win a CMBWindow object
+#'@param x A CMBWindow object.
 #'
-#'@return the maximum distance between window's points
+#'@return The maximum distance between window's points.
 #'
 #'@examples
 #'
@@ -94,24 +95,24 @@ print.summary.CMBWindow <- function(x, ...)
 #' maxDist(win)
 #'
 #'@export
-maxDist.CMBWindow <- function(win)
+maxDist.CMBWindow <- function(x)
 {
 
   # Create temporary window in cartesian coordinates for dist and area
-  if ( coords(win) == "cartesian" ) {
+  if ( coords(x) == "cartesian" ) {
 
-    win.xyz <- win
+    win.xyz <- x
 
   } else {
 
-    win.xyz <- sph2car(win)
+    win.xyz <- sph2car(x)
   }
 
   # Calculate maximum distance
-  max.dist <- switch(winType(win),
+  max.dist <- switch(winType(x),
                      polygon = polygonMaxDist(win.xyz),
                      minus.polygon = pi,
-                     disc = 2*as.numeric(win$r),
+                     disc = 2*as.numeric(x$r),
                      minus.disc = pi,
                      stop(paste("Could not determine window type",
                                 "using rcosmo::winType")))
@@ -164,7 +165,7 @@ is.CMBWindow <- function(win)
 
 #' Visualise a \code{\link{CMBWindow}}
 #'
-#'@param win a CMBWindow
+#'@param x A CMBWindow.
 #'@param add if TRUE then this plot will be added to any existing plot.
 #'Note that if \code{back.col} (see below) is specified then a new plot
 #'window will be opened and \code{add = TRUE} will have no effect
@@ -191,12 +192,14 @@ is.CMBWindow <- function(win)
 #' plot(win2)
 #'
 #'@export
-plot.CMBWindow <- function(win, add = TRUE, type = "l",
+plot.CMBWindow <- function(x, add = TRUE, type = "l",
                            col = "red",
                            size = 2, box = FALSE,
                            axes = FALSE, aspect = FALSE,
                            back.col, ...)
 {
+  win <- x
+
   if ( coords(win) == "spherical" )
   {
     rcosmo::coords(win) <- "cartesian"
@@ -304,9 +307,9 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 
 #' Geodesic area of a \code{\link{CMBWindow}}
 #'
-#' @param win a CMBWindow
+#' @param x A CMBWindow.
 #'
-#' @return Tthe spherical area inside win
+#' @return The spherical area inside \code{x}.
 #'
 #'@examples
 #'
@@ -317,8 +320,9 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 #' geoArea(win)
 #'
 #'@export
-geoArea.CMBWindow <- function(win)
+geoArea.CMBWindow <- function(x)
 {
+  win <- x
   # Calculate the area of the spherical polygon
   win.xyz <- rcosmo::coords(win, new.coords = "cartesian")
 

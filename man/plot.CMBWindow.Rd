@@ -4,12 +4,12 @@
 \alias{plot.CMBWindow}
 \title{Visualise a \code{\link{CMBWindow}}}
 \usage{
-\method{plot}{CMBWindow}(win, add = TRUE, type = "l", col = "red",
+\method{plot}{CMBWindow}(x, add = TRUE, type = "l", col = "red",
   size = 2, box = FALSE, axes = FALSE, aspect = FALSE, back.col,
   ...)
 }
 \arguments{
-\item{win}{a CMBWindow}
+\item{x}{A CMBWindow.}
 
 \item{add}{if TRUE then this plot will be added to any existing plot.
 Note that if \code{back.col} (see below) is specified then a new plot

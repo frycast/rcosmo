@@ -4,10 +4,10 @@
 \alias{summary.CMBWindow}
 \title{Summarise a \code{\link{CMBWindow}}}
 \usage{
-\method{summary}{CMBWindow}(win)
+\method{summary}{CMBWindow}(object, ...)
 }
 \arguments{
-\item{cmbdf}{a CMBWindow}
+\item{object}{a CMBWindow}
 }
 \value{
 A summary includes window's type and area

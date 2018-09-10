@@ -4,13 +4,13 @@
 \alias{plot.HPDataFrame}
 \title{Plot HPDataFrame}
 \usage{
-\method{plot}{HPDataFrame}(hpdf, intensities = "I", add = FALSE,
+\method{plot}{HPDataFrame}(x, intensities = "I", add = FALSE,
   sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
   aspect = FALSE, col = "blue", back.col = "black", labels,
   hp.boundaries = 0, hpb.col = "gray", ...)
 }
 \arguments{
-\item{hpdf}{a HPDataFrame.}
+\item{x}{A HPDataFrame.}
 
 \item{add}{if TRUE then this plot will be added to any existing plot.
 Note that if \code{back.col} (see below) is specified then a new plot
@@ -41,7 +41,7 @@ the plot. This argument is passed to rgl::bg3d.}
 \item{labels}{optionally specify a vector of labels to plot,
 such as words or vertex indices. If this is specified then
 \code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
-\code{length(labels)} must equal \code{nrow(hpdf)}}
+\code{length(labels)} must equal \code{nrow(x)}}
 
 \item{hp.boundaries}{integer. If greater than 0 then HEALPix
 pixel boundaries at \code{nside = hp.boundaries} will be
@@ -58,9 +58,9 @@ according to coordinate columns or HEALPix index
 \description{
 This function produces a plot from a \code{\link{HPDataFrame}}.
 If columns x,y,z (cartesian) or theta,phi (colatitude and longitude
-respectively) are present in \code{hpdf}, then
+respectively) are present in \code{x}, then
 these will be used as coordinates for plotting. Otherwise, the
-HEALPix indices as in \code{pix(hpdf)} will be used. If HEALPix
+HEALPix indices as in \code{pix(x)} will be used. If HEALPix
 indices are used and multiple rows correspond to a single pixel
 index, then beware that values may be obfuscated in the plot,
 and all locations are pixel centers.

@@ -4,13 +4,13 @@
 \alias{nside.HPDataFrame}
 \title{HEALPix Nside parameter from a \code{\link{HPDataFrame}}}
 \usage{
-\method{nside}{HPDataFrame}(hpdf)
+\method{nside}{HPDataFrame}(x)
 }
 \arguments{
-\item{hpdf}{a \code{\link{HPDataFrame}}.}
+\item{x}{A \code{\link{HPDataFrame}}.}
 }
 \value{
-The HEALPix Nside parameter
+The HEALPix Nside parameter.
 }
 \description{
 This function returns the HEALPix Nside parameter

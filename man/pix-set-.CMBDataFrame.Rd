@@ -4,7 +4,7 @@
 \alias{pix<-.CMBDataFrame}
 \title{Assign new pixel indices to a CMBDataFrame}
 \usage{
-\method{pix}{CMBDataFrame}(cmbdf, ...) <- value
+\method{pix}{CMBDataFrame}(x, ...) <- value
 }
 \description{
 Assign new pixel indices to a CMBDataFrame

@@ -2,12 +2,12 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{print.CMBDataFrame}
 \alias{print.CMBDataFrame}
-\title{Print CMB Data}
+\title{Print CMBDataFrame}
 \usage{
-\method{print}{CMBDataFrame}(cmbdf, ...)
+\method{print}{CMBDataFrame}(x, ...)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{x}{A \code{\link{CMBDataFrame}}.}
 
 \item{...}{arguments passed to \code{\link{print.tbl_df}}}
 }
@@ -15,7 +15,7 @@
 Prints contents of the CMB data frame to the console.
 }
 \description{
-This function neatly prints the contents of a CMB Data Frame.
+This function neatly prints the contents of a CMBDataFrame.
 }
 \examples{
 df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)

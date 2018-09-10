@@ -5,13 +5,13 @@
 \title{Get the maximum distance between all points
 in a \code{\link{CMBDataFrame}}}
 \usage{
-\method{maxDist}{CMBDataFrame}(cmbdf)
+\method{maxDist}{CMBDataFrame}(x)
 }
 \arguments{
-\item{cmbdf}{a CMBDataFrame object}
+\item{x}{A CMBDataFrame object.}
 }
 \value{
-maximum distance between all points
+Maximum distance between all points.
 }
 \description{
 Get the maximum distance between all points

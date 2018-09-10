@@ -5,13 +5,13 @@
 \title{Get the maximum distance between all points
 in a \code{\link{CMBWindow}}}
 \usage{
-\method{maxDist}{CMBWindow}(win)
+\method{maxDist}{CMBWindow}(x)
 }
 \arguments{
-\item{win}{a CMBWindow object}
+\item{x}{A CMBWindow object.}
 }
 \value{
-the maximum distance between window's points
+The maximum distance between window's points.
 }
 \description{
 Get the maximum distance between all points

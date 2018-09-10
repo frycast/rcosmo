@@ -4,23 +4,23 @@
 \alias{window.CMBDataFrame}
 \title{Get a sub window from \code{\link{CMBDataFrame}}}
 \usage{
-\method{window}{CMBDataFrame}(cmbdf, new.window, intersect = TRUE,
-  in.pixels, in.pixels.res = 0, ...)
+\method{window}{CMBDataFrame}(x, new.window, intersect = TRUE, in.pixels,
+  in.pixels.res = 0, ...)
 }
 \arguments{
-\item{cmbdf}{a CMBDataFrame.}
+\item{x}{A \code{\link{CMBDataFrame}}.}
 
-\item{new.window}{optionally specify a new window
+\item{new.window}{Optionally specify a new window
 in which case a new CMBDataFrame is returned whose CMBWindow is new.window.
 \code{new.window} may also be a list (see details section and examples).}
 
 \item{intersect}{A boolean that determines
-the behaviour when \code{win} is a list containing BOTH
+the behaviour when \code{new.window} is a list containing BOTH
 regular type and "minus" type windows together (see details).}
 
 \item{in.pixels}{A vector of pixels at resolution
 \code{in.pixels.res} whose union contains the
-window(s) \code{win} entirely, or if \code{new.window} is
+window(s) \code{new.window} entirely, or if \code{new.window} is
 unspecified then this whole pixel is returned.}
 
 \item{in.pixels.res}{An integer. Resolution
@@ -28,7 +28,7 @@ unspecified then this whole pixel is returned.}
 which the \code{in.pixels} parameter is specified}
 }
 \value{
-The window attribute of cmbdf or, if new.window/in.pixels is specified,
+The window attribute of \code{x} or, if new.window/in.pixels is specified,
 a new CMBDataFrame.
 }
 \description{
@@ -42,18 +42,19 @@ a new CMBDataFrame whose CMBWindow attribute is new.window
 Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 are treated differently from other windows.
 
-If the argument is a list of CMBWindows, then interious of all windows whose
+If the argument \code{new.window} is a list of CMBWindows,
+then interious of all windows whose
 winType does not include "minus" are united (let \eqn{A} be their union) and
 exteriors of all windows whose winType does include "minus" are intersected,
 (let \eqn{B} be their intersection). Then, provided that
 \code{intersect = TRUE} (the default), the returned CMBDataFrame will
 be the points of \code{cmbdf} in the the intersection of \eqn{A} and \eqn{B}.
 Otherwise, if \code{intersect = FALSE}, the returned CMBDataFrame
-consists of the points of \code{cmbdf} in the union of
+consists of the points of \code{x} in the union of
 \eqn{A} and \eqn{B}.
 
 Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned CMBDataFrame
-will be the points of \code{cmbdf} in \eqn{B} (resp. \eqn{A}).
+will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 }
 \examples{
 

@@ -107,9 +107,9 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 }
 
 #'@export
-`pix<-.HPDataFrame` <- function(hpdf,...,value) {
-  attr(hpdf, "pix") <- value
-  hpdf
+`pix<-.HPDataFrame` <- function(x,...,value) {
+  attr(x, "pix") <- value
+  x
 }
 
 
@@ -119,13 +119,13 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #' If new.pix is unspecified then this function returns the vector of
 #' HEALPix pixel indices from a HPDataFrame. If new.pix is specified then
 #' this function returns a new HPDataFrame with the same number of rows
-#' as \code{hpdf}, but with pix attribute \code{new.pix}. Thus,
-#' \code{new.pix} must have length equal to \code{nrow(hpdf)}.
+#' as \code{x}, but with pix attribute \code{new.pix}. Thus,
+#' \code{new.pix} must have length equal to \code{nrow(x)}.
 #'
 #'
-#'@param hpdf a \code{\link{HPDataFrame}}.
+#'@param x a \code{\link{HPDataFrame}}.
 #'@param new.pix optional vector of pixel indices with
-#'length equal to \code{nrow(hpdf)}
+#'length equal to \code{nrow(x)}
 #'
 #'@return
 #' The vector of HEALPix pixel indices (integers) or,
@@ -137,19 +137,19 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #' pix(df)
 #'
 #'@export
-pix.HPDataFrame <- function(hpdf, new.pix, ...)
+pix.HPDataFrame <- function(x, new.pix, ...)
 {
   if ( !missing(new.pix) )
   {
-    if (nrow(hpdf) != length(new.pix))
+    if (nrow(x) != length(new.pix))
     {
       stop("nrow(hpdf) not equal to length(new.pix)")
     }
-    attr(hpdf, "pix") <- new.pix
-    return(hpdf)
+    attr(x, "pix") <- new.pix
+    return(x)
   }
 
-  return(attr(hpdf, "pix"))
+  return(attr(x, "pix"))
 }
 
 
@@ -158,19 +158,19 @@ pix.HPDataFrame <- function(hpdf, new.pix, ...)
 #' This function returns the HEALPix Nside parameter
 #' of a \code{\link{HPDataFrame}}
 #'
-#'@param hpdf a \code{\link{HPDataFrame}}.
+#'@param x A \code{\link{HPDataFrame}}.
 #'
 #'@return
-#' The HEALPix Nside parameter
+#' The HEALPix Nside parameter.
 #'
 #'@examples
 #' df <- HPDataFrame(I = rep(0,12), nside = 1)
 #' nside(df)
 #'
 #'@export
-nside.HPDataFrame <- function( hpdf )
+nside.HPDataFrame <- function( x )
 {
-  return( as.integer(attr( hpdf, "nside" )) )
+  return( as.integer(attr( x, "nside" )) )
 }
 
 
@@ -179,14 +179,14 @@ nside.HPDataFrame <- function( hpdf )
 #'
 #' This function produces a plot from a \code{\link{HPDataFrame}}.
 #' If columns x,y,z (cartesian) or theta,phi (colatitude and longitude
-#' respectively) are present in \code{hpdf}, then
+#' respectively) are present in \code{x}, then
 #' these will be used as coordinates for plotting. Otherwise, the
-#' HEALPix indices as in \code{pix(hpdf)} will be used. If HEALPix
+#' HEALPix indices as in \code{pix(x)} will be used. If HEALPix
 #' indices are used and multiple rows correspond to a single pixel
 #' index, then beware that values may be obfuscated in the plot,
 #' and all locations are pixel centers.
 #'
-#'@param hpdf a HPDataFrame.
+#'@param x A HPDataFrame.
 #'@param add if TRUE then this plot will be added to any existing plot.
 #'Note that if \code{back.col} (see below) is specified then a new plot
 #'window will be opened and \code{add = TRUE} will have no effect
@@ -207,7 +207,7 @@ nside.HPDataFrame <- function( hpdf )
 #'@param labels optionally specify a vector of labels to plot,
 #'such as words or vertex indices. If this is specified then
 #'\code{rgl::text3d} is used instead of \code{rgl::plot3d}. Then
-#'\code{length(labels)} must equal \code{nrow(hpdf)}
+#'\code{length(labels)} must equal \code{nrow(x)}
 #'@param hp.boundaries integer. If greater than 0 then HEALPix
 #'pixel boundaries at \code{nside = hp.boundaries} will be
 #'added to the plot
@@ -224,13 +224,14 @@ nside.HPDataFrame <- function( hpdf )
 #'      hp.boundaries = 1)
 #'
 #'@export
-plot.HPDataFrame <- function(hpdf, intensities = "I",
+plot.HPDataFrame <- function(x, intensities = "I",
                               add = FALSE, sample.size,
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
                               col = "blue", back.col = "black", labels,
                               hp.boundaries = 0, hpb.col = "gray", ...)
 {
+  hpdf <- x
   pix <- pix(hpdf)
 
   if ( anyDuplicated(pix) > 0 ) {
@@ -288,13 +289,14 @@ plot.HPDataFrame <- function(hpdf, intensities = "I",
 #' is specified, using e.g. \code{new.ordering = "ring"}, the
 #' ordering scheme of the HPDataFrame will be converted.
 #'
-#'@param hpdf a \code{\link{HPDataFrame}}.
-#'@param new.ordering specifies the new ordering ("ring" or "nest")
+#'@param x a \code{\link{HPDataFrame}}.
+#'@param new.ordering Specifies the new ordering ("ring" or "nest")
 #'if a change of ordering scheme is desired.
 #'
 #'@return
 #' The name of the HEALPix ordering scheme that is used in the
-#' HPDataFrame hpdf, or a new hpdf with the desired new.ordering
+#' HPDataFrame x, or a new HPDataFrame
+#' with the desired new.ordering
 #'
 #'@examples
 #'
@@ -304,10 +306,12 @@ plot.HPDataFrame <- function(hpdf, intensities = "I",
 #' ordering(df1)
 #'
 #'@export
-ordering.HPDataFrame <- function( hpdf, new.ordering, ... )
+ordering.HPDataFrame <- function( x, new.ordering, ... )
 {
-  if ( missing(new.ordering) )
-  {
+  hpdf <- x
+
+  if ( missing(new.ordering) ) {
+
     return(attr( hpdf, "ordering" ))
 
   } else {
@@ -343,9 +347,8 @@ ordering.HPDataFrame <- function( hpdf, new.ordering, ... )
 #' Assign new ordering scheme to HPDataFrame
 #' @keywords internal
 #' @export
-`ordering<-.HPDataFrame` <- function(hpdf,...,value) {
-  rcosmo::ordering(hpdf, new.ordering = value)
-  hpdf
+`ordering<-.HPDataFrame` <- function(x,...,value) {
+  rcosmo::ordering(x, new.ordering = value)
 }
 
 
@@ -546,7 +549,7 @@ is.HPDataFrame <- function(hpdf)
 #'
 #' This function neatly prints the contents of a HPDataFrame.
 #'
-#'@param hpdf a HPDataFrame.
+#'@param x A HPDataFrame.
 #'@param ... arguments passed to \code{\link{print.tbl_df}}
 #'
 #'@return
@@ -558,10 +561,10 @@ is.HPDataFrame <- function(hpdf)
 #' df
 #'
 #'@export
-print.HPDataFrame <- function(hpdf,...)
+print.HPDataFrame <- function(x,...)
 {
   cat("A HPDataFrame\n")
-  print(tibble::as.tibble(hpdf), ...)
+  print(tibble::as.tibble(x), ...)
 }
 
 
@@ -570,11 +573,11 @@ print.HPDataFrame <- function(hpdf,...)
 #' Geodesic area covered by a \code{\link{HPDataFrame}}
 #'
 #' Gives the surface on the unit sphere
-#' that is encompassed by all pixels in \code{hpdf}
+#' that is encompassed by all pixels in \code{x}.
 #'
-#'@param hpdf a HPDataFrame
+#'@param x A HPDataFrame.
 #'
-#'@return the sum of the areas of all pixels (rows) in hpdf
+#'@return The sum of the areas of all pixels (rows) in \code{x}.
 #'
 #'@examples
 #'
@@ -590,11 +593,11 @@ print.HPDataFrame <- function(hpdf,...)
 #' plot(hp1, size = 5, hp.boundaries = 1)
 #'
 #'@export
-geoArea.HPDataFrame <- function(hpdf)
+geoArea.HPDataFrame <- function(x)
 {
-  nside <- rcosmo::nside(hpdf)
+  nside <- rcosmo::nside(x)
   if ( !is.numeric(nside) ) stop("problem with hpdf nside attribute")
-  return(pi/(3*nside^2)*length(unique(rcosmo::pix((hpdf)))))
+  return(pi/(3*nside^2)*length(unique(rcosmo::pix((x)))))
 }
 
 
@@ -628,23 +631,23 @@ geoArea.HPDataFrame <- function(hpdf)
 #'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
 #'will be the points of \code{df} in \eqn{B} (resp. \eqn{A}).
 #'
-#'@param hpdf A HPDataFrame.
+#'@param x A \code{\link{HPDataFrame}}.
 #'@param new.window Optional.
 #'A single \code{\link{CMBWindow}} object or a list of them.
 #'@param intersect A boolean that determines
-#'the behaviour when \code{win} is a list containing BOTH
+#'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
 #'@param healpix.only A boolean. If the HPDataFrame has columns x,y,z
 #' or theta, phi then these will be used to determine locations
-#' with priority over the HEALPix indices in \code{pix(hpdf)}
+#' with priority over the HEALPix indices in \code{pix(x)}
 #' unless \code{healpix.only = TRUE} is given. Note that
 #' if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
 #' will be discarded and replaced with pixel center locations.
 #'
 #'@return
-#' A HPDataFrame containing the data in \code{hpdf} restricted to the
+#' A HPDataFrame containing the data in \code{x} restricted to the
 #' CMBWindow \code{new.window}. Or, if \code{new.window} is
-#' unspecified, then the window attribute of \code{hpdf}
+#' unspecified, then the window attribute of \code{x}
 #' is returned instead (and may be NULL).
 #'
 #'@examples
@@ -663,21 +666,21 @@ geoArea.HPDataFrame <- function(hpdf)
 #'
 #'
 #'@export
-window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
+window.HPDataFrame <- function(x, new.window, intersect = TRUE,
                                healpix.only = FALSE, ...)
 {
   if ( missing(new.window) )
   {
-    return(attr(hpdf, "window"))
+    return(attr(x, "window"))
   }
 
   if ( healpix.only )
   {
-    hpdf <- rcosmo::coords(hpdf, new.coords = "cartesian",
+    hpdf <- rcosmo::coords(x, new.coords = "cartesian",
                             healpix.only = TRUE)
   }
 
-  return(subWindow(hpdf, win = new.window, intersect = intersect))
+  return(subWindow(x, win = new.window, intersect = intersect))
 }
 
 
@@ -686,7 +689,7 @@ window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
 #'
 #' This function produces a summary from a HPDataFrame.
 #'
-#'@param hpdf a HPDataFrame.
+#'@param object A HPDataFrame.
 #'@param intensities the name of a column specifying intensities
 #'(or potentially another numeric quantity of interest)
 #'
@@ -704,8 +707,10 @@ window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
 #' summary(hpdf.win)
 #'
 #'@export
-summary.HPDataFrame <- function(hpdf, intensities = "I", ...)
+summary.HPDataFrame <- function(object, intensities = "I", ...)
 {
+  hpdf <- object
+
   ans <- list(intensities = summary(hpdf[,intensities, drop = TRUE]))
 
   if ( is.null(window(hpdf)) )

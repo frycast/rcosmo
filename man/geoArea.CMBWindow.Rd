@@ -4,13 +4,13 @@
 \alias{geoArea.CMBWindow}
 \title{Geodesic area of a \code{\link{CMBWindow}}}
 \usage{
-\method{geoArea}{CMBWindow}(win)
+\method{geoArea}{CMBWindow}(x)
 }
 \arguments{
-\item{win}{a CMBWindow}
+\item{x}{A CMBWindow.}
 }
 \value{
-Tthe spherical area inside win
+The spherical area inside \code{x}.
 }
 \description{
 Geodesic area of a \code{\link{CMBWindow}}

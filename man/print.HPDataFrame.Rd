@@ -4,10 +4,10 @@
 \alias{print.HPDataFrame}
 \title{Print a \code{\link{HPDataFrame}}}
 \usage{
-\method{print}{HPDataFrame}(hpdf, ...)
+\method{print}{HPDataFrame}(x, ...)
 }
 \arguments{
-\item{hpdf}{a HPDataFrame.}
+\item{x}{A HPDataFrame.}
 
 \item{...}{arguments passed to \code{\link{print.tbl_df}}}
 }

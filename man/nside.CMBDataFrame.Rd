@@ -4,13 +4,13 @@
 \alias{nside.CMBDataFrame}
 \title{HEALPix Nside parameter from a CMBDataFrame}
 \usage{
-\method{nside}{CMBDataFrame}(cmbdf)
+\method{nside}{CMBDataFrame}(x)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{x}{A \code{\link{CMBDataFrame}}.}
 }
 \value{
-The HEALPix Nside parameter
+The HEALPix Nside parameter.
 }
 \description{
 This function returns the HEALPix Nside parameter of a CMBDataFrame

@@ -10,3 +10,4 @@ src/*.o
 src/*.so
 src/*.dll
 packrat/lib*/
+CMB_map_smica1024.fits

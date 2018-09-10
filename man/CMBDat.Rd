@@ -2,7 +2,6 @@
 % Please edit documentation in R/CMBDat.R
 \name{CMBDat}
 \alias{CMBDat}
-\alias{CMBDat}
 \alias{readFITS}
 \title{CMBDat class.}
 \usage{

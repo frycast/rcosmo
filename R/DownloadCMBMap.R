@@ -10,94 +10,81 @@
 #' 5 arcmin resolution, and the polarization maps are provided at Nside = 1024
 #' at 10 arcmin resolution.
 #'
-#' \code{link = 1:} CMB Maps produced by Commander with Nside=1024;
+#' @param pipeline A string naming the foreground separation method pipeline.
+#' Please choose one of "COMMANDER", "NILC", "SEVEM" or "SMICA"
+#' (not case sensitive).
+#' @param nside An integer. The nside parameter (resolution) required.
+#' The available options are \code{1024} or \code{2048}.
+#' @param destfile  An optional character string with the path and file
+#' name for the downloaded file to be saved. Defaults to the working
+#' directory. Tilde-expansion is performed.
 #'
-#' \code{link = 2:} CMB Maps produced by NILC with Nside=1024;
+#' @return CMB Map FITS File (Flexible Image Transport System). The
+#' FITS file can be loaded into a \code{\link{CMBDataFrame}} using
+#' the \code{\link{CMBDat}} function.
 #'
-#' \code{link = 3:} CMB Maps produced by SEVEM with Nside=1024;
-#'
-#' \code{link = 4:} CMB Maps produced by SMICA with Nside=1024;
-#'
-#' \code{link = 5:} CMB Maps produced by Commander with Nside=2048;
-#'
-#' \code{link = 6:} CMB Maps produced by NILC with Nside=2048;
-#'
-#' \code{link = 7:} CMB Maps produced by SEVEM with Nside=2048;
-#'
-#' \code{link = 8:} CMB Maps produced by SMICA with Nside=2048;
-#'
-#' @param link  A character string naming the URL of a resource to be downloaded.
-#' @param destfile  A character string with the file name for the downloaded file
-#' to be saved. Tilde-expansion is performed.
-#' @return  CMB Map Fits File
 #' @examples
-#' ## Download Commander with Nside=1024 and save in the default folder
-#' ## as "../rcosmo/CMB_map_commander1024.fits"
-#' downloadCMBMap(link=1)
-#' ## Download SMICA with Nside=2048 and save in the default folder
-#' ## as "../rcosmo/CMB_map_smica2048.fits"
-#' downloadCMBMap(link=8)
-#' ## Download SMICA with Nside=1024 and save in the specified folder,
-#' ## fpr example, "C:/CMB_map_smica1024.fits"
-#' downloadCMBMap(link=8, destfile="C:/CMB_map_smica1024.fits")
+#' ## Download SMICA with \code{nside = 1024}
+#' ## and save in working directory
+#' ## as "CMB_map_smica1024.fits"
+#' downloadCMBMap(foreground = "smica", nside = 1024)
+#' ## Load the downloaded map into a CMBDataFrame
+#' sky <- CMBDat("CMB_map_smica1024.fits")
+#'
+#' ## Download SMICA with Nside=2048 and save in the working directory
+#' ## as "CMB_map_smica2048.fits"
+#' downloadCMBMap(foreground = "smica", nside = 2048)
+#'
+#' ## Download COMMANDER with Nside=1024 and save in a specified folder,
+#' ## for example,
+#' dest <- "C:/CMB_map_commander1024.fits"
+#' downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
 #
 #' @keywords CMB Maps
 #' @references Planck Public Data Release 2 Maps
 #' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
-#' @references Other fits maps can also be downloaded using the general command \code{\link{download.file}}.
-#' @export
+#' @references Other fits maps can also be downloaded
+#' using the general command \code{\link{download.file}}.
 #'
-downloadCMBMap <- function(link=1,destfile){
+#' @export
+downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
 
-  url <- switch(link,
-                link1,
-                link2,
-                link3,
-                link4,
-                link5,
-                link6,
-                link7,
-                link8)
-  if ( missing(destfile) ) {
-    destfile<- switch(link,
-          destfile1,
-          destfile2,
-          destfile3,
-          destfile4,
-          destfile5,
-          destfile6,
-          destfile7,
-          destfile8)
+  webpath <- paste0("http://irsa.ipac.caltech.edu/",
+                    "data/Planck/release_2/all-sky-maps/",
+                    "maps/component-maps/cmb/")
+  prefix <- "COM_CMB_IQU-"
+  suffix <- "full.fits"
+  ns1024 <- "_1024_R2.02_"
+  ns2048 <- "_2048_R2.01_"
+  foregrounds <- c("commander","nilc","sevem","smica")
+
+  if ( nside == 1024 )
+  {
+    ns <- ns1024
   }
-   download.file(url, destfile, mode = "wb")
-}
+  else if ( nside == 2048 )
+  {
+    ns <- ns2048
+  }
+  else
+  {
+    stop(paste0("Please specify nside parameter as ",
+                "either nside = 1024 or nside = 2048"))
+  }
 
-link1<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-            "maps/component-maps/cmb/COM_CMB_IQU-commander_1024_R2.02_full.fits",sep = "")
-destfile1=paste(getwd(),"/CMB_map_commander1024.fits",sep = "")
-link2<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-            "maps/component-maps/cmb/COM_CMB_IQU-nilc_1024_R2.02_full.fits",sep = "")
-destfile2=paste(getwd(),"/CMB_map_nilc1024.fits",sep = "")
-link3<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-           "maps/component-maps/cmb/COM_CMB_IQU-sevem_1024_R2.02_full.fits",sep = "")
-destfile3=paste(getwd(),"/CMB_map_sevem1024.fits",sep = "")
-link4<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-           "maps/component-maps/cmb/COM_CMB_IQU-smica_1024_R2.02_full.fits",sep = "")
-destfile4=paste(getwd(),"/CMB_map_smica1024.fits",sep = "")
-link5<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-           "maps/component-maps/cmb/",
-           "COM_CMB_IQU-commander-field-Int_2048_R2.01_full.fits",sep = "")
-destfile5=paste(getwd(),"/CMB_map_commander2048.fits",sep = "")
-link6<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-              "maps/component-maps/cmb/",
-              "COM_CMB_IQU-nilc-field-Int_2048_R2.01_full.fits",sep = "")
-destfile6=paste(getwd(),"/CMB_map_nilc2048.fits",sep = "")
-link7<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-              "maps/component-maps/cmb/",
-              "COM_CMB_IQU-sevem-field-Int_2048_R2.01_full.fits",sep = "")
-destfile7=paste(getwd(),"/CMB_map_sevem2048.fits",sep = "")
-link8<- paste("http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
-              "maps/component-maps/cmb/",
-              "COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits",sep = "")
-destfile8=paste(getwd(),"/CMB_map_smica2048.fits",sep = "")
+  foreground <- tolower(foreground)
+  if ( !(foreground %in% foregrounds) )
+  {
+    stop(paste0("foreground parameter was not one of: ",
+                paste0(foregrounds, collapse = ", ")))
+  }
+
+  url <- paste0(webpath, prefix, foreground, ns, suffix)
+
+  if ( missing(destfile) ) {
+    destfile <- paste0("CMB_map_", foreground, nside, ".fits")
+  }
+
+  download.file(url, destfile, mode = "wb")
+}
 

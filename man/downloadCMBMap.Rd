@@ -4,16 +4,23 @@
 \alias{downloadCMBMap}
 \title{Download CMB Maps from Planck Public Data Release.}
 \usage{
-downloadCMBMap(link = 1, destfile)
+downloadCMBMap(foreground = "smica", nside = 1024, destfile)
 }
 \arguments{
-\item{link}{A character string naming the URL of a resource to be downloaded.}
+\item{nside}{An integer. The nside parameter (resolution) required.
+The available options are \code{1024} or \code{2048}.}
 
-\item{destfile}{A character string with the file name for the downloaded file
-to be saved. Tilde-expansion is performed.}
+\item{destfile}{A character string with the file name for the
+downloaded file to be saved. Tilde-expansion is performed.}
+
+\item{pipeline}{A string naming the foreground separation method pipeline.
+Please choose one of "COMMANDER", "NILC", "SEVEM" or "SMICA"
+(not case sensitive).}
 }
 \value{
-CMB Map Fits File
+CMB Map FITS File (Flexible Image Transport System). The
+FITS file can be loaded into a \code{\link{CMBDataFrame}} using
+the \code{\link{CMBDat}} function.
 }
 \description{
 The function \code{downloadCMBMap} downloads CMB maps from
@@ -26,39 +33,30 @@ pipelines, respectively.
 For each pipeline, the intensity maps are provided at Nside = 2048, at
 5 arcmin resolution, and the polarization maps are provided at Nside = 1024
 at 10 arcmin resolution.
-
-\code{link = 1:} CMB Maps produced by Commander with Nside=1024;
-
-\code{link = 2:} CMB Maps produced by NILC with Nside=1024;
-
-\code{link = 3:} CMB Maps produced by SEVEM with Nside=1024;
-
-\code{link = 4:} CMB Maps produced by SMICA with Nside=1024;
-
-\code{link = 5:} CMB Maps produced by Commander with Nside=2048;
-
-\code{link = 6:} CMB Maps produced by NILC with Nside=2048;
-
-\code{link = 7:} CMB Maps produced by SEVEM with Nside=2048;
-
-\code{link = 8:} CMB Maps produced by SMICA with Nside=2048;
 }
 \examples{
-## Download Commander with Nside=1024 and save in the default folder
-## as "../rcosmo/CMB_map_commander1024.fits"
-downloadCMBMap(link=1)
-## Download SMICA with Nside=2048 and save in the default folder
-## as "../rcosmo/CMB_map_smica2048.fits"
-downloadCMBMap(link=8)
-## Download SMICA with Nside=1024 and save in the specified folder,
-## fpr example, "C:/CMB_map_smica1024.fits"
-downloadCMBMap(link=8, destfile="C:/CMB_map_smica1024.fits")
+## Download SMICA with \\code{nside = 1024}
+## and save in working directory
+## as "CMB_map_smica1024.fits"
+downloadCMBMap(foreground = "smica", nside = 1024)
+## Load the downloaded map into a CMBDataFrame
+sky <- CMBDat("CMB_map_smica1024.fits")
+
+## Download SMICA with Nside=2048 and save in the working directory
+## as "CMB_map_smica2048.fits"
+downloadCMBMap(foreground = "smica", nside = 2048)
+
+## Download COMMANDER with Nside=1024 and save in a specified folder,
+## for example,
+dest <- "C:/CMB_map_commander1024.fits"
+downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
 }
 \references{
 Planck Public Data Release 2 Maps
 \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 
-Other fits maps can also be downloaded using the general command \code{\link{download.file}}.
+Other fits maps can also be downloaded
+using the general command \code{\link{download.file}}.
 }
 \keyword{CMB}
 \keyword{Maps}

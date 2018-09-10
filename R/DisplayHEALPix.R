@@ -110,10 +110,10 @@ displayPixelBoundaries <- function(nside, eps = pi/90,
       stop("ordering, if specified, must be 'ring' or 'nested'")
     }
 
-    centers <- rcosmo:::CMBDataFrame(nside = nside, ordering = ordering,
+    centers <- rcosmo::CMBDataFrame(nside = nside, ordering = ordering,
                                     coords = "cartesian")[incl.labels,]
 
-    rcosmo:::plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
+    plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
                               cex = nums.size, labels = incl.labels,
                               font = font)
   }
@@ -123,7 +123,7 @@ displayPixelBoundaries <- function(nside, eps = pi/90,
 ## HELPER FUNCTION 1
 plotPixel <- function(S, col = "black", lwd = 1, ...)
 {
-  C <- rcosmo:::sph2car(S)
+  C <- sph2car(S)
   rgl::plot3d(C[,"x"],C[,"y"],C[,"z"],
               type = "l", add = TRUE, col = col, lwd = lwd, ...)
 }
@@ -303,7 +303,7 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
                           size = 3)
 {
   if ( !missing(boundary.j) ) {
-    rcosmo:::displayPixelBoundaries(nside = 2^boundary.j,
+    rcosmo::displayPixelBoundaries(nside = 2^boundary.j,
                                     ordering = "nested",
                                     nums.col = "red",
                                     col = boundary.col,
@@ -312,11 +312,11 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
   }
 
   # We do this by plotting grandchildren of the siblings
-  gchild <- rcosmo:::pixelWindow(j1 = j,
+  gchild <- rcosmo::pixelWindow(j1 = j,
                                  j2 = plot.j,
                                  pix.j1 = spix)
 
-  hp <- rcosmo:::HPDataFrame(nside = 2^plot.j,
+  hp <- rcosmo::HPDataFrame(nside = 2^plot.j,
                              spix = gchild)
   plot(hp, add = TRUE, col = col, size = size)
 }

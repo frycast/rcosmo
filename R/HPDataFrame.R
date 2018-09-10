@@ -274,7 +274,7 @@ plot.HPDataFrame <- function(hpdf, intensities = "I",
 
   if ( hp.boundaries > 0 )
   {
-    rcosmo:::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col)
+    rcosmo::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col)
   }
 }
 
@@ -320,7 +320,7 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
     } else if ( identical(new.ordering, "nested") ) {
 
       message("Converting to nested ordering...\n")
-      pix(hpdf) <- rcosmo:::ring2nest(nside = nside(hpdf),
+      pix(hpdf) <- rcosmo::ring2nest(nside = nside(hpdf),
                                       pix = pix(hpdf))
       attr(hpdf, "ordering") <- "nested"
 
@@ -344,7 +344,7 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 #' @keywords internal
 #' @export
 `ordering<-.HPDataFrame` <- function(hpdf,...,value) {
-  rcosmo:::ordering(hpdf, new.ordering = value)
+  rcosmo::ordering(hpdf, new.ordering = value)
   hpdf
 }
 
@@ -404,9 +404,9 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
 {
 
-  ns <- rcosmo:::nside(hpdf)
-  od <- rcosmo:::ordering(hpdf)
-  pix <- rcosmo:::pix(hpdf)
+  ns <- rcosmo::nside(hpdf)
+  od <- rcosmo::ordering(hpdf)
+  pix <- rcosmo::pix(hpdf)
 
   if ( healpix.only == TRUE )
   {
@@ -431,7 +431,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
     if ( !all(c("x","y","z") %in% names(hpdf)) )
     {
       # Use pix to convert to spherical
-      sph <- rcosmo:::pix2coords_internal(nside = ns,
+      sph <- pix2coords_internal(nside = ns,
                 nested = (od == "nested"),
                 spix = pix,
                 cartesian = FALSE)
@@ -447,7 +447,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
       z.i <- which(names(hpdf) == "z")
 
       crds <- hpdf[,c(x.i, y.i, z.i)]
-      crds <- rcosmo:::car2sph(crds)
+      crds <- car2sph(crds)
       other <- hpdf[,-c(x.i, y.i, z.i), drop = FALSE]
       hpdf <- cbind(crds, other)
 
@@ -463,7 +463,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
     if ( !all(c("theta","phi") %in% names(hpdf)) )
     {
       # Use pix to convert to cartesian
-      xyz <- rcosmo:::pix2coords_internal(nside = ns,
+      xyz <- pix2coords_internal(nside = ns,
                nested = (od == "nested"),
                spix = pix,
                cartesian = TRUE)
@@ -477,7 +477,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
       phi.i <- which(names(hpdf) == "phi")
 
       crds <- hpdf[,c(theta.i, phi.i)]
-      crds <- rcosmo:::sph2car(crds)
+      crds <- sph2car(crds)
       other <- hpdf[,-c(theta.i, phi.i), drop = FALSE]
       hpdf <- cbind(crds, other)
     }
@@ -591,9 +591,9 @@ print.HPDataFrame <- function(hpdf,...)
 #'@export
 geoArea.HPDataFrame <- function(hpdf)
 {
-  nside <- rcosmo:::nside(hpdf)
+  nside <- rcosmo::nside(hpdf)
   if ( !is.numeric(nside) ) stop("problem with hpdf nside attribute")
-  return(pi/(3*nside^2)*length(unique(rcosmo:::pix((hpdf)))))
+  return(pi/(3*nside^2)*length(unique(rcosmo::pix((hpdf)))))
 }
 
 
@@ -672,7 +672,7 @@ window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
 
   if ( healpix.only )
   {
-    hpdf <- rcosmo:::coords(hpdf, new.coords = "cartesian",
+    hpdf <- rcosmo::coords(hpdf, new.coords = "cartesian",
                             healpix.only = TRUE)
   }
 

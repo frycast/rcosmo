@@ -199,20 +199,20 @@ plot.CMBWindow <- function(win, add = TRUE, type = "l",
 {
   if ( coords(win) == "spherical" )
   {
-    rcosmo:::coords(win) <- "cartesian"
-  } else if ( rcosmo:::coords(win) == "cartesian" ) {
+    rcosmo::coords(win) <- "cartesian"
+  } else if ( rcosmo::coords(win) == "cartesian" ) {
     # do nothing
   } else {
    stop("'win' must be in either spherical or cartesian coordinates")
   }
 
-  if ( rcosmo:::contains("polygon", rcosmo:::winType(win)) )
+  if ( contains("polygon", rcosmo::winType(win)) )
   {
-    boundary <- rcosmo:::polygonBoundary(win)
+    boundary <- polygonBoundary(win)
   }
   else
   {
-    boundary <- rcosmo:::discBoundary(win)
+    boundary <- discBoundary(win)
   }
 
   if ( !missing(back.col) )
@@ -239,8 +239,8 @@ discBoundary <- function( disc, eps = 0.01 )
   r <- as.numeric(disc[1,"r"])
   theta <- rep(r, length(phi))
 
-  boundary <- rcosmo:::sph2car(data.frame(theta = theta, phi = phi))
-  boundary <- rcosmo:::rodrigues(c(0,0,1), center, boundary)
+  boundary <- sph2car(data.frame(theta = theta, phi = phi))
+  boundary <- rodrigues(c(0,0,1), center, boundary)
 
   return(boundary)
 }
@@ -260,9 +260,9 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
     V1 <- vertices.xyz[row,]
     V2 <- vertices.xyz[1 + (row %% rows),]
 
-    normal <- rcosmo:::vector_cross(V1, V2)
+    normal <- vector_cross(V1, V2)
     ## Rotate so that V1XV2 is moved to (0,0,1)
-    rotated <- rcosmo:::rodrigues(as.matrix(normal)[1,], c(0,0,1),
+    rotated <- rodrigues(as.matrix(normal)[1,], c(0,0,1),
                                   rbind(V1,V2))
 
     ## This atan2 function returns negative thetas which are then corrected
@@ -283,9 +283,9 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 
     line <- data.frame(phi = line.phi,
                        theta = rep(pi/2,length(line.phi)))
-    line <- rcosmo:::sph2car( line )
+    line <- sph2car( line )
 
-    line.rotated <-  as.data.frame(rcosmo:::rodrigues(c(0,0,1),
+    line.rotated <-  as.data.frame(rodrigues(c(0,0,1),
                                                       as.matrix(normal)[1,],
                                                       line))
     names(line.rotated) <- c("x","y","z")
@@ -320,11 +320,11 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 geoArea.CMBWindow <- function(win)
 {
   # Calculate the area of the spherical polygon
-  win.xyz <- rcosmo:::coords(win, new.coords = "cartesian")
+  win.xyz <- rcosmo::coords(win, new.coords = "cartesian")
 
-  a <- switch(rcosmo:::winType(win),
-              polygon = rcosmo:::polygonArea(win.xyz),
-              minus.polygon = 4*pi - rcosmo:::polygonArea(win.xyz),
+  a <- switch(rcosmo::winType(win),
+              polygon = polygonArea(win.xyz),
+              minus.polygon = 4*pi - polygonArea(win.xyz),
               disc = 2*pi*(1 - cos(as.numeric(win$r))),
               minus.disc = 2*pi*(1 + cos(as.numeric(win$r))),
               stop("Could not determine window type using rcosmo::winType"))
@@ -429,7 +429,7 @@ coords.CMBWindow <- function( win, new.coords )
   {
     new.coords <- as.character(tolower(new.coords))
 
-    if ( rcosmo:::contains("disc", winType(win)) )
+    if ( contains("disc", winType(win)) )
     {
       r <- win[,"r"]
     }
@@ -442,10 +442,10 @@ coords.CMBWindow <- function( win, new.coords )
     else if ( new.coords == "spherical" )
     {
       # Convert to spherical
-      win[,1:2] <- rcosmo:::car2sph(win[,c("x", "y", "z")])
+      win[,1:2] <- car2sph(win[,c("x", "y", "z")])
 
       # Add the radius if needed
-      if ( rcosmo:::contains("disc", winType(win))  )
+      if ( contains("disc", winType(win))  )
       {
         win[,3] <- r
         names(win) <- c("theta", "phi", "r")
@@ -462,10 +462,10 @@ coords.CMBWindow <- function( win, new.coords )
     else if ( new.coords == "cartesian" )
     {
       # Convert to cartesian
-      win[,1:3] <- rcosmo:::sph2car(win[,c("theta", "phi")])
+      win[,1:3] <- sph2car(win[,c("theta", "phi")])
 
       # Add the radius if needed
-      if ( rcosmo:::contains("disc", winType(win))  )
+      if ( contains("disc", winType(win))  )
       {
         win[,4] <- r
         names(win) <- c("x", "y", "z", "r")
@@ -492,12 +492,12 @@ coords.CMBWindow <- function( win, new.coords )
 #'@export
 `coords<-.CMBWindow` <- function(win,...,value) {
   value <- tolower(value)
-  if (rcosmo:::coords(win) == value)
+  if (rcosmo::coords(win) == value)
   {
     return(win)
 
   } else {
 
-    return(rcosmo:::coords(win, new.coords = value))
+    return(rcosmo::coords(win, new.coords = value))
   }
 }

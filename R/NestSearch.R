@@ -41,13 +41,13 @@ nestSearch <- function(target, nside,
   h <- 0
   for ( i in 2:length(j) )
   {
-    h <- rcosmo:::nestSearch_step( target, j2 = j[i],
+    h <- rcosmo::nestSearch_step( target, j2 = j[i],
                                    j1 = j[i-1], pix.j1 = h)
   }
 
   # Note h is now one level deeper than the target resolution.
   # Convert h to Cartesian coordinates.
-  h.xyz <- rcosmo:::pix2coords_internal(nside = 2^(j[length(j)]),
+  h.xyz <- pix2coords_internal(nside = 2^(j[length(j)]),
                                         nested = TRUE,
                                         cartesian = TRUE,
                                         spix = h)[,1:3]
@@ -60,7 +60,7 @@ nestSearch <- function(target, nside,
 
   # Find the parent of h, which is at the target resolution
   h <- parent(h[index.min])
-  h.xyz <- rcosmo:::pix2coords_internal(nside = nside,
+  h.xyz <- pix2coords_internal(nside = nside,
                                         nested = TRUE,
                                         cartesian = TRUE,
                                         spix = h)[,1:3]
@@ -109,10 +109,10 @@ nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0) {
   # nside at level j2
   nside.j2 <- 2^j2
 
-  spix.j2 <- rcosmo:::pixelWindow(j1, j2, pix.j1)
+  spix.j2 <- rcosmo::pixelWindow(j1, j2, pix.j1)
 
   # Convert spix.j2 to Cartesian coordinates
-  xyz.j2 <- rcosmo:::pix2coords_internal(nside = nside.j2,
+  xyz.j2 <- pix2coords_internal(nside = nside.j2,
                                          nested = TRUE,
                                          cartesian = TRUE,
                                          spix = spix.j2)[,1:3]

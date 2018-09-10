@@ -340,7 +340,7 @@ borderPattern <- function(ptype)
 
 
 
-#'neighbours
+#'Return neighbouring pixels
 #'
 #'Return the neighbouring pixels to a given pixel p
 #'that is specified at resolution j, in the nested order.
@@ -349,6 +349,10 @@ borderPattern <- function(ptype)
 #'@param j The resolution parameter with nside = 2^j.
 #'
 #'@examples
+#'## Return the neighbouring pixels for base pixel 1
+#'neighbours(1, 0)
+#'
+#'## Plot the neighbouring pixels for base pixel 1
 #' demoNeighbours <- function(p,j) {
 #'   neighbours(p, j)
 #'   displayPixels(boundary.j = j, j = j, plot.j = 5,
@@ -360,6 +364,8 @@ borderPattern <- function(ptype)
 #'                 size = 3)
 #'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
+#'
+#' demoNeighbours(1,0)
 #'
 #' @export
 neighbours <- function(p, j)

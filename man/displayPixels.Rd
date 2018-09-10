@@ -2,7 +2,7 @@
 % Please edit documentation in R/DisplayHEALPix.R
 \name{displayPixels}
 \alias{displayPixels}
-\title{displayPixels}
+\title{Display the pixels and grandchildren}
 \usage{
 displayPixels(boundary.j, j, plot.j = 5, spix, boundary.col = "gray",
   boundary.lwd = 1, incl.labels = 1:(12 * 4^boundary.j),
@@ -36,6 +36,20 @@ in the grandchildren of spix at resolution plot.j
 }
 \examples{
 
+## Example 1
+
+## Plot base pixels 1,2,3 by colouring their grandchildren at resolution
+## 5 (by default). No pixel boundaries.
+displayPixels(j=0, spix=c(1,2,3))
+
+## Plot base pixels 1,2,3 display and their boundaries (boundary.j=0)
+displayPixels(0,0, spix=c(1,2,3))
+
+## Plot base pixels 1,2,3 by colouring their grandchildren at resolution 2
+displayPixels(0,0, plot.j = 2, spix=c(1,2,3))
+
+## Example 2
+
 demoNeighbours <- function(p,j) {
   neighbours(p, j)
   displayPixels(boundary.j = j, j = j, plot.j = 5,
@@ -48,6 +62,6 @@ demoNeighbours <- function(p,j) {
   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 }
 
-
+demoNeighbours(1,2)
 
 }

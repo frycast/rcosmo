@@ -14,7 +14,7 @@
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.
 #'@param spix The sample pixels (rows) to read from the FITS file
-#'binary data table (optional)
+#'binary data table (optional).
 #'@return A list containing header information and other metadata
 #'as well as an element called \code{data} where:
 #'If \code{mmap = FALSE} then a \code{data.frame} is

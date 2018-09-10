@@ -12,7 +12,8 @@
 #' can be stored in different rows of any given HPDataFrame.
 #'
 #' @param ... data, can be named vectors or a data.frame
-#' @param nside integer number \eqn{2^k}, the nside parameter, i.e, resolution
+#' @param nside integer number \eqn{2^k}, the nside
+#' parameter, i.e, resolution
 #' @param ordering the HEALPix ordering scheme ("ring" or "nested")
 #' @param auto.spix boolean. If TRUE then spix will be found from
 #' the coordinates provided in the data. That is, each row of
@@ -100,6 +101,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   attr(df, "pix") <- pix
   attr(df, "nside") <- nside
   attr(df, "ordering") <- ordering
+  attr(df, "HEALPixCentered") <- FALSE
   class(df) <- unique(c("HPDataFrame", class(df)))
   df
 }
@@ -153,7 +155,8 @@ pix.HPDataFrame <- function(hpdf, new.pix)
 
 #' HEALPix Nside parameter from a \code{\link{HPDataFrame}}
 #'
-#' This function returns the HEALPix Nside parameter of a \code{\link{HPDataFrame}}
+#' This function returns the HEALPix Nside parameter
+#' of a \code{\link{HPDataFrame}}
 #'
 #'@param hpdf a \code{\link{HPDataFrame}}.
 #'
@@ -271,7 +274,7 @@ plot.HPDataFrame <- function(hpdf, intensities = "I",
 
   if ( hp.boundaries > 0 )
   {
-    plotHPBoundaries(nside = hp.boundaries, col = hpb.col)
+    rcosmo:::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col)
   }
 }
 
@@ -371,7 +374,8 @@ ordering.HPDataFrame <- function( hpdf, new.ordering )
 #'@param healpix.only boolean. If TRUE then columns x,y,z
 #'or theta, phi will be ignored and removed if present.
 #'This forces the coordinates to be found from HEALPix
-#'pixel indices only
+#'pixel indices only. Then the HEALPixCentered
+#'attribute of \code{hpdf} will be set to \code{TRUE}.
 #'
 #'@return
 #' A \code{\link{HPDataFrame}} with columns x,y,z (cartesian)
@@ -403,10 +407,11 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
   ns <- rcosmo:::nside(hpdf)
   od <- rcosmo:::ordering(hpdf)
   pix <- rcosmo:::pix(hpdf)
-  nc <- (new.coords == "cartesian")
 
   if ( healpix.only == TRUE )
   {
+    # Delete any coordinates so they will be created again
+    # from HEALPix only
     crd.cols <- which( names(hpdf) %in%
                   c("x","y","z","theta","phi") )
     if ( length(crd.cols) > 0 )
@@ -433,6 +438,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
       sph <- as.data.frame(sph)
       names(sph) <- c("theta","phi")
       hpdf <- cbind(hpdf, as.data.frame(sph))
+
     }
     else
     {
@@ -444,6 +450,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
       crds <- rcosmo:::car2sph(crds)
       other <- hpdf[,-c(x.i, y.i, z.i), drop = FALSE]
       hpdf <- cbind(crds, other)
+
     }
 
   } else if ( new.coords == "cartesian" ) {
@@ -480,6 +487,7 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
   attr(hpdf, "ordering") <- od
   attr(hpdf, "nside") <- ns
   attr(hpdf, "pix") <- pix
+  attr(hpdf, "HEALPixCentered") <- (healpix.only == TRUE)
 
   return(hpdf)
 }
@@ -591,9 +599,6 @@ geoArea.HPDataFrame <- function(hpdf)
 
 
 
-
-
-
 #' Get a sub window from a \code{\link{HPDataFrame}}
 #'
 #' This function returns a
@@ -623,7 +628,8 @@ geoArea.HPDataFrame <- function(hpdf)
 #'will be the points of \code{df} in \eqn{B} (resp. \eqn{A}).
 #'
 #'@param hpdf A HPDataFrame.
-#'@param new.window A single \code{\link{CMBWindow}} object or a list of them.
+#'@param new.window Optional.
+#'A single \code{\link{CMBWindow}} object or a list of them.
 #'@param intersect A boolean that determines
 #'the behaviour when \code{win} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
@@ -636,7 +642,9 @@ geoArea.HPDataFrame <- function(hpdf)
 #'
 #'@return
 #' A HPDataFrame containing the data in \code{hpdf} restricted to the
-#' CMBWindow \code{new.window}
+#' CMBWindow \code{new.window}. Or, if \code{new.window} is
+#' unspecified, then the window attribute of \code{hpdf}
+#' is returned instead (and may be NULL).
 #'
 #'@examples
 #' ns <- 16
@@ -649,16 +657,126 @@ geoArea.HPDataFrame <- function(hpdf)
 #' hpdf.win <- window(hpdf, new.window = win1)
 #' plot(hpdf.win, col = "yellow", size = 4, add = TRUE)
 #' attributes(hpdf.win)
+#' window(hpdf.win)
 #' hpdf.win
 #'
 #'
 #'@export
-window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE, healpix.only = FALSE)
+window.HPDataFrame <- function(hpdf, new.window, intersect = TRUE,
+                               healpix.only = FALSE)
 {
+  if ( missing(new.window) )
+  {
+    return(attr(hpdf, "window"))
+  }
+
   if ( healpix.only )
   {
-    hpdf <- rcosmo:::coords(hpdf, new.coords = "cartesian", healpix.only = TRUE)
+    hpdf <- rcosmo:::coords(hpdf, new.coords = "cartesian",
+                            healpix.only = TRUE)
   }
 
   return(subWindow(hpdf, win = new.window, intersect = intersect))
+}
+
+
+
+#' Summarise a \code{\link{HPDataFrame}}
+#'
+#' This function produces a summary from a HPDataFrame.
+#'
+#'@param hpdf a HPDataFrame.
+#'@param intensities the name of a column specifying intensities
+#'(or potentially another numeric quantity of interest)
+#'
+#'@return
+#'A summary includes window's type and area,
+#' total area covered by observations,
+#' and main statistcs for intensity values
+#'
+#' @examples
+#' ns <- 2
+#' hpdf <- HPDataFrame(I = rnorm(12*ns^2), nside = 2,
+#'                     ordering = "nested")
+#' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' hpdf.win <- window(hpdf, new.window = win)
+#' summary(hpdf.win)
+#'
+#'@export
+summary.HPDataFrame <- function(hpdf, intensities = "I")
+{
+  ans <- list(intensities = summary(hpdf[,intensities, drop = TRUE]))
+
+  if ( is.null(window(hpdf)) )
+  {
+    ans$window <- "full sky"
+  }
+  else
+  {
+    ans$window <- window(hpdf)
+  }
+
+  ans$names <- names(hpdf)
+  ans$ordering <- ordering(hpdf)
+  ans$HEALPixCentered <- attr(hpdf, "HEALPixCentered")
+  ans$nside <- nside(hpdf)
+  ans$pix <- pix(hpdf)
+  ans$n <- nrow(hpdf)
+  ans$area <- geoArea(hpdf)
+  class(ans) <- "summary.HPDataFrame"
+  return(ans)
+}
+
+
+
+
+#'Print a summary of a HPDataFrame
+#'
+#'@keywords internal
+#'
+#'@param x a \code{summary.HPDataFrame} object, i.e.,
+#'the output of \code{\link{summary.HPDataFrame}}
+#'
+#'@export
+#'
+#'
+print.summary.HPDataFrame <- function(x)
+{
+  cat(
+    cli::rule(center = " HPDataFrame Object ", line = "bar4"), "\n",
+    sep = ""
+  )
+
+  # Window loop details here in boxes
+  if ( any(x$window != "full sky") )
+  {
+    cat("Number of CMBWindows: ", length(x$window), "\n" )
+    if ( length(x$window) <= 5 )
+    {
+      lapply(x$window, function(x) { print(summary(x)); cat("\n\n") } )
+    }
+    else
+    {
+      cat("Too many windows to print them all here", "\n\n")
+    }
+  }
+  else
+  {
+    cat("Full sky map\n")
+  }
+  cat("HEALPix Centered: ", x$HEALPixCentered, "\n")
+
+  cat("Total area covered by all pixels: ", x$area, "\n")
+
+
+  # Summary of intensities
+  cat(cli::rule(line = "~"), "\n", sep = "")
+  cli::cat_line("Intensity quartiles")
+  print(x$intensities)
+
+  # Finishing line
+  cat(
+    cli::rule(line = "="),
+    sep = ""
+  )
 }

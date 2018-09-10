@@ -70,16 +70,16 @@ displayPixelBoundaries <- function(nside, eps = pi/90,
   ### PART II
   for (k in seq(0,3,1)){
     #Northern Hemisphere
-    PHI<- seq(0,acos(2/3),eps)
-    if (PHI[length(PHI)]!= acos(2/3))  PHI = c(PHI, acos(2/3))
-    S<-cbind(PHI, rep(1,length(PHI))*k*pi/2)
+    PHI <- seq(0,acos(2/3),eps)
+    if (PHI[length(PHI)] != acos(2/3))  PHI = c(PHI, acos(2/3))
+    S <- cbind(PHI, rep(1,length(PHI))*k*pi/2)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, lwd = lwd, ...)
 
     #Southern Hemisphere
-    PHI<- seq(acos(-2/3),pi,eps)
-    if (PHI[length(PHI)]!= pi)  PHI = c(PHI, pi)
-    S<-cbind(PHI, rep(1,length(PHI))*k*pi/2)
+    PHI <- seq(acos(-2/3),pi,eps)
+    if (PHI[length(PHI)] != pi)  PHI = c(PHI, pi)
+    S <-cbind(PHI, rep(1,length(PHI))*k*pi/2)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, lwd = lwd, ...)
 
@@ -87,19 +87,18 @@ displayPixelBoundaries <- function(nside, eps = pi/90,
 
   ### Part III: Equatorial Belt Area
   for (k in seq(-3*nside,nside-1,1)){
-    start_theta<-acos(-2/3)
-    start_phi<-(-4/3+4*k/(3*nside))*3*pi/8
-    end_phi<- 4*k/(3*nside)*3*pi/8
-    S<-pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
+    start_theta <- acos(-2/3)
+    start_phi <- (-4/3+4*k/(3*nside))*3*pi/8
+    end_phi <- 4*k/(3*nside)*3*pi/8
+    S <- pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, lwd = lwd, ...)
 
-    start_theta<- acos(2/3)
-    temp<- -start_phi
-    start_phi<- -end_phi
-    end_phi<- temp
-    aa=k+13
-    S<-pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
+    start_theta <- acos(2/3)
+    temp <- -start_phi
+    start_phi <- -end_phi
+    end_phi <- temp
+    S <- pbEqBelt(nside, k, eps, start_phi, end_phi, start_theta)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, lwd = lwd, ...)
   }
@@ -164,8 +163,6 @@ pbNextEqBelt <- function(n, k, prev_phi, prev_theta,
   phi <- prev_phi+delta_phi
   a <- 2/3-4*k/(3*n)
   b <- 8/(3*pi)
-  t1 <- a+b*phi
-  t2 <- a-b*phi
 
   #With consideration of the complex values
   if ( (a+b*phi) >= -1 && (a+b*phi) <= 1 )

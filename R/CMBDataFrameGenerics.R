@@ -1276,19 +1276,6 @@ print.summary.CMBDataFrame <- function(x, ...)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #' Print CMB Data
 #'
 #' This function neatly prints the contents of a CMB Data Frame.

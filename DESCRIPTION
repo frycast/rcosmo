@@ -21,7 +21,8 @@ Imports:
     mmap (>= 0.6-17),
     tibble (>= 1.4.2),
     rgl (>= 0.99.16),
-	  cli (>= 1.0.0)
+	  cli (>= 1.0.0),
+	  gsl (>= 1.9-10.3)
 Suggests:
     knitr,
     rmarkdown,

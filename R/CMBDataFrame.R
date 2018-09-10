@@ -71,45 +71,45 @@ CMBDataFrame <- function(CMBData,
                          I,
                          ...) {
 
-  ### ----- PREPARATION AND CHECKING ARGUMENTS ARE VALID ----- ###
+  ###    PREPARATION AND CHECKING ARGUMENTS ARE VALID     ###
 
-  if ( !missing(win) )
-  {
+  if ( !missing(win) ) {
+
     if ( !rcosmo:::is.CMBWindow(win) ) {
 
-      if ( !is.list(win) )
-      {
+      if ( !is.list(win) ) {
+
         stop("'win' must be a CMBWindow or list of CMBWindows")
       }
 
-      if ( !all(sapply(win, rcosmo:::is.CMBWindow)) )
-      {
+      if ( !all(sapply(win, rcosmo:::is.CMBWindow)) ) {
+
         stop("'win' must be a CMBWindow or list of CMBWindows")
       }
     }
   }
 
-  if ( !missing(ordering) )
-  {
+  if ( !missing(ordering) ) {
+
     ordering <- tolower(ordering)
   }
 
-  if ( !missing(spix) && !missing(sample.size) )
-  {
+  if ( !missing(spix) && !missing(sample.size) ) {
+
     stop("At least one of spix or sample.size should be unspecified")
   }
 
-  if ( !missing(spix) )
-  {
-    if ( is.character(spix) )
-    {
+  if (!missing(spix)) {
+
+    if (is.character(spix)) {
+
       # If spix is a string then assume it is a path to file:
       message("Reading sample pixel indices from file...\n")
-      spix <- read.table(spix, sep = ",")[,1]
+      spix <- read.table(spix, sep = ",")[, 1]
     }
 
-    if( any(spix %% 1 != 0) )
-    {
+    if (any(spix %% 1 != 0)) {
+
       stop("Sample pixel indices must be integers")
     }
 
@@ -120,62 +120,62 @@ CMBDataFrame <- function(CMBData,
   if ( !missing(coords) ) {
     coords <- tolower(coords)
 
-    if ( coords != "spherical" && coords != "cartesian" )
-    {
+    if ( coords != "spherical" && coords != "cartesian" ) {
+
       stop(paste("Invalid argument coords must be unspecified,",
                  "spherical or cartesian"))
     }
   }
 
-  if ( missing(spix) )
-  {
+  if ( missing(spix) ) {
+
     spix <- NULL
-  }
-  else
-  {
+
+  } else {
+
     len <- length(spix)
     spix <- as.integer(spix)
   }
-  if ( !missing(sample.size) )
-  {
+  if ( !missing(sample.size) ) {
+
     len <- sample.size
   }
 
   ## CASE 1: CMBData is a path
   CMBData.is.path <- FALSE
-  if (!missing(CMBData) && is.character(CMBData))
-  {
+  if (!missing(CMBData) && is.character(CMBData)) {
+
     CMBData.is.path <- TRUE
 
-    if ( !missing(nside) )
-    {
+    if ( !missing(nside) ) {
+
       stop("nside must be unspecified when 'CMBData' is specified")
     }
 
-    if ( !missing(I) )
-    {
+    if ( !missing(I) ) {
+
       stop("I must be unspecified when 'CMBData' is specified")
     }
   }
 
   ## CASE 2: CMBData is a CMBDataFrame
   CMBData.is.cmbdf <- FALSE
-  if ( !missing(CMBData) && is.CMBDataFrame(CMBData) )
-  {
+  if ( !missing(CMBData) && is.CMBDataFrame(CMBData) ) {
+
     CMBData.is.cmbdf <- TRUE
 
-    if ( !missing(nside) )
-    {
+    if ( !missing(nside) ) {
+
       stop("nside must be unspecified when 'CMBData' is specified")
     }
 
-    if ( !missing(I) )
-    {
+    if ( !missing(I) ) {
+
       stop("I must be unspecified when 'CMBData' is specified")
     }
 
-    if ( include.polar != FALSE || include.masks != FALSE )
-    {
+    if ( include.polar != FALSE || include.masks != FALSE ) {
+
       stop(paste("include.polar and include.masks must be",
                  "FALSE unless a FITS file is given"))
     }
@@ -183,25 +183,25 @@ CMBDataFrame <- function(CMBData,
   }
 
   ## CASE 3: CMBData is unspecified
-  if ( missing(CMBData) )
-  {
-    if ( missing(nside) )
-    {
+  if ( missing(CMBData) ) {
+
+    if ( missing(nside) ) {
+
       stop(paste("If 'CMBData' is unspecified then 'nside'",
                  "must be specified"))
     }
-    if ( missing(ordering) )
-    {
+    if ( missing(ordering) ) {
+
       ordering <- "nested"
       warning("ordering parameter missing, ordering set to 'nested'")
     }
 
-    if ( !missing(I) )
-    {
-      if ( is.null(spix) && missing(sample.size) )
-      {
-        if ( length(I) != 12*nside^2 )
-        {
+    if ( !missing(I) ) {
+
+      if ( is.null(spix) && missing(sample.size) ) {
+
+        if ( length(I) != 12*nside^2 ) {
+
           stop(paste("The I parameter must have length 12*nside^2",
                      "unless spix or sample.size is specified"))
         }
@@ -211,20 +211,20 @@ CMBDataFrame <- function(CMBData,
 
 
   ## CASE 4: CMBData is a CMBDat object
-  if ( !missing(CMBData) && is.CMBDat(CMBData) )
-  {
-    if ( !missing(nside) )
-    {
+  if ( !missing(CMBData) && is.CMBDat(CMBData) ) {
+
+    if ( !missing(nside) ) {
+
       stop("nside must be unspecified when 'CMBData' is specified")
     }
 
-    if ( !missing(I) )
-    {
+    if ( !missing(I) ) {
+
       stop("I must be unspecified when 'CMBData' is specified")
     }
 
-    if ( !missing(include.polar) || !missing(include.masks) )
-    {
+    if ( !missing(include.polar) || !missing(include.masks) ) {
+
       stop(paste("include.polar and include.masks must not be",
                  "specified if CMBData is a CMBDat object"))
     }
@@ -248,20 +248,20 @@ CMBDataFrame <- function(CMBData,
     # Get Nside from FITS header:
     nside <- CMBData$nside
     # Check that nside is an integer and greater than 0:
-    if(nside %% 1 != 0 || (nside <= 0))
-    {
+    if(nside %% 1 != 0 || (nside <= 0)) {
+
       stop("Failed to obtain valid nside from FITS header")
     }
 
-    if ( !missing(sample.size) )
-    {
+    if ( !missing(sample.size) ) {
+
       spix <- sort(sample(seq(1,12*nside^2), sample.size))
     }
 
     # Get ordering from FITS header:
     orderFITS <- CMBData$ordering
-    if(orderFITS != "ring" && orderFITS != "nested")
-    {
+    if(orderFITS != "ring" && orderFITS != "nested") {
+
       stop(paste("Failed to obtain valid ordering scheme from FITS header,",
            "instead obtained: ", orderFITS))
     }
@@ -279,8 +279,11 @@ CMBDataFrame <- function(CMBData,
 
       # Put the coordinates in a data.frame
       if (coords == "spherical"){
+
         cmbdf <- data.frame(theta = coordinates[,1], phi = coordinates[,2])
+
       } else {
+
         cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
       }
 
@@ -288,8 +291,10 @@ CMBDataFrame <- function(CMBData,
 
       # Add the corresponding intensities from CMBData into the data.frame
       if ( !is.null(spix) ){
+
         cmbdf <- data.frame(cmbdf, I = data$I_STOKES[spix])
       } else {
+
         cmbdf <- data.frame(cmbdf, I = data$I_STOKES)
       }
 
@@ -297,41 +302,43 @@ CMBDataFrame <- function(CMBData,
     } else {
 
       if ( !is.null(spix) ){
+
         cmbdf <- data.frame(I = as.vector(data$I_STOKES[spix]))
       } else {
+
         cmbdf <- data.frame(I = as.vector(data$I_STOKES))
       }
 
     }
 
     if (include.polar == TRUE) {
-      if (!is.null(spix))
-      {
+      if (!is.null(spix)) {
+
         stop(paste("(development stage) include.polar must",
                     "be FALSE if spix is specified"))
       }
-      if ( length(data$Q_STOKES) > 0 )
-      {
+      if ( length(data$Q_STOKES) > 0 ) {
+
         cmbdf$Q <- as.vector(data$Q_STOKES, mode = "numeric")
       }
-      if ( length(data$U_STOKES) > 0 )
-      {
+      if ( length(data$U_STOKES) > 0 ) {
+
         cmbdf$U <- as.vector(data$U_STOKES, mode = "numeric")
       }
     }
 
     if (include.masks == TRUE) {
-      if (!is.null(spix))
-      {
+
+      if (!is.null(spix)) {
         stop(paste("(development stage) include.masks must",
                     "be FALSE if spix is specified"))
       }
-      if ( length(data$TMASK) > 0 )
-      {
+      if ( length(data$TMASK) > 0 ) {
+
         cmbdf$TMASK <- as.vector(data$TMASK, mode = "integer")
       }
-      if ( length(data$PMASK) > 0 )
-      {
+      if ( length(data$PMASK) > 0 ) {
+
         cmbdf$PMASK <- as.vector(data$PMASK, mode = "integer")
       }
     }
@@ -362,33 +369,34 @@ CMBDataFrame <- function(CMBData,
     nside <- rcosmo:::nside(CMBData)
     n <- nrow(CMBData)
 
-    if (( !missing(sample.size) || !is.null(spix) ) )
-    {
-      if ( len > n )
-      {
+    if (( !missing(sample.size) || !is.null(spix) ) ) {
+
+      if ( len > n ) {
+
         stop("sample.size or length(spix) exceeds number of rows of 'CMBData'")
       }
     }
 
-    if ( !missing(sample.size) )
-    {
+    if ( !missing(sample.size) ) {
+
       spix <- sort(sample(pix(CMBData), sample.size))
     }
 
-    if (!is.null(spix))
-    {
+    if (!is.null(spix)) {
+
       cmbdf <- CMBData[pix(CMBData) %in% spix,]
     } else {
+
       cmbdf <- CMBData
     }
 
-    if (!missing(ordering))
-    {
+    if (!missing(ordering)) {
+
       ordering(cmbdf) <- ordering
     }
 
-    if (!missing(coords))
-    {
+    if (!missing(coords)) {
+
       coords(cmbdf) <- coords
     }
 
@@ -398,28 +406,27 @@ CMBDataFrame <- function(CMBData,
   ################################################################
   } else if ( missing(CMBData) ) {
 
-    if ( !missing(sample.size) )
-    {
+    if ( !missing(sample.size) ) {
+
       spix <- sort(sample(seq(1,12*nside^2), sample.size))
-    }
-    else if ( is.null(spix) )
-    {
+    } else if ( is.null(spix) ) {
+
       len <- 12*nside^2
     }
 
     if ( !is.null(spix) && !missing(I)
-         && length(I) != length(spix) )
-    {
+         && length(I) != length(spix) ) {
+
       I <- I[spix]
     }
 
-    if ( missing(I) )
-    {
+    if ( missing(I) ) {
+
       I <- rep(NA, len)
     }
 
-    if ( !missing(coords) )
-    {
+    if ( !missing(coords) ) {
+
       message("Generating coordinates from HEALPix ordering...\n")
 
       cmbdf <- rcosmo:::pix2coords(nside = nside, ordering = ordering,
@@ -450,8 +457,7 @@ CMBDataFrame <- function(CMBData,
   } else if ( !missing(CMBData) && is.CMBDat(CMBData) ) {
 
     ns <- CMBData$nside
-    if ( !missing(sample.size) )
-    {
+    if ( !missing(sample.size) ) {
 
       spix <- sort(sample(1:(12*ns^2), sample.size))
 
@@ -472,8 +478,8 @@ CMBDataFrame <- function(CMBData,
     attr(cmbdf, "header1") <- CMBData$header1
     attr(cmbdf, "header2") <- CMBData$header2
 
-    if ( !missing(coords) )
-    {
+    if ( !missing(coords) ) {
+
       coords(cmbdf) <- coords
     }
 
@@ -483,13 +489,13 @@ CMBDataFrame <- function(CMBData,
 
   }
 
-  if ( !missing(...) )
-  {
+  if ( !missing(...) ) {
+
     cmbdf <- cbind(cmbdf, ...)
   }
 
-  if ( !missing(win) )
-  {
+  if ( !missing(win) ) {
+
     window(cmbdf) <- win
   }
 

@@ -2,7 +2,7 @@ Package: rcosmo
 URL: https://github.com/VidaliLama/rcosmo
 BugReports: https://github.com/VidaliLama/rcosmo/issues
 Title: R Cosmic Microwave Background Data Analysis
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: as.person(c(
     "Daniel Fryer <d.fryer@latrobe.edu.au> [aut, cre]",
     "Andriy Olenko <A.Olenko@latrobe.edu.au> [aut]",

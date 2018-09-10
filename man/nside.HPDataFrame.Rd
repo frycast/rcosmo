@@ -13,7 +13,8 @@
 The HEALPix Nside parameter
 }
 \description{
-This function returns the HEALPix Nside parameter of a \code{\link{HPDataFrame}}
+This function returns the HEALPix Nside parameter
+of a \code{\link{HPDataFrame}}
 }
 \examples{
 df <- HPDataFrame(I = rep(0,12), nside = 1)

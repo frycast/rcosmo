@@ -10,7 +10,8 @@
 \arguments{
 \item{hpdf}{A HPDataFrame.}
 
-\item{new.window}{A single \code{\link{CMBWindow}} object or a list of them.}
+\item{new.window}{Optional.
+A single \code{\link{CMBWindow}} object or a list of them.}
 
 \item{intersect}{A boolean that determines
 the behaviour when \code{win} is a list containing BOTH
@@ -25,7 +26,9 @@ will be discarded and replaced with pixel center locations.}
 }
 \value{
 A HPDataFrame containing the data in \code{hpdf} restricted to the
-CMBWindow \code{new.window}
+CMBWindow \code{new.window}. Or, if \code{new.window} is
+unspecified, then the window attribute of \code{hpdf}
+is returned instead (and may be NULL).
 }
 \description{
 This function returns a
@@ -66,6 +69,7 @@ plot(hpdf); plot(win1)
 hpdf.win <- window(hpdf, new.window = win1)
 plot(hpdf.win, col = "yellow", size = 4, add = TRUE)
 attributes(hpdf.win)
+window(hpdf.win)
 hpdf.win
 
 

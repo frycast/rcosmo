@@ -165,8 +165,8 @@ pixelWindow <- function(j1, j2, pix.j1)
 
 
 #######################################################################
-###############  HELPER FUNCTIONS AND DEVELOPER TOOLS.#################
-###############     POSSIBLY EXPORT SOME OF THESE??   #################
+###############  HELPER FUNCTIONS                     #################
+###############                                       #################
 #######################################################################
 
 
@@ -242,85 +242,6 @@ baseNeighbours <- function(bp)
          c(9 ,12,-1,8,3,7,-1,10),
          c(10,9 ,-1,5,4,8,-1,11))
 }
-
-
-#' p2ibp
-#'
-#' Convert a pixel index p to its index within
-#' the base pixel to which p belongs
-#'
-#' @param p The pixel index at resolution j, in nested order.
-#' @param j The resolution parameter nside = 2^j
-#'
-#'
-#'@export
-p2ibp <- function(p, j) #indexInBP
-{
-  (p-1) %% 4^j + 1
-}
-
-
-#' p2bp
-#'
-#' The base pixel to which pixel p belongs at resolution j
-#'
-#' @param p The pixel index at resolution j, in nested order.
-#' @param j The resolution parameter nside = 2^j
-#'
-#'@export
-p2bp <- function(p, j)
-{
-  floor((p-1) / (4^j)) + 1
-}
-
-
-#' ibp2p
-#'
-#' Find the pixel index p of a given pixel at whose
-#' index in base pixel bp is equal to ibp
-#'
-#' @param ibp The pixel index within base pixel bp, at resolution j, in nested order.
-#' @param bp The base pixel index
-#' @param j The resolution parameter nside = 2^j
-#'
-#'
-#'@export
-ibp2p <- function(ibp, bp, j)
-{
-  (bp - 1)*4^j + ibp
-}
-
-# Convert binary to decimal
-bin2dec <- function(x, digits)
-{
-  pow <- 2^(0:31)[1:digits]
-  sum(pow[as.logical(x)])
-}
-
-# Convert decimal to binary
-dec2bin = function(number, digits) {
-  as.numeric(intToBits(number))[1:digits]
-}
-
-# Separate a binary number (e.g., output of dec2bin)
-# into its even and odd digits
-bin2f <- function(bin, j)
-{
-  even.bits <- bin[seq(2,2*j  , by = 2)]
-  odd.bits  <- bin[seq(1,2*j-1, by = 2)]
-
-  return(list(even = even.bits, odd = odd.bits))
-}
-
-# Recombine even and odd digits into a binary number
-f2bin <- function(f, j)
-{
-  bin <- vector(mode = "integer", length = 2*j)
-  bin[seq(2,2*j  , by = 2)] <- f$even
-  bin[seq(1,2*j-1, by = 2)] <- f$odd
-  return(bin)
-}
-
 
 
 #' a version of onBPBoundary to use with neighbours

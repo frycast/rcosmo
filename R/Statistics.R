@@ -1,9 +1,3 @@
-# Compute the empirical covariance between observations in a CMBDataFrame
-# assuming homogeneity and isotropy.
-# INPUTS: CMBDataFrame, vector r of radii
-# OUTPUTS: C(r), for each r
-
-
 #### WARNING: THE LAST BIN IS NOT THE RIGHT SIZE AS IT CONTAINS ALL
 #### DISTANCES GREATER THAN max.dist SO IT SHOULD PERHAPS BE DISCARDED
 #' Sample covariance for CMB

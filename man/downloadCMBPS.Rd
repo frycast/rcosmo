@@ -13,7 +13,8 @@ download the file. See code details in this help file.}
 \item{destfile}{A character string with the file name for the downloaded
 file  to be saved. Tilde-expansion is performed.}
 
-\item{save}{A boolean indicating whether to save not (since the downloaded
+\item{save}{A boolean indicating whether to save or not
+(since the downloaded
 data is returned anyway).}
 }
 \value{

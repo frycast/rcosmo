@@ -122,7 +122,8 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
 #'
 #' @param link  The link code (an integer from 1 to 6) for the URL to
 #' download the file. See code details in this help file.
-#' @param save A boolean indicating whether to save not (since the downloaded
+#' @param save A boolean indicating whether to save or not
+#' (since the downloaded
 #' data is returned anyway).
 #' @param destfile  A character string with the file name for the downloaded
 #' file  to be saved. Tilde-expansion is performed.
@@ -174,40 +175,3 @@ downloadCMBPS <- function(link = 1, destfile, save = TRUE) {
 
   invisible(CMB_PowerSpectra)
 }
-
-
-
-
-
-# l1 <- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-#             "COM_PowerSpect_CMB-base-plikHM-",
-#             "TTTEEE-lowl-lowE-lensing-minimum-theory_R3.01.txt",sep = "")
-# items1 <- c("L","TT","TE","EE","BB","PP")
-# destfile11 <- paste(getwd(),"/COM_PowerSpect_CMB-base-plikHM-TTTEEE-lowl-lowE-lensing-minimum-theory_R3.01.txt",sep = "")
-#
-# l2<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-#            "COM_PowerSpect_CMB-TT-full_R3.01.txt",sep = "")
-# items2<- c("L","DL","Minus_dDL","Plus_dDL")
-# destfile21 <- paste(getwd(),"/COM_PowerSpect_CMB-TT-full_R3.01.txt",sep = "")
-#
-#
-# l3<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-#            "COM_PowerSpect_CMB-EE-full_R3.01.txt",sep = "")
-# items3<- c("L","DL","Minus_dDL","Plus_dDL")
-# destfile31 <- paste(getwd(),"/COM_PowerSpect_CMB-EE-full_R3.01.txt",sep = "")
-#
-#
-# l4<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-#            "COM_PowerSpect_CMB-TE-full_R3.01.txt",sep = "")
-# items4<- c("L","DL","Minus_dDL","Plus_dDL")
-# destfile41 <- paste(getwd(),"/COM_PowerSpect_CMB-TE-full_R3.01.txt",sep = "")
-#
-# l5<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-#            "COM_PowerSpect_CMB-low-ell-EB-full_R3.01.txt",sep = "")
-# items5<- c("L","DL","dDL")
-# destfile51 <- paste(getwd(),"/COM_PowerSpect_CMB-low-ell-EB-full_R3.01.txt",sep = "")
-#
-# l6<- paste("http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=",
-#            "COM_PowerSpect_CMB-low-ell-BB-full_R3.01.txt",sep = "")
-# items6<- c("L","DL","dDL")
-# destfile61 <- paste(getwd(),"/COM_PowerSpect_CMB-low-ell-BB-full_R3.01.txt",sep = "")

@@ -21,7 +21,9 @@ Get the area of a single HEALPix pixel
 df <- CMBDataFrame("CMB_map_smica1024.fits")
 pixelArea(df)
 
-df1 <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+df1 <- CMBDataFrame(nside = 64,
+                    coords = "cartesian",
+                    ordering = "nested")
 pixelArea(df1)
 
 }

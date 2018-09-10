@@ -22,22 +22,29 @@ The Data Frame with CMB Power Spectra and,
 if \code{save = TRUE} a txt file is saved in \code{destfile}
 }
 \description{
-The function \code{downloadCMBPS} downloads CMB power spectra components from
+The function \code{downloadCMBPS} downloads
+CMB power spectra components from
  \url{http://pla.esac.esa.int/pla/#cosmology}.
 }
 \details{
-\code{link = 1}: Best-fit LCDM CMB power spectra from the baseline Planck
+\code{link = 1}: Best-fit LCDM CMB power spectra
+from the baseline Planck
  TT, TE, EE+lowE+lensing (2 <= ell <= 2508).
 
-\code{link = 2}: Baseline high-ell Planck TT power spectra (2 <= ell <= 2508).
+\code{link = 2}: Baseline high-ell
+Planck TT power spectra (2 <= ell <= 2508).
 
-\code{link = 3}: Baseline high-ell Planck EE power spectra (2 <= ell <= 1996).
+\code{link = 3}: Baseline high-ell
+Planck EE power spectra (2 <= ell <= 1996).
 
-\code{link = 4}: Baseline high-ell Planck TE power spectra (2 <= ell <= 1996).
+\code{link = 4}: Baseline high-ell
+Planck TE power spectra (2 <= ell <= 1996).
 
-\code{link = 5}: Low-ell Planck EB power spectra (2 <= ell <= 29).
+\code{link = 5}: Low-ell
+Planck EB power spectra (2 <= ell <= 29).
 
-\code{link = 6}: Low-ell Planck BB power spectra (2 <= ell <= 29).
+\code{link = 6}: Low-ell
+Planck BB power spectra (2 <= ell <= 29).
 }
 \examples{
 ## Download the Low-ell Planck BB power spectra (2 <= ell <= 29) and
@@ -53,7 +60,8 @@ plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
 
 }
 \references{
-Planck Legacy Archive \url{http://pla.esac.esa.int/pla/#cosmology}
+Planck Legacy Archive
+\url{http://pla.esac.esa.int/pla/#cosmology}
 }
 \keyword{CMB}
 \keyword{Power}

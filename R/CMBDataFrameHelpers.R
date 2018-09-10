@@ -12,7 +12,9 @@
 #' df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' pixelArea(df)
 #'
-#' df1 <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+#' df1 <- CMBDataFrame(nside = 64,
+#'                     coords = "cartesian",
+#'                     ordering = "nested")
 #' pixelArea(df1)
 #'
 #'@export
@@ -98,7 +100,7 @@ resolution <- function( cmbdf )
 #' whose rows comprise a simple random sample of the rows
 #' from the input CMBDataFrame.
 #'
-#'@param cmbdf a CMB Data Frame.
+#'@param cmbdf a \code{\link{CMBDataFrame}}.
 #'@param sample.size the desired sample size.
 #'
 #'@return
@@ -126,10 +128,11 @@ sampleCMB <- function(cmbdf, sample.size)
 
 #' First Minkowski functional
 #'
-#' This function returns an area of the spherical region where measured values
+#' This function returns an area of the spherical region
+#' where measured values
 #' are above of the specified threshold level \eqn{alpha}.
 #'
-#'@param cmbdf a CMB Data Frame.
+#'@param cmbdf a \code{\link{CMBDataFrame}}.
 #'@param \eqn{alpha} a threshold level
 #'@param varindex an index of CMBDataFrame column with measured values
 #'@return
@@ -141,7 +144,9 @@ sampleCMB <- function(cmbdf, sample.size)
 #'@examples
 #'
 #' n <- 64
-#' cmbdf <- CMBDataFrame(nside=n, I = rnorm(12*n^2), coords = "cartesian", ordering = "nested")
+#' cmbdf <- CMBDataFrame(nside=n, I = rnorm(12*n^2),
+#'                       coords = "cartesian",
+#'                       ordering = "nested")
 #' fmf(cmbdf, 0, 4)
 #' fmf(cmbdf, 2, 4)
 #'

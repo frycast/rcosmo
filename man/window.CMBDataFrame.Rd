@@ -110,7 +110,8 @@ plot(win2)
 ## Example 5: intersection of windows with "minus" type
 
 ## Create 2 windows with "minus" type
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2), set.minus =TRUE)
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2),
+                  set.minus =TRUE)
 win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
                   phi = c(pi/4,pi/4,pi/3,pi/3),
                   set.minus =TRUE)

@@ -7,7 +7,7 @@
 fmf(cmbdf, alpha, varindex)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{cmbdf}{a \code{\link{CMBDataFrame}}.}
 
 \item{varindex}{an index of CMBDataFrame column with measured values}
 
@@ -17,13 +17,16 @@ fmf(cmbdf, alpha, varindex)
 The area of the exceedance region
 }
 \description{
-This function returns an area of the spherical region where measured values
+This function returns an area of the spherical region
+where measured values
 are above of the specified threshold level \eqn{alpha}.
 }
 \examples{
 
 n <- 64
-cmbdf <- CMBDataFrame(nside=n, I = rnorm(12*n^2), coords = "cartesian", ordering = "nested")
+cmbdf <- CMBDataFrame(nside=n, I = rnorm(12*n^2),
+                      coords = "cartesian",
+                      ordering = "nested")
 fmf(cmbdf, 0, 4)
 fmf(cmbdf, 2, 4)
 

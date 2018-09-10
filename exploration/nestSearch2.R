@@ -66,7 +66,7 @@ siblings <- function(p) {
 #'                 incl.labels = neighbours(p, j),
 #'                 col = "blue",
 #'                 size = 3)
-#'   rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
 #'
 #'
@@ -80,7 +80,7 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
                           size = 3)
 {
   if ( !missing(boundary.j) ) {
-    rcosmo::plotHPBoundaries(nside = 2^boundary.j,
+    rcosmo::displayPixelBoundaries(nside = 2^boundary.j,
                              ordering = "nested",
                              nums.col = "red",
                              col = boundary.col,
@@ -263,7 +263,7 @@ f2bin <- function(f, j)
 #' # Visualise to see which are on boundary
 #' j <- 2
 #' spix <- 1:16
-#' rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#' rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' displayPixels(boundary.j = j, j = j, spix = spix,
 #'               boundary.col = "gray", incl.labels = spix)
 #'
@@ -526,7 +526,7 @@ demoNeighbours <- function(p,j) {
                 incl.labels = neighbours(p, j),
                 col = "blue",
                 size = 3)
-  rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+  rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 }
 
 
@@ -586,7 +586,7 @@ nestSearch2 <- function(target, nside,
 #               incl.labels = spix,
 #               col = "blue",
 #               size = 3)
-# rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+# rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 
 
 
@@ -687,7 +687,7 @@ demoNestSearch <- function()
   j <- log2(nside)
   spix1 <- nestSearch_old(t, nside = 2^j, demo.plot = TRUE)$pix
   spix2 <- rcosmo::nestSearch(t, nside = 2^j)$pix
-  rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+  rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
   displayPixels(j = j, plot.j = 8,
                 spix = spix1,
                 boundary.col = "gray",

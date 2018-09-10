@@ -96,7 +96,8 @@
 #'## Example 5: intersection of windows with "minus" type
 #'
 #' ## Create 2 windows with "minus" type
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2), set.minus =TRUE)
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2),
+#'                   set.minus =TRUE)
 #' win2 <- CMBWindow(theta = c(pi/4,pi/3,pi/3, pi/4),
 #'                   phi = c(pi/4,pi/4,pi/3,pi/3),
 #'                   set.minus =TRUE)
@@ -673,7 +674,8 @@ maxDist.CMBDataFrame <- function(cmbdf)
 #' for every pixel at resolution parameter \code{nside} (the full sky).
 #' In other words,
 #' in this case, the number of rows of \code{df} must be equal to 12*nside^2.
-#' However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
+#' However, if \code{spix} is left blank and \code{df}
+#' is a \code{CMBDataFrame},
 #' then \code{spix} is set equal to \code{pix(df)}
 #'
 #' @return A CMBDataFrame
@@ -1133,7 +1135,8 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
 
   if ( hp.boundaries > 0 )
   {
-    plotHPBoundaries(nside = hp.boundaries, col = hpb.col)
+    rcosmo:::displayPixelBoundaries(nside = hp.boundaries,
+                                    col = hpb.col)
   }
 }
 

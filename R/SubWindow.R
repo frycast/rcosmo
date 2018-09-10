@@ -1,9 +1,4 @@
 
-
-
-
-
-
 #'subWindow
 #'
 #'Restricts a \code{\link{CMBDataFrame}}, \code{CMBDat} object,

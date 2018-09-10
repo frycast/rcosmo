@@ -7,7 +7,7 @@
 sampleCMB(cmbdf, sample.size)
 }
 \arguments{
-\item{cmbdf}{a CMB Data Frame.}
+\item{cmbdf}{a \code{\link{CMBDataFrame}}.}
 
 \item{sample.size}{the desired sample size.}
 }

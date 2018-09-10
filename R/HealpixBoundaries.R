@@ -26,11 +26,11 @@
 #'
 #' @examples
 #'
-#' plotHPBoundaries(1, eps = pi/90, col = "red")
-#' plotHPBoundaries(2, eps = pi/90, col = "green")
+#' displayPixelBoundaries(1, eps = pi/90, col = "red")
+#' displayPixelBoundaries(2, eps = pi/90, col = "green")
 #'
 #' @export
-plotHPBoundaries <- function(nside, eps = pi/90,
+displayPixelBoundaries <- function(nside, eps = pi/90,
                              col = "gray",
                              lwd = 1, ordering,
                              incl.labels = 1:(12*nside^2),

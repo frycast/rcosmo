@@ -21,7 +21,8 @@ corresponding to each row of \code{df}. If \code{spix} is left blank and
 for every pixel at resolution parameter \code{nside} (the full sky).
 In other words,
 in this case, the number of rows of \code{df} must be equal to 12*nside^2.
-However, if \code{spix} is left blank and \code{df} is a \code{CMBDataFrame},
+However, if \code{spix} is left blank and \code{df}
+is a \code{CMBDataFrame},
 then \code{spix} is set equal to \code{pix(df)}}
 }
 \value{

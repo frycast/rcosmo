@@ -25,7 +25,7 @@ demoNeighbours <- function(p,j) {
                 incl.labels = neighbours(p, j),
                 col = "blue",
                 size = 3)
-  rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+  rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 }
 
 }

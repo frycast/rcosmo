@@ -238,7 +238,7 @@ siblings <- function(p) {
 #'                 incl.labels = neighbours(p, j),
 #'                 col = "blue",
 #'                 size = 3)
-#'   rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
 #'
 #'
@@ -252,7 +252,7 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
                           size = 3)
 {
   if ( !missing(boundary.j) ) {
-    rcosmo::plotHPBoundaries(nside = 2^boundary.j,
+    rcosmo::displayPixelBoundaries(nside = 2^boundary.j,
                              ordering = "nested",
                              nums.col = "red",
                              col = boundary.col,
@@ -488,7 +488,7 @@ borderPattern <- function(ptype)
 #'                 incl.labels = neighbours(p, j),
 #'                 col = "blue",
 #'                 size = 3)
-#'   rcosmo::plotHPBoundaries(nside = 1, col = "blue", lwd = 3)
+#'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
 #'
 neighbours <- function(p, j)

@@ -429,7 +429,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
   {
     if ( all(c("theta","phi") %in% names(hpdf)) )
     {
-      return(df)
+      return(hpdf)
     }
 
     if ( !all(c("x","y","z") %in% names(hpdf)) )

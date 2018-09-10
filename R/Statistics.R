@@ -116,14 +116,18 @@ covCMB <- function(cmbdf,
 
 #' Covariance estimate via power spectra
 #'
-#'This function provides a covariance estimate using the values of the estimated
+#'This function provides a covariance estimate
+#'using the values of the estimated
 #'power spectra.
 #'
 #'
-#'@param PowerSpectra a data frame which first column lists values of multipole
-#'moments and the second column gives the corresponding values of CMB power
+#'@param PowerSpectra a data frame which first
+#'column lists values of multipole
+#'moments and the second column gives
+#'the corresponding values of CMB power
 #'spectra.
-#'@param N a number of points in which the covariance estimate is computed on
+#'@param N a number of points in which
+#'the covariance estimate is computed on
 #'the interval [-1,1]
 #'
 #'
@@ -148,24 +152,27 @@ covCMB <- function(cmbdf,
 #' plot(Cov_est, type="l")
 #'
 #' ## Plot the covariance estimate as a function of angular distances
-#' plot(acos(Cov_est[,1]), Cov_est[,2], type ="l", xlab ="angular distance", ylab ="Estimated Covariance")
+#' plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
+#'      xlab ="angular distance", ylab ="Estimated Covariance")
 #'
 #'@export
 covPwSp <- function(PowerSpectra, Ns)
 {
   Nl <- length(PowerSpectra[, 1])
-  Pls <-
-    legendre_Pl_array(lmax = PowerSpectra[Nl, 1], x = seq(-1 + 1 / Ns, 1, 2 /
-                                                            Ns))
-  Cov_func <-
-    function(mat, Dfl , l)  {
-      apply(mat[l + 1, ], function(col) {
-        sum(Dfl * (2 * l + 1) / (4 * pi * l * (l + 1)) * col)
-      }, MARGIN = 2)
-    }
+  Pls <- gsl::legendre_Pl_array(lmax = PowerSpectra[Nl, 1],
+                                x = seq(-1 + 1 / Ns, 1, 2 / Ns))
+
   Cov_est <- Cov_func(Pls, PowerSpectra[, 2], PowerSpectra[, 1])
   df <- data.frame(t = seq(-1 + 1 / Ns, 1, 2 / Ns), Estimated_Cov = Cov_est)
   return(df)
+}
+
+# Helper function for covPwSp
+Cov_func <- function(mat, Dfl , l)  {
+
+    apply(mat[l + 1, ], function(col) {
+      sum(Dfl * (2 * l + 1) / (4 * pi * l * (l + 1)) * col)
+    }, MARGIN = 2)
 }
 
 
@@ -203,7 +210,7 @@ plotAngDis <- function(cmbdf, colindex)
   thetabreaks <-
     cut(
       cmbdf$theta,
-      breaks = hist(cmbdf$theta, plot = FALSE)$breaks,
+      breaks = graphics::hist(cmbdf$theta, plot = FALSE)$breaks,
       right = FALSE
     )
   theta.mean <-
@@ -212,22 +219,22 @@ plotAngDis <- function(cmbdf, colindex)
 
   phibreaks <-
     cut(cmbdf$phi,
-        breaks = hist(cmbdf$phi, plot = FALSE)$breaks,
+        breaks = graphics::hist(cmbdf$phi, plot = FALSE)$breaks,
         right = FALSE)
   phi.mean <-
     t(tapply(as.data.frame(cmbdf)[, colindex], phibreaks, mean,
              na.rm = TRUE))
 
-  par(mfrow = c(2, 2), mar = c(1, 4, 1, 1) + 0.5)
-  plot(as.data.frame(cmbdf[, c(1, colindex)]), type = "p", col = "red")
-  plot(
+  graphics::par(mfrow = c(2, 2), mar = c(1, 4, 1, 1) + 0.5)
+  graphics::plot(as.data.frame(cmbdf[, c(1, colindex)]), type = "p", col = "red")
+  graphics::plot(
     as.data.frame(cmbdf[, c(2, colindex)]),
     ylab = "",
     type = "p",
     col = "blue"
   )
 
-  barplot(
+  graphics::barplot(
     theta.mean,
     legend = rownames(theta.mean),
     col = "red",
@@ -236,10 +243,10 @@ plotAngDis <- function(cmbdf, colindex)
     ylab = "Mean Values",
     xaxt = 'n'
   )
-  title(xlab = "theta",
+  graphics::title(xlab = "theta",
         line = 0,
         cex.lab = 1)
-  barplot(
+  graphics::barplot(
     phi.mean,
     legend = rownames(phi.mean),
     col = "blue",
@@ -248,7 +255,7 @@ plotAngDis <- function(cmbdf, colindex)
     ylab = "",
     xaxt = 'n'
   )
-  title(xlab = "phi",
+  graphics::title(xlab = "phi",
         line = 0,
         cex.lab = 1)
 }

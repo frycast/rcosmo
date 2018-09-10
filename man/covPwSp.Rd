@@ -7,11 +7,14 @@
 covPwSp(PowerSpectra, Ns)
 }
 \arguments{
-\item{PowerSpectra}{a data frame which first column lists values of multipole
-moments and the second column gives the corresponding values of CMB power
+\item{PowerSpectra}{a data frame which first
+column lists values of multipole
+moments and the second column gives
+the corresponding values of CMB power
 spectra.}
 
-\item{N}{a number of points in which the covariance estimate is computed on
+\item{N}{a number of points in which
+the covariance estimate is computed on
 the interval [-1,1]}
 }
 \value{
@@ -20,7 +23,8 @@ finishing at 1 with the step 2/Ns. The second column is the values of
 estimated covariances on this grid.
 }
 \description{
-This function provides a covariance estimate using the values of the estimated
+This function provides a covariance estimate
+using the values of the estimated
 power spectra.
 }
 \examples{
@@ -31,7 +35,8 @@ Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
 plot(Cov_est, type="l")
 
 ## Plot the covariance estimate as a function of angular distances
-plot(acos(Cov_est[,1]), Cov_est[,2], type ="l", xlab ="angular distance", ylab ="Estimated Covariance")
+plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
+     xlab ="angular distance", ylab ="Estimated Covariance")
 
 }
 \references{

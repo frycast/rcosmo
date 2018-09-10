@@ -85,7 +85,7 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
     destfile <- paste0("CMB_map_", foreground, nside, ".fits")
   }
 
-  download.file(url, destfile, mode = "wb")
+  utils::download.file(url, destfile, mode = "wb")
 }
 
 
@@ -177,10 +177,10 @@ downloadCMBPS <- function(link = 1, destfile, save = TRUE) {
   }
 
   i <- switch(link, 1, 2, 2, 2, 3, 3)
-  CMB_PowerSpectra <- read.table(target, quote = "\"",
+  CMB_PowerSpectra <- utils::read.table(target, quote = "\"",
                                  col.names = items[[i]])
 
-  if ( save ) write.table(CMB_PowerSpectra, file = destfile)
+  if ( save ) utils::write.table(CMB_PowerSpectra, file = destfile)
 
   invisible(CMB_PowerSpectra)
 }

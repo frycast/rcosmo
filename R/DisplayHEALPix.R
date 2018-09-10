@@ -318,5 +318,5 @@ displayPixels <- function(boundary.j, j, plot.j = 5, spix,
 
   hp <- rcosmo::HPDataFrame(nside = 2^plot.j,
                              spix = gchild)
-  plot(hp, add = TRUE, col = col, size = size)
+  plot.HPDataFrame(hp, add = TRUE, col = col, size = size)
 }

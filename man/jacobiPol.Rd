@@ -7,12 +7,12 @@
 \url{http://dlmf.nist.gov/18.9}
 }
 \usage{
-jacobiPol(a, b, L, T)
+jacobiPol(a, b, L, t)
 }
 \arguments{
 \item{L}{The degree of Jacobi polynomial}
 
-\item{T}{Given point in [-1,1].}
+\item{t}{Given point in [-1,1].}
 
 \item{(a, b)}{The parameters of Jacobi polynomial}
 }

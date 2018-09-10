@@ -388,15 +388,19 @@ p2bp <- function(p, j)
 }
 
 
-#' ibp2p
+#' Computes pixel's index using its subindex within base resolution
 #'
-#' Find the pixel index p of a given pixel at whose
-#' index in base pixel bp is equal to ibp
+#' Find the pixel index p of a given pixel with
+#' index ibp in base pixel bp
 #'
 #' @param ibp The pixel index within base pixel bp, at resolution j, in nested order.
 #' @param bp The base pixel index
 #' @param j The resolution parameter nside = 2^j
 #'
+#'@examples
+#'
+#'ibp2p(1, 1, 2)
+#'ibp2p(1, 2, 2)
 #'
 #'@export
 ibp2p <- function(ibp, bp, j)

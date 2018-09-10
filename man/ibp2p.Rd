@@ -2,7 +2,7 @@
 % Please edit documentation in R/Conversion.R
 \name{ibp2p}
 \alias{ibp2p}
-\title{ibp2p}
+\title{Computes pixel's index using its subindex within base resolution}
 \usage{
 ibp2p(ibp, bp, j)
 }
@@ -14,6 +14,12 @@ ibp2p(ibp, bp, j)
 \item{j}{The resolution parameter nside = 2^j}
 }
 \description{
-Find the pixel index p of a given pixel at whose
-index in base pixel bp is equal to ibp
+Find the pixel index p of a given pixel with
+index ibp in base pixel bp
+}
+\examples{
+
+ibp2p(1, 1, 2)
+ibp2p(1, 2, 2)
+
 }

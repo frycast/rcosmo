@@ -182,12 +182,15 @@ parent <- function(p)
   (p - p %% 4 + (p %% 4 != 0)*4)/4
 }
 
-#' children
+#' Return children of a pixel
 #'
-#' Gives the pixels at resolution j + 1 that are contained in p,
-#' where p is specified at resoution j (notice it does not depend on j).
+#' Gives four pixels at resolution j + 1 that are contained in p,
+#' where p is a pixel specified at resoution j (notice it does not depend on j).
 #'
 #' @param p A pixel index specified in nested order.
+#'
+#'@examples
+#'children(11)
 #'
 #'@export
 children <- function(p)
@@ -210,15 +213,22 @@ siblings <- function(p) {
 
 
 
-#' baseNeighbours
+#' Return neighbours of base pixels
 #'
-#' A map from the base pixel index bp to the vector of base pixels
+#' The base-resolution comprises twelve pixels. \code{baseNeighbours} returns
+#' a map from the base pixel index bp to the vector of base pixels
 #' that are neighbours of bp, in counterclockwise order of
 #' direction: S,SE,E,NE,N,NW,W,SW. The presence of -1 indicates
 #' that the corresponding direction is empty.
 #'
 #' @param bp The base pixel index
 #'
+#'@examples
+#'## Return neighbours of base pixel 1
+#'baseNeighbours(1)
+#'
+#'## There is no base pixel 14, so baseNeighbours returns NULL
+#'baseNeighbours(14)
 #'
 #'@export
 baseNeighbours <- function(bp)

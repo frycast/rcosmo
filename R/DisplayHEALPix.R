@@ -245,7 +245,7 @@ pbNextPolarCap <- function(n, k, prev_phi, delta_phi, flag){
 
 
 
-#' displayPixels
+#' Display the pixels and grandchildren
 #'
 #' Display the pixels spix at resolution j by colouring
 #' in the grandchildren of spix at resolution plot.j
@@ -266,6 +266,20 @@ pbNextPolarCap <- function(n, k, prev_phi, delta_phi, flag){
 #'
 #'@examples
 #'
+#'## Example 1
+#'
+#' ## Plot base pixels 1,2,3 by colouring their grandchildren at resolution
+#' ## 5 (by default). No pixel boundaries.
+#' displayPixels(j=0, spix=c(1,2,3))
+#'
+#' ## Plot base pixels 1,2,3 display and their boundaries (boundary.j=0)
+#' displayPixels(0,0, spix=c(1,2,3))
+#'
+#' ## Plot base pixels 1,2,3 by colouring their grandchildren at resolution 2
+#' displayPixels(0,0, plot.j = 2, spix=c(1,2,3))
+#'
+#'## Example 2
+#'
 #' demoNeighbours <- function(p,j) {
 #'   neighbours(p, j)
 #'   displayPixels(boundary.j = j, j = j, plot.j = 5,
@@ -278,7 +292,7 @@ pbNextPolarCap <- function(n, k, prev_phi, delta_phi, flag){
 #'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
 #'
-#'
+#'demoNeighbours(1,2)
 #'
 #'@export
 displayPixels <- function(boundary.j, j, plot.j = 5, spix,

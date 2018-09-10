@@ -1,5 +1,3 @@
-#### WARNING: THE LAST BIN IS NOT THE RIGHT SIZE AS IT CONTAINS ALL
-#### DISTANCES GREATER THAN max.dist SO IT SHOULD PERHAPS BE DISCARDED
 #' Sample covariance for CMB
 #'
 #' This function provides an empirical covariance estimate for data
@@ -60,7 +58,7 @@ covCMB <- function(cmbdf,
 
   if ( !missing(sample.size) ) {
 
-    cmbdf <- rcosmo:::sampleCMB(cmbdf, sample.size = sample.size)
+    cmbdf <- rcosmo::sampleCMB(cmbdf, sample.size = sample.size)
 
   }
 
@@ -81,7 +79,7 @@ covCMB <- function(cmbdf,
 
     if (calc.max.dist)
     {
-      max.dist <- rcosmo:::maxDist_internal(cmbdf)
+      max.dist <- maxDist_internal(cmbdf)
     }
 
 
@@ -96,7 +94,7 @@ covCMB <- function(cmbdf,
 
   }
 
-  covs <- rcosmo:::covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
+  covs <- covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
 
   # Reverse order since cosine is decreasing
   covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])
@@ -282,7 +280,7 @@ plotAngDis <- function(cmbdf, colindex)
 #'@export
 sampleCMB <- function(cmbdf, sample.size)
 {
-  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
+  if ( !is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -324,7 +322,7 @@ sampleCMB <- function(cmbdf, sample.size)
 #'@export
 fmf <- function(cmbdf, alpha, varindex)
 {
-  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
+  if ( !is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }

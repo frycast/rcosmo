@@ -160,14 +160,14 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
         stop("in.pixel can only be used with nested ordering")
       }
 
-      return(rcosmo:::subWindow(cmbdf = cmbdf, win = new.window,
+      return(subWindow(cmbdf = cmbdf, win = new.window,
                                 intersect = intersect,
                                 in.pixels = in.pixels,
                                 in.pixels.res = in.pixels.res))
     }
     else
     {
-      return(rcosmo:::subWindow(cmbdf = cmbdf, win = new.window,
+      return(subWindow(cmbdf = cmbdf, win = new.window,
                                 intersect = intersect))
     }
   }
@@ -179,12 +179,12 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
       stop("in.pixels out of range specified by in.pixels.res")
     }
 
-    if (rcosmo:::ordering(cmbdf) != "nested")
+    if (rcosmo::ordering(cmbdf) != "nested")
     {
       stop("in.pixel can only be used with nested ordering")
     }
 
-    pixelWin <- rcosmo:::pixelWindow(in.pixels.res,
+    pixelWin <- rcosmo::pixelWindow(in.pixels.res,
                                      log2(nside(cmbdf)),
                                      in.pixels)
 
@@ -205,7 +205,7 @@ window.CMBDataFrame <- function(cmbdf, new.window, intersect = TRUE,
 #'
 `window<-.CMBDataFrame` <- function(cmbdf,...,value)
 {
-  return(rcosmo:::window(cmbdf, new.window = value))
+  return(rcosmo::window(cmbdf, new.window = value))
 }
 
 
@@ -252,7 +252,7 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering )
     } else if ( identical(new.ordering, "nested") ) {
 
       message("Converting to nested ordering...\n")
-      pix(cmbdf) <- rcosmo:::ring2nest(nside = nside(cmbdf),
+      pix(cmbdf) <- rcosmo::ring2nest(nside = nside(cmbdf),
                                        pix = pix(cmbdf))
       cmbdf <- cmbdf[order(pix(cmbdf)),]
       attr(cmbdf, "ordering") <- "nested"
@@ -289,7 +289,7 @@ ordering.CMBDataFrame <- function( cmbdf, new.ordering )
 #'
 #' @export
 `ordering<-.CMBDataFrame` <- function(cmbdf,...,value) {
-  rcosmo:::ordering(cmbdf, new.ordering = value)
+  rcosmo::ordering(cmbdf, new.ordering = value)
   cmbdf
 }
 
@@ -488,12 +488,12 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 {
   args <- list(...)
 
-  if ( !all(sapply(args, rcosmo:::is.CMBDataFrame)) )
+  if ( !all(sapply(args, rcosmo::is.CMBDataFrame)) )
   {
     stop("rbind.CMBDataFrame requires all arguments to be CMBDataFrames")
   }
 
-  if ( !all(sapply(args, rcosmo:::areCompatibleCMBDFs, cmbdf2 = args[[1]])) )
+  if ( !all(sapply(args, areCompatibleCMBDFs, cmbdf2 = args[[1]])) )
   {
     stop(paste0("The CMBDataFrames are not compatible for rbind.\n",
                 "You may need to convert coordinates or ordering"))
@@ -519,7 +519,7 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 
   # Keep this CMBDataFrame and the windows so we can get attributes
   cmbdf <- args[[1]]
-  wins <- sapply(args, rcosmo:::window)
+  wins <- sapply(args, rcosmo::window)
 
   if ( unsafe )
   {
@@ -868,7 +868,7 @@ is.CMBDat <- function(cmbdf)
 #'@export
 geoArea.CMBDataFrame <- function(cmbdf)
 {
-  nside <- rcosmo:::nside(cmbdf)
+  nside <- rcosmo::nside(cmbdf)
   if ( !is.numeric(nside) ) stop("problem with cmbdf nside attribute")
   return(pi/(3*nside^2)*nrow(cmbdf))
 }
@@ -957,12 +957,12 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
         nam <- c("theta","phi")
       }
 
-      crds <- rcosmo:::pix2coords_internal(nside = ns, nested = nest,
+      crds <- pix2coords_internal(nside = ns, nested = nest,
                                            cartesian = cart, spix = sp)[,1:nc]
       crds <- as.data.frame(crds)
       names(crds) <- nam
 
-      cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, cmbdf)
+      cmbdf <- cbind.CMBDataFrame(crds, cmbdf)
     }
     else if ( attr(cmbdf, "coords") == new.coords )
     {
@@ -977,9 +977,9 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       z.i <- which(names(cmbdf) == "z")
 
       crds <- cmbdf[,c(x.i, y.i, z.i)]
-      crds <- rcosmo:::car2sph(crds)
+      crds <- car2sph(crds)
       other <- cmbdf[,-c(x.i, y.i, z.i), drop = FALSE]
-      cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, other)
+      cmbdf <- cbind.CMBDataFrame(crds, other)
       attr(cmbdf, "coords") <- "spherical"
     }
     else if ( new.coords == "cartesian" )
@@ -990,9 +990,9 @@ coords.CMBDataFrame <- function( cmbdf, new.coords )
       phi.i <- which(names(cmbdf) == "phi")
 
       crds <- cmbdf[,c(theta.i, phi.i)]
-      crds <- rcosmo:::sph2car(crds)
+      crds <- sph2car(crds)
       other <- cmbdf[,-c(theta.i, phi.i), drop = FALSE]
-      cmbdf <- rcosmo:::cbind.CMBDataFrame(crds, other)
+      cmbdf <- cbind.CMBDataFrame(crds, other)
       attr(cmbdf, "coords") <- "cartesian"
     }
 
@@ -1099,7 +1099,7 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
   if (missing(col))
   {
      col <- tryCatch(colscheme(cmbdf[,intensities, drop = TRUE],
-                           rcosmo:::breaks1024, rcosmo:::colmap),
+                           breaks1024, colmap),
                      error = function(e) {
                       stop(paste0("Problem producing CMB colour scheme. ",
                                   "Make sure that the intensities ",
@@ -1135,7 +1135,7 @@ plot.CMBDataFrame <- function(cmbdf, intensities = "I",
 
   if ( hp.boundaries > 0 )
   {
-    rcosmo:::displayPixelBoundaries(nside = hp.boundaries,
+    rcosmo::displayPixelBoundaries(nside = hp.boundaries,
                                     col = hpb.col)
   }
 }

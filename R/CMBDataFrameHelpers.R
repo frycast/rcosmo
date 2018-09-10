@@ -54,7 +54,7 @@ pixelArea <- function(cmbdf)
 header <- function( cmbdf )
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
@@ -82,7 +82,7 @@ header <- function( cmbdf )
 resolution <- function( cmbdf )
 {
   # Check that argument is a CMBDF
-  if ( !rcosmo:::is.CMBDataFrame(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }

@@ -53,17 +53,17 @@
 subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
                       in.pixels.res = 0)
 {
-  if ( !rcosmo:::is.CMBDataFrame(cmbdf)
-       && !rcosmo:::is.CMBDat(cmbdf) )
+  if ( !rcosmo::is.CMBDataFrame(cmbdf)
+       && !rcosmo::is.CMBDat(cmbdf) )
   {
     if ( is.data.frame(cmbdf) )
     {
       # Note that HPDataFrames end up in here too
-      cmbdf <- rcosmo:::coords(cmbdf, new.coords = "cartesian")
+      cmbdf <- rcosmo::coords(cmbdf, new.coords = "cartesian")
 
       if ( is.HPDataFrame(cmbdf) )
       {
-        spx <- rcosmo:::pix(cmbdf)
+        spx <- rcosmo::pix(cmbdf)
       }
     }
     else
@@ -72,14 +72,14 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     }
   }
 
-  if ( !rcosmo:::is.CMBWindow(win) ) {
+  if ( !rcosmo::is.CMBWindow(win) ) {
 
     if ( !is.list(win) )
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
 
-    if (!all(sapply(win, rcosmo:::is.CMBWindow)))
+    if (!all(sapply(win, rcosmo::is.CMBWindow)))
     {
       stop("'win' must be a CMBWindow or list of CMBWindows")
     }
@@ -89,20 +89,20 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     win <- list(win)
   }
 
-  if ( !missing(in.pixels) && rcosmo:::is.CMBDataFrame(cmbdf) )
+  if ( !missing(in.pixels) && rcosmo::is.CMBDataFrame(cmbdf) )
   {
-    if ( rcosmo:::ordering(cmbdf) != "nested" )
+    if ( rcosmo::ordering(cmbdf) != "nested" )
     {
       stop("in.pixel can only be used with nested ordering")
     }
-    pixelWin <- rcosmo:::pixelWindow(in.pixels.res,
+    pixelWin <- rcosmo::pixelWindow(in.pixels.res,
                                      log2(nside(cmbdf)),
                                      in.pixels)
     cmbdf <- cmbdf[pixelWin,]
   }
 
   # subsequent operations will require win to have cartesian coordinates
-  win.xyz <- lapply(win, rcosmo:::coords, new.coords = "cartesian")
+  win.xyz <- lapply(win, rcosmo::coords, new.coords = "cartesian")
 
   # Triangulate all non-convex polygons into lists of convex polygons,
   # making win.xyz into a new list of only convex polygons
@@ -110,9 +110,9 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   for ( w in win.xyz )
   {
     #Triangulate each w and add all triangles to win.conv
-    if ( rcosmo:::contains("polygon", winType(w)) && !rcosmo:::assumedConvex(w))
+    if ( contains("polygon", winType(w)) && !rcosmo::assumedConvex(w))
     {
-      win.conv <- append(win.conv, rcosmo:::triangulate(w))
+      win.conv <- append(win.conv, triangulate(w))
     }
     else
     {
@@ -124,7 +124,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
   exist.m <- FALSE
   exist.p <- FALSE
-  if ( rcosmo:::is.CMBDataFrame(cmbdf)
+  if ( rcosmo::is.CMBDataFrame(cmbdf)
        || is.data.frame(cmbdf)
        || is.HPDataFrame(cmbdf) )
   {
@@ -133,7 +133,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   }
   else
   {
-    if ( !rcosmo:::is.CMBDat(cmbdf) )
+    if ( !rcosmo::is.CMBDat(cmbdf) )
     {
       stop("cmbdf must be a CMBDataFrame, data.frame or CMBDat object")
     }
@@ -141,9 +141,9 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
     keep.m <- rep(TRUE, 12*cmbdf$nside^2)
   }
   ## pointInside happens here
-  if ( (rcosmo:::is.CMBDataFrame(cmbdf)
+  if ( (rcosmo::is.CMBDataFrame(cmbdf)
         && (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian"))
-       || (!rcosmo:::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)))
+       || (!rcosmo::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)))
   { ## This might be a little quicker if coords are already cartesian
     ## Note that HPDataFrames end up in here
     #################################################################
@@ -155,18 +155,18 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
     for ( w in win.xyz )
     {
-      switch(rcosmo:::winType(w),
+      switch(rcosmo::winType(w),
              polygon = keep.p <- keep.p |
-               rcosmo:::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+               pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
              minus.polygon = keep.m <- keep.m &
-               !rcosmo:::pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
+               !pointInConvexPolygon(cmbdf[,c("x","y","z")], w),
              disc = keep.p <- keep.p |
-               rcosmo:::pointInDisc(cmbdf[,c("x","y","z")], w),
+               pointInDisc(cmbdf[,c("x","y","z")], w),
              minus.disc = keep.m <- keep.m &
-               !rcosmo:::pointInDisc(cmbdf[,c("x","y","z")], w),
+               !pointInDisc(cmbdf[,c("x","y","z")], w),
              stop("Failed to determine window type using rcosmo::winType"))
 
-      if ( rcosmo:::contains("minus", rcosmo:::winType(w)) )
+      if ( contains("minus", rcosmo::winType(w)) )
       {
         exist.m <- TRUE
       }
@@ -179,13 +179,13 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   else
   { ## This is quicker and more robust than assigning new coords in R
     #################################################################
-    if ( rcosmo:::is.CMBDataFrame(cmbdf) || rcosmo::is.HPDataFrame(cmbdf) )
+    if ( rcosmo::is.CMBDataFrame(cmbdf) || rcosmo::is.HPDataFrame(cmbdf) )
     {
-      nes <- (rcosmo:::ordering(cmbdf) == "nested")
+      nes <- (rcosmo::ordering(cmbdf) == "nested")
       ns <- nside(cmbdf)
-      spx <- rcosmo:::pix(cmbdf)
+      spx <- rcosmo::pix(cmbdf)
     }
-    else if ( rcosmo:::is.CMBDat(cmbdf) )
+    else if ( rcosmo::is.CMBDat(cmbdf) )
     {
       nes <- (cmbdf$ordering == "nested")
       ns <- cmbdf$nside
@@ -195,26 +195,26 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 
     for ( w in win.xyz )
     {
-      switch(rcosmo:::winType(w),
+      switch(rcosmo::winType(w),
              polygon = keep.p <- keep.p |
-               rcosmo:::pointInConvexPolygonHP(nside = ns,
+               pointInConvexPolygonHP(nside = ns,
                                                nested = nes,
                                                win = w, spix = spx),
              minus.polygon = keep.m <- keep.m &
-               !rcosmo:::pointInConvexPolygonHP(nside = ns,
+               !pointInConvexPolygonHP(nside = ns,
                                                 nested = nes,
                                                 win = w, spix = spx),
              disc = keep.p <- keep.p |
-               rcosmo:::pointInDiscHP(nside = ns,
+               pointInDiscHP(nside = ns,
                                       nested = nes,
                                       win = w, spix = spx),
              minus.disc = keep.m <- keep.m &
-               !rcosmo:::pointInDiscHP(nside = ns,
+               !pointInDiscHP(nside = ns,
                                        nested = nes,
                                        win = w, spix = spx),
              stop("Failed to determine window type using rcosmo::winType"))
 
-      if ( rcosmo:::contains("minus", rcosmo:::winType(w)) )
+      if ( contains("minus", rcosmo::winType(w)) )
       {
         exist.m <- TRUE
       }

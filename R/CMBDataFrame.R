@@ -75,14 +75,14 @@ CMBDataFrame <- function(CMBData,
 
   if ( !missing(win) ) {
 
-    if ( !rcosmo:::is.CMBWindow(win) ) {
+    if ( !rcosmo::is.CMBWindow(win) ) {
 
       if ( !is.list(win) ) {
 
         stop("'win' must be a CMBWindow or list of CMBWindows")
       }
 
-      if ( !all(sapply(win, rcosmo:::is.CMBWindow)) ) {
+      if ( !all(sapply(win, rcosmo::is.CMBWindow)) ) {
 
         stop("'win' must be a CMBWindow or list of CMBWindows")
       }
@@ -274,7 +274,7 @@ CMBDataFrame <- function(CMBData,
       cartesian <- ifelse(coords == "cartesian", TRUE, FALSE)
 
       # generate the coordinates from HEALPix indices
-      coordinates <- rcosmo:::pix2coords_internal(nside = nside, nested = nest,
+      coordinates <- pix2coords_internal(nside = nside, nested = nest,
                                           spix = spix, cartesian = cartesian)
 
       # Put the coordinates in a data.frame
@@ -366,7 +366,7 @@ CMBDataFrame <- function(CMBData,
   ##############################################################
   } else if ( CMBData.is.cmbdf ) {
 
-    nside <- rcosmo:::nside(CMBData)
+    nside <- rcosmo::nside(CMBData)
     n <- nrow(CMBData)
 
     if (( !missing(sample.size) || !is.null(spix) ) ) {
@@ -429,7 +429,7 @@ CMBDataFrame <- function(CMBData,
 
       message("Generating coordinates from HEALPix ordering...\n")
 
-      cmbdf <- rcosmo:::pix2coords(nside = nside, ordering = ordering,
+      cmbdf <- rcosmo::pix2coords(nside = nside, ordering = ordering,
                                   coords = coords, spix = spix)
 
       cmbdf <- cbind(cmbdf, I = I)

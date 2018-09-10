@@ -1,4 +1,4 @@
-#' Nested Search
+#' Finds the closest pixel center to a point
 #'
 #' Finds the closest HEALPix pixel center to a given \code{target} point,
 #' specified in Cartesian coordinates, using an efficient nested search
@@ -19,6 +19,18 @@
 #' at resolution \code{nside}.
 #'
 #' @examples
+#'
+#' #' ## Find the closest HEALPix pixel center at resolution k=1 for
+#' ## the point (0.6,0.8,0)
+#'
+#' point <- c(0.6,0.8,0)
+#' k <- 1
+#' cpoint <- nestSearch(point, nside=k)
+#'
+#' ## Plot the closest pixel center in blue and the point (0.6,0.8,0) in red
+#' displayPixels(k,k,plot.j=k, spix=c(cpoint$pix), size=5, incl.labels =FALSE)
+#' rgl::plot3d(point[1], point[2], point[3], col="red", size = 5, add = TRUE)
+#'
 #'
 #' @export
 nestSearch <- function(target, nside,

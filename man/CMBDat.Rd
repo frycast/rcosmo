@@ -13,11 +13,7 @@ CMBDat(filename, mmap = FALSE, spix)
 \item{mmap}{A boolean indicating whether to use memory mapping.}
 
 \item{spix}{The sample pixels (rows) to read from the FITS file
-<<<<<<< HEAD
-binary data table (optional)}
-=======
 binary data table (optional).}
->>>>>>> 35b1876d6781bb63e95d42038d82f7f11623d604
 
 \item{filename}{The path to the fits file.}
 

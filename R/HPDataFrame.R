@@ -407,7 +407,6 @@ coords.HPDataFrame <- function( hpdf, new.coords, healpix.only = FALSE )
   ns <- rcosmo:::nside(hpdf)
   od <- rcosmo:::ordering(hpdf)
   pix <- rcosmo:::pix(hpdf)
-  nc <- (new.coords == "cartesian")
 
   if ( healpix.only == TRUE )
   {

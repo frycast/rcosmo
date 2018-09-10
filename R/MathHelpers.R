@@ -1,33 +1,4 @@
 
-
-
-
-# #' Use Haversine formula
-# #'
-# #' Uses the Haversine formula to give the
-# #' geodesic distance between two points on the unit sphere given
-# #' in latitude and longitude. The Haversine formula is favoured
-# #' for its numerical stability
-# #'
-# #'
-# #'@param p1 a 2 element vector (lat, lon) specifying a point on the
-# #'unit sphere
-# #'@param p2 a 2 element vector (lat, lon) specifying a point on the
-# #'unit sphere
-# #'
-# #'@return the geodesic distance between \code{p1} and \code{p2}
-# #'
-# #'@export
-# haversineDist <- function(p1,p2) {
-#
-#   dlat <- abs((p1[1] - p2[1])/2)
-#   dlon <- abs((p1[2] - p2[2])/2)
-#   return(2*asin(sqrt( (sin(dlat))^2 + cos(p1[1])*cos(p2[1])*(sin(dlon))^2 )))
-# }
-
-
-
-
 ## HELPER FUNCTION, CROSS PRODUCT
 vector_cross <- function(a, b) {
   if(length(a)!=3 || length(b)!=3){
@@ -77,7 +48,7 @@ rodrigues <- function(a,b,p.xyz)
 #'
 #' @param (a,b) The parameters of Jacobi polynomial
 #' @param L  The degree of Jacobi polynomial
-#' @param T Given point in [-1,1].
+#' @param t Given point in [-1,1].
 #' @return Jacobi polynomial values
 #' @examples
 #'
@@ -88,22 +59,25 @@ rodrigues <- function(a,b,p.xyz)
 #' @keywords Jacobi,Orthogonal polynomials.
 #' @source \url{http://dlmf.nist.gov/18.9}
 #' @export
-jacobiPol<-function (a,b,L,T){
+jacobiPol <- function(a,b,L,t) {
 
-  if (L==0){
-    YJ<-matrix(1,length(T),1)
-  }else if (L==1){
-    YJ<-(a-b)/2+(a+b+2)/2*T
+  if (L == 0){
+    YJ <- matrix(1,length(t),1)
+  }else if (L == 1){
+    YJ <- (a - b) / 2 + (a + b + 2) / 2 * t
   }else{
-    pMisb1<-matrix(1,length(T),1)
-    pMi<-(a-b)/2+(a+b+2)/2*T
+    pMisb1 <- matrix( 1, length(t), 1)
+    pMi <- (a-b) / 2 + (a + b + 2) / 2 * t
     for (i in seq(2,L,1)){
-      c<-2*i+a+b
-      tmppMisb1<- pMi
-      pMi<-((c-1)*c*(c-2)*T*pMi+(c-1)*(a^2-b^2)*pMi-2*(i+a-1)*(i+b-1)*c*pMisb1)/(2*i*(i+a+b)*(c-2))
-      pMisb1<-tmppMisb1
+      c <- 2 * i + a + b
+      tmppMisb1 <- pMi
+      pMi <- ((c - 1) * c * (c - 2) * t * pMi + (c - 1) *
+                (a ^ 2 - b ^ 2) * pMi - 2 * (i + a - 1) *
+                (i + b - 1) * c * pMisb1) /
+                (2 * i * (i + a + b) * (c-2) )
+      pMisb1 <- tmppMisb1
     }
-    YJ<- pMi
+    YJ <- pMi
   }
   return (YJ)
 }
@@ -147,12 +121,12 @@ jacobiPol<-function (a,b,L,T){
 #'
 #' @export
 sphericalHarmonics <- function(L,m,xyz){
-  if (L==0){
+  if (L == 0){
     Y <- matrix(1,dim(xyz)[1],1)/sqrt(4*pi)
     return (Y)
   }
 
-  if ((m<(-L))|| (m>L)){
+  if ((m < -L) || (m > L)){
     sprintf("Warning: m should be in [-%i,%i]", L)
   }else{
     m_abs<-abs(m)
@@ -176,7 +150,7 @@ sphericalHarmonics <- function(L,m,xyz){
     t[t<(-1)] <- -1
     phi[logic_x2_1] = acos(t[logic_x2_1])
     # x2<0 & x3<1
-    logic_x2_2 <- (y<0&z<1&z>-1)
+    logic_x2_2 <- (y < 0 & z < 1 & z > -1)
     t[logic_x2_2] <- x[logic_x2_2]/sqrt(1-(z[logic_x2_2])^2)
     t[t>1] <- 1
     t[t<(-1)] <- -1

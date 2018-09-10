@@ -108,21 +108,26 @@ CMBDat <- function(filename, mmap = FALSE, spix) {
   header2 <- FITSio::readFITSheader(zz)
   hdr <- FITSio::parseHdr(header2)
 
-  blocks <- ceiling(length(header1)*chars/bytes) +
-            ceiling(length(header2)*chars/bytes)
+  blocks <- ceiling(length(header1) * chars / bytes) +
+            ceiling(length(header2) * chars / bytes)
 
-  # Info needed for reading in binary data
-  naxis1 <- as.numeric(hdr[which(hdr == "NAXIS1") + 1]) # Number of bytes per row
-  naxis2 <- as.numeric(hdr[which(hdr == "NAXIS2") + 1]) # Number of rows
-  tfields <- as.numeric(hdr[which(hdr == "TFIELDS") + 1]) # Number of columns (e.g. I,Q,U,PMASK,TMASK)
+  ### Info needed for reading in binary data
+  # Number of columns (e.g. I,Q,U,PMASK,TMASK)
+  tfields <- as.numeric(hdr[which(hdr == "TFIELDS") + 1])
 
-  # Full map metadata
-  resoln <- as.numeric(hdr[which(hdr == "RESOLN") + 1]) # Resolution (arcmin)
-  method <- hdr[which(hdr == "METHOD") + 1] # The method e.g. SMICA
-  coordsys <- tolower(hdr[which(hdr == "COORDSYS") + 1]) # Coordinate system e.g. Galactic
-  nside <- as.integer(hdr[which(hdr == "NSIDE") + 1]) # The Nside parameter
-  baddata <- hdr[which(hdr == "BAD_DATA") + 1] # Value representing bad data
-  ordering <- tolower(hdr[which(hdr == "ORDERING") + 1]) # HEALPix ordering scheme
+  ## Full map metadata
+  # Resolution (arcmin)
+  resoln <- as.numeric(hdr[which(hdr == "RESOLN") + 1])
+  # The method e.g. SMICA
+  method <- hdr[which(hdr == "METHOD") + 1]
+  # Coordinate system e.g. Galactic
+  coordsys <- tolower(hdr[which(hdr == "COORDSYS") + 1])
+  # The Nside parameter
+  nside <- as.integer(hdr[which(hdr == "NSIDE") + 1])
+  # Value representing bad data
+  baddata <- hdr[which(hdr == "BAD_DATA") + 1]
+  # HEALPix ordering scheme
+  ordering <- tolower(hdr[which(hdr == "ORDERING") + 1])
 
   # Column map metadata
   TFORMn <- character(tfields)
@@ -130,59 +135,60 @@ CMBDat <- function(filename, mmap = FALSE, spix) {
   TUNITn <- character(tfields)
   for (i in 1:tfields) {
 
-    tmp <- gsub(" ", "", hdr[which(hdr == paste("TFORM", # FITS Format Code, e.g. E, B, ...
+    # FITS Format Code, e.g. E, B, ...
+    tmp <- gsub(" ", "", hdr[which(hdr == paste("TFORM",
                                                 i, sep = "")) + 1])
     TFORMn[i] <- tmp
 
-    tmp <- gsub(" ", "", hdr[which(hdr == paste("TTYPE", # column names
+    # column names
+    tmp <- gsub(" ", "", hdr[which(hdr == paste("TTYPE",
                                                 i, sep = "")) + 1])
     TTYPEn[i] <- ifelse(length(tmp) != 1, "", tmp)
 
-    tmp <- gsub(" ", "", hdr[which(hdr == paste("TUNIT", # Column units e.g. K_CMB
+    # Column units e.g. K_CMB
+    tmp <- gsub(" ", "", hdr[which(hdr == paste("TUNIT",
                                                 i, sep = "")) + 1])
     TUNITn[i] <- ifelse(length(tmp) != 1, "", tmp)
   }
 
 
   # Prepare FITS Format code details
-  bsize <- rep(NA, tfields)
   btype <- rep(NA, tfields)
-  bsign <- rep(NA, tfields)
-  for (i in 1:tfields)
-  {
+  for (i in 1:tfields) {
+
     switch(tolower(TFORMn[i]),
            b = {
-             btype[i] <- 1},
+             btype[i] <- 1
+             },
            e = {
-             btype[i] <- 2},
+             btype[i] <- 2
+             },
            stop("Unknown TFORMn, contact rcosmo package developers"))
   }
-
-  swap <- "big" != .Platform$endian
-
 
   mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
   map <- mmap::mmap(file = filename,
                     mode = mystruct,
-                    off = blocks*bytes,
+                    off = blocks * bytes,
                     endian = "big")
   mmap::extractFUN(map) <- function(X) do.call(data.frame, X)
 
 
 
-  if ( mmap == FALSE )
-  {
-    if ( missing(spix) )
-    {
-      spix <- 1:(12*nside^2)
+  if ( mmap == FALSE ) {
+
+    if ( missing(spix) ) {
+
+      spix <- 1:(12 * nside ^ 2)
     }
+
     col <- map[spix]
     mmap::munmap(map)
+
   } else {
+
     col <- map
   }
-
-
 
   close(zz)
 
@@ -204,25 +210,24 @@ CTypeSwitch <- function(x) {
 }
 
 simplifyNames <- function(x) {
+
   sapply(x, function(x) {
+
       if (toupper(x) == "I_STOKES") return("I")
       if (toupper(x) == "Q_STOKES") return("Q")
       if (toupper(x) == "U_STOKES") return("U")
-      return(x)})
+      return(x)
+  })
 }
 
-CTypeExpression <- function(TTYPEn, btype)
-{
+CTypeExpression <- function(TTYPEn, btype) {
+
   names <- simplifyNames(TTYPEn)
   CTypes <- CTypeSwitch(btype)
   names(CTypes) <- names
   return(CTypes)
 }
 # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-
-
-
 
 
 
@@ -269,11 +274,7 @@ CTypeExpression <- function(TTYPEn, btype)
 #'class(cmbdat.win)
 #'
 #'@export
-window.CMBDat <- function(cmbdat, new.window, intersect = TRUE)
-{
+window.CMBDat <- function(cmbdat, new.window, intersect = TRUE) {
+
   return(subWindow(cmbdat, win = new.window, intersect = intersect))
 }
-
-
-
-

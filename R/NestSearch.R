@@ -208,67 +208,6 @@ siblings <- function(p) {
   1:4 + (h-1)*4
 }
 
-#' displayPixels
-#'
-#' Display the pixels spix at resolution j by colouring
-#' in the grandchildren of spix at resolution plot.j
-#'
-#' @param j The resolution that spix are specified at.
-#' @param boundary.j The resolution to display boundaries at. If
-#' this is missing then boundaries will not be plotted.
-#' @param plot.j The resolution to plot grandchildren at
-#' @param spix Integer vector. The pixel indices to display.
-#' These must be in nested order.
-#' @param incl.labels Integer vector of pixel indices to label at
-#' resolution j.
-#' @param boundary.col The boundary colour.
-#' @param boundary.lwd The boundary line width.
-#' @param col The colour to make the grandchildren.
-#' @param size The size to make the grandchildren.
-#'
-#'
-#'@examples
-#'
-#' demoNeighbours <- function(p,j) {
-#'   neighbours(p, j)
-#'   displayPixels(boundary.j = j, j = j, plot.j = 5,
-#'                 spix = neighbours(p, j),
-#'                 boundary.col = "gray",
-#'                 boundary.lwd = 1,
-#'                 incl.labels = neighbours(p, j),
-#'                 col = "blue",
-#'                 size = 3)
-#'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
-#' }
-#'
-#'
-#'
-#'@export
-displayPixels <- function(boundary.j, j, plot.j = 5, spix,
-                          boundary.col = "gray",
-                          boundary.lwd = 1,
-                          incl.labels = 1:(12*4^boundary.j),
-                          col = "blue",
-                          size = 3)
-{
-  if ( !missing(boundary.j) ) {
-    rcosmo::displayPixelBoundaries(nside = 2^boundary.j,
-                             ordering = "nested",
-                             nums.col = "red",
-                             col = boundary.col,
-                             lwd = boundary.lwd,
-                             incl.labels = incl.labels)
-  }
-
-  # We do this by plotting grandchildren of the siblings
-  gchild <- rcosmo::pixelWindow(j1 = j,
-                                j2 = plot.j,
-                                pix.j1 = spix)
-
-  hp <- rcosmo::HPDataFrame(nside = 2^plot.j,
-                            spix = gchild)
-  plot(hp, add = TRUE, col = col, size = size)
-}
 
 
 #' baseNeighbours

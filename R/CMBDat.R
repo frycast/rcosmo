@@ -206,6 +206,7 @@ CTypeExpression <- function(TTYPEn, btype) {
 #'@param intersect A boolean that determines
 #'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
+#'@param ... Unused arguments.
 #'
 #'@return
 #' A CMBDataFrame containing the data in \code{x} restricted to the

@@ -26,6 +26,8 @@ unspecified then this whole pixel is returned.}
 \item{in.pixels.res}{An integer. Resolution
 (i.e., \eqn{j} such that nside = \code{2^j}) at
 which the \code{in.pixels} parameter is specified}
+
+\item{...}{Unused arguments.}
 }
 \value{
 The window attribute of \code{x} or, if new.window/in.pixels is specified,

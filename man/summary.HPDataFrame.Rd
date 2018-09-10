@@ -11,6 +11,8 @@
 
 \item{intensities}{the name of a column specifying intensities
 (or potentially another numeric quantity of interest)}
+
+\item{...}{Unused arguments.}
 }
 \value{
 A summary includes window's type and area,

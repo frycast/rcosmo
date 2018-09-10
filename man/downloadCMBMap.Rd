@@ -7,16 +7,16 @@
 downloadCMBMap(foreground = "smica", nside = 1024, destfile)
 }
 \arguments{
+\item{foreground}{A string naming the foreground separation method pipeline.
+Please choose one of "COMMANDER", "NILC", "SEVEM" or "SMICA"
+(not case sensitive).}
+
 \item{nside}{An integer. The nside parameter (resolution) required.
 The available options are \code{1024} or \code{2048}.}
 
 \item{destfile}{An optional character string with the path and file
 name for the downloaded file to be saved. Defaults to the working
 directory. Tilde-expansion is performed.}
-
-\item{pipeline}{A string naming the foreground separation method pipeline.
-Please choose one of "COMMANDER", "NILC", "SEVEM" or "SMICA"
-(not case sensitive).}
 }
 \value{
 CMB Map FITS File (Flexible Image Transport System). The

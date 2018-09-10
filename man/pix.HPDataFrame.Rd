@@ -11,6 +11,8 @@
 
 \item{new.pix}{optional vector of pixel indices with
 length equal to \code{nrow(x)}}
+
+\item{...}{Unused arguments.}
 }
 \value{
 The vector of HEALPix pixel indices (integers) or,

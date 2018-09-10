@@ -7,11 +7,11 @@
 fmf(cmbdf, alpha, varindex)
 }
 \arguments{
-\item{cmbdf}{a \code{\link{CMBDataFrame}}.}
+\item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
-\item{varindex}{an index of CMBDataFrame column with measured values}
+\item{alpha}{A numeric threshold level.}
 
-\item{\eqn{alpha}}{a threshold level}
+\item{varindex}{An index of CMBDataFrame column with measured values.}
 }
 \value{
 The area of the exceedance region

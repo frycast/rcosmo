@@ -8,6 +8,8 @@ window(x, ...)
 }
 \arguments{
 \item{x}{An object.}
+
+\item{...}{Extra arguments.}
 }
 \description{
 window generic

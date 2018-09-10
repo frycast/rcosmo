@@ -12,6 +12,10 @@
 \arguments{
 \item{x}{A HPDataFrame.}
 
+\item{intensities}{The column name for the data in \code{x}
+that is to be treated
+as intensities for plotting.}
+
 \item{add}{if TRUE then this plot will be added to any existing plot.
 Note that if \code{back.col} (see below) is specified then a new plot
 window will be opened and \code{add = TRUE} will have no effect}

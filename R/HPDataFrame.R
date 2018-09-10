@@ -126,6 +126,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #'@param x a \code{\link{HPDataFrame}}.
 #'@param new.pix optional vector of pixel indices with
 #'length equal to \code{nrow(x)}
+#'@param ... Unused arguments.
 #'
 #'@return
 #' The vector of HEALPix pixel indices (integers) or,
@@ -187,6 +188,9 @@ nside.HPDataFrame <- function( x )
 #' and all locations are pixel centers.
 #'
 #'@param x A HPDataFrame.
+#'@param intensities The column name for the data in \code{x}
+#'that is to be treated
+#'as intensities for plotting.
 #'@param add if TRUE then this plot will be added to any existing plot.
 #'Note that if \code{back.col} (see below) is specified then a new plot
 #'window will be opened and \code{add = TRUE} will have no effect
@@ -292,6 +296,7 @@ plot.HPDataFrame <- function(x, intensities = "I",
 #'@param x a \code{\link{HPDataFrame}}.
 #'@param new.ordering Specifies the new ordering ("ring" or "nest")
 #'if a change of ordering scheme is desired.
+#'@param ... Unused arguments.
 #'
 #'@return
 #' The name of the HEALPix ordering scheme that is used in the
@@ -379,6 +384,7 @@ ordering.HPDataFrame <- function( x, new.ordering, ... )
 #'This forces the coordinates to be found from HEALPix
 #'pixel indices only. Then the HEALPixCentered
 #'attribute of \code{hpdf} will be set to \code{TRUE}.
+#'@param ... Unused arguments.
 #'
 #'@return
 #' A \code{\link{HPDataFrame}} with columns x,y,z (cartesian)
@@ -643,6 +649,7 @@ geoArea.HPDataFrame <- function(x)
 #' unless \code{healpix.only = TRUE} is given. Note that
 #' if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
 #' will be discarded and replaced with pixel center locations.
+#' @param ... Unused arguments.
 #'
 #'@return
 #' A HPDataFrame containing the data in \code{x} restricted to the
@@ -692,6 +699,7 @@ window.HPDataFrame <- function(x, new.window, intersect = TRUE,
 #'@param object A HPDataFrame.
 #'@param intensities the name of a column specifying intensities
 #'(or potentially another numeric quantity of interest)
+#'@param ... Unused arguments.
 #'
 #'@return
 #'A summary includes window's type and area,

@@ -7,7 +7,9 @@
 coords(x, ...)
 }
 \arguments{
-\item{x}{An object}
+\item{x}{An object.}
+
+\item{...}{Unused arguments.}
 }
 \description{
 Coordinate conversion generic

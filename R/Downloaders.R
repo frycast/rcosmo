@@ -10,7 +10,7 @@
 #' 5 arcmin resolution, and the polarization maps are provided at Nside = 1024
 #' at 10 arcmin resolution.
 #'
-#' @param pipeline A string naming the foreground separation method pipeline.
+#' @param foreground A string naming the foreground separation method pipeline.
 #' Please choose one of "COMMANDER", "NILC", "SEVEM" or "SMICA"
 #' (not case sensitive).
 #' @param nside An integer. The nside parameter (resolution) required.

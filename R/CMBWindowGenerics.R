@@ -2,7 +2,8 @@
 #'
 #' This function produces a summary from a CMBWindow
 #'
-#'@param object a CMBWindow
+#'@param object A CMBWindow.
+#'@param ... Unused arguments.
 #'
 #'@return
 #'A summary includes window's type and area
@@ -180,8 +181,6 @@ is.CMBWindow <- function(win)
 #'aspect ratio, or a new ratio.
 #'@param back.col specifies the background colour of
 #'the plot. This argument is passed to rgl::bg3d.
-#'@param eps the geodesic distance between consecutive points to draw
-#'on the window boundary
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@examples
@@ -402,6 +401,7 @@ polygonArea <- function(win)
 #'@param new.coords specifies the new coordinate system
 #'("spherical" or "cartesian")
 #'if a change of coordinate system is desired
+#'@param ... Unused arguments.
 #'
 #'@return
 #' If new.coords is unspecified, then the name of the coordinate system

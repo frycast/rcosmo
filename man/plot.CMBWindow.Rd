@@ -34,9 +34,6 @@ aspect ratio, or a new ratio.}
 the plot. This argument is passed to rgl::bg3d.}
 
 \item{...}{arguments passed to rgl::plot3d}
-
-\item{eps}{the geodesic distance between consecutive points to draw
-on the window boundary}
 }
 \description{
 Visualise a \code{\link{CMBWindow}}

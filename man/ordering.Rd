@@ -8,6 +8,8 @@ ordering(x, ...)
 }
 \arguments{
 \item{x}{An object.}
+
+\item{...}{Extra arguments.}
 }
 \description{
 ordering generic

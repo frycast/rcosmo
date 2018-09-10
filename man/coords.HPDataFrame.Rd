@@ -17,6 +17,8 @@ or theta, phi will be ignored and removed if present.
 This forces the coordinates to be found from HEALPix
 pixel indices only. Then the HEALPixCentered
 attribute of \code{hpdf} will be set to \code{TRUE}.}
+
+\item{...}{Unused arguments.}
 }
 \value{
 A \code{\link{HPDataFrame}} with columns x,y,z (cartesian)

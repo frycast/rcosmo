@@ -13,7 +13,7 @@ moments and the second column gives
 the corresponding values of CMB power
 spectra.}
 
-\item{N}{a number of points in which
+\item{Ns}{a number of points in which
 the covariance estimate is computed on
 the interval [-1,1]}
 }

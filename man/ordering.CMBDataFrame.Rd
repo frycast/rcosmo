@@ -12,6 +12,8 @@
 \item{new.ordering}{Specifies the new ordering ("ring" or "nest")
 if a change of ordering
 scheme is desired.}
+
+\item{...}{Unused arguments.}
 }
 \value{
 The name of the HEALPix ordering scheme that is

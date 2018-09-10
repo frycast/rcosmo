@@ -255,6 +255,7 @@ mkxy2pix <- function() {
 #' or theta, phi (for spherical colatitude and longitude respectively)
 #'@param new.coords specifies the new coordinate system
 #'("spherical" or "cartesian").
+#'@param ... Unused arguments.
 #'
 #'@return
 #' A new data.frame whose coordinates are as specified by

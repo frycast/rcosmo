@@ -12,6 +12,8 @@
 \item{new.coords}{specifies the new coordinate system
 ("spherical" or "cartesian")
 if a change of coordinate system is desired}
+
+\item{...}{Unused arguments.}
 }
 \value{
 If new.coords is unspecified, then the name of the coordinate system

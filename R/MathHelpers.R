@@ -46,7 +46,7 @@ rodrigues <- function(a,b,p.xyz)
 #'
 #' Calculate Jacobi polynomial values of degree L at given point T in [-1,1].
 #'
-#' @param (a,b) The parameters of Jacobi polynomial
+#' @param a,b The parameters of Jacobi polynomial
 #' @param L  The degree of Jacobi polynomial
 #' @param t Given point in [-1,1].
 #' @return Jacobi polynomial values

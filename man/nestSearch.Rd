@@ -13,6 +13,9 @@ point.}
 \item{nside}{An integer, the target resolution at which the
 resulting pixels are returned.}
 
+\item{index.only}{A boolean indicating whether to return only the
+pixel index (TRUE), or cartesian coordinates as well (FALSE).}
+
 \item{j}{A vector of the resolutions to use in each
 \code{\link{nestSearch_step}}. This is usually best left as the default.
 Changing this parameter is for experienced users only.}

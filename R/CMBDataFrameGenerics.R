@@ -37,6 +37,7 @@
 #'@param in.pixels.res An integer. Resolution
 #'(i.e., \eqn{j} such that nside = \code{2^j}) at
 #'which the \code{in.pixels} parameter is specified
+#'@param ... Unused arguments.
 #'
 #'@return
 #' The window attribute of \code{x} or, if new.window/in.pixels is specified,
@@ -226,6 +227,7 @@ window.CMBDataFrame <- function(x, new.window, intersect = TRUE,
 #'@param new.ordering Specifies the new ordering ("ring" or "nest")
 #'if a change of ordering
 #'scheme is desired.
+#'@param ... Unused arguments.
 #'
 #'@return
 #' The name of the HEALPix ordering scheme that is
@@ -333,6 +335,7 @@ nside.CMBDataFrame <- function( x )
 #'@param x A CMBDataFrame.
 #'@param new.pix Optional vector of pixel indices with
 #'length equal to \code{nrow(x)}.
+#'@param ... Unused arguments.
 #'
 #'@return
 #' The vector of HEALPix pixel indices or, if new.pix is specified,
@@ -405,6 +408,11 @@ pix.CMBDataFrame <- function(x, new.pix, ...)
 #'
 #'See the documentation for \code{\link{cbind}}
 #'
+#'@param ... (generalized) vectors or matrices. Columns to bind.
+#'@param deparse.level Integer controlling the construction of labels
+#'in the case of non-matrix-like arguments.
+#'
+#'
 #'@examples
 #'cmbdf <- CMBDataFrame(nside = 1, ordering = "nested", coords = "spherical")
 #'cmbdf2 <- cbind(cmbdf, myData = rep(1, 12))
@@ -465,6 +473,8 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 #'deleted unless \code{unsafe = TRUE}. If \code{unsafe = TRUE}
 #'then a \code{\link{HPDataFrame}} will be returned instead
 #'of a \code{\link{CMBDataFrame}}.
+#'@param deparse.level See documentation
+#'for \code{\link{rbind.data.frame}}.
 #'
 #'@seealso See the documentation for \code{\link{rbind}}
 #'
@@ -898,6 +908,7 @@ geoArea.CMBDataFrame <- function(x)
 #'@param new.coords Specifies the new coordinate
 #'system ("spherical" or "cartesian")
 #'if a change of coordinate system is desired.
+#'@param ... Unused arguments.
 #'
 #'@return
 #' If new.coords is unspecified, then the name of the coordinate system
@@ -1162,6 +1173,7 @@ colscheme <- function(I, breaks, colmap) {
 #'@param object A \code{\link{CMBDataFrame}}.
 #'@param intensities the name of a column specifying CMB intensities
 #'(or potentially another numeric quantity of interest)
+#'@param ... Unused arguments.
 #'
 #'@return
 #'A summary includes window's type and area,

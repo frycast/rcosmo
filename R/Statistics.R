@@ -124,7 +124,7 @@ covCMB <- function(cmbdf,
 #'moments and the second column gives
 #'the corresponding values of CMB power
 #'spectra.
-#'@param N a number of points in which
+#'@param Ns a number of points in which
 #'the covariance estimate is computed on
 #'the interval [-1,1]
 #'
@@ -302,9 +302,9 @@ sampleCMB <- function(cmbdf, sample.size)
 #' where measured values
 #' are above of the specified threshold level \eqn{alpha}.
 #'
-#'@param cmbdf a \code{\link{CMBDataFrame}}.
-#'@param \eqn{alpha} a threshold level
-#'@param varindex an index of CMBDataFrame column with measured values
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param alpha A numeric threshold level.
+#'@param varindex An index of CMBDataFrame column with measured values.
 #'@return
 #' The area of the exceedance region
 #'

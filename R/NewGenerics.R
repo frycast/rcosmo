@@ -1,6 +1,7 @@
 #' Coordinate conversion generic
 #'
-#' @param x An object
+#' @param x An object.
+#' @param ... Unused arguments.
 #'
 #' @seealso
 #' \code{\link{coords.CMBDataFrame}}
@@ -45,6 +46,7 @@ maxDist <- function(x) UseMethod("maxDist", x)
 #'pix generic
 #'
 #'@param x An object.
+#'@param ... Extra arguments.
 #'
 #'@seealso
 #'\code{\link{pix.CMBDataFrame}}
@@ -80,6 +82,7 @@ nside <- function(x) UseMethod("nside", x)
 #'ordering generic
 #'
 #'@param x An object.
+#'@param ... Extra arguments.
 #'
 #'@seealso
 #'\code{\link{ordering.CMBDataFrame}}
@@ -104,6 +107,7 @@ ordering <- function(x, ...) UseMethod("ordering", x)
 #'window generic
 #'
 #'@param x An object.
+#'@param ... Extra arguments.
 #'
 #'@seealso
 #'\code{\link{window.CMBDataFrame}}

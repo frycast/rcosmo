@@ -9,6 +9,9 @@
 \arguments{
 \item{...}{A number of CMBDataFrames}
 
+\item{deparse.level}{See documentation
+for \code{\link{rbind.data.frame}}.}
+
 \item{unsafe}{A boolean. If the CMBDataFrame arguments have
 overlapping pixel
 indices then all but one of the non-unique rows will be

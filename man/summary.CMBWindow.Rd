@@ -7,7 +7,9 @@
 \method{summary}{CMBWindow}(object, ...)
 }
 \arguments{
-\item{object}{a CMBWindow}
+\item{object}{A CMBWindow.}
+
+\item{...}{Unused arguments.}
 }
 \value{
 A summary includes window's type and area

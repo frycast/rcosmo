@@ -23,6 +23,8 @@ with priority over the HEALPix indices in \code{pix(x)}
 unless \code{healpix.only = TRUE} is given. Note that
 if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
 will be discarded and replaced with pixel center locations.}
+
+\item{...}{Unused arguments.}
 }
 \value{
 A HPDataFrame containing the data in \code{x} restricted to the

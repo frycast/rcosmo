@@ -10,11 +10,11 @@
 jacobiPol(a, b, L, t)
 }
 \arguments{
+\item{a, b}{The parameters of Jacobi polynomial}
+
 \item{L}{The degree of Jacobi polynomial}
 
 \item{t}{Given point in [-1,1].}
-
-\item{(a, b)}{The parameters of Jacobi polynomial}
 }
 \value{
 Jacobi polynomial values

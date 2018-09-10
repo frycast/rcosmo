@@ -13,6 +13,8 @@ or theta, phi (for spherical colatitude and longitude respectively)}
 
 \item{new.coords}{specifies the new coordinate system
 ("spherical" or "cartesian").}
+
+\item{...}{Unused arguments.}
 }
 \value{
 A new data.frame whose coordinates are as specified by

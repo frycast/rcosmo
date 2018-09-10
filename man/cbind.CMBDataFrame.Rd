@@ -6,6 +6,12 @@
 \usage{
 \method{cbind}{CMBDataFrame}(..., deparse.level = 1)
 }
+\arguments{
+\item{...}{(generalized) vectors or matrices. Columns to bind.}
+
+\item{deparse.level}{Integer controlling the construction of labels
+in the case of non-matrix-like arguments.}
+}
 \description{
 Add a new column or columns (vector, matrix or data.frame)
 to a \code{\link{CMBDataFrame}}. Note that method dispatch

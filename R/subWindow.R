@@ -300,7 +300,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
 #'will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 #'
-#'@param x a data.frame. Must have
+#'@param x A data.frame. Must have
 #'columns labelled x,y,z specifying cartesian coordinates, or
 #'columns labelled theta, phi specifying colatitude and longitude
 #'respectively.
@@ -308,6 +308,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
 #'@param intersect A boolean that determines
 #'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
+#'@param ... Unused arguments.
 #'
 #'@return
 #' A data.frame containing the data in \code{x} restricted to the

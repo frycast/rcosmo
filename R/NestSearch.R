@@ -20,7 +20,7 @@
 #'
 #' @examples
 #'
-#' #' ## Find the closest HEALPix pixel center at resolution k=1 for
+#' ## Find the closest HEALPix pixel center at resolution k=1 for
 #' ## the point (0.6,0.8,0)
 #'
 #' point <- c(0.6,0.8,0)

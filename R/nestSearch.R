@@ -329,7 +329,7 @@ borderPattern <- function(ptype)
 
 
 
-# THIS NEEDS TO BE DOCUMENTED AND EXPORTED
+
 #'neighbours
 #'
 #'Return the neighbouring pixels to a given pixel p
@@ -351,6 +351,7 @@ borderPattern <- function(ptype)
 #'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
 #'
+#' @export
 neighbours <- function(p, j)
 {
   if ( j == 0 )

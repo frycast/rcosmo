@@ -38,8 +38,6 @@
 #' \code{num.bins + 1} rows since the first row, the sample
 #' variance, is not counted as a bin.
 #'
-#' @examples
-#'
 #' @export
 covCMB <- function(cmbdf,
                    num.bins = 10,

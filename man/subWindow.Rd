@@ -57,7 +57,4 @@ consists of the points of \code{cmbdf} in the union of
 Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned CMBDataFrame
 will be the points of \code{cmbdf} in \eqn{B} (resp. \eqn{A}).
 }
-\examples{
-
-}
 \keyword{internal}

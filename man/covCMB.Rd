@@ -53,6 +53,3 @@ variance, is not counted as a bin.
 This function provides an empirical covariance estimate for data
 in a CMBDataFrame or data.frame. It places data into bins.
 }
-\examples{
-
-}

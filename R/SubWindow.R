@@ -47,8 +47,6 @@
 #'which is restricted to the
 #'region of the sky specified by \code{win}
 #'
-#'@examples
-#'
 #'@export
 subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
                       in.pixels.res = 0)

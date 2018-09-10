@@ -27,8 +27,6 @@
 #'such as \code{\link{subWindow}}. This argument is irrelevant when the window
 #'is not a polygon
 #'
-#'@return
-#'
 #'@examples
 #' win <- CMBWindow(theta = c(pi/2,pi/2,pi/3, pi/3), phi = c(0,pi/3,pi/3,0))
 #' plot(win)

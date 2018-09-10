@@ -99,8 +99,6 @@ nestSearch <- function(target, nside,
 #' of the closest HEALPix pixel center to the target point,
 #' \code{target}, at resolution j2, and its neighbours.
 #'
-#' @examples
-#'
 #' @export
 nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0) {
 

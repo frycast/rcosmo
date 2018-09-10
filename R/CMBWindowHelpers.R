@@ -5,17 +5,21 @@
 #'
 #'@return a list of CMBWindow polygons or minus.polygons,
 #'each having 3 vertices and representing a triangle.
-#' If winType of \code{win} does not include "minus" then these triangles have
-#' pairwise disjoint interiors and their union is equal to the original polygon,
+#' If winType of \code{win} does not include
+#' "minus" then these triangles have
+#' pairwise disjoint interiors and their union
+#' is equal to the original polygon,
 #' \code{win}.
-#' Otherwise, if winType of \code{win} does include "minus" the triangles are
+#' Otherwise, if winType of \code{win}
+#' does include "minus" the triangles are
 #' the same as for the non-minus type above, but have "minus" types.
 #'
 #'@examples
 #'
 #'## Example 1
 #'
-#' win <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3), phi = c(pi/4,pi/4,pi/3,pi/3))
+#' win <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+#'                  phi = c(pi/4,pi/4,pi/3,pi/3))
 #' win
 #' plot(win)
 #' win1 <- triangulate(win)
@@ -26,7 +30,8 @@
 #'
 #' ## Example 2: triangilation minus-type polygon
 #'
-#' win <- CMBWindow(theta = c(pi/5,pi/3,pi/4, pi/3, pi/5), phi = c(pi/5,pi/5, pi/4 ,pi/3,pi/3), set.minus =TRUE)
+#' win <- CMBWindow(theta = c(pi/5,pi/3,pi/4, pi/3, pi/5),
+#'                  phi = c(pi/5,pi/5, pi/4 ,pi/3,pi/3), set.minus =TRUE)
 #' win
 #' plot(win)
 #' summary(win)
@@ -142,7 +147,8 @@ triangulate <- function(win)
 
 #'Check if a \code{\link{CMBWindow}} is assumed convex.
 #'
-#'Initially any \code{\link{CMBWindow}} is not assumed convex. The assumedConvex
+#'Initially any \code{\link{CMBWindow}} is not assumed convex.
+#'The assumedConvex
 #' attribute can be change for any \code{\link{CMBWindow}}.
 #'
 #'@param win a CMBWindow object
@@ -231,14 +237,16 @@ assumedConvex <- function(win, assume.convex)
 #'
 #' win1 <- CMBWindow(x=0,y=3/5,z=4/5,r=0.8)
 #' winType(win1)
-#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian",
+#'                       ordering = "nested")
 #' cmbdf.win1 <- window(cmbdf, new.window = win1)
 #' plot(cmbdf.win1)
 #'
 #'
 #' winType(win1) <- "minus.disc"
 #' winType(win1)
-#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian",
+#'                       ordering = "nested")
 #' cmbdf.win1 <- window(cmbdf, new.window = win1)
 #' plot(cmbdf.win1)
 #'

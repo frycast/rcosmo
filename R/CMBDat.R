@@ -1,4 +1,4 @@
-#' Read CMB data from a FITS file. Test2.
+#' Read CMB data from a FITS file.
 #'
 #' \code{CMBDat} is adapted from the \code{\link{readFITS}}
 #' function in package

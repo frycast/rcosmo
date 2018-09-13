@@ -2,7 +2,7 @@
 % Please edit documentation in R/nestSearch.R
 \name{siblings}
 \alias{siblings}
-\title{siblings}
+\title{Return siblings of pixel}
 \usage{
 siblings(p)
 }
@@ -12,4 +12,10 @@ siblings(p)
 \description{
 The siblings of pixel p are defined as the
 children of the parent of p. Note this is resolution independent.
+}
+\examples{
+
+siblings(11)
+siblings(12)
+
 }

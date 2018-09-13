@@ -31,7 +31,9 @@
 #' cpoint <- nestSearch(point, nside=k)
 #'
 #' ## Plot the closest pixel center in blue and the point (0.6,0.8,0) in red
-#' displayPixels(k,k,plot.j=k, spix=c(cpoint$pix), size=5, incl.labels =FALSE)
+#' j <- log2(k)
+#'
+#' displayPixels(j, j, plot.j=j, spix=c(cpoint$pix), size=5, incl.labels =FALSE)
 #' rgl::plot3d(point[1], point[2], point[3], col="red", size = 5, add = TRUE)
 #'
 #'
@@ -183,13 +185,19 @@ pixelWindow <- function(j1, j2, pix.j1)
 #######################################################################
 
 
-#' parent
+#' Return index of parent pixel
 #'
 #' Gives the pixel at resolution j - 1 that contains p,
 #' where p is specified at resoution j (notice it does not depend on j).
 #'
 #' @param p A pixel index specified in nested order.
 #'
+#' @examples
+#'
+#'  parent(4)
+#'  parent(5)
+#'
+#' @export
 parent <- function(p)
 {
   (p - p %% 4 + (p %% 4 != 0)*4)/4
@@ -211,12 +219,17 @@ children <- function(p)
   1:4 + (p-1)*4
 }
 
-#' siblings
+#' Return siblings of pixel
 #'
 #' The siblings of pixel p are defined as the
 #' children of the parent of p. Note this is resolution independent.
 #'
 #' @param p Pixel index in nested order.
+#'
+#' @examples
+#'
+#' siblings(11)
+#' siblings(12)
 #'
 #'@export
 siblings <- function(p) {

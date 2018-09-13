@@ -361,7 +361,7 @@ coords.data.frame <- function(x, new.coords, ...)
 
 
 
-#' p2ibp
+#' Return pixel index within its base pixel
 #'
 #' Convert a pixel index p to its index within
 #' the base pixel to which p belongs
@@ -370,6 +370,11 @@ coords.data.frame <- function(x, new.coords, ...)
 #' @param j The resolution parameter nside = 2^j
 #'
 #'
+#'@examples
+#'
+#'p2ibp(6, 0)
+#'p2ibp(6, 1)
+#'
 #'@export
 p2ibp <- function(p, j) #indexInBP
 {
@@ -377,12 +382,17 @@ p2ibp <- function(p, j) #indexInBP
 }
 
 
-#' p2bp
+#' Reurn base pixel to which pixel belongs
 #'
 #' The base pixel to which pixel p belongs at resolution j
 #'
 #' @param p The pixel index at resolution j, in nested order.
 #' @param j The resolution parameter nside = 2^j
+#'
+#'@examples
+#'
+#'p2bp(5, 0)
+#'p2bp(5, 1)
 #'
 #'@export
 p2bp <- function(p, j)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nestSearch.R
 \name{parent}
 \alias{parent}
-\title{parent}
+\title{Return index of parent pixel}
 \usage{
 parent(p)
 }
@@ -12,4 +12,10 @@ parent(p)
 \description{
 Gives the pixel at resolution j - 1 that contains p,
 where p is specified at resoution j (notice it does not depend on j).
+}
+\examples{
+
+ parent(4)
+ parent(5)
+
 }

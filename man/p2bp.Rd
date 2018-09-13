@@ -2,7 +2,7 @@
 % Please edit documentation in R/Conversion.R
 \name{p2bp}
 \alias{p2bp}
-\title{p2bp}
+\title{Reurn base pixel to which pixel belongs}
 \usage{
 p2bp(p, j)
 }
@@ -13,4 +13,10 @@ p2bp(p, j)
 }
 \description{
 The base pixel to which pixel p belongs at resolution j
+}
+\examples{
+
+p2bp(5, 0)
+p2bp(5, 1)
+
 }

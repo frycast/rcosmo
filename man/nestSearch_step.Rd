@@ -38,3 +38,4 @@ resolution j2.
 Setting \code{pix.j1 = 0} (the default) searches for the HEALPix point closest
 to \code{target} at resolution j2, among all HEALPix points at resolution j1.
 }
+\keyword{internal}

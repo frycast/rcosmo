@@ -10,7 +10,8 @@ nside(x)
 \item{x}{An object.}
 }
 \description{
-nside generic
+Detailed descriptions and and examples can be found in documentation for specific
+nside functions \code{\link{nside.CMBDataFrame}}, \code{\link{nside.HPDataFrame}}
 }
 \seealso{
 \code{\link{nside.CMBDataFrame}}

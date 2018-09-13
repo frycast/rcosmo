@@ -7,7 +7,8 @@
 ordering(x, ...) <- value
 }
 \description{
-ordering generic
+Detailed descriptions and and examples can be found in documentation for specific
+ordering functions \code{\link{ordering.CMBDataFrame}}, \code{\link{ordering.HPDataFrame}}
 }
 \seealso{
 \code{\link{ordering.CMBDataFrame}}

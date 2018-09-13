@@ -12,7 +12,8 @@ pix(x, ...)
 \item{...}{Extra arguments.}
 }
 \description{
-pix generic
+Detailed descriptions and and examples can be found in documentation for specific
+pix functions \code{\link{pix.CMBDataFrame}}, \code{\link{pix.HPDataFrame}}
 }
 \seealso{
 \code{\link{pix.CMBDataFrame}}

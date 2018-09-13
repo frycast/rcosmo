@@ -12,7 +12,9 @@ window(x, ...)
 \item{...}{Extra arguments.}
 }
 \description{
-window generic
+Detailed descriptions and and examples can be found in documentation for specific
+window functions \code{\link{window.CMBDataFrame}}, \code{\link{window.HPDataFrame}},
+\code{\link{window.data.frame}}
 }
 \seealso{
 \code{\link{window.CMBDataFrame}}

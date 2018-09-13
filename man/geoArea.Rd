@@ -10,7 +10,9 @@ geoArea(x)
 \item{x}{An object.}
 }
 \description{
-geoArea generic
+Detailed descriptions and and examples can be found in documentation for specific
+geoArea functions \code{\link{geoArea.CMBDataFrame}}, \code{\link{geoArea.HPDataFrame}},
+\code{\link{geoArea.CMBWindow}}
 }
 \seealso{
 \code{\link{geoArea.CMBDataFrame}}

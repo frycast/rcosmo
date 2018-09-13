@@ -1,5 +1,9 @@
 #' Coordinate conversion generic
 #'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' coords functions \code{\link{coords.CMBDataFrame}}, \code{\link{coords.CMBWindow}},
+#' \code{\link{coords.HPDataFrame}}, \code{\link{coords.data.frame}}
+#'
 #' @param x An object.
 #' @param ... Unused arguments.
 #'
@@ -15,12 +19,20 @@ coords <- function(x, ...) UseMethod("coords", x)
 
 #' Coordinate conversion generic
 #'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' coords functions \code{\link{coords.CMBDataFrame}}, \code{\link{coords.CMBWindow}},
+#' \code{\link{coords.HPDataFrame}}, \code{\link{coords.data.frame}}
+#'
 #' @keywords internal
 #'
 #'@export
 `coords<-` <- function(x, ..., value) UseMethod("coords<-", x)
 
 #'geoArea generic
+#'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' geoArea functions \code{\link{geoArea.CMBDataFrame}}, \code{\link{geoArea.HPDataFrame}},
+#' \code{\link{geoArea.CMBWindow}}
 #'
 #'@param x An object.
 #'
@@ -34,6 +46,9 @@ geoArea <- function(x) UseMethod("geoArea", x)
 
 #'maxDist generic
 #'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' maxDist functions \code{\link{maxDist.CMBDataFrame}}, \code{\link{maxDist.CMBWindow}}
+#'
 #'@param x An object.
 #'
 #'@seealso
@@ -44,6 +59,9 @@ geoArea <- function(x) UseMethod("geoArea", x)
 maxDist <- function(x) UseMethod("maxDist", x)
 
 #'pix generic
+#'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' pix functions \code{\link{pix.CMBDataFrame}}, \code{\link{pix.HPDataFrame}}
 #'
 #'@param x An object.
 #'@param ... Extra arguments.
@@ -58,6 +76,10 @@ pix <- function(x, ...) UseMethod("pix", x)
 
 #'pix generic
 #'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' pix functions \code{\link{pix.CMBDataFrame}}, \code{\link{pix.HPDataFrame}}
+#'
+#'
 #'@seealso
 #'\code{\link{pix.CMBDataFrame}}
 #'\code{\link{pix.HPDataFrame}}
@@ -68,6 +90,9 @@ pix <- function(x, ...) UseMethod("pix", x)
 `pix<-` <- function(x, ..., value) UseMethod("pix<-", x)
 
 #'nside generic
+#'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' nside functions \code{\link{nside.CMBDataFrame}}, \code{\link{nside.HPDataFrame}}
 #'
 #'@param x An object.
 #'
@@ -80,6 +105,9 @@ pix <- function(x, ...) UseMethod("pix", x)
 nside <- function(x) UseMethod("nside", x)
 
 #'ordering generic
+#'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' ordering functions \code{\link{ordering.CMBDataFrame}}, \code{\link{ordering.HPDataFrame}}
 #'
 #'@param x An object.
 #'@param ... Extra arguments.
@@ -94,6 +122,10 @@ ordering <- function(x, ...) UseMethod("ordering", x)
 
 #'ordering generic
 #'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' ordering functions \code{\link{ordering.CMBDataFrame}}, \code{\link{ordering.HPDataFrame}}
+#'
+#'
 #'@seealso
 #'\code{\link{ordering.CMBDataFrame}}
 #'\code{\link{ordering.HPDataFrame}}
@@ -105,6 +137,10 @@ ordering <- function(x, ...) UseMethod("ordering", x)
 
 
 #'window generic
+#'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' window functions \code{\link{window.CMBDataFrame}}, \code{\link{window.HPDataFrame}},
+#' \code{\link{window.data.frame}}
 #'
 #'@param x An object.
 #'@param ... Extra arguments.
@@ -120,6 +156,10 @@ window <- function(x, ...) UseMethod("window", x)
 
 
 #'window generic
+#'
+#' Detailed descriptions and and examples can be found in documentation for specific
+#' window functions \code{\link{window.CMBDataFrame}}, \code{\link{window.HPDataFrame}},
+#' \code{\link{window.data.frame}}
 #'
 #'@seealso
 #'\code{\link{window.CMBDataFrame}}

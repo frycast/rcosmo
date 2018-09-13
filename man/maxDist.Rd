@@ -10,7 +10,8 @@ maxDist(x)
 \item{x}{An object.}
 }
 \description{
-maxDist generic
+Detailed descriptions and and examples can be found in documentation for specific
+maxDist functions \code{\link{maxDist.CMBDataFrame}}, \code{\link{maxDist.CMBWindow}}
 }
 \seealso{
 \code{\link{maxDist.CMBDataFrame}}

@@ -7,6 +7,8 @@
 coords(x, ...) <- value
 }
 \description{
-Coordinate conversion generic
+Detailed descriptions and and examples can be found in documentation for specific
+coords functions \code{\link{coords.CMBDataFrame}}, \code{\link{coords.CMBWindow}},
+\code{\link{coords.HPDataFrame}}, \code{\link{coords.data.frame}}
 }
 \keyword{internal}

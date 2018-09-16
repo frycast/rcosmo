@@ -11,7 +11,7 @@ Authors@R: as.person(c(
   ))
 Description: Handling and statistical analysis of Cosmic Microwave Background 
     data on a HEALPix grid.
-Depends: R (>= 3.3.1)
+Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

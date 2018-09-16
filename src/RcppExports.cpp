@@ -163,25 +163,3 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-
-static const R_CallMethodDef CallEntries[] = {
-    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
-    {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
-    {"_rcosmo_mkpix2xyC", (DL_FUNC) &_rcosmo_mkpix2xyC, 1},
-    {"_rcosmo_nest2ring", (DL_FUNC) &_rcosmo_nest2ring, 2},
-    {"_rcosmo_pix2coords_internal", (DL_FUNC) &_rcosmo_pix2coords_internal, 4},
-    {"_rcosmo_car2sph", (DL_FUNC) &_rcosmo_car2sph, 1},
-    {"_rcosmo_sph2car", (DL_FUNC) &_rcosmo_sph2car, 1},
-    {"_rcosmo_pointInConvexPolygonHP", (DL_FUNC) &_rcosmo_pointInConvexPolygonHP, 4},
-    {"_rcosmo_pointInDiscHP", (DL_FUNC) &_rcosmo_pointInDiscHP, 4},
-    {"_rcosmo_pointInConvexPolygon", (DL_FUNC) &_rcosmo_pointInConvexPolygon, 2},
-    {"_rcosmo_pointInDisc", (DL_FUNC) &_rcosmo_pointInDisc, 2},
-    {"_rcosmo_maxDist_internal", (DL_FUNC) &_rcosmo_maxDist_internal, 1},
-    {"_rcosmo_minDist_internal", (DL_FUNC) &_rcosmo_minDist_internal, 2},
-    {NULL, NULL, 0}
-};
-
-RcppExport void R_init_rcosmo(DllInfo *dll) {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-    R_useDynamicSymbols(dll, FALSE);
-}

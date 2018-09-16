@@ -63,7 +63,8 @@ will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 
 ## Example 1: Create a new CMBDataFrame with a window
 
-cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian",
+                      ordering = "nested")
 win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 cmbdf.win <- window(cmbdf, new.window = win)
 plot(cmbdf.win)

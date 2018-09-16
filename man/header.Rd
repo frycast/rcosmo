@@ -17,8 +17,10 @@ data was imported
 Get the FITS headers from a \code{\link{CMBDataFrame}}
 }
 \examples{
-df <- CMBDataFrame("CMB_map_smica1024.fits")
-df.sample <- CMBDataFrame(df, sample.size = 10000)
-header(df.sample)
+## First download the map
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# df.sample <- CMBDataFrame(df, sample.size = 10000)
+# header(df.sample)
 
 }

@@ -26,7 +26,12 @@ as \code{cmbdf}, but with pix attribute \code{new.pix}. Thus,
 \code{new.pix} must have length equal to \code{nrow(cmbdf)}.
 }
 \examples{
-df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+## First download the map
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+# pix(df)
+
+df <- CMBDataFrame(nside = 16, sample.size = 10, ordering = "nested")
 pix(df)
 
 }

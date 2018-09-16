@@ -18,7 +18,9 @@ Get the arcmin resolution from a \code{\link{CMBDataFrame}}
 }
 \examples{
 
-df <- CMBDataFrame("CMB_map_smica1024.fits")
-resolution(df)
+## First download the map
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# resolution(df)
 
 }

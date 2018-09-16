@@ -192,13 +192,15 @@ Cov_func <- function(mat, Dfl , l)  {
 #'
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' df.sample <- CMBDataFrame(df, sample.size = 80000)
-#' win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
-#' cmbdf.win <- window(df.sample, new.window = win)
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # df.sample <- CMBDataFrame(df, sample.size = 80000)
+#' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
+#' # cmbdf.win <- window(df.sample, new.window = win)
 #'
-#' colindex <- 3
-#' plotAngDis(cmbdf.win,colindex)
+#' # colindex <- 3
+#' # plotAngDis(cmbdf.win,colindex)
 #'
 #'@export
 plotAngDis <- function(cmbdf, colindex)
@@ -279,8 +281,14 @@ plotAngDis <- function(cmbdf, colindex)
 #' from the input CMBDataFrame.
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' plot(sampleCMB(df, sample.size = 800000))
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # plot(sampleCMB(df, sample.size = 800000))
+#'
+#' df <- CMBDataFrame(nside = 16, ordering = "nested")
+#' df.sample <- sampleCMB(df, sample.size = 100)
+#' df
 #'
 #'@export
 sampleCMB <- function(cmbdf, sample.size)

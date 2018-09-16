@@ -8,9 +8,10 @@
 #' at the \code{nside} resolution of \code{cmbdf}
 #'
 #' @examples
-#'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' pixelArea(df)
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # pixelArea(df)
 #'
 #' df1 <- CMBDataFrame(nside = 64,
 #'                     coords = "cartesian",
@@ -46,9 +47,11 @@ pixelArea <- function(cmbdf)
 #'
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' df.sample <- CMBDataFrame(df, sample.size = 10000)
-#' header(df.sample)
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # df.sample <- CMBDataFrame(df, sample.size = 10000)
+#' # header(df.sample)
 #'
 #'@export
 header <- function( cmbdf )
@@ -75,8 +78,10 @@ header <- function( cmbdf )
 #'
 #' @examples
 #'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' resolution(df)
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # resolution(df)
 #'
 #'@export
 resolution <- function( cmbdf )

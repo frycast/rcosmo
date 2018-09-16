@@ -233,3 +233,25 @@ window.CMBDat <- function(x, new.window, intersect = TRUE, ...) {
 
   return(subWindow(x, win = new.window, intersect = intersect))
 }
+
+
+
+
+#' Check if an object is of class CMBDat
+#'
+#' @param cmbdf Any R object
+#'
+#' @return TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
+#'
+#'@examples
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
+#' # class(cmbdat)
+#' # is.CMBDat(cmbdat)
+#'
+#' @export
+is.CMBDat <- function(cmbdf)
+{
+  identical(as.numeric(sum(class(cmbdf) == "CMBDat")), 1)
+}

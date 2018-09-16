@@ -102,12 +102,12 @@ jacobiPol <- function(a,b,L,t) {
 #' ## Calculate spherical harmonic value at
 #' ## the point (0,1,0) with L=5, m=2
 #' point<-data.frame(x=0,y=1,z=0)
-#' sphericalharmonics(5,2,point)
+#' sphericalHarmonics(5,2,point)
 #'
 #' ## Calculate spherical harmonic values at
 #' ## the point (1,0,0), (0,1,0), (0,0,1) with L=5, m=2
 #' points<-data.frame(diag(3))
-#' sphericalharmonics(5,2,points)
+#' sphericalHarmonics(5,2,points)
 #'
 #' @keywords spherical harmonic
 #' @references  See

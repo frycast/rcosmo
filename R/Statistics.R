@@ -104,7 +104,8 @@ covCMB <- function(cmbdf,
   # Find the bin centers (break_{i+1} - break_i)/2 with break_0 = 0.
   centers <- c(0,v[1:(length(v)-1)] + (v[2:length(v)] - v[1:(length(v) - 1)])/2)
 
-  result <- data.frame(dist = centers, cov = covs[,1], n = as.integer(c(covs[,2][1], covs[,2][-1]/2)) )
+  result <- data.frame(dist = centers, cov = covs[,1],
+                       n = as.integer(c(covs[,2][1], covs[,2][-1]/2)) )
   class(result) <- c("CMBCovariance", "data.frame")
   attr(result, "breaks") <- breaks
 
@@ -665,13 +666,15 @@ extrCMB <- function(cmbdf, win, n, varindex="I")
 #'
 #'@examples
 #'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 1000)
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
-#'
-#' lw <- list(win1, win2)
-#' qstat(cmbdf, lw)
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 1000)
+#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
+#' #
+#' # lw <- list(win1, win2)
+#' # qstat(cmbdf, lw)
 #'
 #'@export
 qstat <- function(cmbdf, listwin, varindex="I")

@@ -26,7 +26,7 @@ that points to the CMB map data table in the FITS file.
 \description{
 \code{CMBDat} is adapted from the \code{\link{readFITS}}
 function in package
-  \href{https://cran.r-project.org/web/packages/FITSio/index.html}{FITSio}.
+  \href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
   When it works, \code{CMBDat} is much faster than
   \code{\link{readFITS}}.
   However, \code{\link{readFITS}} is more general, i.e.,

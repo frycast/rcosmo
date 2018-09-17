@@ -11,3 +11,5 @@
 ^rcosmo\.pdf$
 ^rcosmoVignette\.pdf$
 ^cran-comments\.md$
+^\.travis\.yml$
+^GITHUB-README\.md$

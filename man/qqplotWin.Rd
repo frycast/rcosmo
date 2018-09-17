@@ -4,7 +4,7 @@
 \alias{qqplotWin}
 \title{Quantile-Quantile plots for \code{\link{CMBWindow}}s}
 \usage{
-qqplotWin(cmbdf, win1, win2, varindex = "I")
+qqplotWin(cmbdf, win1, win2, varindex = 1)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

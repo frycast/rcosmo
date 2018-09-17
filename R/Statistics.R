@@ -685,8 +685,8 @@ qstat <- function(cmbdf, listwin, varindex=1)
   cmbint <- sapply(listwin,function(v1,v2){
     window(v1, new.window = v2)},v1=cmbdf[,varindex])
 
-  ni <- sapply(cmbint,length)
-  sigmai <- sapply(cmbint,var)
+  ni <- sapply(cmbint, length)
+  sigmai <- sapply(cmbint, stats::var)
   sigma <- stats::var(unlist(cmbint, recursive = FALSE))
 
   1- sum((ni-1)*sigmai)/(sigma*(sum(ni)-1))

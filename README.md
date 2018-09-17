@@ -16,3 +16,6 @@ The current version of `rcosmo` includes the following functionality:
 +	Implementation and analysis of spherical harmonics, spherical wavelets, etc
 +	Various methods for CMB map visualization, such as interactive 3D full sky maps rendered with OpenGL, Mollweide projection and HEALPix boundary plotting
 + Spherical geometry tools such as shortest distance between two points, calculate spherical angles, shortest distance between a point and a region, etc
+
+
+[![Travis-CI Build Status](https://travis-ci.org/VidaliLama/rcosmo.svg?branch=master)](https://travis-ci.org/VidaliLama/rcosmo)

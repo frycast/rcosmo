@@ -22,13 +22,7 @@ whose rows comprise a simple random sample of the rows
 from the input CMBDataFrame.
 }
 \examples{
-## First download the map
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# plot(sampleCMB(df, sample.size = 800000))
-
-df <- CMBDataFrame(nside = 16, ordering = "nested")
-df.sample <- sampleCMB(df, sample.size = 100)
-df
+df <- CMBDataFrame("CMB_map_smica1024.fits")
+plot(sampleCMB(df, sample.size = 800000))
 
 }

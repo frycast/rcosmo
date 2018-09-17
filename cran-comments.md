@@ -1,8 +1,8 @@
 ## Test environments
 
 * local Windows 10 install, R 3.5.1
-* <insert e.g., Ubuntu 12.04 (on travis-ci), R 3.5.1>
-* <insert e.g., winbuilder (devel and release)>
+* Ubuntu 14.04 (on travis-ci) (devel, release and old release)
+* winbuilder (devel and release)
 
 ## R CMD Check results
 0 errors | 0 warnings | 2 notes

@@ -559,22 +559,12 @@ entropyCMB <- function(cmbdf, win, varindex="I", method)
 #' # downloadCMBMap(foreground = "smica", nside = 1024)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-<<<<<<< HEAD
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
-#' plot(win1)
-#' plot(win2,col="green")
-=======
+#' #
 #' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #' # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
 #' # plot(win1)
 #' # plot(win2,col="green")
->>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
-#'
+#' #
 #' # chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
@@ -623,18 +613,10 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
 #' # downloadCMBMap(foreground = "smica", nside = 1024)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-<<<<<<< HEAD
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-#' win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
-#' extrCMB(cmbdf, win1,5)
-=======
+#' #
 #' # win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
 #' # extrCMB(cmbdf, win1,5)
->>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
-#'
+#' #
 #' ## Ploting the window and 5 top extreme values
 #' # plot(win1)
 #' # plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)

@@ -260,10 +260,6 @@ plotAngDis <- function(cmbdf, colindex)
 
 
 
-
-
-
-
 #' Take a simple random sample from a CMBDataFrame
 #'
 #' This function returns a CMBDataFrame with size sample.size,
@@ -375,6 +371,8 @@ exprob <- function(cmbdf, win, alpha, varindex="I")
   cmbdf.win <- window(cmbdf, new.window = win)
   sum(cmbdf.win[,varindex] > alpha)/sum(1-is.na(cmbdf.win[,varindex]))
 }
+
+
 
 #' Quantile-Quantile plots for \code{\link{CMBWindow}}s
 #'
@@ -495,10 +493,10 @@ qqnormWin <- function(cmbdf, win, varindex="I")
 #' df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' cmbdf <- sampleCMB(df, sample.size = 10000)
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' CMBEntropy(cmbdf, win1)
+#' entropyCMB(cmbdf, win1)
 #'
 #'@export
-CMBEntropy <- function(cmbdf, win, varindex="I")
+entropyCMB <- function(cmbdf, win, varindex="I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -538,14 +536,14 @@ CMBEntropy <- function(cmbdf, win, varindex="I")
 #' cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(pi,pi/2,pi/2),  phi = c(0,0,pi/2))
+#' win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
 #' plot(win1)
 #' plot(win2,col="green")
 #'
-#' CMBChi2(cmbdf, win1, win2)
+#' chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
-CMBChi2 <- function(cmbdf, win1, win2, varindex="I")
+chi2CMB <- function(cmbdf, win1, win2, varindex="I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -569,3 +567,46 @@ CMBChi2 <- function(cmbdf, win1, win2, varindex="I")
 
   chi2.empirical(y1, y2)
 }
+
+#' Extreme values
+#'
+#' This function returns \code{n} largest extreme values for the specified
+#' \code{\link{CMBDataFrame}} column  \code{varindex} and
+#' \code{\link{CMBWindow}} region.
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param win A \code{\link{CMBWindow}}
+#'@param n An integer value.
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'
+#'@return
+#'
+#'A \code{\link{CMBDataFrame}} with \code{n} largest extreme values
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("../CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#'
+#' win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
+#' extrCMB(cmbdf, win1,5)
+#'
+#' ## Ploting the window and 5 top extreme values
+#' plot(win1)
+#' plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
+#'
+#'@export
+extrCMB <- function(cmbdf, win, n, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  if ( !is.CMBWindow(win) )
+  {
+    stop("Argument must be a CMBWindow")
+  }
+  cmbdf.win <- window(cmbdf, new.window = win)
+  cmbdf.win[order(cmbdf.win$I),][1:n,]
+}
+

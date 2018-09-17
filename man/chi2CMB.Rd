@@ -26,7 +26,7 @@ counts of \code{varindex} for computations.
 }
 \examples{
 
-df <- CMBDataFrame("../CMB_map_smica1024.fits")
+df <- CMBDataFrame("CMB_map_smica1024.fits")
 cmbdf <- sampleCMB(df, sample.size = 1000)
 
 win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))

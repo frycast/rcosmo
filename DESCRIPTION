@@ -10,7 +10,7 @@ Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"),
              person("Ming", "Li", role = "aut"))
 Description: Handling and statistical analysis of Cosmic Microwave Background 
     data on a HEALPix grid.
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.4.0)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -21,7 +21,8 @@ Imports:
     tibble (>= 1.4.2),
     rgl (>= 0.99.16),
 	  cli (>= 1.0.0),
-	  gsl (>= 1.9-10.3)
+	  gsl (>= 1.9-10.3),
+	  entropy (>= 1.2.1)
 Suggests:
     knitr,
     rmarkdown,

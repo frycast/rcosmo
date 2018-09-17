@@ -16,7 +16,7 @@
       Followed all intructions [here](https://stackoverflow.com/questions/42313373/r-cmd-check-note-found-no-calls-to-r-registerroutines-r-usedynamicsymbols) but could not remove this note.
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package
+There are no downstream dependencies for this package
 
 
 

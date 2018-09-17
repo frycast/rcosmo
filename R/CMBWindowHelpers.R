@@ -218,7 +218,8 @@ assumedConvex <- function(win, assume.convex)
 #'If \code{new.type} is missing then the \code{winType} of win
 #'is returned. Otherwise, a new window is returned with \code{winType}
 #'equal to \code{new.type}. If you want to change the
-#'winType of \code{win} directly, then use \code{\link{winType<-}}.
+#'winType of \code{win} directly, then use \code{\link{winType<-}}, see
+#'the examples below.
 #'
 #'@param win a \code{CMBWindow} object or a list of such
 #'@param new.type optionally specify a new type. Use this to

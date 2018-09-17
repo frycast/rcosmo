@@ -4,7 +4,7 @@
 \alias{entropyCMB}
 \title{CMB Entropy}
 \usage{
-entropyCMB(cmbdf, win, varindex = "I", method)
+entropyCMB(cmbdf, win, varindex = 1, method)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

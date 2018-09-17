@@ -338,7 +338,7 @@ sampleCMB <- function(cmbdf, sample.size)
 #' fmf(cmbdf.win, 0, 4)
 #'
 #'@export
-fmf <- function(cmbdf, alpha, varindex)
+fmf <- function(cmbdf, alpha, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -370,13 +370,13 @@ fmf <- function(cmbdf, alpha, varindex)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
-#' # alpha <- mean(cmbdf$I)
+#' # alpha <- mean(cmbdf[,1])
 #'
 #' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #' # exprob(cmbdf, win1, alpha)
 #'
 #'@export
-exprob <- function(cmbdf, win, alpha, varindex="I")
+exprob <- function(cmbdf, win, alpha, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -425,7 +425,7 @@ exprob <- function(cmbdf, win, alpha, varindex="I")
 #' # qqplotWin(cmbdf, win1, win2)
 #'
 #'@export
-qqplotWin <- function(cmbdf, win1, win2, varindex="I")
+qqplotWin <- function(cmbdf, win1, win2, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -437,9 +437,9 @@ qqplotWin <- function(cmbdf, win1, win2, varindex="I")
   }
   cmbdf.win1 <- window(cmbdf, new.window = win1)
   cmbdf.win2 <- window(cmbdf, new.window = win2)
-  stats::qqplot(cmbdf.win1$I, cmbdf.win2$I)
+  stats::qqplot(cmbdf.win1[,varindex], cmbdf.win2[,varindex])
   graphics::abline(c(0,1))
-  stats::qqplot(cmbdf.win1$I, cmbdf.win2$I,plot.it = FALSE)
+  stats::qqplot(cmbdf.win1[,varindex], cmbdf.win2[,varindex],plot.it = FALSE)
 }
 
 #' Normal QQ plot for \code{\link{CMBWindow}}
@@ -473,7 +473,7 @@ qqplotWin <- function(cmbdf, win1, win2, varindex="I")
 #' # qqnormWin(cmbdf, win1)
 #'
 #'@export
-qqnormWin <- function(cmbdf, win, varindex="I")
+qqnormWin <- function(cmbdf, win, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -484,9 +484,9 @@ qqnormWin <- function(cmbdf, win, varindex="I")
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  stats::qqnorm(cmbdf.win$I)
-  stats::qqline(cmbdf.win$I)
-  stats::qqnorm(cmbdf.win$I,plot.it = FALSE)
+  stats::qqnorm(cmbdf.win[,varindex])
+  stats::qqline(cmbdf.win[,varindex])
+  stats::qqnorm(cmbdf.win[,varindex],plot.it = FALSE)
 }
 
 
@@ -518,7 +518,7 @@ qqnormWin <- function(cmbdf, win, varindex="I")
 #' # entropyCMB(cmbdf, win1)
 #'
 #'@export
-entropyCMB <- function(cmbdf, win, varindex="I", method)
+entropyCMB <- function(cmbdf, win, varindex=1, method)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -529,7 +529,7 @@ entropyCMB <- function(cmbdf, win, varindex="I", method)
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  y <- graphics::hist(cmbdf.win$I, plot = FALSE)$counts
+  y <- graphics::hist(cmbdf.win[,varindex], plot = FALSE)$counts
 
   if (missing(method)) return(entropy::entropy(y))
   return(entropy::entropy(y, method = method))
@@ -569,7 +569,7 @@ entropyCMB <- function(cmbdf, win, varindex="I", method)
 #' # chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
-chi2CMB <- function(cmbdf, win1, win2, varindex="I")
+chi2CMB <- function(cmbdf, win1, win2, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -581,15 +581,15 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
   }
   cmbdf.win1 <- window(cmbdf, new.window = win1)
   cmbdf.win2 <- window(cmbdf, new.window = win2)
-  y10 <- graphics::hist(cmbdf.win1$I, plot = FALSE)$counts
-  y20 <- graphics::hist(cmbdf.win2$I, plot = FALSE)$counts
+  y10 <- graphics::hist(cmbdf.win1[,varindex], plot = FALSE)$counts
+  y20 <- graphics::hist(cmbdf.win2[,varindex], plot = FALSE)$counts
   nb <- min(length(y10),length(y20))
 
-  combI <- c(cmbdf.win1$I,cmbdf.win2$I)
+  combI <- c(cmbdf.win1[,varindex],cmbdf.win2[,varindex])
   yb <- seq(min(combI), max(combI), length.out=min(nb))
 
-  y1 <- graphics::hist(cmbdf.win1$I, breaks=yb, plot = FALSE)$counts
-  y2 <- graphics::hist(cmbdf.win2$I, breaks=yb, plot = FALSE)$counts
+  y1 <- graphics::hist(cmbdf.win1[,varindex], breaks=yb, plot = FALSE)$counts
+  y2 <- graphics::hist(cmbdf.win2[,varindex], breaks=yb, plot = FALSE)$counts
 
   entropy::chi2.empirical(y1, y2)
 }
@@ -623,7 +623,7 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
 #' # plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
 #'
 #'@export
-extrCMB <- function(cmbdf, win, n, varindex="I")
+extrCMB <- function(cmbdf, win, n, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -634,7 +634,7 @@ extrCMB <- function(cmbdf, win, n, varindex="I")
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  cmbdf.win[order(cmbdf.win$I),][1:n,]
+  cmbdf.win[order(cmbdf.win[,varindex]),][1:n,]
 }
 
 
@@ -644,7 +644,6 @@ extrCMB <- function(cmbdf, win, n, varindex="I")
 #'This function returns an estimated q-statistic for the specified  column
 #'\code{varindex} in a \code{\link{CMBDataFrame}} and the list of
 #'\code{\link{CMBWindow}}s.
-#'
 #'
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
@@ -661,8 +660,8 @@ extrCMB <- function(cmbdf, win, n, varindex="I")
 #'Estimated q-statistics for observations in a list of \code{\link{CMBWindow}}s
 #'
 #'@references
-#'Wang, JF; Zhang, TL; Fu, BJ (2016). "A measure of spatial
-#'stratified heterogeneity". Ecological Indicators. 67: 250–256.
+#'Wang, JF; Zhang, TL; Fu, BJ (2016). A measure of spatial
+#'stratified heterogeneity. Ecological Indicators. 67: 250–256.
 #'
 #'@examples
 #'
@@ -677,14 +676,14 @@ extrCMB <- function(cmbdf, win, n, varindex="I")
 #' # qstat(cmbdf, lw)
 #'
 #'@export
-qstat <- function(cmbdf, listwin, varindex="I")
+qstat <- function(cmbdf, listwin, varindex=1)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
   cmbint <- sapply(listwin,function(v1,v2){
-    window(v1, new.window = v2)},v1=cmbdf)
+    window(v1, new.window = v2)},v1=cmbdf[,varindex])
 
   ni <- sapply(cmbint,length)
   sigmai <- sapply(cmbint,var)

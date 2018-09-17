@@ -4,7 +4,7 @@
 \alias{qqnormWin}
 \title{Normal QQ plot for \code{\link{CMBWindow}}}
 \usage{
-qqnormWin(cmbdf, win, varindex = "I")
+qqnormWin(cmbdf, win, varindex = 1)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

@@ -531,7 +531,7 @@ entropyCMB <- function(cmbdf, win, varindex="I", method)
   y <- graphics::hist(cmbdf.win$I, plot = FALSE)$counts
 
   if (missing(method)) return(entropy::entropy(y))
-  return(entropy(y, method = method))
+  return(entropy::entropy(y, method = method))
 }
 
 #'Chi-squared statistic for two \code{\link{CMBWindow}}s

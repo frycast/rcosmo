@@ -143,16 +143,15 @@ covCMB <- function(cmbdf,
 #'
 #'
 #'@examples
-#' ## Download the power spectrum first
-#' # N <- 20000
-#' # COM_PowerSpectra <- downloadCMBPS(link=1)
-#' #
-#' # Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
-#' # plot(Cov_est, type="l")
+#' N <- 20000
+#' COM_PowerSpectra <- downloadCMBPS(link=1)
+#'
+#' Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
+#' plot(Cov_est, type="l")
 #'
 #' ## Plot the covariance estimate as a function of angular distances
-#' # plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
-#' #      xlab ="angular distance", ylab ="Estimated Covariance")
+#' plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
+#'      xlab ="angular distance", ylab ="Estimated Covariance")
 #'
 #'@export
 covPwSp <- function(PowerSpectra, Ns)
@@ -193,15 +192,13 @@ Cov_func <- function(mat, Dfl , l)  {
 #'
 #'
 #'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # df.sample <- CMBDataFrame(df, sample.size = 80000)
-#' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
-#' # cmbdf.win <- window(df.sample, new.window = win)
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' df.sample <- CMBDataFrame(df, sample.size = 80000)
+#' win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
+#' cmbdf.win <- window(df.sample, new.window = win)
 #'
-#' # colindex <- 3
-#' # plotAngDis(cmbdf.win,colindex)
+#' colindex <- 3
+#' plotAngDis(cmbdf.win,colindex)
 #'
 #'@export
 plotAngDis <- function(cmbdf, colindex)
@@ -282,14 +279,8 @@ plotAngDis <- function(cmbdf, colindex)
 #' from the input CMBDataFrame.
 #'
 #'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # plot(sampleCMB(df, sample.size = 800000))
-#'
-#' df <- CMBDataFrame(nside = 16, ordering = "nested")
-#' df.sample <- sampleCMB(df, sample.size = 100)
-#' df
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' plot(sampleCMB(df, sample.size = 800000))
 #'
 #'@export
 sampleCMB <- function(cmbdf, sample.size)
@@ -479,3 +470,102 @@ qqnormWin <- function(cmbdf, win, varindex="I")
   stats::qqnorm(cmbdf.win$I,plot.it = FALSE)
 }
 
+
+#' CMB Entropy
+#'
+#'This function returns an estimated entropy for the specified
+#'\code{\link{CMBDataFrame}} column  \code{varindex} and \code{\link{CMBWindow}}
+#'region. The functions employes the function \link{entropy} and uses histogram
+#'counts of \code{varindex} for computations. All arguments of the standard
+#'\link{entropy} can be used.
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param win A \code{\link{CMBWindow}}
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param method	A method to estimate entropy, see \link{entropy}
+#'
+#'@return
+#'
+#'Estimated Shannon entropy for observations in \code{\link{CMBWindow}}
+#'
+#'@references \link{entropy}
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 10000)
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' CMBEntropy(cmbdf, win1)
+#'
+#'@export
+CMBEntropy <- function(cmbdf, win, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  if ( !is.CMBWindow(win) )
+  {
+    stop("Argument must be a CMBWindow")
+  }
+  cmbdf.win <- window(cmbdf, new.window = win)
+  y <- graphics::hist(cmbdf.win$I, plot = FALSE)$counts
+  entropy::entropy(y)
+}
+
+#'Chi-squared statistic for two \code{\link{CMBWindow}}s
+#'
+#'This function returns the empirical chi-squared statistic for \code{varindex}
+#'observations from two \code{\link{CMBWindow}}s of the specified
+#'\code{\link{CMBDataFrame}}. The functions employes the function \link{chi2.empirical} and uses histogram
+#'counts of \code{varindex} for computations.
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param win A \code{\link{CMBWindow}}
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'
+#'@return
+#'
+#'Estimated Chi-squared statistic for observations in two
+#'\code{\link{CMBWindow}}s.  For smal sample sizes and many zero counts
+#'Chi-squared statistic is inefficient.
+#'
+#'@references \link{chi2.empirical}
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("../CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#'
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' win2 <- CMBWindow(theta = c(pi,pi/2,pi/2),  phi = c(0,0,pi/2))
+#' plot(win1)
+#' plot(win2,col="green")
+#'
+#' CMBChi2(cmbdf, win1, win2)
+#'
+#'@export
+CMBChi2 <- function(cmbdf, win1, win2, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  if ( !is.CMBWindow(win1) | !is.CMBWindow(win2) )
+  {
+    stop("Argument must be a CMBWindow")
+  }
+  cmbdf.win1 <- window(cmbdf, new.window = win1)
+  cmbdf.win2 <- window(cmbdf, new.window = win2)
+  y10 <- graphics::hist(cmbdf.win1$I, plot = FALSE)$counts
+  y20 <- graphics::hist(cmbdf.win2$I, plot = FALSE)$counts
+  nb <- min(length(y10),length(y20))
+
+  combI <- c(cmbdf.win1$I,cmbdf.win2$I)
+  yb <- seq(min(combI), max(combI), length.out=min(nb))
+
+  y1 <- hist(cmbdf.win1$I, breaks=yb, plot = FALSE)$counts
+  y2 <- hist(cmbdf.win2$I, breaks=yb, plot = FALSE)$counts
+
+  chi2.empirical(y1, y2)
+}

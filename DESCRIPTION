@@ -3,16 +3,15 @@ URL: https://github.com/VidaliLama/rcosmo
 BugReports: https://github.com/VidaliLama/rcosmo/issues
 Title: R Cosmic Microwave Background Data Analysis
 Version: 1.0.0
-Authors@R: as.person(c(
-    "Daniel Fryer <d.fryer@latrobe.edu.au> [aut, cre]",
-    "Andriy Olenko <A.Olenko@latrobe.edu.au> [aut]",
-    "Yuguang Wang <Y.Wang@latrobe.edu.au> [aut]",
-    "Ming Li <Ming.Li@latrobe.edu.au> [aut]"
-  ))
+Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"), 
+                     email = "d.fryer@latrobe.edu.au"),
+             person("Andriy", "Olenko", role = "aut"),
+             person("Yuguang", "Wang", role = "aut"),
+             person("Ming", "Li", role = "aut"))
 Description: Handling and statistical analysis of Cosmic Microwave Background 
     data on a HEALPix grid.
 Depends: R (>= 3.5.0)
-License: MIT + file LICENSE
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:

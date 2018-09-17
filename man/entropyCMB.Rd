@@ -4,7 +4,7 @@
 \alias{entropyCMB}
 \title{CMB Entropy}
 \usage{
-entropyCMB(cmbdf, win, varindex = "I")
+entropyCMB(cmbdf, win, varindex = "I", method)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -26,11 +26,12 @@ counts of \code{varindex} for computations. All arguments of the standard
 \link{entropy} can be used.
 }
 \examples{
-
-df <- CMBDataFrame("CMB_map_smica1024.fits")
-cmbdf <- sampleCMB(df, sample.size = 10000)
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-entropyCMB(cmbdf, win1)
+## Download the map first
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# cmbdf <- sampleCMB(df, sample.size = 10000)
+# win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+# entropyCMB(cmbdf, win1)
 
 }
 \references{

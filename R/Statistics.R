@@ -143,26 +143,34 @@ covCMB <- function(cmbdf,
 #'
 #'
 #'@examples
-#' N <- 20000
-#' COM_PowerSpectra <- downloadCMBPS(link=1)
 #'
-#' Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
-#' plot(Cov_est, type="l")
+#' ## Download the power spectrum first
+#' # N <- 20000
+#' # COM_PowerSpectra <- downloadCMBPS(link=1)
+#' #
+#' # Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
+#' # plot(Cov_est, type="l")
 #'
 #' ## Plot the covariance estimate as a function of angular distances
-#' plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
-#'      xlab ="angular distance", ylab ="Estimated Covariance")
+#' # plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
+#' #      xlab ="angular distance", ylab ="Estimated Covariance")
 #'
 #'@export
 covPwSp <- function(PowerSpectra, Ns)
 {
-  Nl <- length(PowerSpectra[, 1])
-  Pls <- gsl::legendre_Pl_array(lmax = PowerSpectra[Nl, 1],
-                                x = seq(-1 + 1 / Ns, 1, 2 / Ns))
+  if (requireNamespace("gsl", quietly = TRUE)) {
 
-  Cov_est <- Cov_func(Pls, PowerSpectra[, 2], PowerSpectra[, 1])
-  df <- data.frame(t = seq(-1 + 1 / Ns, 1, 2 / Ns), Estimated_Cov = Cov_est)
-  return(df)
+    Nl <- length(PowerSpectra[, 1])
+    Pls <- gsl::legendre_Pl_array(lmax = PowerSpectra[Nl, 1],
+                                  x = seq(-1 + 1 / Ns, 1, 2 / Ns))
+
+    Cov_est <- Cov_func(Pls, PowerSpectra[, 2], PowerSpectra[, 1])
+    df <- data.frame(t = seq(-1 + 1 / Ns, 1, 2 / Ns), Estimated_Cov = Cov_est)
+    return(df)
+  } else {
+
+    stop("Package \"gsl\" needed for this function. Please install it.")
+  }
 }
 
 # Helper function for covPwSp
@@ -192,13 +200,15 @@ Cov_func <- function(mat, Dfl , l)  {
 #'
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' df.sample <- CMBDataFrame(df, sample.size = 80000)
-#' win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
-#' cmbdf.win <- window(df.sample, new.window = win)
-#'
-#' colindex <- 3
-#' plotAngDis(cmbdf.win,colindex)
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # df.sample <- CMBDataFrame(df, sample.size = 80000)
+#' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
+#' # cmbdf.win <- window(df.sample, new.window = win)
+#' #
+#' # colindex <- 3
+#' # plotAngDis(cmbdf.win,colindex)
 #'
 #'@export
 plotAngDis <- function(cmbdf, colindex)
@@ -275,8 +285,14 @@ plotAngDis <- function(cmbdf, colindex)
 #' from the input CMBDataFrame.
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' plot(sampleCMB(df, sample.size = 800000))
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # plot(sampleCMB(df, sample.size = 800000))
+#'
+#' df <- CMBDataFrame(nside = 16, ordering = "nested")
+#' df.sample <- sampleCMB(df, sample.size = 100)
+#' df
 #'
 #'@export
 sampleCMB <- function(cmbdf, sample.size)
@@ -348,14 +364,15 @@ fmf <- function(cmbdf, alpha, varindex)
 #'Estimated threshold exceedance probability
 #'
 #'@examples
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#' # alpha <- mean(cmbdf$I)
 #'
-#' alpha <- mean(cmbdf$I)
-#'
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' exprob(cmbdf, win1, alpha)
+#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # exprob(cmbdf, win1, alpha)
 #'
 #'@export
 exprob <- function(cmbdf, win, alpha, varindex="I")
@@ -384,7 +401,8 @@ exprob <- function(cmbdf, win, alpha, varindex="I")
 #' \code{varindex}. The function automatically adds a diagonal line.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
-#'@param win A \code{\link{CMBWindow}}
+#'@param win1 A \code{\link{CMBWindow}}
+#'@param win2 A \code{\link{CMBWindow}}
 #'@param varindex An index of CMBDataFrame column with measured values.
 #'
 #'@return
@@ -394,15 +412,16 @@ exprob <- function(cmbdf, win, alpha, varindex="I")
 #'@references \link{qqnormWin}, \link{qqnorm}, \link{qqplot}
 #'
 #'@examples
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 10000)
 #'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 10000)
+#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+#' #                   phi = c(pi/4,pi/4,pi/3,pi/3))
 #'
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
-#'                   phi = c(pi/4,pi/4,pi/3,pi/3))
-#'
-#' qqplotWin(cmbdf, win1, win2)
+#' # qqplotWin(cmbdf, win1, win2)
 #'
 #'@export
 qqplotWin <- function(cmbdf, win1, win2, varindex="I")
@@ -444,12 +463,13 @@ qqplotWin <- function(cmbdf, win1, win2, varindex="I")
 #'@references \link{qqnorm}, \link{qqplot}, \link{qqplotWin}
 #'
 #'@examples
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' qqnormWin(cmbdf, win1)
+#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # qqnormWin(cmbdf, win1)
 #'
 #'@export
 qqnormWin <- function(cmbdf, win, varindex="I")
@@ -480,7 +500,7 @@ qqnormWin <- function(cmbdf, win, varindex="I")
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
 #'@param varindex An index of CMBDataFrame column with measured values.
-#'@param method	A method to estimate entropy, see \link{entropy}
+#'@param method	 A method to estimate entropy, see \link{entropy}
 #'
 #'@return
 #'
@@ -489,14 +509,15 @@ qqnormWin <- function(cmbdf, win, varindex="I")
 #'@references \link{entropy}
 #'
 #'@examples
-#'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' cmbdf <- sampleCMB(df, sample.size = 10000)
-#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' entropyCMB(cmbdf, win1)
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 10000)
+#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # entropyCMB(cmbdf, win1)
 #'
 #'@export
-entropyCMB <- function(cmbdf, win, varindex="I")
+entropyCMB <- function(cmbdf, win, varindex="I", method)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -508,7 +529,9 @@ entropyCMB <- function(cmbdf, win, varindex="I")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
   y <- graphics::hist(cmbdf.win$I, plot = FALSE)$counts
-  entropy::entropy(y)
+
+  if (missing(method)) return(entropy::entropy(y))
+  return(entropy(y, method = method))
 }
 
 #'Chi-squared statistic for two \code{\link{CMBWindow}}s
@@ -519,7 +542,8 @@ entropyCMB <- function(cmbdf, win, varindex="I")
 #'counts of \code{varindex} for computations.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
-#'@param win A \code{\link{CMBWindow}}
+#'@param win1 A \code{\link{CMBWindow}}
+#'@param win2 A \code{\link{CMBWindow}}
 #'@param varindex An index of CMBDataFrame column with measured values.
 #'
 #'@return
@@ -531,7 +555,12 @@ entropyCMB <- function(cmbdf, win, varindex="I")
 #'@references \link{chi2.empirical}
 #'
 #'@examples
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
+<<<<<<< HEAD
 #' df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
@@ -539,8 +568,14 @@ entropyCMB <- function(cmbdf, win, varindex="I")
 #' win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
 #' plot(win1)
 #' plot(win2,col="green")
+=======
+#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
+#' # plot(win1)
+#' # plot(win2,col="green")
+>>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
 #'
-#' chi2CMB(cmbdf, win1, win2)
+#' # chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
 chi2CMB <- function(cmbdf, win1, win2, varindex="I")
@@ -562,10 +597,10 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
   combI <- c(cmbdf.win1$I,cmbdf.win2$I)
   yb <- seq(min(combI), max(combI), length.out=min(nb))
 
-  y1 <- hist(cmbdf.win1$I, breaks=yb, plot = FALSE)$counts
-  y2 <- hist(cmbdf.win2$I, breaks=yb, plot = FALSE)$counts
+  y1 <- graphics::hist(cmbdf.win1$I, breaks=yb, plot = FALSE)$counts
+  y2 <- graphics::hist(cmbdf.win2$I, breaks=yb, plot = FALSE)$counts
 
-  chi2.empirical(y1, y2)
+  entropy::chi2.empirical(y1, y2)
 }
 
 #' Extreme values
@@ -584,16 +619,25 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
 #'A \code{\link{CMBDataFrame}} with \code{n} largest extreme values
 #'
 #'@examples
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
+<<<<<<< HEAD
 #' df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
 #' win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
 #' extrCMB(cmbdf, win1,5)
+=======
+#' # win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
+#' # extrCMB(cmbdf, win1,5)
+>>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
 #'
 #' ## Ploting the window and 5 top extreme values
-#' plot(win1)
-#' plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
+#' # plot(win1)
+#' # plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
 #'
 #'@export
 extrCMB <- function(cmbdf, win, n, varindex="I")

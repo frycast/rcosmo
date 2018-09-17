@@ -21,13 +21,13 @@ Imports:
     tibble (>= 1.4.2),
     rgl (>= 0.99.16),
 	  cli (>= 1.0.0),
-	  gsl (>= 1.9-10.3),
 	  entropy (>= 1.2.1)
 Suggests:
     knitr,
     rmarkdown,
     testthat,
-    R.rsp
+    R.rsp,
+    gsl
 LinkingTo: Rcpp
 RoxygenNote: 6.1.0
 VignetteBuilder: R.rsp

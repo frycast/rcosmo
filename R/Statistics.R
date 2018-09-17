@@ -343,3 +343,139 @@ fmf <- function(cmbdf, alpha, varindex)
   pixelArea(cmbdf)*sum(cmbdf[,varindex] > alpha)
 }
 
+
+
+#' Threshold exceedance probability
+#'
+#' This function returns an estimated exceedance probability for the specified
+#' \code{\link{CMBDataFrame}} column  \code{varindex}, threshold level
+#' \eqn{alpha} and \code{\link{CMBWindow}} region.
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param win A \code{\link{CMBWindow}}
+#'@param alpha A numeric threshold level.
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'
+#'@return
+#'
+#'Estimated threshold exceedance probability
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#'
+#' alpha <- mean(cmbdf$I)
+#'
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' exprob(cmbdf, win1, alpha)
+#'
+#'@export
+exprob <- function(cmbdf, win, alpha, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  if ( !is.CMBWindow(win) )
+  {
+    stop("Argument must be a CMBWindow")
+  }
+  cmbdf.win <- window(cmbdf, new.window = win)
+  sum(cmbdf.win[,varindex] > alpha)/sum(1-is.na(cmbdf.win[,varindex]))
+}
+
+#' Quantile-Quantile plots for \code{\link{CMBWindow}}s
+#'
+#' This funcion is a modification of standard \link{qqplot} functions to work
+#' with \code{\link{CMBWindow}} regions.
+#'
+#' \code{\link{qqplotWin} produces a QQ plot of observations in two
+#' \code{\link{CMBWindow}}s for the specified \code{\link{CMBDataFrame}} column
+#' \code{varindex}. The function automatically adds a diagonal line.
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param win A \code{\link{CMBWindow}}
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'
+#'@return
+#'
+#' A list with quantile components x and y and a QQ plot with a diagonal line
+#'
+#'@references \link{qqnormWin}, \link{qqnorm}, \link{qqplot}
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 10000)
+#'
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+#'                   phi = c(pi/4,pi/4,pi/3,pi/3))
+#'
+#' qqplotWin(cmbdf, win1, win2)
+#'
+#'@export
+qqplotWin <- function(cmbdf, win1, win2, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  if ( !is.CMBWindow(win1) | !is.CMBWindow(win2) )
+  {
+    stop("Argument must be a CMBWindow")
+  }
+  cmbdf.win1 <- window(cmbdf, new.window = win1)
+  cmbdf.win2 <- window(cmbdf, new.window = win2)
+  stats::qqplot(cmbdf.win1$I, cmbdf.win2$I)
+  graphics::abline(c(0,1))
+  stats::qqplot(cmbdf.win1$I, cmbdf.win2$I,plot.it = FALSE)
+}
+
+#' Normal QQ plot for \code{\link{CMBWindow}}
+#'
+#' This funcion is a modification of standard \link{qqnorm} functions to work
+#' with \code{\link{CMBWindow}} regions.
+#'
+#'\code{\link{qqnormWin}} returns a normal QQ plot of for the specified
+#'\code{\link{CMBDataFrame}} column \code{varindex} and \code{\link{CMBWindow}}
+#'region. The function automatically adds a line of a “theoretical” normal
+#'quantile-quantile plot.
+#'
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param win A \code{\link{CMBWindow}}
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'
+#'@return
+#'
+#' A list with quantile components x and y and a normal QQ plot with QQ line
+#'
+#'@references \link{qqnorm}, \link{qqplot}, \link{qqplotWin}
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#'
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' qqnormWin(cmbdf, win1)
+#'
+#'@export
+qqnormWin <- function(cmbdf, win, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  if ( !is.CMBWindow(win) )
+  {
+    stop("Argument must be a CMBWindow")
+  }
+  cmbdf.win <- window(cmbdf, new.window = win)
+  stats::qqnorm(cmbdf.win$I)
+  stats::qqline(cmbdf.win$I)
+  stats::qqnorm(cmbdf.win$I,plot.it = FALSE)
+}
+

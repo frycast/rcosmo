@@ -23,7 +23,8 @@ Get/change the winType (polygon or disk) of a \code{\link{CMBWindow}}.
 If \code{new.type} is missing then the \code{winType} of win
 is returned. Otherwise, a new window is returned with \code{winType}
 equal to \code{new.type}. If you want to change the
-winType of \code{win} directly, then use \code{\link{winType<-}}.
+winType of \code{win} directly, then use \code{\link{winType<-}}, see
+the examples below.
 }
 \examples{
 

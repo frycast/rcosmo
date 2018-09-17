@@ -32,10 +32,20 @@ counts of \code{varindex} for computations.
 # df <- CMBDataFrame("CMB_map_smica1024.fits")
 # cmbdf <- sampleCMB(df, sample.size = 1000)
 
+<<<<<<< HEAD
+df <- CMBDataFrame("CMB_map_smica1024.fits")
+cmbdf <- sampleCMB(df, sample.size = 1000)
+
+win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
+plot(win1)
+plot(win2,col="green")
+=======
 # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
 # plot(win1)
 # plot(win2,col="green")
+>>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
 
 # chi2CMB(cmbdf, win1, win2)
 

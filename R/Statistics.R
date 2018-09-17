@@ -560,10 +560,20 @@ entropyCMB <- function(cmbdf, win, varindex="I", method)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
+<<<<<<< HEAD
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#'
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
+#' plot(win1)
+#' plot(win2,col="green")
+=======
 #' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #' # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
 #' # plot(win1)
 #' # plot(win2,col="green")
+>>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
 #'
 #' # chi2CMB(cmbdf, win1, win2)
 #'
@@ -614,8 +624,16 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
+<<<<<<< HEAD
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#'
+#' win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
+#' extrCMB(cmbdf, win1,5)
+=======
 #' # win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
 #' # extrCMB(cmbdf, win1,5)
+>>>>>>> eea8f715c53f8e4457971b49e68b21b40d5bd261
 #'
 #' ## Ploting the window and 5 top extreme values
 #' # plot(win1)
@@ -634,5 +652,59 @@ extrCMB <- function(cmbdf, win, n, varindex="I")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
   cmbdf.win[order(cmbdf.win$I),][1:n,]
+}
+
+
+#' q-statistic
+#'
+#'
+#'This function returns an estimated q-statistic for the specified  column
+#'\code{varindex} in a \code{\link{CMBDataFrame}} and the list of
+#'\code{\link{CMBWindow}}s.
+#'
+#'
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param listwin A list of \code{\link{CMBWindow}}s
+#'@param varindex An index of CMBDataFrame column with measured values.
+#'
+#'@details The q-statistics is used to measure spatial stratified heterogeneity
+#'and takes values in [0, 1]. It gives the percent of the variance of
+#'\code{varindex} explained by the stratification. 0 corresponds to no spatial
+#'stratified heterogeneity, 1 to perfect spatial stratified heterogeneity.
+#'
+#'@return
+#'
+#'Estimated q-statistics for observations in a list of \code{\link{CMBWindow}}s
+#'
+#'@references
+#'Wang, JF; Zhang, TL; Fu, BJ (2016). "A measure of spatial
+#'stratified heterogeneity". Ecological Indicators. 67: 250–256.
+#'
+#'@examples
+#'
+#' df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' cmbdf <- sampleCMB(df, sample.size = 1000)
+#' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
+#'
+#' lw <- list(win1, win2)
+#' qstat(cmbdf, lw)
+#'
+#'@export
+qstat <- function(cmbdf, listwin, varindex="I")
+{
+  if ( !is.CMBDataFrame(cmbdf) )
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  cmbint <- sapply(listwin,function(v1,v2){
+    window(v1, new.window = v2)},v1=cmbdf)
+
+  ni <- sapply(cmbint,length)
+  sigmai <- sapply(cmbint,var)
+  sigma <- stats::var(unlist(cmbint, recursive = FALSE))
+
+  1- sum((ni-1)*sigmai)/(sigma*(sum(ni)-1))
 }
 

@@ -158,13 +158,19 @@ covCMB <- function(cmbdf,
 #'@export
 covPwSp <- function(PowerSpectra, Ns)
 {
-  Nl <- length(PowerSpectra[, 1])
-  Pls <- gsl::legendre_Pl_array(lmax = PowerSpectra[Nl, 1],
-                                x = seq(-1 + 1 / Ns, 1, 2 / Ns))
+  if (requireNamespace("gsl", quietly = TRUE)) {
 
-  Cov_est <- Cov_func(Pls, PowerSpectra[, 2], PowerSpectra[, 1])
-  df <- data.frame(t = seq(-1 + 1 / Ns, 1, 2 / Ns), Estimated_Cov = Cov_est)
-  return(df)
+    Nl <- length(PowerSpectra[, 1])
+    Pls <- gsl::legendre_Pl_array(lmax = PowerSpectra[Nl, 1],
+                                  x = seq(-1 + 1 / Ns, 1, 2 / Ns))
+
+    Cov_est <- Cov_func(Pls, PowerSpectra[, 2], PowerSpectra[, 1])
+    df <- data.frame(t = seq(-1 + 1 / Ns, 1, 2 / Ns), Estimated_Cov = Cov_est)
+    return(df)
+  } else {
+
+    stop("Package \"gsl\" needed for this function. Please install it.")
+  }
 }
 
 # Helper function for covPwSp
@@ -395,7 +401,8 @@ exprob <- function(cmbdf, win, alpha, varindex="I")
 #' \code{varindex}. The function automatically adds a diagonal line.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
-#'@param win A \code{\link{CMBWindow}}
+#'@param win1 A \code{\link{CMBWindow}}
+#'@param win2 A \code{\link{CMBWindow}}
 #'@param varindex An index of CMBDataFrame column with measured values.
 #'
 #'@return
@@ -412,7 +419,7 @@ exprob <- function(cmbdf, win, alpha, varindex="I")
 #'
 #' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #' # win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
-#'                   phi = c(pi/4,pi/4,pi/3,pi/3))
+#' #                   phi = c(pi/4,pi/4,pi/3,pi/3))
 #'
 #' # qqplotWin(cmbdf, win1, win2)
 #'
@@ -493,7 +500,7 @@ qqnormWin <- function(cmbdf, win, varindex="I")
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
 #'@param varindex An index of CMBDataFrame column with measured values.
-#'@param method	A method to estimate entropy, see \link{entropy}
+#'@param method	 A method to estimate entropy, see \link{entropy}
 #'
 #'@return
 #'
@@ -510,7 +517,7 @@ qqnormWin <- function(cmbdf, win, varindex="I")
 #' # entropyCMB(cmbdf, win1)
 #'
 #'@export
-entropyCMB <- function(cmbdf, win, varindex="I")
+entropyCMB <- function(cmbdf, win, varindex="I", method)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -522,7 +529,9 @@ entropyCMB <- function(cmbdf, win, varindex="I")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
   y <- graphics::hist(cmbdf.win$I, plot = FALSE)$counts
-  entropy::entropy(y)
+
+  if (missing(method)) return(entropy::entropy(y))
+  return(entropy(y, method = method))
 }
 
 #'Chi-squared statistic for two \code{\link{CMBWindow}}s
@@ -533,7 +542,8 @@ entropyCMB <- function(cmbdf, win, varindex="I")
 #'counts of \code{varindex} for computations.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
-#'@param win A \code{\link{CMBWindow}}
+#'@param win1 A \code{\link{CMBWindow}}
+#'@param win2 A \code{\link{CMBWindow}}
 #'@param varindex An index of CMBDataFrame column with measured values.
 #'
 #'@return
@@ -577,10 +587,10 @@ chi2CMB <- function(cmbdf, win1, win2, varindex="I")
   combI <- c(cmbdf.win1$I,cmbdf.win2$I)
   yb <- seq(min(combI), max(combI), length.out=min(nb))
 
-  y1 <- hist(cmbdf.win1$I, breaks=yb, plot = FALSE)$counts
-  y2 <- hist(cmbdf.win2$I, breaks=yb, plot = FALSE)$counts
+  y1 <- graphics::hist(cmbdf.win1$I, breaks=yb, plot = FALSE)$counts
+  y2 <- graphics::hist(cmbdf.win2$I, breaks=yb, plot = FALSE)$counts
 
-  chi2.empirical(y1, y2)
+  entropy::chi2.empirical(y1, y2)
 }
 
 #' Extreme values

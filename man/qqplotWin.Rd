@@ -9,9 +9,11 @@ qqplotWin(cmbdf, win1, win2, varindex = "I")
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{win1}{A \code{\link{CMBWindow}}}
 
-\item{win}{A \code{\link{CMBWindow}}}
+\item{win2}{A \code{\link{CMBWindow}}}
+
+\item{varindex}{An index of CMBDataFrame column with measured values.}
 }
 \value{
 A list with quantile components x and y and a QQ plot with a diagonal line
@@ -21,15 +23,16 @@ This funcion is a modification of standard \link{qqplot} functions to work
 with \code{\link{CMBWindow}} regions.
 }
 \examples{
+## Download the map first
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# cmbdf <- sampleCMB(df, sample.size = 10000)
 
-df <- CMBDataFrame("CMB_map_smica1024.fits")
-cmbdf <- sampleCMB(df, sample.size = 10000)
+# win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+# win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
+#                   phi = c(pi/4,pi/4,pi/3,pi/3))
 
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
-                  phi = c(pi/4,pi/4,pi/3,pi/3))
-
-qqplotWin(cmbdf, win1, win2)
+# qqplotWin(cmbdf, win1, win2)
 
 }
 \references{

@@ -9,9 +9,11 @@ chi2CMB(cmbdf, win1, win2, varindex = "I")
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{win1}{A \code{\link{CMBWindow}}}
 
-\item{win}{A \code{\link{CMBWindow}}}
+\item{win2}{A \code{\link{CMBWindow}}}
+
+\item{varindex}{An index of CMBDataFrame column with measured values.}
 }
 \value{
 Estimated Chi-squared statistic for observations in two
@@ -25,16 +27,17 @@ observations from two \code{\link{CMBWindow}}s of the specified
 counts of \code{varindex} for computations.
 }
 \examples{
+## Download the map first
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# cmbdf <- sampleCMB(df, sample.size = 1000)
 
-df <- CMBDataFrame("../CMB_map_smica1024.fits")
-cmbdf <- sampleCMB(df, sample.size = 1000)
+# win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+# win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
+# plot(win1)
+# plot(win2,col="green")
 
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
-plot(win1)
-plot(win2,col="green")
-
-chi2CMB(cmbdf, win1, win2)
+# chi2CMB(cmbdf, win1, win2)
 
 }
 \references{

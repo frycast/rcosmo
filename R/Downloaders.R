@@ -37,7 +37,7 @@
 #'
 #' ## Download COMMANDER with Nside=1024 and save in a specified folder,
 #' ## for example,
-#' # dest <- "C:/CMB_map_commander1024.fits"
+#' # dest <- "CMB_map_commander1024.fits"
 #' # downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
 #
 #' @keywords CMB Maps

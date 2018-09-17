@@ -48,7 +48,8 @@
 #'
 #' ## Example 1: Create a new CMBDataFrame with a window
 #'
-#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
+#' cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian",
+#'                       ordering = "nested")
 #' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #' cmbdf.win <- window(cmbdf, new.window = win)
 #' plot(cmbdf.win)
@@ -342,7 +343,12 @@ nside.CMBDataFrame <- function( x )
 #' a new CMBDataFrame.
 #'
 #'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
+#' # pix(df)
+#'
+#' df <- CMBDataFrame(nside = 16, sample.size = 10, ordering = "nested")
 #' pix(df)
 #'
 #'@export
@@ -832,22 +838,7 @@ is.CMBDataFrame <- function(cmbdf)
 
 
 
-#' Check if an object is of class CMBDat
-#'
-#' @param cmbdf Any R object
-#'
-#' @return TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
-#'
-#'@examples
-#'cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-#'class(cmbdat)
-#'is.CMBDat(cmbdat)
-#'
-#' @export
-is.CMBDat <- function(cmbdf)
-{
-  identical(as.numeric(sum(class(cmbdf) == "CMBDat")), 1)
-}
+
 
 
 
@@ -1083,9 +1074,10 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #'A plot of the CMB data
 #'
 #'@examples
-#' filename <- "CMB_map_smica1024.fits"
-#' sky <- CMBDataFrame(filename)
-#' plot(sky, sample.size = 800000)
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # sky <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # plot(sky, sample.size = 800000)
 #'
 #'@export
 plot.CMBDataFrame <- function(x, intensities = "I",
@@ -1182,14 +1174,19 @@ colscheme <- function(I, breaks, colmap) {
 #'
 #'
 #'@examples
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # df.sample <- CMBDataFrame(df, sample.size = 800000)
+#' # summary(df.sample)
 #'
-#' df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' df.sample <- CMBDataFrame(df, sample.size = 800000)
-#' summary(df.sample)
+#' ns <- 16
+#' df <- CMBDataFrame(I = rnorm(12*ns^2), nside = ns,
+#'                    ordering = "nested")
 #'
-#' win1<- CMBWindow(x=0,y=3/5,z=4/5,r=0.8)
-#' df.sample1 <- window(df.sample, new.window = win1)
-#' summary(df.sample1)
+#' win1 <- CMBWindow(x=0,y=3/5,z=4/5,r=0.8)
+#' df.sample1 <- window(df, new.window = win1)
+#' summary(df)
 #'
 #'@export
 summary.CMBDataFrame <- function(object, intensities = "I", ...)
@@ -1300,10 +1297,6 @@ print.summary.CMBDataFrame <- function(x, ...)
 #'@return
 #'Prints contents of the CMB data frame to the console.
 #'
-#'@examples
-#' df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
-#' print(df)
-#' df
 #'
 #'@export
 print.CMBDataFrame <- function(x, ...)

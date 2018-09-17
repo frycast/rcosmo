@@ -10,3 +10,4 @@
 ^\.Rprofile$
 ^rcosmo\.pdf$
 ^rcosmoVignette\.pdf$
+^cran-comments\.md$

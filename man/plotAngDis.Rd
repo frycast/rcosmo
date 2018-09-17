@@ -22,12 +22,14 @@ For specified measurements from \code{\link{CMBDataFrame}} this function
 produces scaterplots and binned means versus theta and phi angles.
 }
 \examples{
-df <- CMBDataFrame("CMB_map_smica1024.fits")
-df.sample <- CMBDataFrame(df, sample.size = 80000)
-win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
-cmbdf.win <- window(df.sample, new.window = win)
+## First download the map
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# df.sample <- CMBDataFrame(df, sample.size = 80000)
+# win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
+# cmbdf.win <- window(df.sample, new.window = win)
 
-colindex <- 3
-plotAngDis(cmbdf.win,colindex)
+# colindex <- 3
+# plotAngDis(cmbdf.win,colindex)
 
 }

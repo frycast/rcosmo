@@ -65,13 +65,17 @@ nestSearch <- function(target, nside,
 
   # Find the parent of h, which is at the target resolution
   h <- parent(h[index.min])
-  h.xyz <- pix2coords_internal(nside = nside,
-                                        nested = TRUE,
-                                        cartesian = TRUE,
-                                        spix = h)[,1:3]
 
-  return(list(xyz = as.numeric( h.xyz ),
-              pix = h))
+  if ( !index.only ) {
+
+    h.xyz <- pix2coords_internal(nside = nside,
+                               nested = TRUE,
+                               cartesian = TRUE,
+                               spix = h)[,1:3]
+    return(list(xyz = as.numeric( h.xyz ), pix = h))
+  }
+
+  return(h)
 }
 
 

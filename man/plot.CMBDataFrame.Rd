@@ -61,8 +61,9 @@ A plot of the CMB data
 This function produces a plot from a \code{\link{CMBDataFrame}}.
 }
 \examples{
-filename <- "CMB_map_smica1024.fits"
-sky <- CMBDataFrame(filename)
-plot(sky, sample.size = 800000)
+## First download the map
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# sky <- CMBDataFrame("CMB_map_smica1024.fits")
+# plot(sky, sample.size = 800000)
 
 }

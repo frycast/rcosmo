@@ -1,13 +1,4 @@
-#' Read CMB data from a FITS file.
-#'
-#' \code{CMBDat} is adapted from the \code{\link{readFITS}}
-#' function in package
-#'   \href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
-#'   When it works, \code{CMBDat} is much faster than
-#'   \code{\link{readFITS}}.
-#'   However, \code{\link{readFITS}} is more general, i.e.,
-#'   it applies to FITS files that do not contain CMB data.
-#'
+#' CMBDat class
 #'
 #' The function \code{CMBDat} creates objects of class \code{CMBDat}.
 #' These are lists containing header information and other metadata as well
@@ -15,6 +6,12 @@
 #' intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
 #' \code{\link{mmap}} object that points to the CMB map data table in the FITS
 #' file.
+#'
+#'\code{CMBDat} is adapted from the \code{\link{readFITS}} function in package
+#'\href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
+#'For CMB data \code{CMBDat} workss much faster than \code{\link{readFITS}}.
+#'However, \code{\link{readFITS}} is more general, i.e.,
+#'it applies to FITS files that do not contain CMB data.
 #'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.

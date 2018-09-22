@@ -2,7 +2,7 @@
 % Please edit documentation in R/CMBDat.R
 \name{CMBDat}
 \alias{CMBDat}
-\title{Read CMB data from a FITS file.}
+\title{CMBDat class}
 \usage{
 CMBDat(filename, mmap = FALSE, spix)
 }
@@ -24,21 +24,19 @@ If \code{mmap = TRUE} then a \code{\link{mmap}} object is returned
 that points to the CMB map data table in the FITS file.
 }
 \description{
-\code{CMBDat} is adapted from the \code{\link{readFITS}}
-function in package
-  \href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
-  When it works, \code{CMBDat} is much faster than
-  \code{\link{readFITS}}.
-  However, \code{\link{readFITS}} is more general, i.e.,
-  it applies to FITS files that do not contain CMB data.
-}
-\details{
 The function \code{CMBDat} creates objects of class \code{CMBDat}.
 These are lists containing header information and other metadata as well
 as an element called data, whose columns may include, for example, the
 intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
 \code{\link{mmap}} object that points to the CMB map data table in the FITS
 file.
+}
+\details{
+\code{CMBDat} is adapted from the \code{\link{readFITS}} function in package
+\href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
+For CMB data \code{CMBDat} workss much faster than \code{\link{readFITS}}.
+However, \code{\link{readFITS}} is more general, i.e.,
+it applies to FITS files that do not contain CMB data.
 }
 \examples{
 

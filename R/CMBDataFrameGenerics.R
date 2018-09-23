@@ -643,32 +643,6 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 
 
 
-#'Get the maximum distance between all points
-#'in a \code{\link{CMBDataFrame}}
-#'
-#'@param x A CMBDataFrame object.
-#'
-#'@return Maximum distance between all points.
-#'
-#'@examples
-#'
-#' ## For CMBDataFrame with all Healpix ponts included it must be pi
-#' cmbdf <- CMBDataFrame(nside = 4)
-#' pix(cmbdf)
-#' maxDist(cmbdf)
-#'
-#' ## Example for CMBDataFrame with Healpix only ponts 1 and 2 included
-#'
-#' cmbdf <- CMBDataFrame(nside = 4, spix =c(1,2))
-#' pix(cmbdf)
-#' maxDist(cmbdf)
-#'
-#'@export
-maxDist.CMBDataFrame <- function(x)
-{
-  coords(x) <- "cartesian"
-  return(maxDist_internal(x))
-}
 
 
 

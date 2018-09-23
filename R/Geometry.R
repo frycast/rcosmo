@@ -137,7 +137,6 @@ minDist <- function(df, point)
 
 #'Get the maximum geodesic distance between points
 #'
-#'
 #'Get the maximum geodesic distance either between all points in a data.frame
 #'pairwise, or between all points in a data.frame and one target
 #'point.

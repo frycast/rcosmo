@@ -4,25 +4,37 @@
 \alias{HPDataFrame}
 \title{HPDataFrame class}
 \usage{
-HPDataFrame(..., nside, ordering = "nested", auto.spix = FALSE, spix)
+HPDataFrame(..., nside, ordering = "nested", auto.spix = FALSE, spix,
+  assumedUniquePix = FALSE)
 }
 \arguments{
-\item{...}{data, can be named vectors or a data.frame}
+\item{...}{Data. Can be named vectors or a data.frame. May
+include columns x,y and z representing Cartesian coordinates
+of points on the unit sphere.}
 
-\item{nside}{integer number \eqn{2^k}, the nside
-parameter, i.e, resolution}
+\item{nside}{Integer number \eqn{2^k}, the nside
+parameter, i.e, resolution. If \code{nside} is unspecified, then
+the an attempt is made to use columns x,y and z from the provided
+data, as Cartesian coordinates, to calculate an nside that is
+sufficient to ensure all points belong to unique pixels.}
 
-\item{ordering}{the HEALPix ordering scheme ("ring" or "nested")}
+\item{ordering}{The HEALPix ordering scheme ("ring" or "nested").}
 
-\item{auto.spix}{boolean. If TRUE then spix will be found from
+\item{auto.spix}{Boolean. If TRUE then spix will be found from
 the coordinates provided in the data. That is, each row of
 data will be assigned the pixel index of its closest HEALPix
 pixel center. There must be columns x,y,z for cartesian or
-theta, phi for spherical colatitude and longitude respectively}
+theta, phi for spherical colatitude and longitude respectively.
+If \code{auto.spix = FALSE} then \code{nside} must be specified.}
 
-\item{spix}{a vector of HEALPix pixel indices indicating the
+\item{spix}{A vector of HEALPix pixel indices indicating the
 pixel locations of the data. Note that \code{spix} is ignored
-if \code{auto.spix = TRUE}}
+if \code{auto.spix = TRUE}.}
+
+\item{assumedUniquePix}{A boolen. Sets the \code{assumedUniquePix}
+attribute of the HPDataFrame. This attribute indicates whether
+or not the rows of a HPDataFrame can be assumed to belong to
+unique pixels.}
 }
 \description{
 HPDataFrames are a type of \code{data.frame} designed to carry

@@ -25,6 +25,7 @@
 #' data will be assigned the pixel index of its closest HEALPix
 #' pixel center. There must be columns x,y,z for cartesian or
 #' theta, phi for spherical colatitude and longitude respectively.
+#' If \code{auto.spix = FALSE} then \code{nside} must be specified.
 #' @param spix A vector of HEALPix pixel indices indicating the
 #' pixel locations of the data. Note that \code{spix} is ignored
 #' if \code{auto.spix = TRUE}.
@@ -40,20 +41,24 @@
 #' coords(hp1, new.coords = "cartesian")
 #' class(hp1)
 #'
+#' # Where nside is not specified
+#' sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
+#' sky.s <- CMBDataFrame(sky, sample.size = 100)
+#' hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
+#' assumedUniquePix(hpdf)
+#'
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix,
                         assumedUniquePix = FALSE)
 {
-  if ( missing(nside) )
-  {
-    df <- data.frame(...)
-    nside <- separatingNside(df)
-    assumedUniquePix<- TRUE
-  }
-
   if ( !auto.spix )
   {
+    if ( missing(nside) )
+    {
+      stop("If auto.spix = FALSE, then nside must be specified")
+    }
+
     if ( missing(spix) )
     {
       pix <- 1:(12*nside^2)
@@ -76,7 +81,14 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   }
   else # auto.spix = TRUE. So, use nestSearch to determine pixel centers
   {
+
     df <- data.frame(...)
+
+    if ( missing(nside) )
+    {
+      nside <- separatingNside(df)
+      assumedUniquePix <- TRUE
+    }
 
     if (all(c("x","y","z") %in% names(df)))
     {
@@ -116,7 +128,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   attr(df, "ordering") <- ordering
   attr(df, "HEALPixCentered") <- FALSE
   attr(df, "assumedUniquePix") <- assumedUniquePix
-  class(df) <- unique(c("HPDataFrame", class(df)))
+  class(df) <- c("HPDataFrame", "data.frame")
   df
 }
 
@@ -850,6 +862,6 @@ separatingNside <- function(df) {
 assumedUniquePix <- function(obj) {
 
   if (is.CMBDataFrame(obj)) return(TRUE)
-  if (is.HPDataFrame(obj)) return(attr(sky, "assumedUniquePix"))
+  if (is.HPDataFrame(obj)) return(attr(obj, "assumedUniquePix"))
   return(FALSE)
 }

@@ -453,4 +453,32 @@ f2bin <- function(f, j)
 }
 
 
+#'minDist2nside
+#'
+#'Get an nside such that all points belong
+#'to different pixels, when the minimum
+#'distance between the points is \code{dist}.
+#'
+#'We treat pixels as circles. From the total surface
+#'area of a unit sphere and the radius of a circle with
+#'area 4*pi/(12*nside^2), we derive a sufficiently
+#'large nside to achieve the desired separation. We
+#'aim for (circular) pixels with (default)
+#'radius \code{dist}*3/4.
+#'
+#'@param dist The minimum distance between any
+#'two points in a data.frame
+#'of points that lie on S^2
+#'@param factor Allows changing the shrinkage factor
+#'for the circlular pixels (radius = dist*factor).
+#'
+#'@keywords internal
+#'
+#'@export
+minDist2nside <- function(dist, factor = 3/4)
+{
+  n <- 1/(dist*sqrt(3))/factor
 
+  # Round to the next power of 2
+  return(2^ceiling(log2(n)))
+}

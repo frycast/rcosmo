@@ -11,18 +11,27 @@
 #' multiple data points falling within a given pixel
 #' can be stored in different rows of any given HPDataFrame.
 #'
-#' @param ... data, can be named vectors or a data.frame
-#' @param nside integer number \eqn{2^k}, the nside
-#' parameter, i.e, resolution
-#' @param ordering the HEALPix ordering scheme ("ring" or "nested")
-#' @param auto.spix boolean. If TRUE then spix will be found from
+#' @param ... Data. Can be named vectors or a data.frame. May
+#' include columns x,y and z representing Cartesian coordinates
+#' of points on the unit sphere.
+#' @param nside Integer number \eqn{2^k}, the nside
+#' parameter, i.e, resolution. If \code{nside} is unspecified, then
+#' the an attempt is made to use columns x,y and z from the provided
+#' data, as Cartesian coordinates, to calculate an nside that is
+#' sufficient to ensure all points belong to unique pixels.
+#' @param ordering The HEALPix ordering scheme ("ring" or "nested").
+#' @param auto.spix Boolean. If TRUE then spix will be found from
 #' the coordinates provided in the data. That is, each row of
 #' data will be assigned the pixel index of its closest HEALPix
 #' pixel center. There must be columns x,y,z for cartesian or
-#' theta, phi for spherical colatitude and longitude respectively
-#' @param spix a vector of HEALPix pixel indices indicating the
+#' theta, phi for spherical colatitude and longitude respectively.
+#' @param spix A vector of HEALPix pixel indices indicating the
 #' pixel locations of the data. Note that \code{spix} is ignored
-#' if \code{auto.spix = TRUE}
+#' if \code{auto.spix = TRUE}.
+#' @param assumedUniquePix A boolen. Sets the \code{assumedUniquePix}
+#' attribute of the HPDataFrame. This attribute indicates whether
+#' or not the rows of a HPDataFrame can be assumed to belong to
+#' unique pixels.
 #'
 #' @examples
 #'
@@ -33,10 +42,14 @@
 #'
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",
-                        auto.spix = FALSE, spix)
+                        auto.spix = FALSE, spix,
+                        assumedUniquePix = FALSE)
 {
-  if ( missing(nside) ) {
-    stop("nside must be specified")
+  if ( missing(nside) )
+  {
+    df <- data.frame(...)
+    nside <- separatingNside(df)
+    assumedUniquePix<- TRUE
   }
 
   if ( !auto.spix )
@@ -102,6 +115,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   attr(df, "nside") <- nside
   attr(df, "ordering") <- ordering
   attr(df, "HEALPixCentered") <- FALSE
+  attr(df, "assumedUniquePix") <- assumedUniquePix
   class(df) <- unique(c("HPDataFrame", class(df)))
   df
 }
@@ -793,4 +807,49 @@ print.summary.HPDataFrame <- function(x, ...)
     cli::rule(line = "="),
     sep = ""
   )
+}
+
+
+
+#'separatingNside
+#'
+#'@param df A data.frame. Must have columns x,y,z
+#'for Cartesian coordinates that must represent points
+#'on the unit sphere.
+#'
+#'@return An nside (power of 2) such that all points
+#'in \code{df} will belong to unique pixels.
+#'
+#'@examples
+#' sky <- CMBDataFrame(nside = 16, coords = "cartesian", ordering = "nested")
+#' separatingNside(sky)
+#'
+#'@keywords internal
+#'
+#'@export
+separatingNside <- function(df) {
+
+  dist <- minDist(df)
+  return(minDist2nside(dist))
+}
+
+
+#'assumedUniquePix
+#'
+#'Check if an object can be assumed to have rows
+#'that correspond to unique HEALPix pixel indices.
+#'
+#'@param obj Any object
+#'
+#'@return A boolean. This is TRUE if \code{obj}
+#'is a CMBDataFrame or a HPDataFrame whose
+#'rows can be assumed to correspond to unique
+#'HEALPix pixel indices.
+#'
+#'@export
+assumedUniquePix <- function(obj) {
+
+  if (is.CMBDataFrame(obj)) return(TRUE)
+  if (is.HPDataFrame(obj)) return(attr(sky, "assumedUniquePix"))
+  return(FALSE)
 }

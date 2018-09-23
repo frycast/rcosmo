@@ -50,32 +50,30 @@
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix,
-                        assumedUniquePix = FALSE)
-{
-  if ( !auto.spix )
-  {
-    if ( missing(nside) )
-    {
+                        assumedUniquePix = FALSE) {
+
+  if ( !auto.spix ) {
+
+    if ( missing(nside) ) {
+
       stop("If auto.spix = FALSE, then nside must be specified")
     }
 
-    if ( missing(spix) )
-    {
+    if ( missing(spix) ) {
+
       pix <- 1:(12*nside^2)
-    }
-    else
-    {
+    } else {
+
       pix <- spix
     }
 
     args <- list(...)
     nargs <- length(args)
-    if ( nargs == 0 )
-    {
+    if ( nargs == 0 ) {
+
       df <- data.frame(I = rep(NA, length(pix)))
-    }
-    else
-    {
+    } else {
+
       df <- data.frame(args)
     }
   }
@@ -84,31 +82,29 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 
     df <- data.frame(...)
 
-    if ( missing(nside) )
-    {
+    if ( missing(nside) ) {
+
       nside <- separatingNside(df)
       assumedUniquePix <- TRUE
     }
 
-    if (all(c("x","y","z") %in% names(df)))
-    {
+    if (all(c("x","y","z") %in% names(df))) {
+
       pix <- apply(df[,c("x","y","z")], MARGIN = 1, nestSearch,
                    nside = nside, index.only = TRUE)
-    }
-    else if (all(c("theta","phi") %in% names(df)))
-    {
+    } else if (all(c("theta","phi") %in% names(df))) {
+
       df.xyz <- coords(df, new.coords = "cartesian")
       pix <- apply(df.xyz[,c("x","y","z")], MARGIN = 1, nestSearch,
                    nside = nside, index.only = TRUE)
-    }
-    else
-    {
+    } else {
+
       stop(paste0("When auto.spix = TRUE there must be columns ",
                   "x, y, z (cartesian) or theta, phi (spherical)"))
     }
 
-    if ( ordering != "nested" )
-    {
+    if ( ordering != "nested" ) {
+
       # Development stage: In future we will convert to desired ordering.
       warning(paste0("`auto.spix = TRUE` uses nestSearch, which requires ",
                      "nested ordering. The ordering was changed to nested."))
@@ -116,8 +112,8 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     }
   }
 
-  if ( length(pix) != nrow(df) )
-  {
+  if ( length(pix) != nrow(df) ) {
+
     stop(paste0("There should be a pixel index assigned to each row. ",
                 "Perhaps use spix; perhaps specify nside correctly; ",
                 "or perhaps use auto.spix = TRUE."))
@@ -166,10 +162,10 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 #'@export
 pix.HPDataFrame <- function(x, new.pix, ...)
 {
-  if ( !missing(new.pix) )
-  {
-    if (nrow(x) != length(new.pix))
-    {
+  if ( !missing(new.pix) ) {
+
+    if (nrow(x) != length(new.pix)) {
+
       stop("nrow(hpdf) not equal to length(new.pix)")
     }
     attr(x, "pix") <- new.pix
@@ -195,8 +191,8 @@ pix.HPDataFrame <- function(x, new.pix, ...)
 #' nside(df)
 #'
 #'@export
-nside.HPDataFrame <- function( x )
-{
+nside.HPDataFrame <- function( x ) {
+
   return( as.integer(attr( x, "nside" )) )
 }
 
@@ -259,15 +255,16 @@ plot.HPDataFrame <- function(x, intensities = "I",
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
                               col = "blue", back.col = "black", labels,
-                              hp.boundaries = 0, hpb.col = "gray", ...)
-{
+                              hp.boundaries = 0, hpb.col = "gray", ...) {
+
   hpdf <- x
   pix <- pix(hpdf)
 
   if ( anyDuplicated(pix) > 0 ) {
+
     if ( !all(c("x","y","z") %in% names(hpdf))
-         && !all(c("theta","phi") %in% names(hpdf)) )
-    {
+         && !all(c("theta","phi") %in% names(hpdf)) ) {
+
       warning(paste0("Some rows of hpdf share the same pixel index. ",
                    "Quantities may be obfuscated in final plot ",
                    "and sample.size may differ from actual size ",
@@ -275,8 +272,8 @@ plot.HPDataFrame <- function(x, intensities = "I",
     }
   }
 
-  if ( !missing(sample.size) )
-  {
+  if ( !missing(sample.size) ) {
+
     spix <- sample(pix, sample.size)
     hpdf <- hpdf[pix %in% spix,]
   }
@@ -284,27 +281,26 @@ plot.HPDataFrame <- function(x, intensities = "I",
   hpdf.xyz <- coords(hpdf, new.coords = "cartesian")
 
   ## Do the plotting
-  if ( !add )
-  {
+  if ( !add ) {
+
     rgl::open3d()
     rgl::bg3d(back.col)
   }
 
-  if ( missing(labels) )
-  {
+  if ( missing(labels) ) {
+
     rgl::plot3d(hpdf.xyz$x, hpdf.xyz$y, hpdf.xyz$z,
                 col = col, type = type, size = size,
                 box = box, axes = axes, add = add, aspect = aspect, ...)
-  }
-  else
-  {
+  } else {
+
     rgl::text3d(hpdf.xyz$x, hpdf.xyz$y, hpdf.xyz$z, labels,
                 col = col, type = type, size = size,
                 box = box, axes = axes, add = add, aspect = aspect, ...)
   }
 
-  if ( hp.boundaries > 0 )
-  {
+  if ( hp.boundaries > 0 ) {
+
     rcosmo::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col)
   }
 }
@@ -337,8 +333,8 @@ plot.HPDataFrame <- function(x, intensities = "I",
 #' ordering(df1)
 #'
 #'@export
-ordering.HPDataFrame <- function( x, new.ordering, ... )
-{
+ordering.HPDataFrame <- function( x, new.ordering, ... ) {
+
   hpdf <- x
 
   if ( missing(new.ordering) ) {
@@ -436,36 +432,36 @@ ordering.HPDataFrame <- function( x, new.ordering, ... )
 #' hp2 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
 #'
 #'@export
-coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
-{
+coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
+
   hpdf <- x
 
   ns <- rcosmo::nside(hpdf)
   od <- rcosmo::ordering(hpdf)
   pix <- rcosmo::pix(hpdf)
 
-  if ( healpix.only == TRUE )
-  {
+  if ( healpix.only == TRUE ) {
+
     # Delete any coordinates so they will be created again
     # from HEALPix only
     crd.cols <- which( names(hpdf) %in%
                   c("x","y","z","theta","phi") )
-    if ( length(crd.cols) > 0 )
-    {
+    if ( length(crd.cols) > 0 ) {
+
       hpdf <- hpdf[ , -crd.cols]
     }
 
   }
 
-  if ( new.coords == "spherical" )
-  {
-    if ( all(c("theta","phi") %in% names(hpdf)) )
-    {
+  if ( new.coords == "spherical" ) {
+
+    if ( all(c("theta","phi") %in% names(hpdf)) ) {
+
       return(hpdf)
     }
 
-    if ( !all(c("x","y","z") %in% names(hpdf)) )
-    {
+    if ( !all(c("x","y","z") %in% names(hpdf)) ) {
+
       # Use pix to convert to spherical
       sph <- pix2coords_internal(nside = ns,
                 nested = (od == "nested"),
@@ -475,9 +471,8 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
       names(sph) <- c("theta","phi")
       hpdf <- cbind(hpdf, as.data.frame(sph))
 
-    }
-    else
-    {
+    } else {
+
       x.i <- which(names(hpdf) == "x")
       y.i <- which(names(hpdf) == "y")
       z.i <- which(names(hpdf) == "z")
@@ -491,13 +486,13 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
 
   } else if ( new.coords == "cartesian" ) {
 
-    if ( all(c("x","y","z") %in% names(hpdf)) )
-    {
+    if ( all(c("x","y","z") %in% names(hpdf)) ) {
+
       return(hpdf)
     }
 
-    if ( !all(c("theta","phi") %in% names(hpdf)) )
-    {
+    if ( !all(c("theta","phi") %in% names(hpdf)) ) {
+
       # Use pix to convert to cartesian
       xyz <- pix2coords_internal(nside = ns,
                nested = (od == "nested"),
@@ -506,9 +501,8 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
       xyz <- as.data.frame(xyz)
       names(xyz) <- c("x","y","z")
       hpdf <- cbind(hpdf, as.data.frame(xyz))
-    }
-    else
-    {
+    } else {
+
       theta.i <- which(names(hpdf) == "theta")
       phi.i <- which(names(hpdf) == "phi")
 
@@ -570,8 +564,8 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... )
 #' is.HPDataFrame(df)
 #'
 #' @export
-is.HPDataFrame <- function(hpdf)
-{
+is.HPDataFrame <- function(hpdf) {
+
   identical(as.numeric(sum(class(hpdf) == "HPDataFrame")), 1)
 }
 
@@ -593,8 +587,8 @@ is.HPDataFrame <- function(hpdf)
 #' df
 #'
 #'@export
-print.HPDataFrame <- function(x,...)
-{
+print.HPDataFrame <- function(x,...) {
+
   cat("A HPDataFrame\n")
   print(tibble::as.tibble(x), ...)
 }
@@ -625,8 +619,8 @@ print.HPDataFrame <- function(x,...)
 #' plot(hp1, size = 5, hp.boundaries = 1)
 #'
 #'@export
-geoArea.HPDataFrame <- function(x)
-{
+geoArea.HPDataFrame <- function(x) {
+
   nside <- rcosmo::nside(x)
   if ( !is.numeric(nside) ) stop("problem with hpdf nside attribute")
   return(pi/(3*nside^2)*length(unique(rcosmo::pix((x)))))
@@ -700,15 +694,15 @@ geoArea.HPDataFrame <- function(x)
 #'
 #'@export
 window.HPDataFrame <- function(x, new.window, intersect = TRUE,
-                               healpix.only = FALSE, ...)
-{
-  if ( missing(new.window) )
-  {
+                               healpix.only = FALSE, ...) {
+
+  if ( missing(new.window) ) {
+
     return(attr(x, "window"))
   }
 
-  if ( healpix.only )
-  {
+  if ( healpix.only ) {
+
     hpdf <- rcosmo::coords(x, new.coords = "cartesian",
                             healpix.only = TRUE)
   }
@@ -741,18 +735,17 @@ window.HPDataFrame <- function(x, new.window, intersect = TRUE,
 #' summary(hpdf.win)
 #'
 #'@export
-summary.HPDataFrame <- function(object, intensities = "I", ...)
-{
+summary.HPDataFrame <- function(object, intensities = "I", ...) {
+
   hpdf <- object
 
   ans <- list(intensities = summary(hpdf[,intensities, drop = TRUE]))
 
-  if ( is.null(window(hpdf)) )
-  {
+  if ( is.null(window(hpdf)) ) {
+
     ans$window <- "full sky"
-  }
-  else
-  {
+  } else {
+
     ans$window <- window(hpdf)
   }
 
@@ -780,28 +773,25 @@ summary.HPDataFrame <- function(object, intensities = "I", ...)
 #'@export
 #'
 #'
-print.summary.HPDataFrame <- function(x, ...)
-{
+print.summary.HPDataFrame <- function(x, ...) {
   cat(
     cli::rule(center = " HPDataFrame Object ", line = "bar4"), "\n",
     sep = ""
   )
 
   # Window loop details here in boxes
-  if ( any(x$window != "full sky") )
-  {
+  if ( any(x$window != "full sky") ) {
+
     cat("Number of CMBWindows: ", length(x$window), "\n" )
-    if ( length(x$window) <= 5 )
-    {
+    if ( length(x$window) <= 5 ) {
+
       lapply(x$window, function(x) { print(summary(x)); cat("\n\n") } )
-    }
-    else
-    {
+    } else {
+
       cat("Too many windows to print them all here", "\n\n")
     }
-  }
-  else
-  {
+  } else {
+
     cat("Full sky map\n")
   }
   cat("HEALPix Centered: ", x$HEALPixCentered, "\n")

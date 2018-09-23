@@ -74,7 +74,9 @@ p1f <- function(p1, p2) {
 #'Get the minimum distance between points
 #'
 #'
-#'Get the minimum distance between a point and points in a data frame
+#'Get the minimum distance either between all points in a data.frame
+#'pairwise, or between all points in a data.frame and one target
+#'point.
 #'
 #'@param df A \code{data.frame} with columns x,y,z for cartesian
 #'or theta, phi for spherical colatitude and longitude respectively.
@@ -82,10 +84,15 @@ p1f <- function(p1, p2) {
 #'If this is a \code{\link{HPDataFrame}} or \code{\link{CMBDataFrame}}
 #'and coordinate columns are missing, then coordinates will be
 #'assigned based on HEALPix pixel indices.
-#'@param point A point on the unit sphere in cartesian coordinates.
+#'@param point An optional target point on the unit sphere
+#'in cartesian coordinates, in which case all distances are
+#'calculated between \code{point} and the points in \code{df}.
 #'
-#'@return the shortest distance from \code{point} to the
-#'points specified by the rows of \code{df}
+#'@return If \code{point} is specified: the shortest
+#'distance from \code{point} to the
+#'points specified by the rows of \code{df}.
+#'If \code{point} is not specified: the shortest
+#'distance pairwise between points in \code{df}.
 #'
 #'@name minDist
 #'
@@ -115,7 +122,78 @@ p1f <- function(p1, p2) {
 minDist <- function(df, point)
 {
   df <- coords(df, new.coords = "cartesian")
-  minDist_internal(df[,c("x","y","z")], point)
+
+  if (!missing(point)) {
+
+    minDist_internal1(df[,c("x","y","z")], point)
+  } else {
+
+    minDist_internal2(df[,c("x","y","z")])
+  }
+}
+
+
+
+
+#'Get the maximum geodesic distance between points
+#'
+#'
+#'Get the maximum geodesic distance either between all points in a data.frame
+#'pairwise, or between all points in a data.frame and one target
+#'point.
+#'
+#'@param df A \code{data.frame} with columns x,y,z for cartesian
+#'or theta, phi for spherical colatitude and longitude respectively.
+#'The rows must correspond to points on the unit sphere.
+#'If this is a \code{\link{HPDataFrame}} or \code{\link{CMBDataFrame}}
+#'and coordinate columns are missing, then coordinates will be
+#'assigned based on HEALPix pixel indices.
+#'@param point An optional target point on the unit sphere
+#'in cartesian coordinates, in which case all distances are
+#'calculated between \code{point} and the points in \code{df}.
+#'
+#'@return If \code{point} is specified: the longest geodesic
+#'distance from \code{point} to the
+#'points specified by the rows of \code{df}.
+#'If \code{point} is not specified: the longest geodesic
+#'distance pairwise between points in \code{df}.
+#'
+#'@name maxDist
+#'
+#'@examples
+#'
+#' ## Using a CMBDataFrame with HEALPix coordinates only
+#' cmbdf <- CMBDataFrame(nside = 1, spix = c(1,5,12), ordering = "ring")
+#' plot(cmbdf, hp.boundaries = 1, col = "blue", size = 5)
+#' p <- c(0,0,1)
+#' maxDist(cmbdf, p) # no need to have coordinates
+#'
+#' ## Using a HPDataFrame with HEALPix coordinates only
+#' hp <- HPDataFrame(nside = 1, I = rep(0,3), spix = c(1,5,12) )
+#' maxDist(hp, p) # notice no need to have coordinates
+#'
+#' ## Using a data.frame with cartesian coordinates
+#' coords(hp) <- "cartesian"
+#' df <- data.frame(x = hp$x, y = hp$y, z = hp$z)
+#' maxDist(df, p)
+#'
+#' ## Using a data.frame with spherical coordinates
+#' coords(hp) <- "spherical"
+#' df <- data.frame(theta = hp$theta, phi = hp$phi)
+#' maxDist(df, p)
+#'
+#'@export
+maxDist <- function(df, point)
+{
+  df <- coords(df, new.coords = "cartesian")
+
+  if (!missing(point)) {
+
+    maxDist_internal1(df[,c("x","y","z")], point)
+  } else {
+
+    maxDist_internal2(df[,c("x","y","z")])
+  }
 }
 
 

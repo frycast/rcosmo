@@ -70,11 +70,19 @@ pointInDisc <- function(df, win) {
     .Call(`_rcosmo_pointInDisc`, df, win)
 }
 
-maxDist_internal <- function(cmbdf) {
-    .Call(`_rcosmo_maxDist_internal`, cmbdf)
+minDist_internal1 <- function(cmbdf, point) {
+    .Call(`_rcosmo_minDist_internal1`, cmbdf, point)
 }
 
-minDist_internal <- function(cmbdf, point) {
-    .Call(`_rcosmo_minDist_internal`, cmbdf, point)
+minDist_internal2 <- function(cmbdf) {
+    .Call(`_rcosmo_minDist_internal2`, cmbdf)
+}
+
+maxDist_internal1 <- function(cmbdf, point) {
+    .Call(`_rcosmo_maxDist_internal1`, cmbdf, point)
+}
+
+maxDist_internal2 <- function(cmbdf) {
+    .Call(`_rcosmo_maxDist_internal2`, cmbdf)
 }
 

@@ -1,7 +1,9 @@
-#' Sample covariance for CMB
+#' Sample covariance function
 #'
-#' This function provides an empirical covariance estimate for data
-#' in a CMBDataFrame or data.frame. It places data into bins.
+#' This function provides an empirical covariance function for data
+#' in a CMBDataFrame or data.frame. It assumes that data are from a stationary spherical
+#' random field and the covariance depends only on a geodesic distance between locations.
+#' Output is a binned covariance.
 #'
 #' @param cmbdf is a \code{\link{CMBDataFrame}} or \code{\link{data.frame}}
 #' @param num.bins specifies the number of bins
@@ -10,7 +12,7 @@
 #' the full covariance computation is too slow.
 #' @param max.dist an optional number between 0 and pi specifying the
 #' maximum geodesic distance to use for calculating covariance. Only
-#' used if \code{breaks} is unspecified.
+#' used if \code{breaks} are unspecified.
 #' @param breaks optionally specify the breaks manually using a
 #' vector giving the break points between cells. This vector
 #' has length \code{num.bins} since the last break point is taken
@@ -26,17 +28,36 @@
 #' default to pi.
 #'
 #' @return
-#' An object of class CMBCovariance consisting of a \code{\link{data.frame}}
-#' containing sample covariance
-#' values, bin centers, and number \code{n} of data point pairs
-#' whose distance falls in
-#' the corresponding bin.
-#' The first
-#' row of this data.frame corresponds to the sample variance.
-#' The attribute "breaks" contains the break points used.
-#' The returned \code{\link{data.frame}} has
-#' \code{num.bins + 1} rows since the first row, the sample
-#' variance, is not counted as a bin.
+#'
+#' An object of the class CMBcovariance that is a modification of \code{\link{variogram}}
+#' from the package \link{geoR}  with variogram values replaced by covariances.
+#'
+#' The attribute "breaks" contains the break points used to create bins.
+#' The result has \code{num.bins + 1} values since the first value, the sample
+#' variance,  is not counted as a bin.
+#'
+#'
+#' \describe{
+#' \item{u}{a vector with distances.}
+#' \item{v}{a vector with estimated covariance values at distances given in u.}
+#' \item{n}{number of pairs in each bin}
+#' \item{sd}{standard deviation of the values in each bin}
+#' \item{bins.lim}{ limits defining the interval spanned by each bin}
+#' \item{ind.bin}{a logical vector indicating whether the number of pairs
+#' in each bin is greater or equal to the value in the argument pairs.min}
+#' \item{var.mark}{variance of the data}
+#' \item{beta.ols}{parameters of the mean part of the model fitted by ordinary
+#' least squares}
+#' \item{output.type}{echoes the option argument}
+#' \item{max.dist}{maximum distance between pairs allowed in the covariance calculations}
+#' \item{n.data}{number of data}
+#' \item{direction}{direction for which the covariance was computed}
+#' \item{call}{the function call}
+#' }
+#'
+#'
+#'@references \code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
+#'
 #'
 #' @export
 covCMB <- function(cmbdf,
@@ -47,34 +68,28 @@ covCMB <- function(cmbdf,
                    equiareal = TRUE,
                    calc.max.dist = FALSE)
 {
-
-  if ( !is.CMBDataFrame(cmbdf) ) {
-
+  if (!is.CMBDataFrame(cmbdf)) {
     stop("cmbdf must be a CMBDataFrame")
 
   }
 
-  if ( !missing(sample.size) ) {
-
+  if (!missing(sample.size)) {
     cmbdf <- rcosmo::sampleCMB(cmbdf, sample.size = sample.size)
 
   }
 
-  if ( is.null(coords(cmbdf)) || coords(cmbdf) != "cartesian" ) {
-
+  if (is.null(coords(cmbdf)) || coords(cmbdf) != "cartesian") {
     coords(cmbdf) <- "cartesian"
 
   }
 
-  if ( !all( c("x", "y", "z", "I") %in% names(cmbdf) ) )
+  if (!all(c("x", "y", "z", "I") %in% names(cmbdf)))
   {
     stop("cmbdf must have columns named 'x', 'y', 'z', 'I' in that order")
   }
 
-  if ( missing(breaks) )
+  if (missing(breaks))
   {
-
-
     if (calc.max.dist)
     {
       max.dist <- maxDist_internal(cmbdf)
@@ -83,34 +98,320 @@ covCMB <- function(cmbdf,
 
     if (equiareal)
     {
-      breaks <- seq(cos(max.dist), 1, length.out = num.bins+1)[-(num.bins+1)]
+      breaks <-
+        seq(cos(max.dist), 1, length.out = num.bins + 1)[-(num.bins + 1)]
     }
     else
     {
-      breaks <- cos(rev(seq(0, max.dist, length.out = num.bins+1)[-1]))
+      breaks <- cos(rev(seq(0, max.dist, length.out = num.bins + 1)[-1]))
     }
 
   }
 
-  covs <- covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
+  covs <- covCMB_internal2(cmbdf[, c("x", "y", "z", "I")], breaks)
 
   # Reverse order since cosine is decreasing
-  covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])
-  covs[2:nrow(covs),2] <- rev(covs[2:nrow(covs),2])
-  v <- c(0,rev(acos(breaks)))
+  covs[2:nrow(covs), 1] <- rev(covs[2:nrow(covs), 1])
+  covs[2:nrow(covs), 2] <- rev(covs[2:nrow(covs), 2])
+  v <- c(0, rev(acos(breaks)))
   # Drop the throw-away bin (distances greater than max.dist)
-  covs <- covs[-nrow(covs),]
+  covs <- covs[-nrow(covs), ]
 
   # Find the bin centers (break_{i+1} - break_i)/2 with break_0 = 0.
-  centers <- c(0,v[1:(length(v)-1)] + (v[2:length(v)] - v[1:(length(v) - 1)])/2)
+  centers <-
+    c(0, v[1:(length(v) - 1)] + (v[2:length(v)] - v[1:(length(v) - 1)]) / 2)
 
-  result <- data.frame(dist = centers, cov = covs[,1],
-                       n = as.integer(c(covs[,2][1], covs[,2][-1]/2)) )
-  class(result) <- c("CMBCovariance", "data.frame")
-  attr(result, "breaks") <- breaks
+  pairs.min <- 2
+  n <- as.integer(c(covs[, 2][1], covs[, 2][-1] / 2))
+  indp <- (n >= pairs.min)
+  sd1 <- n
+  result <- list(
+    u = centers,
+    v = covs[, 1],
+    n = n,
+    sd1,
+    bins.lim = v,
+    ind.bin = indp
+  )
 
+  call.fc <- match.call()
+  option <- "bin"
+  estimator.type <- "classical"
+  trend <- "cte"
+  data.var <-  var(cmbdf$I)
+  n.data <- length(cmbdf$I)
+  ##
+  beta.ols <- mean(cmbdf$I)
+  umax <- max(centers[centers < max.dist])
+
+  result <- c(
+    result,
+    list(
+      var.mark = data.var,
+      beta.ols = beta.ols,
+      output.type = option,
+      max.dist = max.dist,
+      estimator.type = estimator.type,
+      n.data = n.data,
+      lambda = 1,
+      trend = trend,
+      pairs.min = pairs.min
+    )
+  )
+  result$nugget.tolerance <- 1e-12
+  result$direction <- "omnidirectional"
+  result$tolerance <- "none"
+  result$uvec <- centers
+  result$call <- call.fc
+  oldClass(result) <- "CMBcovariance"
   return(result)
 }
+
+#' Sample correlation function
+#'
+#' This function provides an empirical correlation function for data
+#' in a CMBDataFrame or data.frame. It assumes that data are from a stationary spherical
+#' random field and the correlation depends only on a geodesic distance between locations.
+#' Output is a binned correlation.
+#'
+#' @param cmbdf is a \code{\link{CMBDataFrame}} or \code{\link{data.frame}}
+#' @param num.bins specifies the number of bins
+#' @param sample.size optionally specify the size of a simple random
+#' sample to take before calculating correlation. This may be useful if
+#' the full correlation computation is too slow.
+#' @param max.dist an optional number between 0 and pi specifying the
+#' maximum geodesic distance to use for calculating correlation. Only
+#' used if \code{breaks} are  unspecified.
+#' @param breaks optionally specify the breaks manually using a
+#' vector giving the break points between cells. This vector
+#' has length \code{num.bins} since the last break point is taken
+#' as \code{max.dist}. If \code{equiareal = TRUE} then
+#' these breaks should be \eqn{cos(r_i)} where \eqn{r_i} are radii.
+#' If \code{equiareal = FALSE} then these breaks should be \eqn{r_i}.
+#' @param equiareal if TRUE then the bins have equal spherical
+#' area. If false then the bins have equal annular widths.
+#' Default is TRUE.
+#' @param calc.max.dist if TRUE then the \code{max.dist} will be
+#' calculated from the locations in cmbdf. Otherwise
+#' either \code{max.dist} must be specified or max.dist will
+#' default to pi.
+#'
+#' @return
+#'
+#' An object of the class CMBcorrelation that is a modification of \code{\link{variogram}}
+#' from the package \link{geoR} with variogram values replaced by correlation.
+#'
+#' The attribute "breaks" contains the break points used to create bins.
+#' The result has \code{num.bins + 1} values since the first value at distance 0 is not
+#' counted as a bin.
+#'
+#' \describe{
+#' \item{u}{a vector with distances.}
+#' \item{v}{a vector with estimated correlation values at distances given in u.}
+#' \item{n}{number of pairs in each bin}
+#' \item{sd}{standard deviation of the values in each bin}
+#' \item{bins.lim}{ limits defining the interval spanned by each bin}
+#' \item{ind.bin}{a logical vector indicating whether the number of pairs
+#' in each bin is greater or equal to the value in the argument pairs.min}
+#' \item{var.mark}{variance of the data}
+#' \item{beta.ols}{parameters of the mean part of the model fitted by ordinary
+#' least squares}
+#' \item{output.type}{echoes the option argument}
+#' \item{max.dist}{maximum distance between pairs allowed in the correlation calculations}
+#' \item{n.data}{number of data}
+#' \item{direction}{direction for which the correlation was computed}
+#' \item{call}{the function call}
+#' }
+#'
+#'
+#'@references \code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{covCMB}}
+#'
+#'
+#' @export
+corrCMB <- function(cmbdf,
+                         num.bins = 10,
+                         sample.size,
+                         max.dist = pi,
+                         breaks,
+                         equiareal = TRUE,
+                         calc.max.dist = FALSE)
+{corrCMB<- covCMB(cmbdf, num.bins,
+                 sample.size,
+                 max.dist,
+                 breaks,
+                 equiareal ,
+                 calc.max.dist)
+corrCMB$v <- corrCMB$v/corrCMB$v[1]
+oldClass(corrCMB) <- "CMBcorrelation"
+return(corrCMB)}
+
+#' Sample variogram
+#'
+#' This function provides an empirical variogram for data in a
+#' \code{\link{CMBDataFrame}} or data.frame. It assumes that data are from a
+#' stationary spherical random field and the covariance depends only on a
+#' geodesic distance between locations. Output is a binned variogram.
+#'
+#'
+#' @param cmbdf is a \code{\link{CMBDataFrame}} or \code{\link{data.frame}}
+#' @param num.bins specifies the number of bins
+#' @param sample.size optionally specify the size of a simple random
+#' sample to take before calculating variogram. This may be useful if
+#' the full covariance computation is too slow.
+#' @param max.dist an optional number between 0 and pi specifying the
+#' maximum geodesic distance to use for calculating covariance. Only
+#' used if \code{breaks} are  unspecified.
+#' @param breaks optionally specify the breaks manually using a
+#' vector giving the break points between cells. This vector
+#' has length \code{num.bins} since the last break point is taken
+#' as \code{max.dist}. If \code{equiareal = TRUE} then
+#' these breaks should be \eqn{cos(r_i)} where \eqn{r_i} are radii.
+#' If \code{equiareal = FALSE} then these breaks should be \eqn{r_i}.
+#' @param equiareal if TRUE then the bins have equal spherical
+#' area. If false then the bins have equal annular widths.
+#' Default is TRUE.
+#' @param calc.max.dist if TRUE then the \code{max.dist} will be
+#' calculated from the locations in cmbdf. Otherwise
+#' either \code{max.dist} must be specified or max.dist will
+#' default to pi.
+#'
+#' @return
+#' An object of class \code{\link{variogram}} specified in the package \link{geoR}.
+#'
+#' The attribute "breaks" contains the break points used to create bins.
+#' The result has \code{num.bins + 1} values since the first value at distance 0 is not
+#' counted as a bin.
+#'
+#'\describe{
+#' \item{u}{a vector with distances.}
+#' \item{v}{a vector with estimated variogram values at distances given in u.}
+#' \item{n}{number of pairs in each bin}
+#' \item{sd}{standard deviation of the values in each bin}
+#' \item{bins.lim}{ limits defining the interval spanned by each bin}
+#' \item{ind.bin}{a logical vector indicating whether the number of pairs
+#' in each bin is greater or equal to the value in the argument pairs.min}
+#' \item{var.mark}{variance of the data}
+#' \item{beta.ols}{parameters of the mean part of the model fitted by ordinary
+#' least squares}
+#' \item{output.type}{echoes the option argument}
+#' \item{max.dist}{maximum distance between pairs allowed in the variogram calculations}
+#' \item{n.data}{number of data}
+#' \item{direction}{direction for which the variogram was computed}
+#' \item{call}{the function call}
+#' }
+#'
+#'
+#'@references \code{\link{variogram}}, \link{geoR}, \code{\link{covCMB}}, \code{\link{corrCMB}}
+#'
+#' @export
+variogramCMB <- function(cmbdf,
+                   num.bins = 10,
+                   sample.size,
+                   max.dist = pi,
+                   breaks,
+                   equiareal = TRUE,
+                   calc.max.dist = FALSE)
+{varCMB<- covCMB(cmbdf, num.bins ,
+                     sample.size,
+                     max.dist ,
+                     breaks,
+                     equiareal ,
+                     calc.max.dist )
+varCMB$v <- varCMB$v[1]-varCMB$v
+oldClass(varCMB) <- "variogram"
+return(varCMB)}
+
+#'Plot CMBvariogram, CMBcovariance, CMBcorrelation
+#'
+#'
+#' @export
+plot.CMBvariogram <-
+  function (x) {
+    if(attributes(x)$class == "variogram") plot(x, ylab= "sample variogram")
+    if(attributes(x)$class == "CMBcovariance") {
+      x0 <- x
+      attributes(x0)$class <- "variogram"
+      plot(x0, ylab = "sample covariance")
+    }
+    if(attributes(x)$class == "CMBcorrelation"){
+      x0 <- x
+      attributes(x0)$class <- "variogram"
+      plot(x0, ylab= "sample correlation")
+    }
+  }
+
+# covCMB <- function(cmbdf,
+#                    num.bins = 10,
+#                    sample.size,
+#                    max.dist = pi,
+#                    breaks,
+#                    equiareal = TRUE,
+#                    calc.max.dist = FALSE)
+# {
+#
+#   if ( !is.CMBDataFrame(cmbdf) ) {
+#
+#     stop("cmbdf must be a CMBDataFrame")
+#
+#   }
+#
+#   if ( !missing(sample.size) ) {
+#
+#     cmbdf <- rcosmo::sampleCMB(cmbdf, sample.size = sample.size)
+#
+#   }
+#
+#   if ( is.null(coords(cmbdf)) || coords(cmbdf) != "cartesian" ) {
+#
+#     coords(cmbdf) <- "cartesian"
+#
+#   }
+#
+#   if ( !all( c("x", "y", "z", "I") %in% names(cmbdf) ) )
+#   {
+#     stop("cmbdf must have columns named 'x', 'y', 'z', 'I' in that order")
+#   }
+#
+#   if ( missing(breaks) )
+#   {
+#
+#
+#     if (calc.max.dist)
+#     {
+#       max.dist <- maxDist_internal(cmbdf)
+#     }
+#
+#
+#     if (equiareal)
+#     {
+#       breaks <- seq(cos(max.dist), 1, length.out = num.bins+1)[-(num.bins+1)]
+#     }
+#     else
+#     {
+#       breaks <- cos(rev(seq(0, max.dist, length.out = num.bins+1)[-1]))
+#     }
+#
+#   }
+#
+#   covs <- covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
+#
+#   # Reverse order since cosine is decreasing
+#   covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])
+#   covs[2:nrow(covs),2] <- rev(covs[2:nrow(covs),2])
+#   v <- c(0,rev(acos(breaks)))
+#   # Drop the throw-away bin (distances greater than max.dist)
+#   covs <- covs[-nrow(covs),]
+#
+#   # Find the bin centers (break_{i+1} - break_i)/2 with break_0 = 0.
+#   centers <- c(0,v[1:(length(v)-1)] + (v[2:length(v)] - v[1:(length(v) - 1)])/2)
+#
+#   result <- data.frame(dist = centers, cov = covs[,1],
+#                        n = as.integer(c(covs[,2][1], covs[,2][-1]/2)) )
+#   class(result) <- c("CMBCovariance", "data.frame")
+#   attr(result, "breaks") <- breaks
+#
+#   return(result)
+# }
 
 
 #' Covariance estimate via power spectra

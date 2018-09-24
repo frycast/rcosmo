@@ -90,18 +90,23 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 
     if (all(c("x","y","z") %in% names(df))) {
 
-      pix <- apply(df[,c("x","y","z")], MARGIN = 1, nestSearch,
-                   nside = nside, index.only = TRUE)
+      # Do nothing
+
     } else if (all(c("theta","phi") %in% names(df))) {
 
       df.xyz <- coords(df, new.coords = "cartesian")
-      pix <- apply(df.xyz[,c("x","y","z")], MARGIN = 1, nestSearch,
-                   nside = nside, index.only = TRUE)
+
     } else {
 
       stop(paste0("When auto.spix = TRUE there must be columns ",
                   "x, y, z (cartesian) or theta, phi (spherical)"))
     }
+
+    pix <- nestSearch(df[,c("x","y","z")], nside = nside,
+                      index.only = TRUE)
+
+    # pix <- apply(df[,c("x","y","z")], MARGIN = 1, nestSearch,
+    #              nside = nside, index.only = TRUE)
 
     if ( ordering != "nested" ) {
 

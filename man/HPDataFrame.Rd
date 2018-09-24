@@ -55,4 +55,10 @@ pix(hp1)
 coords(hp1, new.coords = "cartesian")
 class(hp1)
 
+# Where nside is not specified
+sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
+sky.s <- CMBDataFrame(sky, sample.size = 100)
+hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
+assumedUniquePix(hpdf)
+
 }

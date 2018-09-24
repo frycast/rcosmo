@@ -23,19 +23,32 @@
 #'
 #' @examples
 #'
-#' ## Find the closest HEALPix pixel center at resolution k=1 for
+#' ## Find the closest HEALPix pixel center at resolution j=2 for
 #' ## the point (0.6,0.8,0)
 #'
 #' point <- c(0.6,0.8,0)
-#' k <- 1
-#' cpoint <- nestSearch(point, nside=k)
+#' j <- 2
+#' cpoint <- nestSearch(point, nside = 2^j)
 #'
 #' ## Plot the closest pixel center in blue and the point (0.6,0.8,0) in red
-#' j <- log2(k)
+#' displayPixels(j, j, plot.j=j, spix=c(cpoint$pix),
+#'               size=5, incl.labels =FALSE)
+#' rgl::plot3d(point[1], point[2], point[3],
+#'             col="red", size = 5, add = TRUE)
 #'
-#' displayPixels(j, j, plot.j=j, spix=c(cpoint$pix), size=5, incl.labels =FALSE)
-#' rgl::plot3d(point[1], point[2], point[3], col="red", size = 5, add = TRUE)
 #'
+#' ## Repeat the above for 4 points in a matrix
+#' points <- matrix(c(0,0,1,0,1,0,1,0,0,0.6,0.8,0),
+#' byrow = TRUE, nrow = 4)
+#' points
+#' j <- 2
+#' cpoints <- nestSearch(points, nside = 2^j)
+#'
+#' ## Plot the closest pixel center in blue and the point (0.6,0.8,0) in red
+#' displayPixels(j, j, plot.j=j, spix=c(cpoints$pix),
+#'               size=5, incl.labels =FALSE)
+#' rgl::plot3d(points[,1], points[,2], points[,3],
+#'             col="red", size = 5, add = TRUE)
 #'
 #' @export
 nestSearch <- function(target, nside,
@@ -48,6 +61,16 @@ nestSearch <- function(target, nside,
   {
     h <- rcosmo::nestSearch_step( target, j2 = j[i],
                                    j1 = j[i-1], pix.j1 = h)
+
+    ## FIX ME :
+    # nestSearch_step should be able to take pix.j1
+    # as a matrix where row k is 9 pixels inside
+    # which the closest grandchild pixel to target
+    # should be found (currently it just unlists h)
+    # and searches amongst all pixels for every target.
+    ##
+    h <- unique(as.numeric(unlist(h)))
+
   }
 
   # Note h is now one level deeper than the target resolution.
@@ -57,11 +80,19 @@ nestSearch <- function(target, nside,
                                         cartesian = TRUE,
                                         spix = h)[,1:3]
 
-  dists <-  apply(h.xyz, MARGIN = 1,
-                  function(point) {
-                    sum((point - target)^2)
-                  } )
-  index.min <- which.min(dists)
+  # Minimise sum((point - target)^2) by row
+  if ( is.matrix(target) || is.data.frame(target) ) {
+
+    dots <- h.xyz %*% t(target)
+  } else if ( is.numeric(target) ) {
+
+    dots <- h.xyz %*% target
+  } else {
+
+    stop("target point must be numeric (vector, data.frame or matrix)")
+  }
+  index.min <- max.col(t(dots), ties.method = "first")
+
 
   # Find the parent of h, which is at the target resolution
   h <- parent(h[index.min])
@@ -72,7 +103,7 @@ nestSearch <- function(target, nside,
                                nested = TRUE,
                                cartesian = TRUE,
                                spix = h)[,1:3]
-    return(list(xyz = as.numeric( h.xyz ), pix = h))
+    return(list(xyz = h.xyz, pix = h))
   }
 
   return(h)
@@ -113,26 +144,52 @@ nestSearch <- function(target, nside,
 #' @export
 nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0) {
 
-  if ( j1 > j2 ) stop("j1 must be less than or equal to j2")
-
   # nside at level j2
   nside.j2 <- 2^j2
 
-  spix.j2 <- rcosmo::pixelWindow(j1, j2, pix.j1)
+  if ( j1 < j2 ) {
 
-  # Convert spix.j2 to Cartesian coordinates
-  xyz.j2 <- pix2coords_internal(nside = nside.j2,
-                                         nested = TRUE,
-                                         cartesian = TRUE,
-                                         spix = spix.j2)[,1:3]
+    spix.j2 <- rcosmo::pixelWindow(j1, j2, pix.j1)
+    xyz.j2 <- pix2coords_internal(nside = nside.j2,
+                                  nested = TRUE,
+                                  cartesian = TRUE,
+                                  spix = spix.j2)[,1:3]
+  } else if ( j1 == j2 )  {
 
-  dists <-  apply(xyz.j2, MARGIN = 1,
-                  function(point) {
-                    sum((point - target)^2)
-                  } )
-  index.min <- which.min(dists)
+    # Convert spix.j2 to Cartesian coordinates
+    xyz.j2 <- pix2coords_internal(nside = nside.j2,
+                                  nested = TRUE,
+                                  cartesian = TRUE)[,1:3]
+  } else {
 
-  return( neighbours(spix.j2[index.min], j2) )
+    stop("j1 must be less than or equal to j2")
+  }
+
+
+  # Minimise sum((point - target)^2) by row
+  if ( is.matrix(target) || is.data.frame(target) ) {
+
+    dots <- xyz.j2 %*% t(target)
+  } else if ( is.numeric(target) ) {
+
+    dots <- xyz.j2 %*% target
+  } else {
+
+    stop("target point must be numeric (vector, data.frame or matrix)")
+  }
+
+  index.min <- max.col(t(dots), ties.method = "first")
+
+  # dots <- as.numeric(xyz.j2 %*% target)
+  # index.min <- which.max(dots)
+
+  if ( j1 < j2 ) {
+    result <- spix.j2[index.min]
+  } else {
+    result <- index.min
+  }
+
+  return( neighbours(result, j2) )
 }
 
 
@@ -294,6 +351,7 @@ baseNeighbours <- function(bp)
 #'
 #'@keywords internal
 #'
+#'@export
 onBPBoundary <- function(se, so, j)
 {
   b <- 0L
@@ -354,6 +412,7 @@ onBPBoundary <- function(se, so, j)
 #'
 #'@keywords internal
 #'
+#'@export
 borderPattern <- function(ptype)
 {
   switch(ptype + 1,
@@ -387,7 +446,7 @@ borderPattern <- function(ptype)
 #'## Plot the neighbouring pixels for base pixel 1
 #' demoNeighbours <- function(p,j) {
 #'   neighbours(p, j)
-#'   displayPixels(boundary.j = j, j = j, plot.j = 5,
+#'   displayPixels(boundary.j = j, j = j, plot.j = j+3,
 #'                 spix = neighbours(p, j),
 #'                 boundary.col = "gray",
 #'                 boundary.lwd = 1,
@@ -397,13 +456,27 @@ borderPattern <- function(ptype)
 #'   rcosmo::displayPixelBoundaries(nside = 1, col = "blue", lwd = 3)
 #' }
 #'
+#' demoNeighbours(1,2)
 #' demoNeighbours(1,0)
 #'
 #' @export
-neighbours <- function(p, j)
-{
-  if ( j == 0 )
+neighbours <- function(p, j) {
+
+  # Handle case that p is a vector recursively
+  if ( length(p) > 1 )
   {
+    np <- length(p)
+    #result <- matrix(0, nrow = np, ncol = 9)
+    result <- list()
+    for ( i in 1:np )
+    {
+      result[[i]] <- neighbours(p[i], j)
+    }
+    return(result)
+  }
+
+  if ( j == 0 ) {
+
     bs <- baseNeighbours(p)
     return(bs[bs > 0])
   }
@@ -412,10 +485,19 @@ neighbours <- function(p, j)
   ibp <- p2ibp(p, j)
   bp <- p2bp(p, j)
 
+  # Effectively dec2bin
+  digits <- 1:(2*j)
+  bin <- as.numeric(intToBits(ibp-1))[digits]
+
+  # Used in bin2dec
+  pow <- 2^(0:31)[digits]
+
+  even <- bin[c(FALSE, TRUE)]
+  odd <- bin[c(TRUE, FALSE)]
+
   # Get even and odd binary digit information
-  f <- bin2f(dec2bin(ibp-1, digits = 2*j), j = j)
-  se <- sum( f$even )
-  so <- sum( f$odd )
+  se <- sum( even )
+  so <- sum( odd )
 
   # Get the BP border crossing info: target border pixels
   # bdr is the direction of crossing:
@@ -424,16 +506,27 @@ neighbours <- function(p, j)
   target.bp <- rep(bp, 9)
   target.bp[which(bdr != 0)] <- baseNeighbours(bp)[bdr]
 
-  # Separately increment/decrement the odd/even binary reps
-  even.dec <- bin2dec(f$even, digits = j)
-  odd.dec <- bin2dec(f$odd, digits = j)
+  ## Separately increment/decrement the odd/even binary reps
+  # Effectively bin2dec
+  even.dec <- sum(pow[as.logical(even)])
+  odd.dec <- sum(pow[as.logical(odd)])
   # Order: S,SE, E,NE, N,NW, W,SW,self
   ei <- c(-1,-1,-1, 0, 1, 1, 1, 0,   0)
   oi <- c(-1, 0, 1, 1, 1, 0,-1,-1,   0)
-  nbrs <- data.frame(even = I(lapply(rep(even.dec,9) + ei,
-                                     dec2bin, digits = j)),
-                     odd  = I(lapply(rep(odd.dec, 9) + oi,
-                                     dec2bin, digits = j)))
+  ed <- rep(even.dec,9) + ei
+  od <- rep(odd.dec, 9) + oi
+
+  # even <- lapply(ed, dec2bin, digits = j)
+  # odd  <- lapply(od, dec2bin, digits = j)
+
+  dig <- 0:(j-1)
+  pos <- dig + rep(c(1, 33, 65, 97, 129, 161, 193, 225, 257), each = j)
+
+  ebits <- as.numeric(intToBits(ed))
+  obits <- as.numeric(intToBits(od))
+
+  evenm <- matrix(ebits[pos], ncol = j, byrow = TRUE)
+  oddm <- matrix(obits[pos], ncol = j, byrow = TRUE)
 
   # Swap some nbrs N<->S depending on region of bp
   if ( bp %in% c(1,2,3,4) ) {
@@ -444,18 +537,18 @@ neighbours <- function(p, j)
 
     #SW->NW
     if (length(i4)!=0) {
-      nbrs[i4,]$odd  <- nbrs[i4,]$even
-      nbrs[i4,]$even <- list(rep(1,j))
+      oddm[i4,]  <- evenm[i4,]
+      evenm[i4,] <- rep(1,j)
     }
     #S->N
     if (length(i5) != 0) {
-      nbrs[i5,]$even <- list(rep(1,j))
-      nbrs[i5,]$odd  <- list(rep(1,j))
+      evenm[i5,] <- rep(1,j)
+      oddm[i5,]  <- rep(1,j)
     }
     #SE->NE
     if (length(i6)!=0) {
-      nbrs[i6,]$even <- nbrs[i6,]$odd
-      nbrs[i6,]$odd  <- list(rep(1,j))
+      evenm[i6,] <- oddm[i6,]
+      oddm[i6,]  <- rep(1,j)
     }
 
   } else if ( bp %in% c(9,10,11,12) ) {
@@ -466,23 +559,28 @@ neighbours <- function(p, j)
 
     #N->S
     if (length(i1) != 0) {
-      nbrs[i1,]$even <- list(rep(0,j))
-      nbrs[i1,]$odd <- list(rep(0,j))
+      evenm[i1,] <- rep(0,j)
+      oddm[i1,] <- rep(0,j)
     }
     #NW->SW
     if (length(i2) != 0) {
-      nbrs[i2,]$even <- nbrs[i2,]$odd
-      nbrs[i2,]$odd <- list(rep(0,j))
+      evenm[i2,] <- oddm[i2,]
+      oddm[i2,] <- rep(0,j)
     }
     #NE->SE
     if (length(i8) != 0) {
-      nbrs[i8,]$odd <- nbrs[i8,]$even
-      nbrs[i8,]$even <- list(rep(0,j))
+      oddm[i8,] <- evenm[i8,]
+      evenm[i8,] <- rep(0,j)
     }
   }
 
   # Recombine even and odd
-  nbrs <- recombineEvenOdd(nbrs, j)
+  bin <- matrix(0, ncol = 2*j, nrow = 9)
+  # Effectively f2bin
+  bin[,c(FALSE, TRUE)] <- evenm
+  bin[,c(TRUE, FALSE)] <- oddm
+  # Effectively bin2dec
+  nbrs <- (bin %*% pow) + 1
 
   # Convert indices in BP to actual indices p
   np <- ibp2p(nbrs, target.bp, j)
@@ -492,13 +590,13 @@ neighbours <- function(p, j)
 # Takes a data.frame with column for even binary and column for odd.
 # Returns the recombined digits in decimal as vector. This is
 # a helper function for neighbours.
-recombineEvenOdd <- function(nbrs, j)
-{
-  unlist(
-    mapply(FUN = function(even,odd) {
-      bin <- f2bin(list(even = even, odd = odd), j = j)
-      p <- bin2dec(bin, digits = 2*j) + 1
-      return(p)
-    },
-    nbrs$even, nbrs$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
-}
+# recombineEvenOdd <- function(nbrs, j)
+# {
+#   unlist(
+#     mapply(FUN = function(even,odd) {
+#       bin <- f2bin(list(even = even, odd = odd), j = j)
+#       p <- bin2dec(bin, digits = 2*j) + 1
+#       return(p)
+#     },
+#     nbrs$even, nbrs$odd, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+# }

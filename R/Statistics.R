@@ -321,23 +321,41 @@ varCMB$v <- varCMB$v[1]-varCMB$v
 oldClass(varCMB) <- "variogram"
 return(varCMB)}
 
-#'Plot CMBvariogram, CMBcovariance, CMBcorrelation
+#'Plot variogram
 #'
+#'@param x An object of class variogram.
+#'@param ... Extra arguments passed to plot.default.
 #'
 #' @export
-plot.CMBvariogram <-
-  function (x) {
-    if(attributes(x)$class == "variogram") plot(x, ylab= "sample variogram")
-    if(attributes(x)$class == "CMBcovariance") {
+plot.variogram <-
+  function (x, ...) {
+    plot(x, ylab= "sample variogram", ...)
+  }
+
+#'Plot CMBcovariance
+#'
+#'@param x  An object of class CMBCovariance.
+#'@param ... Extra arguments passed to plot.default.
+#'
+#' @export
+plot.CMBcovariance <-
+  function (x, ...) {
       x0 <- x
       attributes(x0)$class <- "variogram"
-      plot(x0, ylab = "sample covariance")
-    }
-    if(attributes(x)$class == "CMBcorrelation"){
+      plot(x0, ylab = "sample covariance", ...)
+  }
+
+#'Plot CMBcorrelation
+#'
+#'@param x An object of class CMBCorrelation.
+#'@param ... Extra arguments passed to plot.default.
+#'
+#' @export
+plot.CMBcorrelation <-
+  function (x, ...) {
       x0 <- x
       attributes(x0)$class <- "variogram"
-      plot(x0, ylab= "sample correlation")
-    }
+      plot(x0, ylab= "sample correlation", ...)
   }
 
 # covCMB <- function(cmbdf,

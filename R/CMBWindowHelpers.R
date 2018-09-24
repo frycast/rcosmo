@@ -321,3 +321,63 @@ winType <- function(win, new.type)
 {
   return(winType(win, new.type = value))
 }
+
+
+
+
+
+#'Get the maximum distance between all points
+#'in a \code{\link{CMBWindow}}
+#'
+#'@param x A CMBWindow object.
+#'
+#'@return The maximum distance between window's points.
+#'
+#'@examples
+#'
+#' ## win is a equilateral spherical triangle which sides are pi/2
+#' win <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
+#' maxWindowDist(win)
+#'
+#'@export
+maxWindowDist <- function(x)
+{
+
+  # Create temporary window in cartesian coordinates for dist and area
+  if ( coords(x) == "cartesian" ) {
+
+    win.xyz <- x
+
+  } else {
+
+    win.xyz <- sph2car(x)
+  }
+
+  # Calculate maximum distance
+  max.dist <- switch(winType(x),
+                     polygon = polygonMaxDist(win.xyz),
+                     minus.polygon = pi,
+                     disc = 2*as.numeric(x$r),
+                     minus.disc = pi,
+                     stop(paste("Could not determine window type",
+                                "using rcosmo::winType")))
+
+  return(max.dist)
+}
+
+## HELPER FUNCTION FOR maxWindowDist
+polygonMaxDist <- function(win)
+{
+  max.dist <- 0
+  for ( i in 1:(nrow(win) - 1) )
+  {
+    for ( j in (i+1):nrow(win) )
+    {
+      dist <- geoDist(win[i,], win[j,])
+      if ( dist > max.dist ) max.dist <- dist
+    }
+  }
+
+  return(max.dist)
+}
+

@@ -34,16 +34,14 @@ ordering scheme.
 }
 \examples{
 
-## Find the closest HEALPix pixel center at resolution k=1 for
+## Find the closest HEALPix pixel center at resolution j=2 for
 ## the point (0.6,0.8,0)
 
 point <- c(0.6,0.8,0)
-k <- 1
-cpoint <- nestSearch(point, nside=k)
+j <- 2
+cpoint <- nestSearch(point, nside = 2^j)
 
 ## Plot the closest pixel center in blue and the point (0.6,0.8,0) in red
-j <- log2(k)
-
 displayPixels(j, j, plot.j=j, spix=c(cpoint$pix), size=5, incl.labels =FALSE)
 rgl::plot3d(point[1], point[2], point[3], col="red", size = 5, add = TRUE)
 

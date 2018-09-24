@@ -44,19 +44,6 @@ coords <- function(x, ...) UseMethod("coords", x)
 #'@export
 geoArea <- function(x) UseMethod("geoArea", x)
 
-#'maxDist generic
-#'
-#' Detailed descriptions and and examples can be found in documentation for specific
-#' maxDist functions \code{\link{maxDist.CMBDataFrame}}, \code{\link{maxDist.CMBWindow}}
-#'
-#'@param x An object.
-#'
-#'@seealso
-#'\code{\link{maxDist.CMBDataFrame}}
-#'\code{\link{maxDist.CMBWindow}}
-#'
-#'@export
-maxDist <- function(x) UseMethod("maxDist", x)
 
 #'pix generic
 #'

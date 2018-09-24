@@ -14,14 +14,21 @@ If this is a \code{\link{HPDataFrame}} or \code{\link{CMBDataFrame}}
 and coordinate columns are missing, then coordinates will be
 assigned based on HEALPix pixel indices.}
 
-\item{point}{A point on the unit sphere in cartesian coordinates.}
+\item{point}{An optional target point on the unit sphere
+in cartesian coordinates, in which case all distances are
+calculated between \code{point} and the points in \code{df}.}
 }
 \value{
-the shortest distance from \code{point} to the
-points specified by the rows of \code{df}
+If \code{point} is specified: the shortest
+distance from \code{point} to the
+points specified by the rows of \code{df}.
+If \code{point} is not specified: the shortest
+distance pairwise between points in \code{df}.
 }
 \description{
-Get the minimum distance between a point and points in a data frame
+Get the minimum distance either between all points in a data.frame
+pairwise, or between all points in a data.frame and one target
+point.
 }
 \examples{
 

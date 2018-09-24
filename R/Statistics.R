@@ -92,7 +92,7 @@ covCMB <- function(cmbdf,
   {
     if (calc.max.dist)
     {
-      max.dist <- maxDist_internal(cmbdf)
+      max.dist <- maxDist_internal2(cmbdf)
     }
 
 

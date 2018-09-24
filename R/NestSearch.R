@@ -64,10 +64,11 @@ nestSearch <- function(target, nside,
 
     ## FIX ME :
     # nestSearch_step should be able to take pix.j1
-    # as a matrix where row k is 9 pixels inside
-    # which the closest grandchild pixel to target
-    # should be found (currently it just unlists h)
-    # and searches amongst all pixels for every target.
+    # as a list where element k is the 7-9 pixels inside
+    # which the closest grandchild pixel to the kth
+    # element of target
+    # should be found (currently it just unlists h
+    # and searches amongst all pixels for every target).
     ##
     h <- unique(as.numeric(unlist(h)))
 

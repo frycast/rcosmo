@@ -2,10 +2,9 @@
 % Please edit documentation in R/Statistics.R
 \name{plot.variogram}
 \alias{plot.variogram}
+\alias{Plot}
+\alias{variogram}
 \title{Plot variogram}
-\usage{
-\method{plot}{variogram}(x, ...)
-}
 \arguments{
 \item{x}{An object of class variogram.}
 
@@ -16,7 +15,7 @@ Produces a plot with the sample variogram.
 }
 \description{
 Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
-\code{\link{geoR}} package.
+\strong{geoR} package.
 }
 \examples{
 
@@ -24,11 +23,11 @@ Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
 # downloadCMBMap(foreground = "smica", nside = 1024)
 # df <- CMBDataFrame("CMB_map_smica1024.fits")
 # cmbdf <- sampleCMB(df, sample.size = 100000)
-# varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
+# varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=1000)
 # plot(varcmb)
 
 }
 \references{
-\code{\link{variogramCMB}}, \code{\link{variogram}}, \link{geoR},
+\strong{geoR} package, \code{\link{variogramCMB}}, \code{\link[geoR]{variog}},
 \code{\link[geoR]{plot.variogram}}
 }

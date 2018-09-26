@@ -4,7 +4,7 @@
 \alias{plotAngDis}
 \title{Plot angular scaterplots and means}
 \usage{
-plotAngDis(cmbdf, intensities = "I", ...)
+plotAngDis(cmbdf, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A  full \code{\link{CMBDataFrame}} or a windowed

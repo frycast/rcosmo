@@ -4,7 +4,7 @@
 \alias{fmf}
 \title{First Minkowski functional}
 \usage{
-fmf(cmbdf, alpha, intensities = "I", ...)
+fmf(cmbdf, alpha, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

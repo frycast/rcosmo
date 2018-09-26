@@ -4,7 +4,7 @@
 \alias{extrCMB}
 \title{Extreme values}
 \usage{
-extrCMB(cmbdf, win, n, intensities = "I", ...)
+extrCMB(cmbdf, win, n, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

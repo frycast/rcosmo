@@ -4,7 +4,7 @@
 \alias{qqplotWin}
 \title{Quantile-Quantile plots for \code{\link{CMBWindow}}s}
 \usage{
-qqplotWin(cmbdf, win1, win2, intensities = "I", ...)
+qqplotWin(cmbdf, win1, win2, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -21,6 +21,11 @@ A list with quantile components x and y and a QQ plot with a diagonal line
 \description{
 This funcion is a modification of standard \link{qqplot} functions to work
 with \code{\link{CMBWindow}} regions.
+}
+\details{
+\code{\link{qqplotWin}} produces a QQ plot of observations in two
+\code{\link{CMBWindow}}s for the specified \code{\link{CMBDataFrame}} column
+\code{intensities}. The function automatically adds a diagonal line.
 }
 \examples{
 ## Download the map first

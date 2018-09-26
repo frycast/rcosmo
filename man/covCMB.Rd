@@ -37,8 +37,8 @@ either \code{max.dist} must be specified or max.dist will
 default to pi.}
 }
 \value{
-An object of the class CMBcovariance that is a modification of \code{\link{variogram}}
-from the package \link{geoR}  with variogram values replaced by covariances.
+An object of the class CMBcovariance that is a modification of \code{\link[geoR]{variog}}
+from the package \strong{geoR}  with variogram values replaced by covariances.
 
 The attribute "breaks" contains the break points used to create bins.
 The result has \code{num.bins + 1} values since the first value, the sample
@@ -79,5 +79,5 @@ Output is a binned covariance.
 
 }
 \references{
-\code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
+\strong{geoR} package, \code{\link[geoR]{variog}}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
 }

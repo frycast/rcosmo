@@ -37,8 +37,8 @@ either \code{max.dist} must be specified or max.dist will
 default to pi.}
 }
 \value{
-An object of the class CMBcorrelation that is a modification of \code{\link{variogram}}
-from the package \link{geoR} with variogram values replaced by correlation.
+An object of the class CMBcorrelation that is a modification of \code{\link[geoR]{variog}}
+from the package \strong{geoR} with variogram values replaced by correlation.
 
 The attribute "breaks" contains the break points used to create bins.
 The result has \code{num.bins + 1} values since the first value at distance 0 is not
@@ -79,5 +79,5 @@ Output is a binned correlation.
 
 }
 \references{
-\code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{covCMB}}
+\strong{geoR} package,\code{\link[geoR]{variog}},  \code{\link{variogramCMB}}, \code{\link{covCMB}}
 }

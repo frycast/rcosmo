@@ -16,7 +16,7 @@ Produces a plot with the sample correlation function.
 }
 \description{
 Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.variogram}} from
-\code{\link{geoR}} package.
+\strong{geoR} package.
 }
 \examples{
 
@@ -29,6 +29,6 @@ Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.vario
 
 }
 \references{
-\code{\link{corrCMB}}, \code{\link{variogram}}, \link{geoR},
+\strong{geoR} package, \code{\link{corrCMB}}, \code{\link[geoR]{variog}},
 \code{\link{plot.variogram}}
 }

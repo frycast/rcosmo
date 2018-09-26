@@ -29,8 +29,8 @@
 #'
 #' @return
 #'
-#' An object of the class CMBcovariance that is a modification of \code{\link{variogram}}
-#' from the package \link{geoR}  with variogram values replaced by covariances.
+#' An object of the class CMBcovariance that is a modification of \code{\link[geoR]{variog}}
+#' from the package \strong{geoR}  with variogram values replaced by covariances.
 #'
 #' The attribute "breaks" contains the break points used to create bins.
 #' The result has \code{num.bins + 1} values since the first value, the sample
@@ -56,7 +56,7 @@
 #' }
 #'
 #'
-#'@references \code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
+#'@references \strong{geoR} package, \code{\link[geoR]{variog}}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
 #'
 #'@examples
 #' ## Download the map first
@@ -205,8 +205,8 @@ covCMB <- function(cmbdf,
 #'
 #' @return
 #'
-#' An object of the class CMBcorrelation that is a modification of \code{\link{variogram}}
-#' from the package \link{geoR} with variogram values replaced by correlation.
+#' An object of the class CMBcorrelation that is a modification of \code{\link[geoR]{variog}}
+#' from the package \strong{geoR} with variogram values replaced by correlation.
 #'
 #' The attribute "breaks" contains the break points used to create bins.
 #' The result has \code{num.bins + 1} values since the first value at distance 0 is not
@@ -231,7 +231,7 @@ covCMB <- function(cmbdf,
 #' }
 #'
 #'
-#'@references \code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{covCMB}}
+#'@references \strong{geoR} package,\code{\link[geoR]{variog}},  \code{\link{variogramCMB}}, \code{\link{covCMB}}
 #'
 #'@examples
 #'
@@ -291,7 +291,7 @@ return(corrCMB)}
 #' default to pi.
 #'
 #' @return
-#' An object of class \code{\link{variogram}} specified in the package \link{geoR}.
+#' An object of class \code{\link[geoR]{variog}} specified in the package \strong{geoR}.
 #'
 #' The attribute "breaks" contains the break points used to create bins.
 #' The result has \code{num.bins + 1} values since the first value at distance 0 is not
@@ -316,7 +316,7 @@ return(corrCMB)}
 #' }
 #'
 #'
-#'@references \code{\link{variogram}}, \link{geoR}, \code{\link{covCMB}}, \code{\link{corrCMB}}
+#'@references \strong{geoR} package, \code{\link[geoR]{variog}},  \code{\link{covCMB}}, \code{\link{corrCMB}}
 #'
 #'@examples
 #'
@@ -348,7 +348,7 @@ return(varCMB)}
 #'Plot variogram
 #'
 #'Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
-#'\code{\link{geoR}} package.
+#'\strong{geoR} package.
 #'
 #'@param x An object of class variogram.
 #'@param ... Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.
@@ -356,7 +356,7 @@ return(varCMB)}
 #'
 #'@return Produces a plot with the sample variogram.
 #'
-#'@references \code{\link{variogramCMB}}, \code{\link{variogram}}, \link{geoR},
+#'@references \strong{geoR} package, \code{\link{variogramCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link[geoR]{plot.variogram}}
 #'
 #'@examples
@@ -365,25 +365,26 @@ return(varCMB)}
 #' # downloadCMBMap(foreground = "smica", nside = 1024)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
+#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=1000)
 #' # plot(varcmb)
 #'
-#' @export
-plot.variogram <-  function (x, ...) {
-  plot(x, ylab= "sample variogram", ...)
-  }
+#'@name plot.variogram
+#'
+#' @aliases plot.variogram Plot variogram
+#'
+NULL
 
 #'Plot CMBcovariance
 #'
 #'Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variogram}} from
-#'\code{\link{geoR}} package.
+#'\strong{geoR} package.
 #'
 #'@param x  An object of class CMBCovariance.
 #'@param ...  Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.
 #'
 #'@return Produces a plot with the sample covariance function.
 #'
-#'@references \code{\link{covCMB}}, \code{\link{variogram}}, \link{geoR},
+#'@references \strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link[geoR]{plot.variogram}}
 #'
 #'@examples
@@ -405,14 +406,14 @@ plot.CMBcovariance <-  function (x, ...) {
 #'Plot CMBcorrelation
 #'
 #'Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.variogram}} from
-#'\code{\link{geoR}} package.
+#'\strong{geoR} package.
 #'
 #'@param x  An object of class CMBCorrelation.
 #'@param ...  Extra arguments as in \code{\link{plot.variogram}} passed to plot.default.
 #'
 #'@return Produces a plot with the sample correlation function.
 #'
-#'@references \code{\link{corrCMB}}, \code{\link{variogram}}, \link{geoR},
+#'@references \strong{geoR} package, \code{\link{corrCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link{plot.variogram}}
 #'
 #'@examples
@@ -531,7 +532,7 @@ Cov_func <- function(mat, Dfl , l)  {
 #' # plotAngDis(cmbdf.win, intensities)
 #'
 #'@export
-plotAngDis <- function(cmbdf, intensities = "I", ...)
+plotAngDis <- function(cmbdf, intensities = "I")
 {
   coords(cmbdf) <- "spherical"
 
@@ -567,7 +568,7 @@ plotAngDis <- function(cmbdf, intensities = "I", ...)
     legend = rownames(theta.mean),
     col = "red",
     ylim = 1.1 * range(theta.mean),
-    xlab = "",
+    xlab = " ",
     ylab = "Mean Values",
     xaxt = 'n'
   )
@@ -657,7 +658,7 @@ sampleCMB <- function(cmbdf, sample.size)
 #' fmf(cmbdf.win, 0, 4)
 #'
 #'@export
-fmf <- function(cmbdf, alpha, intensities = "I", ...)
+fmf <- function(cmbdf, alpha, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -718,7 +719,7 @@ exprob <- function(cmbdf, win, alpha, intensities = "I")
 #' This funcion is a modification of standard \link{qqplot} functions to work
 #' with \code{\link{CMBWindow}} regions.
 #'
-#' \code{\link{qqplotWin} produces a QQ plot of observations in two
+#' \code{\link{qqplotWin}} produces a QQ plot of observations in two
 #' \code{\link{CMBWindow}}s for the specified \code{\link{CMBDataFrame}} column
 #' \code{intensities}. The function automatically adds a diagonal line.
 #'
@@ -746,7 +747,7 @@ exprob <- function(cmbdf, win, alpha, intensities = "I")
 #' # qqplotWin(cmbdf, win1, win2)
 #'
 #'@export
-qqplotWin <- function(cmbdf, win1, win2, intensities = "I", ...)
+qqplotWin <- function(cmbdf, win1, win2, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -794,7 +795,7 @@ qqplotWin <- function(cmbdf, win1, win2, intensities = "I", ...)
 #' # qqnormWin(cmbdf, win1)
 #'
 #'@export
-qqnormWin <- function(cmbdf, win, intensities = "I", ...)
+qqnormWin <- function(cmbdf, win, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -890,7 +891,7 @@ entropyCMB <- function(cmbdf, win, intensities = "I", method)
 #' # chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
-chi2CMB <- function(cmbdf, win1, win2, intensities = "I", ...)
+chi2CMB <- function(cmbdf, win1, win2, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -944,7 +945,7 @@ chi2CMB <- function(cmbdf, win1, win2, intensities = "I", ...)
 #' # plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
 #'
 #'@export
-extrCMB <- function(cmbdf, win, n, intensities = "I", ...)
+extrCMB <- function(cmbdf, win, n, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -981,7 +982,7 @@ extrCMB <- function(cmbdf, win, n, intensities = "I", ...)
 #'Estimated q-statistics for observations in a list of \code{\link{CMBWindow}}s
 #'
 #'@references
-#'Wang, JF; Zhang, TL; Fu, BJ (2016). A measure of spatial
+#'Wang, J.F, Zhang, T.L, Fu, B.J. (2016). A measure of spatial
 #'stratified heterogeneity. Ecological Indicators. 67: 250–256.
 #'
 #'@examples
@@ -997,7 +998,7 @@ extrCMB <- function(cmbdf, win, n, intensities = "I", ...)
 #' # qstat(cmbdf, lw)
 #'
 #'@export
-qstat <- function(cmbdf, listwin, intensities = "I", ...)
+qstat <- function(cmbdf, listwin, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {

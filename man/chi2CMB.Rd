@@ -4,7 +4,7 @@
 \alias{chi2CMB}
 \title{Chi-squared statistic for two \code{\link{CMBWindow}}s}
 \usage{
-chi2CMB(cmbdf, win1, win2, intensities = "I", ...)
+chi2CMB(cmbdf, win1, win2, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

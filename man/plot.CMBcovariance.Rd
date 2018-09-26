@@ -16,7 +16,7 @@ Produces a plot with the sample covariance function.
 }
 \description{
 Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variogram}} from
-\code{\link{geoR}} package.
+\strong{geoR} package.
 }
 \examples{
 
@@ -29,6 +29,6 @@ Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variog
 
 }
 \references{
-\code{\link{covCMB}}, \code{\link{variogram}}, \link{geoR},
+\strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
 \code{\link[geoR]{plot.variogram}}
 }

@@ -37,7 +37,7 @@ either \code{max.dist} must be specified or max.dist will
 default to pi.}
 }
 \value{
-An object of class \code{\link{variogram}} specified in the package \link{geoR}.
+An object of class \code{\link[geoR]{variog}} specified in the package \strong{geoR}.
 
 The attribute "breaks" contains the break points used to create bins.
 The result has \code{num.bins + 1} values since the first value at distance 0 is not
@@ -78,5 +78,5 @@ geodesic distance between locations. Output is a binned variogram.
 
 }
 \references{
-\code{\link{variogram}}, \link{geoR}, \code{\link{covCMB}}, \code{\link{corrCMB}}
+\strong{geoR} package, \code{\link[geoR]{variog}},  \code{\link{covCMB}}, \code{\link{corrCMB}}
 }

@@ -4,7 +4,7 @@
 \alias{qstat}
 \title{q-statistic}
 \usage{
-qstat(cmbdf, listwin, intensities = "I", ...)
+qstat(cmbdf, listwin, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -41,6 +41,6 @@ stratified heterogeneity, 1 to perfect spatial stratified heterogeneity.
 
 }
 \references{
-Wang, JF; Zhang, TL; Fu, BJ (2016). A measure of spatial
+Wang, J.F, Zhang, T.L, Fu, B.J. (2016). A measure of spatial
 stratified heterogeneity. Ecological Indicators. 67: 250–256.
 }

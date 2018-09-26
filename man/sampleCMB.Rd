@@ -2,7 +2,7 @@
 % Please edit documentation in R/Statistics.R
 \name{sampleCMB}
 \alias{sampleCMB}
-\title{Take a simple random sample from a CMBDataFrame}
+\title{Take a simple random sample from a \code{\link{CMBDataFrame}}}
 \usage{
 sampleCMB(cmbdf, sample.size)
 }
@@ -12,12 +12,12 @@ sampleCMB(cmbdf, sample.size)
 \item{sample.size}{the desired sample size.}
 }
 \value{
-A CMBDataFrame with size sample.size,
+A \code{\link{CMBDataFrame}} with size sample.size,
 whose rows comprise a simple random sample of the rows
 from the input CMBDataFrame.
 }
 \description{
-This function returns a CMBDataFrame with size sample.size,
+This function returns a \code{\link{CMBDataFrame}} with size sample.size,
 whose rows comprise a simple random sample of the rows
 from the input CMBDataFrame.
 }
@@ -27,8 +27,8 @@ from the input CMBDataFrame.
 # df <- CMBDataFrame("CMB_map_smica1024.fits")
 # plot(sampleCMB(df, sample.size = 800000))
 
-df <- CMBDataFrame(nside = 16, ordering = "nested")
+df <- CMBDataFrame(nside = 16, I = rnorm(12 * 16 ^ 2), ordering = "nested")
 df.sample <- sampleCMB(df, sample.size = 100)
-df
+df.sample
 
 }

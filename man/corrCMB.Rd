@@ -64,7 +64,7 @@ least squares}
 }
 \description{
 This function provides an empirical correlation function for data
-in a CMBDataFrame or data.frame. It assumes that data are from a stationary spherical
+in a \code{\link{CMBDataFrame}} or data.frame. It assumes that data are from a stationary spherical
 random field and the correlation depends only on a geodesic distance between locations.
 Output is a binned correlation.
 }

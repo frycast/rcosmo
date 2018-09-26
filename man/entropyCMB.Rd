@@ -4,14 +4,14 @@
 \alias{entropyCMB}
 \title{CMB Entropy}
 \usage{
-entropyCMB(cmbdf, win, varindex = 1, method)
+entropyCMB(cmbdf, win, intensities = "I", method)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
 \item{win}{A \code{\link{CMBWindow}}}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 
 \item{method}{A method to estimate entropy, see \link{entropy}}
 }
@@ -20,9 +20,9 @@ Estimated Shannon entropy for observations in \code{\link{CMBWindow}}
 }
 \description{
 This function returns an estimated entropy for the specified
-\code{\link{CMBDataFrame}} column  \code{varindex} and \code{\link{CMBWindow}}
+\code{\link{CMBDataFrame}} column  \code{intensities} and \code{\link{CMBWindow}}
 region. The functions employes the function \link{entropy} and uses histogram
-counts of \code{varindex} for computations. All arguments of the standard
+counts of \code{intensities} for computations. All arguments of the standard
 \link{entropy} can be used.
 }
 \examples{

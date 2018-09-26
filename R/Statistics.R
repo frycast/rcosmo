@@ -1,7 +1,7 @@
 #' Sample covariance function
 #'
 #' This function provides an empirical covariance function for data
-#' in a CMBDataFrame or data.frame. It assumes that data are from a stationary spherical
+#' in a \code{\link{CMBDataFrame}} or data.frame. It assumes that data are from a stationary spherical
 #' random field and the covariance depends only on a geodesic distance between locations.
 #' Output is a binned covariance.
 #'
@@ -170,7 +170,7 @@ covCMB <- function(cmbdf,
 #' Sample correlation function
 #'
 #' This function provides an empirical correlation function for data
-#' in a CMBDataFrame or data.frame. It assumes that data are from a stationary spherical
+#' in a \code{\link{CMBDataFrame}} or data.frame. It assumes that data are from a stationary spherical
 #' random field and the correlation depends only on a geodesic distance between locations.
 #' Output is a binned correlation.
 #'
@@ -511,7 +511,7 @@ Cov_func <- function(mat, Dfl , l)  {
 #'@param cmbdf A  full \code{\link{CMBDataFrame}} or a windowed
 #'\code{\link{CMBDataFrame}}
 #'
-#'@param colindex An index of CMBDataFrame column with measured values
+#'@param intensities  A CMBDataFrame column with measured values
 #'
 #'@return
 #' 2x2 plot. The first row shows scaterplots. The second row gives
@@ -527,11 +527,11 @@ Cov_func <- function(mat, Dfl , l)  {
 #' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
 #' # cmbdf.win <- window(df.sample, new.window = win)
 #' #
-#' # colindex <- 3
-#' # plotAngDis(cmbdf.win,colindex)
+#' # intensities <- "I"
+#' # plotAngDis(cmbdf.win, intensities)
 #'
 #'@export
-plotAngDis <- function(cmbdf, colindex)
+plotAngDis <- function(cmbdf, intensities = "I", ...)
 {
   coords(cmbdf) <- "spherical"
 
@@ -542,7 +542,7 @@ plotAngDis <- function(cmbdf, colindex)
       right = FALSE
     )
   theta.mean <-
-    t(tapply(as.data.frame(cmbdf)[, colindex], thetabreaks, mean,
+    t(tapply(as.data.frame(cmbdf)[, intensities], thetabreaks, mean,
              na.rm = TRUE))
 
   phibreaks <-
@@ -550,13 +550,13 @@ plotAngDis <- function(cmbdf, colindex)
         breaks = graphics::hist(cmbdf$phi, plot = FALSE)$breaks,
         right = FALSE)
   phi.mean <-
-    t(tapply(as.data.frame(cmbdf)[, colindex], phibreaks, mean,
+    t(tapply(as.data.frame(cmbdf)[, intensities], phibreaks, mean,
              na.rm = TRUE))
 
   graphics::par(mfrow = c(2, 2), mar = c(1, 4, 1, 1) + 0.5)
-  graphics::plot(as.data.frame(cmbdf[, c(1, colindex)]), type = "p", col = "red")
+  graphics::plot(as.data.frame(cmbdf[, c("theta", intensities)]), type = "p", col = "red")
   graphics::plot(
-    as.data.frame(cmbdf[, c(2, colindex)]),
+    as.data.frame(cmbdf[, c("phi", intensities)]),
     ylab = "",
     type = "p",
     col = "blue"
@@ -590,9 +590,9 @@ plotAngDis <- function(cmbdf, colindex)
 
 
 
-#' Take a simple random sample from a CMBDataFrame
+#' Take a simple random sample from a \code{\link{CMBDataFrame}}
 #'
-#' This function returns a CMBDataFrame with size sample.size,
+#' This function returns a \code{\link{CMBDataFrame}} with size sample.size,
 #' whose rows comprise a simple random sample of the rows
 #' from the input CMBDataFrame.
 #'
@@ -600,7 +600,7 @@ plotAngDis <- function(cmbdf, colindex)
 #'@param sample.size the desired sample size.
 #'
 #'@return
-#' A CMBDataFrame with size sample.size,
+#' A \code{\link{CMBDataFrame}} with size sample.size,
 #' whose rows comprise a simple random sample of the rows
 #' from the input CMBDataFrame.
 #'
@@ -610,9 +610,9 @@ plotAngDis <- function(cmbdf, colindex)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # plot(sampleCMB(df, sample.size = 800000))
 #'
-#' df <- CMBDataFrame(nside = 16, ordering = "nested")
+#' df <- CMBDataFrame(nside = 16, I = rnorm(12 * 16 ^ 2), ordering = "nested")
 #' df.sample <- sampleCMB(df, sample.size = 100)
-#' df
+#' df.sample
 #'
 #'@export
 sampleCMB <- function(cmbdf, sample.size)
@@ -636,7 +636,7 @@ sampleCMB <- function(cmbdf, sample.size)
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param alpha A numeric threshold level.
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'@return
 #' The area of the exceedance region
 #'
@@ -657,13 +657,13 @@ sampleCMB <- function(cmbdf, sample.size)
 #' fmf(cmbdf.win, 0, 4)
 #'
 #'@export
-fmf <- function(cmbdf, alpha, varindex=1)
+fmf <- function(cmbdf, alpha, intensities = "I", ...)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
-  pixelArea(cmbdf)*sum(cmbdf[,varindex] > alpha)
+  pixelArea(cmbdf)*sum(cmbdf[,intensities, drop = TRUE] > alpha)
 }
 
 
@@ -671,13 +671,13 @@ fmf <- function(cmbdf, alpha, varindex=1)
 #' Threshold exceedance probability
 #'
 #' This function returns an estimated exceedance probability for the specified
-#' \code{\link{CMBDataFrame}} column  \code{varindex}, threshold level
+#' \code{\link{CMBDataFrame}} column  \code{intensities}, threshold level
 #' \eqn{alpha} and \code{\link{CMBWindow}} region.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
 #'@param alpha A numeric threshold level.
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'
 #'@return
 #'
@@ -689,13 +689,15 @@ fmf <- function(cmbdf, alpha, varindex=1)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 1000)
 #'
-#' # alpha <- mean(cmbdf[,1])
+#' # intensities <- "I"
+#' # alpha <- mean(cmbdf[,intensities, drop = TRUE])
+#' # alpha
 #'
 #' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 #' # exprob(cmbdf, win1, alpha)
 #'
 #'@export
-exprob <- function(cmbdf, win, alpha, varindex=1)
+exprob <- function(cmbdf, win, alpha, intensities = "I")
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -706,7 +708,7 @@ exprob <- function(cmbdf, win, alpha, varindex=1)
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  sum(cmbdf.win[,varindex] > alpha)/sum(1-is.na(cmbdf.win[,varindex]))
+  sum(cmbdf.win[,intensities, drop = TRUE] > alpha)/sum(1-is.na(cmbdf.win[,intensities, drop = TRUE]))
 }
 
 
@@ -718,12 +720,12 @@ exprob <- function(cmbdf, win, alpha, varindex=1)
 #'
 #' \code{\link{qqplotWin} produces a QQ plot of observations in two
 #' \code{\link{CMBWindow}}s for the specified \code{\link{CMBDataFrame}} column
-#' \code{varindex}. The function automatically adds a diagonal line.
+#' \code{intensities}. The function automatically adds a diagonal line.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win1 A \code{\link{CMBWindow}}
 #'@param win2 A \code{\link{CMBWindow}}
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'
 #'@return
 #'
@@ -744,7 +746,7 @@ exprob <- function(cmbdf, win, alpha, varindex=1)
 #' # qqplotWin(cmbdf, win1, win2)
 #'
 #'@export
-qqplotWin <- function(cmbdf, win1, win2, varindex=1)
+qqplotWin <- function(cmbdf, win1, win2, intensities = "I", ...)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -756,9 +758,9 @@ qqplotWin <- function(cmbdf, win1, win2, varindex=1)
   }
   cmbdf.win1 <- window(cmbdf, new.window = win1)
   cmbdf.win2 <- window(cmbdf, new.window = win2)
-  stats::qqplot(cmbdf.win1[,varindex], cmbdf.win2[,varindex])
+  stats::qqplot(cmbdf.win1[,intensities, drop = TRUE], cmbdf.win2[,intensities, drop = TRUE])
   graphics::abline(c(0,1))
-  stats::qqplot(cmbdf.win1[,varindex], cmbdf.win2[,varindex],plot.it = FALSE)
+  stats::qqplot(cmbdf.win1[,intensities, drop = TRUE], cmbdf.win2[,intensities, drop = TRUE],plot.it = FALSE)
 }
 
 #' Normal QQ plot for \code{\link{CMBWindow}}
@@ -767,14 +769,14 @@ qqplotWin <- function(cmbdf, win1, win2, varindex=1)
 #' with \code{\link{CMBWindow}} regions.
 #'
 #'\code{\link{qqnormWin}} returns a normal QQ plot of for the specified
-#'\code{\link{CMBDataFrame}} column \code{varindex} and \code{\link{CMBWindow}}
+#'\code{\link{CMBDataFrame}} column \code{intensities} and \code{\link{CMBWindow}}
 #'region. The function automatically adds a line of a “theoretical” normal
 #'quantile-quantile plot.
 #'
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'
 #'@return
 #'
@@ -792,7 +794,7 @@ qqplotWin <- function(cmbdf, win1, win2, varindex=1)
 #' # qqnormWin(cmbdf, win1)
 #'
 #'@export
-qqnormWin <- function(cmbdf, win, varindex=1)
+qqnormWin <- function(cmbdf, win, intensities = "I", ...)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -803,23 +805,23 @@ qqnormWin <- function(cmbdf, win, varindex=1)
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  stats::qqnorm(cmbdf.win[,varindex])
-  stats::qqline(cmbdf.win[,varindex])
-  stats::qqnorm(cmbdf.win[,varindex],plot.it = FALSE)
+  stats::qqnorm(cmbdf.win[,intensities, drop = TRUE])
+  stats::qqline(cmbdf.win[,intensities, drop = TRUE])
+  stats::qqnorm(cmbdf.win[,intensities, drop = TRUE],plot.it = FALSE)
 }
 
 
 #' CMB Entropy
 #'
 #'This function returns an estimated entropy for the specified
-#'\code{\link{CMBDataFrame}} column  \code{varindex} and \code{\link{CMBWindow}}
+#'\code{\link{CMBDataFrame}} column  \code{intensities} and \code{\link{CMBWindow}}
 #'region. The functions employes the function \link{entropy} and uses histogram
-#'counts of \code{varindex} for computations. All arguments of the standard
+#'counts of \code{intensities} for computations. All arguments of the standard
 #'\link{entropy} can be used.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'@param method	 A method to estimate entropy, see \link{entropy}
 #'
 #'@return
@@ -837,7 +839,7 @@ qqnormWin <- function(cmbdf, win, varindex=1)
 #' # entropyCMB(cmbdf, win1)
 #'
 #'@export
-entropyCMB <- function(cmbdf, win, varindex=1, method)
+entropyCMB <- function(cmbdf, win, intensities = "I", method)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -848,7 +850,7 @@ entropyCMB <- function(cmbdf, win, varindex=1, method)
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  y <- graphics::hist(cmbdf.win[,varindex], plot = FALSE)$counts
+  y <- graphics::hist(cmbdf.win[,intensities, drop = TRUE], plot = FALSE)$counts
 
   if (missing(method)) return(entropy::entropy(y))
   return(entropy::entropy(y, method = method))
@@ -856,15 +858,15 @@ entropyCMB <- function(cmbdf, win, varindex=1, method)
 
 #'Chi-squared statistic for two \code{\link{CMBWindow}}s
 #'
-#'This function returns the empirical chi-squared statistic for \code{varindex}
+#'This function returns the empirical chi-squared statistic for \code{intensities}
 #'observations from two \code{\link{CMBWindow}}s of the specified
 #'\code{\link{CMBDataFrame}}. The functions employes the function \link{chi2.empirical} and uses histogram
-#'counts of \code{varindex} for computations.
+#'counts of \code{intensities} for computations.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win1 A \code{\link{CMBWindow}}
 #'@param win2 A \code{\link{CMBWindow}}
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'
 #'@return
 #'
@@ -888,7 +890,7 @@ entropyCMB <- function(cmbdf, win, varindex=1, method)
 #' # chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
-chi2CMB <- function(cmbdf, win1, win2, varindex=1)
+chi2CMB <- function(cmbdf, win1, win2, intensities = "I", ...)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -900,15 +902,15 @@ chi2CMB <- function(cmbdf, win1, win2, varindex=1)
   }
   cmbdf.win1 <- window(cmbdf, new.window = win1)
   cmbdf.win2 <- window(cmbdf, new.window = win2)
-  y10 <- graphics::hist(cmbdf.win1[,varindex], plot = FALSE)$counts
-  y20 <- graphics::hist(cmbdf.win2[,varindex], plot = FALSE)$counts
+  y10 <- graphics::hist(cmbdf.win1[,intensities, drop = TRUE], plot = FALSE)$counts
+  y20 <- graphics::hist(cmbdf.win2[,intensities, drop = TRUE], plot = FALSE)$counts
   nb <- min(length(y10),length(y20))
 
-  combI <- c(cmbdf.win1[,varindex],cmbdf.win2[,varindex])
+  combI <- c(cmbdf.win1[,intensities, drop = TRUE],cmbdf.win2[,intensities, drop = TRUE])
   yb <- seq(min(combI), max(combI), length.out=min(nb))
 
-  y1 <- graphics::hist(cmbdf.win1[,varindex], breaks=yb, plot = FALSE)$counts
-  y2 <- graphics::hist(cmbdf.win2[,varindex], breaks=yb, plot = FALSE)$counts
+  y1 <- graphics::hist(cmbdf.win1[,intensities, drop = TRUE], breaks=yb, plot = FALSE)$counts
+  y2 <- graphics::hist(cmbdf.win2[,intensities, drop = TRUE], breaks=yb, plot = FALSE)$counts
 
   entropy::chi2.empirical(y1, y2)
 }
@@ -916,13 +918,13 @@ chi2CMB <- function(cmbdf, win1, win2, varindex=1)
 #' Extreme values
 #'
 #' This function returns \code{n} largest extreme values for the specified
-#' \code{\link{CMBDataFrame}} column  \code{varindex} and
+#' \code{\link{CMBDataFrame}} column  \code{intensities} and
 #' \code{\link{CMBWindow}} region.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
 #'@param n An integer value.
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'
 #'@return
 #'
@@ -942,7 +944,7 @@ chi2CMB <- function(cmbdf, win1, win2, varindex=1)
 #' # plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
 #'
 #'@export
-extrCMB <- function(cmbdf, win, n, varindex=1)
+extrCMB <- function(cmbdf, win, n, intensities = "I", ...)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
@@ -953,7 +955,7 @@ extrCMB <- function(cmbdf, win, n, varindex=1)
     stop("Argument must be a CMBWindow")
   }
   cmbdf.win <- window(cmbdf, new.window = win)
-  cmbdf.win[order(cmbdf.win[,varindex]),][1:n,]
+  cmbdf.win[order(cmbdf.win[,intensities, drop = TRUE]),][1:n,]
 }
 
 
@@ -961,17 +963,17 @@ extrCMB <- function(cmbdf, win, n, varindex=1)
 #'
 #'
 #'This function returns an estimated q-statistic for the specified  column
-#'\code{varindex} in a \code{\link{CMBDataFrame}} and the list of
+#'\code{intensities} in a \code{\link{CMBDataFrame}} and the list of
 #'\code{\link{CMBWindow}}s.
 #'
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param listwin A list of \code{\link{CMBWindow}}s
-#'@param varindex An index of CMBDataFrame column with measured values.
+#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
 #'
 #'@details The q-statistics is used to measure spatial stratified heterogeneity
 #'and takes values in [0, 1]. It gives the percent of the variance of
-#'\code{varindex} explained by the stratification. 0 corresponds to no spatial
+#'\code{intensities} explained by the stratification. 0 corresponds to no spatial
 #'stratified heterogeneity, 1 to perfect spatial stratified heterogeneity.
 #'
 #'@return
@@ -995,14 +997,14 @@ extrCMB <- function(cmbdf, win, n, varindex=1)
 #' # qstat(cmbdf, lw)
 #'
 #'@export
-qstat <- function(cmbdf, listwin, varindex=1)
+qstat <- function(cmbdf, listwin, intensities = "I", ...)
 {
   if ( !is.CMBDataFrame(cmbdf) )
   {
     stop("Argument must be a CMBDataFrame")
   }
   cmbint <- sapply(listwin,function(v1,v2){
-    window(v1, new.window = v2)},v1=cmbdf[,varindex])
+    window(v1, new.window = v2)},v1=cmbdf[,intensities, drop = TRUE])
 
   ni <- sapply(cmbint, length)
   sigmai <- sapply(cmbint, stats::var)

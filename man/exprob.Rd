@@ -4,7 +4,7 @@
 \alias{exprob}
 \title{Threshold exceedance probability}
 \usage{
-exprob(cmbdf, win, alpha, varindex = 1)
+exprob(cmbdf, win, alpha, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -13,14 +13,14 @@ exprob(cmbdf, win, alpha, varindex = 1)
 
 \item{alpha}{A numeric threshold level.}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 Estimated threshold exceedance probability
 }
 \description{
 This function returns an estimated exceedance probability for the specified
-\code{\link{CMBDataFrame}} column  \code{varindex}, threshold level
+\code{\link{CMBDataFrame}} column  \code{intensities}, threshold level
 \eqn{alpha} and \code{\link{CMBWindow}} region.
 }
 \examples{
@@ -29,7 +29,9 @@ This function returns an estimated exceedance probability for the specified
 # df <- CMBDataFrame("CMB_map_smica1024.fits")
 # cmbdf <- sampleCMB(df, sample.size = 1000)
 
-# alpha <- mean(cmbdf[,1])
+# intensities <- "I"
+# alpha <- mean(cmbdf[,intensities, drop = TRUE])
+# alpha
 
 # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
 # exprob(cmbdf, win1, alpha)

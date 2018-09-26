@@ -4,7 +4,7 @@
 \alias{chi2CMB}
 \title{Chi-squared statistic for two \code{\link{CMBWindow}}s}
 \usage{
-chi2CMB(cmbdf, win1, win2, varindex = 1)
+chi2CMB(cmbdf, win1, win2, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -13,7 +13,7 @@ chi2CMB(cmbdf, win1, win2, varindex = 1)
 
 \item{win2}{A \code{\link{CMBWindow}}}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 Estimated Chi-squared statistic for observations in two
@@ -21,10 +21,10 @@ Estimated Chi-squared statistic for observations in two
 Chi-squared statistic is inefficient.
 }
 \description{
-This function returns the empirical chi-squared statistic for \code{varindex}
+This function returns the empirical chi-squared statistic for \code{intensities}
 observations from two \code{\link{CMBWindow}}s of the specified
 \code{\link{CMBDataFrame}}. The functions employes the function \link{chi2.empirical} and uses histogram
-counts of \code{varindex} for computations.
+counts of \code{intensities} for computations.
 }
 \examples{
 ## Download the map first

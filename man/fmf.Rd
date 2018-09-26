@@ -4,14 +4,14 @@
 \alias{fmf}
 \title{First Minkowski functional}
 \usage{
-fmf(cmbdf, alpha, varindex = 1)
+fmf(cmbdf, alpha, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
 \item{alpha}{A numeric threshold level.}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 The area of the exceedance region

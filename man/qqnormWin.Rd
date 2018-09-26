@@ -4,14 +4,14 @@
 \alias{qqnormWin}
 \title{Normal QQ plot for \code{\link{CMBWindow}}}
 \usage{
-qqnormWin(cmbdf, win, varindex = 1)
+qqnormWin(cmbdf, win, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
 \item{win}{A \code{\link{CMBWindow}}}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 A list with quantile components x and y and a normal QQ plot with QQ line
@@ -22,7 +22,7 @@ with \code{\link{CMBWindow}} regions.
 }
 \details{
 \code{\link{qqnormWin}} returns a normal QQ plot of for the specified
-\code{\link{CMBDataFrame}} column \code{varindex} and \code{\link{CMBWindow}}
+\code{\link{CMBDataFrame}} column \code{intensities} and \code{\link{CMBWindow}}
 region. The function automatically adds a line of a “theoretical” normal
 quantile-quantile plot.
 }

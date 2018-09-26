@@ -4,7 +4,7 @@
 \alias{extrCMB}
 \title{Extreme values}
 \usage{
-extrCMB(cmbdf, win, n, varindex = 1)
+extrCMB(cmbdf, win, n, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -13,14 +13,14 @@ extrCMB(cmbdf, win, n, varindex = 1)
 
 \item{n}{An integer value.}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 A \code{\link{CMBDataFrame}} with \code{n} largest extreme values
 }
 \description{
 This function returns \code{n} largest extreme values for the specified
-\code{\link{CMBDataFrame}} column  \code{varindex} and
+\code{\link{CMBDataFrame}} column  \code{intensities} and
 \code{\link{CMBWindow}} region.
 }
 \examples{

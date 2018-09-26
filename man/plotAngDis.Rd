@@ -4,13 +4,13 @@
 \alias{plotAngDis}
 \title{Plot angular scaterplots and means}
 \usage{
-plotAngDis(cmbdf, colindex)
+plotAngDis(cmbdf, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A  full \code{\link{CMBDataFrame}} or a windowed
 \code{\link{CMBDataFrame}}}
 
-\item{colindex}{An index of CMBDataFrame column with measured values}
+\item{intensities}{A CMBDataFrame column with measured values}
 }
 \value{
 2x2 plot. The first row shows scaterplots. The second row gives
@@ -29,7 +29,7 @@ produces scaterplots and binned means versus theta and phi angles.
 # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
 # cmbdf.win <- window(df.sample, new.window = win)
 #
-# colindex <- 3
-# plotAngDis(cmbdf.win,colindex)
+# intensities <- "I"
+# plotAngDis(cmbdf.win, intensities)
 
 }

@@ -4,27 +4,27 @@
 \alias{qstat}
 \title{q-statistic}
 \usage{
-qstat(cmbdf, listwin, varindex = 1)
+qstat(cmbdf, listwin, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
 
 \item{listwin}{A list of \code{\link{CMBWindow}}s}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 Estimated q-statistics for observations in a list of \code{\link{CMBWindow}}s
 }
 \description{
 This function returns an estimated q-statistic for the specified  column
-\code{varindex} in a \code{\link{CMBDataFrame}} and the list of
+\code{intensities} in a \code{\link{CMBDataFrame}} and the list of
 \code{\link{CMBWindow}}s.
 }
 \details{
 The q-statistics is used to measure spatial stratified heterogeneity
 and takes values in [0, 1]. It gives the percent of the variance of
-\code{varindex} explained by the stratification. 0 corresponds to no spatial
+\code{intensities} explained by the stratification. 0 corresponds to no spatial
 stratified heterogeneity, 1 to perfect spatial stratified heterogeneity.
 }
 \examples{

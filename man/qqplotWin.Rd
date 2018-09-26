@@ -4,7 +4,7 @@
 \alias{qqplotWin}
 \title{Quantile-Quantile plots for \code{\link{CMBWindow}}s}
 \usage{
-qqplotWin(cmbdf, win1, win2, varindex = 1)
+qqplotWin(cmbdf, win1, win2, intensities = "I", ...)
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}
@@ -13,7 +13,7 @@ qqplotWin(cmbdf, win1, win2, varindex = 1)
 
 \item{win2}{A \code{\link{CMBWindow}}}
 
-\item{varindex}{An index of CMBDataFrame column with measured values.}
+\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 }
 \value{
 A list with quantile components x and y and a QQ plot with a diagonal line

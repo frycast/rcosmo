@@ -157,3 +157,36 @@ window <- function(x, ...) UseMethod("window", x)
 #'
 #'@export
 `window<-` <- function(x, ..., value) UseMethod("window<-", x)
+
+#'plot generic
+#'
+#' Plot empirical variogram type functions. Detailed descriptions and examples can be found in documentation for specific
+#' plot functions \code{\link{plot.variogram}}, \code{\link{plot.CMBcovariance}},
+#' \code{\link{plot.CMBcorrelation}}
+#'
+#'@param x An object.
+#'@param ... Extra arguments.
+#'
+#'@seealso
+#'\code{\link{plot.variogram}}
+#'\code{\link{plot.CMBcovariance}}
+#'\code{\link{plot.CMBcorrelation}}
+#'
+#'@export
+plot <- function(x, ...) UseMethod("plot", x)
+
+#'plot generic
+#'
+#' Plot empirical variogram type functions. Detailed descriptions and and examples can be found in documentation for specific
+#' plot functions \code{\link{plot.variogram}}, \code{\link{plot.CMBcovariance}},
+#' \code{\link{plot.CMBcorrelation}}
+#'
+#'@seealso
+#'\code{\link{plot.variogram}}
+#'\code{\link{plot.CMBcovariance}}
+#'\code{\link{plot.CMBcorrelation}}
+#'
+#'@keywords internal
+#'
+#'@export
+`plot<-` <- function(x, ..., value) UseMethod("plot<-", x)

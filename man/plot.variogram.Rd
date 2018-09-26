@@ -9,8 +9,26 @@
 \arguments{
 \item{x}{An object of class variogram.}
 
-\item{...}{Extra arguments passed to plot.default.}
+\item{...}{Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.}
+}
+\value{
+Produces a plot with the sample variogram.
 }
 \description{
-Plot variogram
+Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
+\code{\link{geoR}} package.
+}
+\examples{
+
+## Download the map first
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# cmbdf <- sampleCMB(df, sample.size = 100000)
+# varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
+# plot(varcmb)
+
+}
+\references{
+\code{\link{variogramCMB}}, \code{\link{variogram}}, \link{geoR},
+\code{\link[geoR]{plot.variogram}}
 }

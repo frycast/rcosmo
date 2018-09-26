@@ -58,6 +58,13 @@
 #'
 #'@references \code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
 #'
+#'@examples
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 100000)
+#' # Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
+#' # Cov
 #'
 #' @export
 covCMB <- function(cmbdf,
@@ -138,7 +145,7 @@ covCMB <- function(cmbdf,
   option <- "bin"
   estimator.type <- "classical"
   trend <- "cte"
-  data.var <-  var(cmbdf$I)
+  data.var <-  stats::var(cmbdf$I)
   n.data <- length(cmbdf$I)
   ##
   beta.ols <- mean(cmbdf$I)
@@ -226,6 +233,14 @@ covCMB <- function(cmbdf,
 #'
 #'@references \code{\link{variogram}}, \link{geoR}, \code{\link{variogramCMB}}, \code{\link{covCMB}}
 #'
+#'@examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 100000)
+#' # corcmb <- corrCMB(cmbdf, max.dist = 0.03, num.bins = 10, sample.size=1000)
+#' # corcmb
 #'
 #' @export
 corrCMB <- function(cmbdf,
@@ -303,6 +318,15 @@ return(corrCMB)}
 #'
 #'@references \code{\link{variogram}}, \link{geoR}, \code{\link{covCMB}}, \code{\link{corrCMB}}
 #'
+#'@examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 100000)
+#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
+#' # varcmb
+#'
 #' @export
 variogramCMB <- function(cmbdf,
                    num.bins = 10,
@@ -323,23 +347,56 @@ return(varCMB)}
 
 #'Plot variogram
 #'
+#'Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
+#'\code{\link{geoR}} package.
+#'
 #'@param x An object of class variogram.
-#'@param ... Extra arguments passed to plot.default.
+#'@param ... Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.
+#'
+#'
+#'@return Produces a plot with the sample variogram.
+#'
+#'@references \code{\link{variogramCMB}}, \code{\link{variogram}}, \link{geoR},
+#'\code{\link[geoR]{plot.variogram}}
+#'
+#'@examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 100000)
+#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
+#' # plot(varcmb)
 #'
 #' @export
-plot.variogram <-
-  function (x, ...) {
-    plot(x, ylab= "sample variogram", ...)
+plot.variogram <-  function (x, ...) {
+  plot(x, ylab= "sample variogram", ...)
   }
 
 #'Plot CMBcovariance
 #'
+#'Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variogram}} from
+#'\code{\link{geoR}} package.
+#'
 #'@param x  An object of class CMBCovariance.
-#'@param ... Extra arguments passed to plot.default.
+#'@param ...  Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.
+#'
+#'@return Produces a plot with the sample covariance function.
+#'
+#'@references \code{\link{covCMB}}, \code{\link{variogram}}, \link{geoR},
+#'\code{\link[geoR]{plot.variogram}}
+#'
+#'@examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 100000)
+#' # Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
+#' # plot(Cov)
 #'
 #' @export
-plot.CMBcovariance <-
-  function (x, ...) {
+plot.CMBcovariance <-  function (x, ...) {
       x0 <- x
       attributes(x0)$class <- "variogram"
       plot(x0, ylab = "sample covariance", ...)
@@ -347,89 +404,32 @@ plot.CMBcovariance <-
 
 #'Plot CMBcorrelation
 #'
-#'@param x An object of class CMBCorrelation.
-#'@param ... Extra arguments passed to plot.default.
+#'Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.variogram}} from
+#'\code{\link{geoR}} package.
+#'
+#'@param x  An object of class CMBCorrelation.
+#'@param ...  Extra arguments as in \code{\link{plot.variogram}} passed to plot.default.
+#'
+#'@return Produces a plot with the sample correlation function.
+#'
+#'@references \code{\link{corrCMB}}, \code{\link{variogram}}, \link{geoR},
+#'\code{\link{plot.variogram}}
+#'
+#'@examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 100000)
+#' # corcmb <- corrCMB(cmbdf, max.dist = 0.03, num.bins = 10, sample.size=1000)
+#' # plot(corcmb)
 #'
 #' @export
-plot.CMBcorrelation <-
-  function (x, ...) {
+plot.CMBcorrelation <-  function (x, ...) {
       x0 <- x
       attributes(x0)$class <- "variogram"
       plot(x0, ylab= "sample correlation", ...)
   }
-
-# covCMB <- function(cmbdf,
-#                    num.bins = 10,
-#                    sample.size,
-#                    max.dist = pi,
-#                    breaks,
-#                    equiareal = TRUE,
-#                    calc.max.dist = FALSE)
-# {
-#
-#   if ( !is.CMBDataFrame(cmbdf) ) {
-#
-#     stop("cmbdf must be a CMBDataFrame")
-#
-#   }
-#
-#   if ( !missing(sample.size) ) {
-#
-#     cmbdf <- rcosmo::sampleCMB(cmbdf, sample.size = sample.size)
-#
-#   }
-#
-#   if ( is.null(coords(cmbdf)) || coords(cmbdf) != "cartesian" ) {
-#
-#     coords(cmbdf) <- "cartesian"
-#
-#   }
-#
-#   if ( !all( c("x", "y", "z", "I") %in% names(cmbdf) ) )
-#   {
-#     stop("cmbdf must have columns named 'x', 'y', 'z', 'I' in that order")
-#   }
-#
-#   if ( missing(breaks) )
-#   {
-#
-#
-#     if (calc.max.dist)
-#     {
-#       max.dist <- maxDist_internal(cmbdf)
-#     }
-#
-#
-#     if (equiareal)
-#     {
-#       breaks <- seq(cos(max.dist), 1, length.out = num.bins+1)[-(num.bins+1)]
-#     }
-#     else
-#     {
-#       breaks <- cos(rev(seq(0, max.dist, length.out = num.bins+1)[-1]))
-#     }
-#
-#   }
-#
-#   covs <- covCMB_internal2(cmbdf[,c("x","y","z","I")], breaks)
-#
-#   # Reverse order since cosine is decreasing
-#   covs[2:nrow(covs),1] <- rev(covs[2:nrow(covs),1])
-#   covs[2:nrow(covs),2] <- rev(covs[2:nrow(covs),2])
-#   v <- c(0,rev(acos(breaks)))
-#   # Drop the throw-away bin (distances greater than max.dist)
-#   covs <- covs[-nrow(covs),]
-#
-#   # Find the bin centers (break_{i+1} - break_i)/2 with break_0 = 0.
-#   centers <- c(0,v[1:(length(v)-1)] + (v[2:length(v)] - v[1:(length(v) - 1)])/2)
-#
-#   result <- data.frame(dist = centers, cov = covs[,1],
-#                        n = as.integer(c(covs[,2][1], covs[,2][-1]/2)) )
-#   class(result) <- c("CMBCovariance", "data.frame")
-#   attr(result, "breaks") <- breaks
-#
-#   return(result)
-# }
 
 
 #' Covariance estimate via power spectra

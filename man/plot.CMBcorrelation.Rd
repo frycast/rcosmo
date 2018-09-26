@@ -9,8 +9,26 @@
 \arguments{
 \item{x}{An object of class CMBCorrelation.}
 
-\item{...}{Extra arguments passed to plot.default.}
+\item{...}{Extra arguments as in \code{\link{plot.variogram}} passed to plot.default.}
+}
+\value{
+Produces a plot with the sample correlation function.
 }
 \description{
-Plot CMBcorrelation
+Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.variogram}} from
+\code{\link{geoR}} package.
+}
+\examples{
+
+## Download the map first
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# cmbdf <- sampleCMB(df, sample.size = 100000)
+# corcmb <- corrCMB(cmbdf, max.dist = 0.03, num.bins = 10, sample.size=1000)
+# plot(corcmb)
+
+}
+\references{
+\code{\link{corrCMB}}, \code{\link{variogram}}, \link{geoR},
+\code{\link{plot.variogram}}
 }

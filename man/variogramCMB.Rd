@@ -67,6 +67,16 @@ This function provides an empirical variogram for data in a
 stationary spherical random field and the covariance depends only on a
 geodesic distance between locations. Output is a binned variogram.
 }
+\examples{
+
+## Download the map first
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# cmbdf <- sampleCMB(df, sample.size = 100000)
+# varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
+# varcmb
+
+}
 \references{
 \code{\link{variogram}}, \link{geoR}, \code{\link{covCMB}}, \code{\link{corrCMB}}
 }

@@ -52,4 +52,8 @@ coords(hp) <- "spherical"
 df <- data.frame(theta = hp$theta, phi = hp$phi)
 minDist(df, p)
 
+## min distance between points in cmdf
+minDist(cmbdf)
+
+
 }

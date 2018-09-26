@@ -400,7 +400,7 @@ NULL
 plot.CMBcovariance <-  function (x, ...) {
       x0 <- x
       attributes(x0)$class <- "variogram"
-      plot(x0, ylab = "sample covariance", ...)
+      graphics::plot(x0, ylab = "sample covariance", ...)
   }
 
 #'Plot CMBcorrelation
@@ -429,7 +429,7 @@ plot.CMBcovariance <-  function (x, ...) {
 plot.CMBcorrelation <-  function (x, ...) {
       x0 <- x
       attributes(x0)$class <- "variogram"
-      plot(x0, ylab= "sample correlation", ...)
+      graphics::plot(x0, ylab= "sample correlation", ...)
   }
 
 

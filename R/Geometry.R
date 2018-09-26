@@ -118,6 +118,10 @@ p1f <- function(p1, p2) {
 #' df <- data.frame(theta = hp$theta, phi = hp$phi)
 #' minDist(df, p)
 #'
+#' ## min distance between points in cmdf
+#' minDist(cmbdf)
+#'
+#'
 #'@export
 minDist <- function(df, point)
 {
@@ -180,6 +184,9 @@ minDist <- function(df, point)
 #' coords(hp) <- "spherical"
 #' df <- data.frame(theta = hp$theta, phi = hp$phi)
 #' maxDist(df, p)
+#'
+#' ## max distance between points in cmdf
+#' maxDist(cmbdf)
 #'
 #'@export
 maxDist <- function(df, point)

@@ -52,4 +52,7 @@ coords(hp) <- "spherical"
 df <- data.frame(theta = hp$theta, phi = hp$phi)
 maxDist(df, p)
 
+## max distance between points in cmdf
+maxDist(cmbdf)
+
 }

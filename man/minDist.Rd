@@ -2,7 +2,7 @@
 % Please edit documentation in R/Geometry.R
 \name{minDist}
 \alias{minDist}
-\title{Get the minimum distance between points}
+\title{Get the minimum geodesic distance between points}
 \usage{
 minDist(df, point)
 }
@@ -26,7 +26,7 @@ If \code{point} is not specified: the shortest
 distance pairwise between points in \code{df}.
 }
 \description{
-Get the minimum distance either between all points in a data.frame
+Get the minimum geodesic distance either between all points in a data.frame
 pairwise, or between all points in a data.frame and one target
 point.
 }

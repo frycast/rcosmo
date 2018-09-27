@@ -71,10 +71,10 @@ p1f <- function(p1, p2) {
 }
 
 
-#'Get the minimum distance between points
+#'Get the minimum geodesic distance between points
 #'
 #'
-#'Get the minimum distance either between all points in a data.frame
+#'Get the minimum geodesic distance either between all points in a data.frame
 #'pairwise, or between all points in a data.frame and one target
 #'point.
 #'

@@ -1014,3 +1014,1073 @@ qstat <- function(cmbdf, listwin, intensities = "I")
   1- sum((ni-1)*sigmai)/(sigma*(sum(ni)-1))
 }
 
+
+
+
+#' Computes values of spherical covariance functions
+#'
+#'
+#'This function computes the covariances given the separation distance of  locations.
+#'Options for different covariance functions are available. The function uses
+#'\code{\link[geoR]{cov.spatial}} for models from the package \strong{geoR} and
+#'introduces additional new models.
+#'
+#'
+#'@param obj Vector of distances between pairs of spatial locations.
+#'@param cov.model A type of the correlation function. Available choices are: "matern",
+#'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
+#'@param cov.pars A vector with two covariance parameters. The first parameter
+#'corresponds to the variance sigma^2. The second parameter corresponds
+#'to the range phi of the correlation function.
+#'@param kappa A smoothness parameter of the correlation function.
+#'
+#'@details See the section Details in \code{\link[geoR]{cov.spatial}}. Expressions for
+#'the correlation functions which are not included in the packege \strong{geoR}:
+#'
+#'
+#'@return
+#'
+#'Values of the covariances for given distances.
+#'
+#'@references
+#'\strong{geoR} package, \code{\link[geoR]{cov.spatial}}
+#'
+#'T. Gneiting. Strictly and non-strictly positive definite functions on spheres.
+#'Bernoulli 19 (2013), no. 4, 1327-1349.
+#'
+#'@examples
+#'
+#'## Plot of the Askey covariance function
+#'
+#' v1.f <- function(x, ...) {covmodelCMB (x, ...)}
+#' curve( v1.f(x, cov.pars = c(1, 0.03), kappa = 3, cov.model = "askey"),
+#' from = 0, to = 0.1, xlab = "distance", ylab = expression(cov(h)), lty = 2,
+#' main = "covariance")
+#'
+#'## Plot of the Askey variogram
+#' v.f <- function(x, ...) { 1 - covmodelCMB (x, ...)}
+#' curve(v.f(x,  cov.pars = c(1, 0.03), kappa = 3, cov.model = "askey" ),
+#'  from = 0, to = 0.1, xlab = "distance", ylab = expression(gamma(h)), lty = 2,
+#'  main = "variogram")
+#'
+#'@export
+covmodelCMB  <-  function (obj,
+                           cov.model = "matern",
+                           cov.pars = stop("no cov.pars argument provided"),
+                           kappa = 0.5)
+{
+  fn.env <- sys.frame(sys.nframe())
+  .checkCMB.cov.model(
+    cov.model = cov.model,
+    cov.pars = cov.pars,
+    kappa = kappa,
+    env = fn.env,
+    output = FALSE
+  )
+  phi <- get("phi", envir = fn.env)
+  sigmasq <- get("sigmasq", envir = fn.env)
+  covs <- obj
+  covs[] <- 0
+  for (i in 1:get("ns", envir = fn.env)) {
+    if (phi[i] < 1e-16)
+      cov.model[i] <- "pure.nugget"
+    obj.sc <- obj / phi[i]
+    cov.values <- switch(
+      cov.model[i],
+      askey = ifelse(obj < phi[i], (1 - (obj.sc)) ^ (kappa[i]), 0),
+      c2wendland = ifelse(obj < phi[i], (1 + kappa[i] * (obj.sc)) * (1 - (obj.sc)) ^
+                            (kappa[i]), 0),
+      c4wendland = ifelse(obj < phi[i], (1 + kappa[i] * (obj.sc) + (((kappa[i]) ^
+                                                                       2 - 1) * (obj.sc) ^ 2
+      ) / 3) * (1 - (obj.sc)) ^ (kappa[i]), 0),
+      sinepower = (1 - (sin(obj.sc/ 2)) ^ (kappa[i])),
+      multiquadric =  (1 - phi[i]) ^ (2 * kappa[i]) / (1 + (phi[i]) ^ 2 - 2 *
+                                                         (phi[i]) * cos(obj)) ^ (kappa[i]),
+      pure.nugget = rep(0, length(obj)),
+      wave = (1 / obj) * (phi[i] * sin(obj.sc)),
+      exponential = exp(-(obj.sc)),
+      matern = {
+        if (kappa[i] == 0.5)
+          exp(-(obj.sc))
+        else
+          matern(u = obj,
+                 phi = phi[i],
+                 kappa = kappa[i])
+      },
+      gaussian = exp(-((obj.sc) ^ 2)),
+      spherical = ifelse(obj < phi[i], (1 - 1.5 * (obj.sc) +
+                                          0.5 * (obj.sc) ^ 3), 0),
+      circular = {
+        obj.sc[obj.sc > 1] <- 1
+
+        ifelse(obj < phi[i], (1 - (2 * ((obj.sc) *
+                                          sqrt(1 - ((obj.sc) ^ 2)) +
+                                          asin(obj.sc)
+        )) / pi), 0)
+      },
+      cubic = {
+        ifelse(obj < phi[i], (1 - (
+          7 * (obj.sc ^ 2) -
+            8.75 * (obj.sc ^ 3) +
+            3.5 * (obj.sc ^ 5) -
+            0.75 * (obj.sc ^ 7)
+        )), 0)
+      },
+      power = (obj) ^ phi,
+      powered.exponential = exp(-((obj.sc) ^ kappa[i])),
+      cauchy = (1 + (obj.sc) ^ 2) ^ (-kappa[i]),
+      gneiting = {
+        obj.sc <- 0.301187465825 * obj.sc
+
+        t2 <- (1 - obj.sc)
+
+        t2 <- ifelse(t2 > 0, (t2 ^ 8), 0)
+
+        (1 + 8 * obj.sc + 25 * (obj.sc ^ 2) + 32 * (obj.sc ^ 3)) * t2
+      },
+      gencauchy = (1 + (obj.sc) ^ kappa[2]) ^ (-kappa[1] / kappa[2]),
+      gneiting.matern = {
+        obj.sc <- 0.301187465825 * obj.sc / kappa[2]
+
+        t2 <- (1 - obj.sc)
+
+        t2 <- ifelse(t2 > 0, (t2 ^ 8), 0)
+
+        cov.values <-
+          (1 + 8 * obj.sc + 25 * (obj.sc ^ 2) + 32 * (obj.sc ^ 3)) * t2
+
+        cov.values * matern(u = obj,
+                            phi = phi[i],
+                            kappa = kappa[1])
+
+      },
+      stop("wrong or no specification of cov.model")
+    )
+    if (cov.model[i] == "power") {
+      A <- (max(cov.values) / sqrt(pi)) * gamma((1 + phi[i]) / 2) *
+        gamma(1 - (phi[i] / 2))
+      A <- A * max(gamma(phi[i] + (1 + (1:2)) / 2) / (gamma(1 +
+                                                              phi[i]) * gamma((1 + (
+                                                                1:2
+                                                              )) / 2)))
+      cov.values <- A - cov.values
+      cov.values <- cov.values / max(cov.values)
+    }
+    cov.values <- ifelse(obj < 1e-16, sigmasq[i], sigmasq[i] *
+                           cov.values)
+    covs <- covs + cov.values
+  }
+  if (sum(sigmasq) < 1e-16)
+    covs[obj < 1e-16] <- 1
+  if (any(!is.finite(covs)))
+    warning("Infinity value in covmodelCMB ")
+  if (any(is.na(covs)))
+    warning("NA value in covmodelCMB ")
+  if (any(is.nan(covs)))
+    warning("NaN value in covmodelCMB ")
+  return(covs)
+}
+
+variofit1 <-
+  function (vario,
+            ini.cov.pars,
+            cov.model,
+            fix.nugget = FALSE,
+            nugget = 0,
+            fix.kappa = FALSE,
+            kappa = 0.5,
+            simul.number = NULL,
+            max.dist = vario$max.dist,
+            weights,
+            minimisation.function,
+            limits = pars.limits(),
+            messages,
+            ...)
+  {
+    call.fc <- match.call()
+    if (missing(messages))
+      messages.screen <-
+        as.logical(ifelse(is.null(getOption("geoR.messages")),
+                          TRUE, getOption("geoR.messages")))
+    else
+      messages.screen <- messages
+    if (length(class(vario)) == 0 ||
+        all(class(vario) != "variogram"))
+      warning("object vario should preferably be of the geoR's class \"variogram\"")
+    if (!missing(ini.cov.pars)) {
+      if (any(class(ini.cov.pars) == "eyefit"))
+        cov.model <- ini.cov.pars[[1]]$cov.model
+      if (any(class(ini.cov.pars) == "variomodel"))
+        cov.model <- ini.cov.pars$cov.model
+    }
+    if (missing(cov.model))
+      cov.model <- "matern"
+    cov.model <- match.arg(cov.model, choices = CMB.cov.models)
+    if (cov.model == "stable")
+      cov.model <- "powered.exponential"
+    if (cov.model == "powered.exponential")
+      if (limits$kappa["upper"] > 2)
+        limits$kappa["upper"] <- 2
+    if (missing(weights)) {
+      if (vario$output.type == "cloud")
+        weights <- "equal"
+      else
+        weights <- "npairs"
+    }
+    else
+      weights <- match.arg(weights, choices = c("npairs",
+                                                "equal", "cressie"))
+    if (messages.screen) {
+      cat(paste("variofit: covariance model used is", cov.model,
+                "\n"))
+      cat(paste("variofit: weights used:", weights, "\n"))
+    }
+    if (missing(minimisation.function))
+      minimisation.function <- "optim"
+    if (any(cov.model == c("linear", "power")) &
+        minimisation.function ==
+        "nls") {
+      cat(
+        "warning: minimisation function nls can not be used with given cov.model.\n          changing for \"optim\".\n"
+      )
+      minimisation.function <- "optim"
+    }
+    if (minimisation.function == "nls" & weights != "equal") {
+      warning(
+        "variofit: minimisation function nls can only be used with weights=\"equal\".\n          changing for \"optim\".\n"
+      )
+      minimisation.function <- "optim"
+    }
+    if (is.matrix(vario$v) & is.null(simul.number))
+      stop(
+        "object in vario$v is a matrix. This function works for only 1 empirical variogram at once\n"
+      )
+    if (!is.null(simul.number))
+      vario$v <- vario$v[, simul.number]
+    if (mode(max.dist) != "numeric" || length(max.dist) > 1)
+      stop("a single numerical value must be provided in the argument max.dist")
+    if (max.dist == vario$max.dist)
+      XY <- list(u = vario$u, v = vario$v, n = vario$n)
+    else
+      XY <- list(u = vario$u[vario$u <= max.dist],
+                 v = vario$v[vario$u <=
+                               max.dist],
+                 n = vario$n[vario$u <= max.dist])
+    if (cov.model == "pure.nugget") {
+      minimisation.function <- "not used"
+      message <-
+        "correlation function does not require numerical minimisation"
+      if (weights == "equal")
+        lm.wei <- rep(1, length(XY$u))
+      else
+        lm.wei <- XY$n
+      if (cov.model == "pure.nugget") {
+        if (fix.nugget) {
+          temp <- lm((XY$v - nugget) ~ 1, weights = lm.wei)
+          cov.pars <- c(temp$coef, 0)
+        }
+        else {
+          temp <- lm(XY$v ~ 1, weights = lm.wei)
+          nugget <- temp$coef
+          cov.pars <- c(0, 0)
+        }
+      }
+      value <- sum((temp$residuals) ^ 2)
+    }
+    else {
+      if (messages.screen)
+        cat(paste(
+          "variofit: minimisation function used:",
+          minimisation.function,
+          "\n"
+        ))
+      umax <- max(vario$u)
+      vmax <- max(vario$v)
+      if (missing(ini.cov.pars)) {
+        ini.cov.pars <- as.matrix(expand.grid(c(vmax / 2, 3 *
+                                                  vmax / 4, vmax), seq(0, 0.8 * umax, len = 6)))
+        if (!fix.nugget)
+          nugget <- unique(c(nugget, vmax / 10, vmax / 4, vmax / 2))
+        if (!fix.kappa)
+          kappa <- unique(c(kappa, 0.25, 0.5, 1, 1.5, 2))
+        if (messages.screen)
+          warning("initial values not provided - running the default search")
+      }
+      else {
+        if (any(class(ini.cov.pars) == "eyefit")) {
+          init <- nugget <- kappa <- NULL
+          for (i in 1:length(ini.cov.pars)) {
+            init <- drop(rbind(init, ini.cov.pars[[i]]$cov.pars))
+            nugget <- c(nugget, ini.cov.pars[[i]]$nugget)
+            if (cov.model == "gneiting.matern")
+              kappa <- drop(rbind(kappa, ini.cov.pars[[i]]$kappa))
+            else
+              kappa <- c(kappa, ini.cov.pars[[i]]$kappa)
+          }
+          ini.cov.pars <- init
+        }
+        if (any(class(ini.cov.pars) == "variomodel")) {
+          nugget <- ini.cov.pars$nugget
+          kappa <- ini.cov.pars$kappa
+          ini.cov.pars <- ini.cov.pars$cov.pars
+        }
+      }
+      if (is.matrix(ini.cov.pars) | is.data.frame(ini.cov.pars)) {
+        ini.cov.pars <- as.matrix(ini.cov.pars)
+        if (nrow(ini.cov.pars) == 1)
+          ini.cov.pars <- as.vector(ini.cov.pars)
+        else {
+          if (ncol(ini.cov.pars) != 2)
+            stop(
+              "\nini.cov.pars must be a matrix or data.frame with 2 components: \ninitial values for sigmasq (partial sill) and phi (range parameter)\n"
+            )
+        }
+      }
+      else if (length(ini.cov.pars) > 2)
+        stop("\nini.cov.pars must provide initial values for sigmasq and phi\n")
+      if (is.matrix(ini.cov.pars) | (length(nugget) > 1) |
+          (length(kappa) > 1)) {
+        if (messages.screen)
+          cat("variofit: searching for best initial value ...")
+        ini.temp <- matrix(ini.cov.pars, ncol = 2)
+        grid.ini <- as.matrix(expand.grid(
+          sigmasq = unique(ini.temp[,
+                                    1]),
+          phi = unique(ini.temp[, 2]),
+          tausq = unique(nugget),
+          kappa = unique(kappa)
+        ))
+        v.loss <- function(parms, u, v, n, cov.model, weights) {
+          sigmasq <- parms[1]
+          phi <- parms[2]
+          if (cov.model == "power")
+            phi <- 2 * exp(phi) / (1 + exp(phi))
+          tausq <- parms[3]
+          kappa <- parms[4]
+          if (cov.model == "power")
+            v.mod <- tausq + covmodelCMB (
+              u,
+              cov.pars = c(sigmasq,
+                           phi),
+              cov.model = "power",
+              kappa = kappa
+            )
+          else
+            v.mod <- (sigmasq + tausq) - covmodelCMB (
+              u,
+              cov.pars = c(sigmasq, phi),
+              cov.model = cov.model,
+              kappa = kappa
+            )
+          if (weights == "equal")
+            loss <- sum((v - v.mod) ^ 2)
+          if (weights == "npairs")
+            loss <- sum(n * (v - v.mod) ^ 2)
+          if (weights == "cressie")
+            loss <- sum((n / (v.mod ^ 2)) * (v - v.mod) ^ 2)
+          return(loss)
+        }
+        grid.loss <- apply(
+          grid.ini,
+          1,
+          v.loss,
+          u = XY$u,
+          v = XY$v,
+          n = XY$n,
+          cov.model = cov.model,
+          weights = weights
+        )
+        ini.temp <- grid.ini[which(grid.loss == min(grid.loss))[1],
+                             , drop = FALSE]
+        if (is.R())
+          rownames(ini.temp) <- "initial.value"
+        if (messages.screen) {
+          cat(" selected values:\n")
+          print(rbind(round(ini.temp, digits = 2), status = ifelse(
+            c(FALSE,
+              FALSE, fix.nugget, fix.kappa), "fix", "est"
+          )))
+          cat(paste("loss value:", min(grid.loss), "\n"))
+        }
+        names(ini.temp) <- NULL
+        ini.cov.pars <- ini.temp[1:2]
+        nugget <- ini.temp[3]
+        kappa <- ini.temp[4]
+        grid.ini <- NULL
+      }
+      if (ini.cov.pars[1] > 2 * vmax)
+        warning("unreasonable initial value for sigmasq (too high)")
+      if (ini.cov.pars[1] + nugget > 3 * vmax)
+        warning("unreasonable initial value for sigmasq + nugget (too high)")
+      if (vario$output.type != "cloud") {
+        if (ini.cov.pars[1] + nugget < 0.3 * vmax)
+          warning("unreasonable initial value for sigmasq + nugget (too low)")
+      }
+      if (nugget > 2 * vmax)
+        warning("unreasonable initial value for nugget (too high)")
+      if (ini.cov.pars[2] > 1.5 * umax)
+        warning("unreasonable initial value for phi (too high)")
+      if (!fix.kappa) {
+        if (cov.model == "powered.exponential")
+          Tkappa.ini <- log(kappa / (2 - kappa))
+        else
+          Tkappa.ini <- log(kappa)
+      }
+      if (minimisation.function == "nls") {
+        if (ini.cov.pars[2] == 0)
+          ini.cov.pars <- max(XY$u) / 10
+        if (kappa == 0)
+          kappa <- 0.5
+        if (cov.model == "power")
+          Tphi.ini <- log(ini.cov.pars[2] / (2 - ini.cov.pars[2]))
+        else
+          Tphi.ini <- log(ini.cov.pars[2])
+        XY$cov.model <- cov.model
+        if (fix.nugget) {
+          XY$nugget <- as.vector(nugget)
+          if (fix.kappa) {
+            XY$kappa <- as.vector(kappa)
+            res <- nls((v - nugget) ~ matrix((
+              1 - covmodelCMB (
+                u,
+                cov.pars = c(1, exp(Tphi)),
+                cov.model = cov.model,
+                kappa = kappa
+              )
+            ), ncol = 1),
+            start = list(Tphi = Tphi.ini),
+            data = XY,
+            algorithm = "plinear",
+            ...
+            )
+          }
+          else {
+            if (cov.model == "powered.exponential")
+              res <- nls((v - nugget) ~ matrix((
+                1 - covmodelCMB (
+                  u,
+                  cov.pars = c(1, exp(Tphi)),
+                  cov.model = cov.model,
+                  kappa = (2 * exp(Tkappa) /
+                             (1 + exp(Tkappa)))
+                )
+              ),
+              ncol = 1),
+              start = list(Tphi = Tphi.ini,
+                           Tkappa = Tkappa.ini),
+              data = XY,
+              algorithm = "plinear",
+              ...
+              )
+            else
+              res <- nls((v - nugget) ~ matrix((
+                1 -
+                  covmodelCMB (
+                    u,
+                    cov.pars = c(1, exp(Tphi)),
+                    cov.model = cov.model,
+                    kappa = exp(Tkappa)
+                  )
+              ),
+              ncol = 1),
+              start = list(Tphi = Tphi.ini,
+                           Tkappa = Tkappa.ini),
+              data = XY,
+              algorithm = "plinear",
+              ...
+              )
+            kappa <- exp(coef(res)["Tkappa"])
+            names(kappa) <- NULL
+          }
+          cov.pars <- coef(res)[c(".lin", "Tphi")]
+          names(cov.pars) <- NULL
+        }
+        else {
+          if (fix.kappa) {
+            XY$kappa <- kappa
+            res <- nls(
+              v ~ cbind(1, (
+                1 - covmodelCMB (
+                  u,
+                  cov.pars = c(1, exp(Tphi)),
+                  cov.model = cov.model,
+                  kappa = kappa
+                )
+              )),
+              start = list(Tphi = Tphi.ini),
+              algorithm = "plinear",
+              data = XY,
+              ...
+            )
+          }
+          else {
+            if (cov.model == "powered.exponential")
+              res <- nls(
+                v ~ cbind(1, (
+                  1 - covmodelCMB (
+                    u,
+                    cov.pars = c(1, exp(Tphi)),
+                    cov.model = cov.model,
+                    kappa = (2 * exp(Tkappa) /
+                               (1 + exp(Tkappa)))
+                  )
+                )),
+                start = list(Tphi = Tphi.ini, Tkappa = Tkappa.ini),
+                algorithm = "plinear",
+                data = XY,
+                ...
+              )
+            else
+              res <- nls(
+                v ~ cbind(1, (
+                  1 - covmodelCMB (
+                    u,
+                    cov.pars = c(1, exp(Tphi)),
+                    cov.model = cov.model,
+                    kappa = exp(Tkappa)
+                  )
+                )),
+                start = list(Tphi = Tphi.ini,
+                             Tkappa = Tkappa.ini),
+                algorithm = "plinear",
+                data = XY,
+                ...
+              )
+            kappa <- exp(coef(res)["Tkappa"])
+            names(kappa) <- NULL
+          }
+          nugget <- coef(res)[".lin1"]
+          names(nugget) <- NULL
+          cov.pars <- coef(res)[c(".lin2", "Tphi")]
+          names(cov.pars) <- NULL
+        }
+        if (cov.model == "power")
+          cov.pars[2] <-
+          2 * exp(cov.pars[2]) / (1 + exp(cov.pars[2]))
+        else
+          cov.pars[2] <- exp(cov.pars[2])
+        if (nugget < 0 | cov.pars[1] < 0) {
+          warning(
+            "\nvariofit: negative variance parameter found using the default option \"nls\".\n        Try another minimisation function and/or fix some of the parameters.\n"
+          )
+          temp <- c(
+            sigmasq = cov.pars[1],
+            phi = cov.pars[2],
+            tausq = nugget,
+            kappa = kappa
+          )
+          print(rbind(round(temp, digits = 4), status = ifelse(
+            c(FALSE,
+              FALSE, fix.nugget, fix.kappa), "fix", "est"
+          )))
+          return(invisible())
+        }
+        value <- sum(resid(res) ^ 2)
+        message <- "nls does not provides convergence message"
+      }
+      if (minimisation.function == "nlm" | minimisation.function ==
+          "optim") {
+        .global.list <- list(
+          u = XY$u,
+          v = XY$v,
+          n = XY$n,
+          fix.nugget = fix.nugget,
+          nugget = nugget,
+          fix.kappa = fix.kappa,
+          kappa = kappa,
+          cov.model = cov.model,
+          m.f = minimisation.function,
+          weights = weights
+        )
+        ini <- ini.cov.pars
+        if (cov.model == "power")
+          ini[2] <- log(ini[2] / (2 - ini[2]))
+        if (cov.model == "linear")
+          ini <- ini[1]
+        if (fix.nugget == FALSE)
+          ini <- c(ini, nugget)
+        if (!fix.kappa)
+          ini <- c(ini, Tkappa.ini)
+        names(ini) <- NULL
+        if (minimisation.function == "nlm") {
+          result <- nlm(.loss1.vario, ini, g.l = .global.list,
+                        ...)
+          result$par <- result$estimate
+          result$value <- result$minimum
+          result$convergence <- result$code
+          if (!is.null(get(".temp.theta", pos = 1)))
+            result$par <- get(".temp.theta", pos = 1)
+        }
+        else {
+          lower.l <- sapply(limits, function(x)
+            x[1])
+          upper.l <- sapply(limits, function(x)
+            x[2])
+          if (fix.kappa == FALSE) {
+            if (fix.nugget) {
+              lower <- lower.l[c("sigmasq.lower", "phi.lower",
+                                 "kappa.lower")]
+              upper <- upper.l[c("sigmasq.upper", "phi.upper",
+                                 "kappa.upper")]
+            }
+            else {
+              lower <- lower.l[c("sigmasq.lower",
+                                 "phi.lower",
+                                 "tausq.rel.lower",
+                                 "kappa.lower")]
+              upper <- upper.l[c("sigmasq.upper",
+                                 "phi.upper",
+                                 "tausq.rel.upper",
+                                 "kappa.upper")]
+            }
+          }
+          else {
+            if (cov.model == "power") {
+              if (fix.nugget) {
+                lower <- lower.l[c("sigmasq.lower", "phi.lower")]
+                upper <- upper.l[c("sigmasq.upper", "phi.upper")]
+              }
+              else {
+                lower <- lower.l[c("sigmasq.lower",
+                                   "phi.lower",
+                                   "tausq.rel.lower")]
+                upper <- upper.l[c("sigmasq.upper",
+                                   "phi.upper",
+                                   "tausq.rel.upper")]
+              }
+            }
+            else {
+              lower <- lower.l["phi.lower"]
+              upper <- upper.l["phi.upper"]
+            }
+          }
+          result <- optim(
+            ini,
+            .loss1.vario,
+            method = "L-BFGS-B",
+            hessian = TRUE,
+            lower = lower,
+            upper = upper,
+            g.l = .global.list,
+            ...
+          )
+        }
+        value <- result$value
+        message <- paste(minimisation.function,
+                         "convergence code:",
+                         result$convergence)
+        if (cov.model == "linear")
+          result$par <- c(result$par[1], 1, result$par[-1])
+        cov.pars <- as.vector(result$par[1:2])
+        if (cov.model == "power")
+          cov.pars[2] <-
+          2 * exp(cov.pars[2]) / (1 + exp(cov.pars[2]))
+        if (!fix.kappa) {
+          if (fix.nugget)
+            kappa <- result$par[3]
+          else {
+            nugget <- result$par[3]
+            kappa <- result$par[4]
+          }
+          if (.global.list$cov.model == "powered.exponential")
+            kappa <- 2 * (exp(kappa)) / (1 + exp(kappa))
+          else
+            kappa <- exp(kappa)
+        }
+        else if (!fix.nugget)
+          nugget <- result$par[3]
+      }
+    }
+    if (cov.model == "matern")
+      #     kappa <- min(0.5,kappa)
+      if (cov.model == "powered.exponential")
+        kappa <- min(1,kappa)
+    if (cov.model == "askey")
+      kappa <- max(2,kappa)
+    if (cov.model == "c2wendland")
+      kappa <- max(4,kappa)
+    if (cov.model == "c4wendland")
+      kappa <- max(6,kappa)
+    if (cov.model == "sinepower")
+      kappa <- min(2,kappa)
+    estimation <- list(
+      nugget = nugget,
+      cov.pars = cov.pars,
+      cov.model = cov.model,
+      kappa = kappa,
+      value = value,
+      trend = vario$trend,
+      beta.ols = vario$beta.ols,
+      practicalRange = practicalRangeCMB(
+        cov.model = cov.model,
+        phi = cov.pars[2],
+        kappa = kappa
+      ),
+      max.dist = max.dist,
+      minimisation.function = minimisation.function
+    )
+    estimation$weights <- weights
+    if (weights == "equal")
+      estimation$method <- "OLS"
+    else
+      estimation$method <- "WLS"
+    estimation$fix.nugget <- fix.nugget
+    estimation$fix.kappa <- fix.kappa
+    estimation$lambda <- vario$lambda
+    estimation$message <- message
+    estimation$call <- call.fc
+    oldClass(estimation) <- c("variomodel", "variofit")
+    return(estimation)
+  }
+
+linesCMB <-  function (x, max.dist, scaled = FALSE, ...)
+{
+  my.l <- list()
+  if (missing(max.dist)) {
+    my.l$max.dist <- x$max.dist
+    if (is.null(my.l$max.dist))
+      stop("argument max.dist needed for this object")
+  }
+  else
+    my.l$max.dist <- max.dist
+  if (any(
+    x$cov.model == c(
+      "matern",
+      "powered.exponential",
+      "cauchy",
+      "gencauchy",
+      "gneiting.matern",
+      "askey",
+      "c2wendland",
+      "c4wendland",
+      "sinepower",
+      "multiquadric"
+    )
+  ))
+  my.l$kappa <- x$kappa
+  else
+    kappa <- NULL
+  if (is.vector(x$cov.pars))
+    my.l$sill.total <- x$nugget + x$cov.pars[1]
+  else
+    my.l$sill.total <- x$nugget + sum(x$cov.pars[, 1])
+  my.l$nugget <- x$nugget
+  my.l$cov.pars <- x$cov.pars
+  my.l$cov.model <- x$cov.model
+  if (scaled) {
+    if (is.vector(x$cov.model))
+      my.l$cov.pars[1] <-  my.l$cov.pars[1] / my.l$sill.total
+    else
+      my.l$cov.pars[, 1] <-
+        my.l$cov.cov.pars[, 1] / my.l$sill.total
+    my.l$sill.total <- 1
+  }
+  gamma.f <- function(x, my.l) {
+    if (any(my.l$cov.model == c("linear", "power")))
+      return(my.l$nugget + my.l$cov.pars[1] * (x ^ my.l$cov.pars[2]))
+    else
+      return(
+        my.l$sill.total -
+          covmodelCMB (
+            x,
+            cov.model = my.l$cov.model,
+            kappa = my.l$kappa,
+            cov.pars = my.l$cov.pars
+          )
+      )
+  }
+  curve(
+    gamma.f(x, my.l = my.l),
+    from = 0,
+    to = my.l$max.dist,
+    add = TRUE,
+    ...
+  )
+  return(invisible())
+}
+
+practicalRangeCMB <-
+  function (cov.model,
+            phi,
+            kappa = 0.5,
+            correlation = 0.05,
+            ...)
+  {
+    cov.model <- match.arg(cov.model, choices = CMB.cov.models)
+    .checkCMB.cov.model(
+      cov.model = cov.model,
+      cov.pars = c(1, phi),
+      kappa = kappa,
+      output = FALSE
+    )
+    if (cov.model %in% c("circular",
+                         "cubic",
+                         "spherical",
+                         "askey",
+                         "c2wendland",
+                         "c4wendland"))
+      return(min(phi, pi))
+    if (any(cov.model %in% c("pure.nugget")))
+      return(0)
+    if (any(cov.model %in% c("linear", "sinepower", "multiquadric")))
+      return(pi)
+    if (any(cov.model %in% c("power")))
+      return(Inf)
+    findRange <- function(range, cm, p, k, cor)
+      covmodelCMB (
+        range,
+        cov.model = cm,
+        kappa = k,
+        cov.pars = c(1, p)
+      ) - cor
+    pr <-
+      uniroot(
+        findRange,
+        interval = c(0, 50 * phi + 1),
+        cm = cov.model,
+        p = phi,
+        k = kappa,
+        cor = correlation,
+        ...
+      )$root
+    return(min(pr, pi))
+  }
+
+CMB.cov.models <-
+  c(
+    "matern",
+    "exponential",
+    "spherical",
+    "powered.exponential",
+    "cauchy",
+    "gencauchy",
+    "pure.nugget",
+    "askey",
+    "c2wendland",
+    "c4wendland",
+    "sinepower",
+    "multiquadric"
+  )
+
+.loss1.vario <-  function (theta, g.l)
+{
+  if (g.l$cov.model == "linear")
+    theta <- c(theta[1], 1, theta[-1])
+  ##
+  ## Imposing constraints for nlm
+  ##
+  if (g.l$m.f == "nlm") {
+    assign(".temp.theta",  NULL, pos = 1)
+    if (!g.l$fix.kappa) {
+      if (g.l$fix.nugget) {
+        if (g.l$cov.model == "power")
+          theta.minimiser <- theta[1]
+        else
+          theta.minimiser <- theta[1:2]
+        Tkappa <- theta[3]
+      }
+      else{
+        if (g.l$cov.model == "power")
+          theta.minimiser <- theta[c(1:3)]
+        else
+          theta.minimiser <- theta[1:3]
+        Tkappa <- theta[4]
+      }
+    }
+    else
+      theta.minimiser <- theta
+    penalty <- 10000 * sum(0 - pmin(theta.minimiser, 0))
+    theta <- pmax(theta.minimiser, 0)
+    if (!g.l$fix.kappa)
+      theta <- c(theta.minimiser, Tkappa)
+    if (any(theta.minimiser < 0))
+      assign(".temp.theta", theta, pos = 1)
+    else
+      penalty <- 0
+  }
+  else
+    penalty <- 0
+  ##
+  ## reading parameters
+  ##
+  if (!g.l$fix.kappa) {
+    if (g.l$fix.nugget) {
+      tausq <- g.l$nugget
+      Tkappa <- theta[3]
+    }
+    else{
+      tausq <- theta[3]
+      Tkappa <- theta[4]
+    }
+    ## kappa now > 0 for both nlm() and optim()
+    ##if(g.l$m.f == "nlm"){
+    if (g.l$cov.model == "powered.exponential")
+      kappa <-  2 * (exp(Tkappa)) / (1 + exp(Tkappa))
+    else
+      kappa <- exp(Tkappa)
+    ##}
+    ##else kappa <- Tkappa
+  }
+  else{
+    kappa <- g.l$kappa
+    if (g.l$fix.nugget)
+      tausq <- g.l$nugget
+    else
+      tausq <- theta[3]
+  }
+  ##
+  sigmasq <- theta[1]
+  phi <- theta[2]
+  if (g.l$cov.model == "power")
+    phi <- 2 * exp(phi) / (1 + exp(phi))
+  sill.total <- sigmasq + tausq
+  ##
+  ## Computing values for the theoretical variogram
+  ##
+  if (any(g.l$cov.model == c("linear", "power")))
+    gammaU <- tausq + sigmasq * (g.l$u ^ phi)
+  else
+    gammaU <-
+    sill.total - covmodelCMB (
+      g.l$u,
+      cov.model = g.l$cov.model,
+      kappa = kappa,
+      cov.pars = c(sigmasq, phi)
+    )
+  ##
+  ## Computing loss function
+  ##
+  if (g.l$weight == "equal")
+    loss <- sum((g.l$v - gammaU) ^ 2)
+  if (g.l$weights == "npairs")
+    loss <- sum(g.l$n * (g.l$v - gammaU) ^ 2)
+  if (g.l$weights == "cressie")
+    loss <- sum((g.l$n / (gammaU ^ 2)) * (g.l$v - gammaU) ^ 2)
+  if (loss > (.Machine$double.xmax ^ 0.5) |
+      loss == Inf | loss == -Inf | is.nan(loss))
+    loss <- .Machine$double.xmax ^ 0.5
+  return(loss + penalty)
+}
+
+
+.checkCMB.cov.model <-
+  function(cov.model,
+           cov.pars,
+           kappa,
+           env = NULL,
+           output = TRUE)
+  {
+    ## extracting covariance parameters
+    if (is.vector(cov.pars))
+      sigmasq <- cov.pars[1]
+    else
+      sigmasq <- cov.pars[, 1]
+    if (is.vector(cov.pars))
+      phi <-  cov.pars[2]
+    else
+      phi <- cov.pars[, 2]
+    if (missing(kappa) || is.null(kappa))
+      kappa <- NA
+    ## checking for nested models
+    cov.pars <- drop(cov.pars)
+    if (is.vector(cov.pars))
+      ns <- 1
+    else{
+      ns <- nrow(cov.pars)
+      if (length(cov.model) == 1)
+        cov.model <- rep(cov.model, ns)
+      if (length(kappa) == 1)
+        kappa <- rep(kappa, ns)
+    }
+    if (length(cov.model) != ns)
+      stop("wrong length for cov.model")
+    ##
+    cov.model <- sapply(cov.model, match.arg, CMB.cov.models)
+    cov.model[cov.model == "stable"] <- "powered.exponential"
+    if (any(cov.model == c("gneiting.matern", "gencauchy"))) {
+      if (length(kappa) != 2 * ns)
+        stop(
+          paste(
+            "wrong length for kappa, ",
+            cov.model,
+            "model requires two values for the argument kappa"
+          )
+        )
+    }
+    else{
+      if (length(kappa) != ns)
+        stop('wrong length for kappa')
+    }
+    ## settings for power model (do not reverse order of the next two lines!)
+    phi[cov.model == "linear"] <- 1
+    cov.model[cov.model == "linear"] <- "power"
+    ## checking input for cov. models with extra parameter(s)
+    if (any(cov.model == 'gneiting.matern') && ns > 1)
+      stop('nested models including the gneiting.matern are not implemented')
+    for (i in 1:ns) {
+      if (any(
+        cov.model[i] == c(
+          "matern",
+          "powered.exponential",
+          "cauchy",
+          "gneiting.matern",
+          "gencauchy",
+          "askey",
+          "c2wendland",
+          "c4wendland",
+          "sinepower",
+          "multiquadric"
+        )
+      )) {
+        if (any(cov.model[i] == c("gneiting.matern", "gencauchy"))) {
+          if (any(is.na(kappa)) || length(kappa) != 2 * ns)
+            stop(
+              paste(
+                cov.model[i],
+                "correlation function model requires a vector with 2 parameters in the argument kappa"
+              )
+            )
+        }
+        else{
+          if (is.na(kappa[i]) | is.null(kappa[i]))
+            stop(
+              "for matern, powered.exponential, gencauchy, askey, c2wendland,
+              c4wendland, sinepower, multiquadric and cauchy covariance
+              functions the parameter kappa must be provided"
+            )
+        }
+        if ((
+          cov.model[i] == "matern" | cov.model[i] == "powered.exponential" |
+          cov.model[i] == "askey" | cov.model[i] == "c2wendland" |
+          cov.model[i] == "c4wendland" |
+          cov.model[i] == "sinepower" |
+          cov.model[i] == "multiquadric"
+        ) & length(kappa) != 1 * ns)
+          stop("kappa must have 1 parameter for this correlation function")
+        if (cov.model[i] == "matern" &
+            kappa[i] == 0.5)
+          cov.model[i] == "exponential"
+        }
+      if (cov.model[i] == "power")
+        if (any(phi[i] >= 2) | any(phi[i] <= 0))
+          stop("for power model the phi parameters must be in the interval ]0,2[")
+      }
+    if (!is.null(env)) {
+      assign("sigmasq", sigmasq, envir = env)
+      assign("phi", phi, envir = env)
+      assign("kappa", kappa, envir = env)
+      assign("ns", ns, envir = env)
+      assign("cov.model", cov.model, envir = env)
+    }
+    if (output)
+      return(list(
+        cov.model = cov.model,
+        sigmasq = sigmasq,
+        phi = phi,
+        kappa = kappa,
+        ns = ns
+      ))
+    else
+      return(invisible())
+  }

@@ -27,7 +27,8 @@ Suggests:
     rmarkdown,
     testthat,
     R.rsp,
-    gsl
+    gsl,
+    geoR
 LinkingTo: Rcpp
 RoxygenNote: 6.1.0
 VignetteBuilder: R.rsp

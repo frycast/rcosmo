@@ -1060,22 +1060,22 @@ plot.CMBDataFrame <- function(x, intensities = "I",
                               axes = FALSE, aspect = FALSE,
                               col, back.col = "black", labels,
                               hp.boundaries = 0, hpb.col = "gray",
-                              ...)
-{
+                              ...) {
+
   cmbdf <- x
-  if ( !missing(sample.size) )
-  {
+  if ( !missing(sample.size) ) {
+
     spix <- sample(pix(cmbdf), sample.size)
     cmbdf <- cmbdf[pix(cmbdf) %in% spix,]
   }
 
-  if (is.null(coords(cmbdf)))
-  {
+  if (is.null(coords(cmbdf))) {
+
     coords(cmbdf) <- "cartesian"
   }
 
-  if (missing(col))
-  {
+  if (missing(col)) {
+
      col <- tryCatch(colscheme(cmbdf[,intensities, drop = TRUE],
                            breaks1024, colmap),
                      error = function(e) {
@@ -1092,27 +1092,26 @@ plot.CMBDataFrame <- function(x, intensities = "I",
   cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
 
   ## Do the plotting
-  if ( !add )
-  {
+  if ( !add ) {
+
     rgl::open3d()
     rgl::bg3d(back.col)
   }
 
-  if ( missing(labels) )
-  {
+  if ( missing(labels) ) {
+
     rgl::plot3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z,
                 col = col, type = type, size = size,
                 box = box, axes = axes, add = add, aspect = aspect, ...)
-  }
-  else
-  {
+  } else {
+
     rgl::text3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z, labels,
                 col = col, type = type, size = size,
                 box = box, axes = axes, add = add, aspect = aspect, ...)
   }
 
-  if ( hp.boundaries > 0 )
-  {
+  if ( hp.boundaries > 0 ) {
+
     rcosmo::displayPixelBoundaries(nside = hp.boundaries,
                                     col = hpb.col)
   }
@@ -1120,6 +1119,7 @@ plot.CMBDataFrame <- function(x, intensities = "I",
 
 # Helper function for plot.CMBDataFrame
 colscheme <- function(I, breaks, colmap) {
+
   intervals<- findInterval(I, breaks[2:256], rightmost.closed = FALSE,
                            all.inside = FALSE, left.open = TRUE)
   cols <- colmap[intervals+1]

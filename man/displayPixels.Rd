@@ -5,8 +5,8 @@
 \title{Display the pixels and grandchildren}
 \usage{
 displayPixels(boundary.j, j, plot.j = 5, spix, boundary.col = "gray",
-  boundary.lwd = 1, incl.labels = 1:(12 * 4^boundary.j),
-  col = "blue", size = 3)
+  boundary.lwd = 1, incl.labels = 1:(12 * 4^boundary.j), col = "blue",
+  size = 3)
 }
 \arguments{
 \item{boundary.j}{The resolution to display boundaries at. If

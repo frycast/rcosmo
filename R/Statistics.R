@@ -115,11 +115,12 @@ covCMB <- function(cmbdf,
 
   }
 
-  covs <- covCMB_internal2(cmbdf[, c("x", "y", "z", "I")], breaks)
+  covs <- covCMB_internal_var(cmbdf[, c("x", "y", "z", "I")], breaks)
 
   # Reverse order since cosine is decreasing
   covs[2:nrow(covs), 1] <- rev(covs[2:nrow(covs), 1])
   covs[2:nrow(covs), 2] <- rev(covs[2:nrow(covs), 2])
+  covs[3:nrow(covs), 3] <- rev(covs[2:nrow(covs), 3])
   v <- c(0, rev(acos(breaks)))
   # Drop the throw-away bin (distances greater than max.dist)
   covs <- covs[-nrow(covs), ]
@@ -131,12 +132,12 @@ covCMB <- function(cmbdf,
   pairs.min <- 2
   n <- as.integer(c(covs[, 2][1], covs[, 2][-1] / 2))
   indp <- (n >= pairs.min)
-  sd1 <- n
+  sd1 <- sqrt(covs[,3])
   result <- list(
     u = centers,
     v = covs[, 1],
     n = n,
-    sd1,
+    sd1 = sd1,
     bins.lim = v,
     ind.bin = indp
   )
@@ -249,16 +250,18 @@ corrCMB <- function(cmbdf,
                          max.dist = pi,
                          breaks,
                          equiareal = TRUE,
-                         calc.max.dist = FALSE)
-{corrCMB<- covCMB(cmbdf, num.bins,
+                         calc.max.dist = FALSE) {
+
+  corrCMB<- covCMB(cmbdf, num.bins,
                  sample.size,
                  max.dist,
                  breaks,
                  equiareal ,
                  calc.max.dist)
-corrCMB$v <- corrCMB$v/corrCMB$v[1]
-oldClass(corrCMB) <- "CMBCorrelation"
-return(corrCMB)}
+  corrCMB$v <- corrCMB$v/corrCMB$v[1]
+  oldClass(corrCMB) <- "CMBCorrelation"
+  return(corrCMB)
+}
 
 #' Sample variogram
 #'
@@ -334,16 +337,18 @@ variogramCMB <- function(cmbdf,
                    max.dist = pi,
                    breaks,
                    equiareal = TRUE,
-                   calc.max.dist = FALSE)
-{varCMB<- covCMB(cmbdf, num.bins ,
+                   calc.max.dist = FALSE) {
+
+  varCMB<- covCMB(cmbdf, num.bins ,
                      sample.size,
                      max.dist ,
                      breaks,
                      equiareal ,
                      calc.max.dist )
-varCMB$v <- varCMB$v[1]-varCMB$v
-oldClass(varCMB) <- "variogram"
-return(varCMB)}
+  varCMB$v <- varCMB$v[1]-varCMB$v
+  oldClass(varCMB) <- "variogram"
+  return(varCMB)
+}
 
 #'Plot variogram
 #'

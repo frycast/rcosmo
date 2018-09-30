@@ -5,18 +5,6 @@
 
 using namespace Rcpp;
 
-// covCMB_internal1
-NumericVector covCMB_internal1(Rcpp::DataFrame cmbdf, NumericVector breaks);
-RcppExport SEXP _rcosmo_covCMB_internal1(SEXP cmbdfSEXP, SEXP breaksSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type breaks(breaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(covCMB_internal1(cmbdf, breaks));
-    return rcpp_result_gen;
-END_RCPP
-}
 // covCMB_internal2
 NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
 RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
@@ -26,6 +14,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type cos_breaks(cos_breaksSEXP);
     rcpp_result_gen = Rcpp::wrap(covCMB_internal2(cmbdf, cos_breaks));
+    return rcpp_result_gen;
+END_RCPP
+}
+// covCMB_internal_sd
+NumericVector covCMB_internal_sd(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
+RcppExport SEXP _rcosmo_covCMB_internal_sd(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cos_breaks(cos_breaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal_sd(cmbdf, cos_breaks));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -188,8 +188,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcosmo_covCMB_internal1", (DL_FUNC) &_rcosmo_covCMB_internal1, 2},
     {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
+    {"_rcosmo_covCMB_internal_sd", (DL_FUNC) &_rcosmo_covCMB_internal_sd, 2},
     {"_rcosmo_mkpix2xyC", (DL_FUNC) &_rcosmo_mkpix2xyC, 1},
     {"_rcosmo_nest2ring", (DL_FUNC) &_rcosmo_nest2ring, 2},
     {"_rcosmo_pix2coords_internal", (DL_FUNC) &_rcosmo_pix2coords_internal, 4},

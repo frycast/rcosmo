@@ -370,7 +370,6 @@ return(varCMB)}
 #'
 #'@name plot.variogram
 #'
-#' @aliases plot.variogram Plot variogram
 #'
 NULL
 
@@ -1015,33 +1014,59 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 }
 
 
-
-
-#' Computes values of spherical covariance functions
+#' Computes values of covariance functions
 #'
 #'
 #'This function computes the covariances given the separation distance of  locations.
-#'Options for different covariance functions are available. The function uses
-#'\code{\link[geoR]{cov.spatial}} for models from the package \strong{geoR} and
-#'introduces additional new models.
+#'Options for different covariance functions on spheres are available. The function uses
+#'the function \code{\link[geoR]{cov.spatial}} for covariance models from the package
+#'\strong{geoR} and modifies it for additional new models on spheres.
 #'
 #'
 #'@param obj Vector of distances between pairs of spatial locations.
 #'@param cov.model A type of the correlation function. Available choices are: "matern",
 #'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
-#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric". Default is "matern"
 #'@param cov.pars A vector with two covariance parameters. The first parameter
 #'corresponds to the variance sigma^2. The second parameter corresponds
 #'to the range phi of the correlation function.
 #'@param kappa A smoothness parameter of the correlation function.
 #'
-#'@details See the section Details in \code{\link[geoR]{cov.spatial}}. Expressions for
-#'the correlation functions which are not included in the packege \strong{geoR}:
+#'@details
+#'The function returns the value of the covariance \code{C(h)} at the distance \code{h}.
+#'The covariance function has the form
 #'
+#'\deqn{C(h) = sigma^2 * rho(h/phi).}
+#'
+#'The parameters of the covariance are positive numbers \code{sigma^2}, \code{phi}
+#' and \code{kappa}.
+#'
+#'Expressions for the correlation functions which are not included in the packege
+#'\strong{geoR}:
+#'
+#'\describe{
+#' \item{\strong{askey}}{
+#' \deqn{rho(h/phi) = (1 - h/phi)^kappa, if h < phi;}
+#' \deqn{0, otherwise.}}
+#' \item{\strong{c2wendland}}{
+#' \deqn{rho(h/phi) =  (1 + kappa * h/phi) * (1 - h/phi)^kappa, if h < phi;}
+#' \deqn{0, otherwise.}}
+#' \item{\strong{c4wendland}}{
+#' \deqn{rho(h/phi) =  (1 + kappa * h/phi + (kappa^2 - 1) * (h/phi)^2 / 3) * (1 - h/phi)^kappa, if h < phi;}
+#' \deqn{0, otherwise.}}
+#' \item{\strong{sinepower}}{
+#' \deqn{rho(h/phi) = 1 - (sin(h/(2 phi))) ^ kappa}}
+#'  \item{\strong{multiquadric}}{
+#'  \deqn{C(h) =   (1 - phi) ^ (2 * kappa) / (1 + phi^2 - 2 * phi * cos(h))^kappa,
+#'  0<phi<1}}
+#'  }
+#'
+#'Additional information can be found in the section Details in
+#'\code{\link[geoR]{cov.spatial}}.
 #'
 #'@return
 #'
-#'Values of the covariances for given distances.
+#'Values of a covariance function for the given distances.
 #'
 #'@references
 #'\strong{geoR} package, \code{\link[geoR]{cov.spatial}}
@@ -1104,7 +1129,7 @@ covmodelCMB  <-  function (obj,
         if (kappa[i] == 0.5)
           exp(-(obj.sc))
         else
-          matern(u = obj,
+          geoR::matern(u = obj,
                  phi = phi[i],
                  kappa = kappa[i])
       },
@@ -1150,7 +1175,7 @@ covmodelCMB  <-  function (obj,
         cov.values <-
           (1 + 8 * obj.sc + 25 * (obj.sc ^ 2) + 32 * (obj.sc ^ 3)) * t2
 
-        cov.values * matern(u = obj,
+        cov.values * geoR::matern(u = obj,
                             phi = phi[i],
                             kappa = kappa[1])
 
@@ -1182,22 +1207,141 @@ covmodelCMB  <-  function (obj,
   return(covs)
 }
 
-variofit1 <-
-  function (vario,
+#' Estimates parameters of variograms
+#'
+#'
+#'This function estimates variogram parameters by fitting a parametric model
+#'from \code{\link{covmodelCMB}} to a sample variogram. The function modifies
+#'\code{\link[geoR]{variofit}} from the package \strong{geoR}
+#'for additional covariance models on spheres.
+#'
+#'@param vario An object of the class \code{variogram} obtained as an output of
+#'the function \code{\link{variogramCMB}}.
+#'@param ini.cov.pars A vector with initial values for the variogram parameters.
+#'The first parameter corresponds to the variance sigma^2. The second parameter
+#'corresponds to the range phi of the correlation function.
+#'@param cov.model A type of the variogram function. Available choices are: "matern",
+#'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric". The default is "matern"
+#'@param fix.nugget logical. Indicates whether the nugget variance should be regarded
+#'as fixed or be estimated. The default is FALSE.
+#'@param nugget A value for the nugget parameter. Regarded as a fixed values if
+#'\code{fix.nugget = TRUE} or as a initial value for the minimization algorithm if
+#'\code{fix.nugget = FALSE}. The default is zero.
+#'@param fix.kappa logical. Indicates whether the parameter kappa should be regarded
+#'as fixed or be estimated. The default is TRUE.
+#'@param kappa A value for the smoothness parameter. Regarded as a fixed values if
+#'\code{fix.kappa = TRUE} or as a initial value for the minimization algorithm if
+#'\code{fix.kappa = FALSE}. Required not in all covariance models, see
+#'\code{\link{covmodelCMB}}. The default is 0.5.
+#'@param simul.number number of simulation. Used if \code{vario} has empirical variograms
+#'for more than one data-set (simulations). The default is NULL
+#'@param max.dist A maximum distance to fit a variogram model. The default is
+#'\code{x$max.dist}.
+#'@param weights Weights used in the loss function in the minimization algorithm.
+#'@param limits Lower and upper limits for the model parameters used
+#'in the numerical minimisation by \code{minimisation.function = "optim"}.
+#'@param minimisation.function Minimization function ("optim", "nlm", "nls") to estimate
+#'the parameters.
+#'@param messages logical. Indicates whether or not status messages are printed on
+#'the screen.
+#'@param ... other minimisation parameters
+#'
+#'
+#'@details
+#'The parameter values of a variogram function from \code{\link{covmodelCMB}} are
+#'found by numerical optimization using one of the functions: \code{\link{optim}},
+#'\code{\link{nlm}} and \code{\link{nls}}.
+#'
+#'The function modifies \code{\link[geoR]{variofit}} from the package \strong{geoR}
+#'for additional variogram models on spheres.  Available models are: "matern",
+#'"exponential", "spherical", "powered.exponential", "cauchy", "gencauchy",
+#'"pure.nugget", "askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
+#'
+#'Additionally it rescales an empirical variogram to the range \code{[0,1]} before
+#'numerical optimisation and then transforms all obtained results to the original
+#'scale. If \code{ini.cov.pars} are not provided then the 5x5 grid
+#'\code{(seq(0,max(vario$v),l=5), seq(0,vario$max.dist,l=5))}
+#'of initial values of sigma^2  and phi is used.
+#'
+#'
+#'@return
+#'An object of the class \code{variomodel} and \code{variofit}, see
+#'\code{\link[geoR]{variofit}}
+#'
+#'@references
+#'\strong{geoR} package, \code{\link[geoR]{variofit}}, \code{\link{covmodelCMB}}
+#'
+#'@examples
+#' #
+#' # df <- CMBDataFrame("../CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 10000)
+#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30)
+#' # varcmb
+#' #
+#' # ols <- variofitCMB(varcmb,  fix.nug=FALSE, wei="equal", cov.model= "matern")
+#' # plot(varcmb)
+#' # lines(ols, lty=2)
+#' # str(ols)
+#' #
+#' # ols <- variofitCMB(vario1, fix.nug = TRUE, kappa = 3, wei = "equal",
+#' # cov.model = "askey")
+#' # plot(varcmb, main = ols$cov.model)
+#' # linesCMB(ols, lty = 2)
+#' # str(ols)
+#'
+#'@export
+variofitCMB <- function (vario, ini.cov.pars, cov.model, fix.nugget = FALSE,
+                         nugget = 0, fix.kappa = TRUE, kappa = 0.5, simul.number = NULL,
+                         max.dist = vario$max.dist, weights, minimisation.function,
+                         limits = geoR::pars.limits(), messages, ...) {
+  cov.model <- match.arg(cov.model, choices = CMB.cov.models)
+  vario1 <- vario
+  vario1$v <- vario1$v/max(vario1$v)
+  if (missing(ini.cov.pars)){
+    ini.cov.pars <- expand.grid(seq(0,max(vario1$v),l=5), seq(0,vario1$max.dist,l=5))
+  }
+  if (cov.model %in% c("matern",
+                       "exponential",
+                       "spherical",
+                       "powered.exponential",
+                       "cauchy",
+                       "gencauchy",
+                       "pure.nugget")){
+    variofitCMB <- geoR::variofit(vario1, ini.cov.pars=ini.cov.pars, cov.model=cov.model, fix.nugget=fix.nugget,
+                                  nugget=nugget, fix.kappa=fix.kappa, kappa=kappa, simul.number=simul.number,
+                                  max.dist=max.dist, weights=weights, minimisation.function=minimisation.function,
+                                  limits = limits, messages=messages, ...)
+  }
+  if (cov.model %in% c( "askey",
+                        "c2wendland",
+                        "c4wendland",
+                        "sinepower",
+                        "multiquadric")){
+    variofitCMB <- variofit1(vario1, ini.cov.pars=ini.cov.pars, cov.model=cov.model, fix.nugget=fix.nugget,
+                             nugget=nugget, fix.kappa=fix.kappa, kappa=kappa, simul.number=simul.number,
+                             max.dist=max.dist, weights=weights, minimisation.function=minimisation.function,
+                             limits = limits, messages=messages, ...)
+  }
+  variofitCMB$cov.pars[1] <- variofitCMB$cov.pars[1]*max(vario$v)
+  variofitCMB$nugget <- variofitCMB$nugget*max(vario$v)
+  return(variofitCMB)
+}
+
+variofit1 <-   function (vario,
             ini.cov.pars,
             cov.model,
-            fix.nugget = FALSE,
-            nugget = 0,
-            fix.kappa = FALSE,
-            kappa = 0.5,
-            simul.number = NULL,
-            max.dist = vario$max.dist,
+            fix.nugget,
+            nugget,
+            fix.kappa,
+            kappa,
+            simul.number,
+            max.dist,
             weights,
             minimisation.function,
-            limits = pars.limits(),
+            limits,
             messages,
-            ...)
-  {
+            ...)  {
     call.fc <- match.call()
     if (missing(messages))
       messages.screen <-
@@ -1277,11 +1421,11 @@ variofit1 <-
         lm.wei <- XY$n
       if (cov.model == "pure.nugget") {
         if (fix.nugget) {
-          temp <- lm((XY$v - nugget) ~ 1, weights = lm.wei)
+          temp <- stats::lm((XY$v - nugget) ~ 1, weights = lm.wei)
           cov.pars <- c(temp$coef, 0)
         }
         else {
-          temp <- lm(XY$v ~ 1, weights = lm.wei)
+          temp <- stats::lm(XY$v ~ 1, weights = lm.wei)
           nugget <- temp$coef
           cov.pars <- c(0, 0)
         }
@@ -1359,16 +1503,14 @@ variofit1 <-
           tausq <- parms[3]
           kappa <- parms[4]
           if (cov.model == "power")
-            v.mod <- tausq + covmodelCMB (
-              u,
+            v.mod <- tausq + covmodelCMB(u,
               cov.pars = c(sigmasq,
                            phi),
               cov.model = "power",
               kappa = kappa
             )
           else
-            v.mod <- (sigmasq + tausq) - covmodelCMB (
-              u,
+            v.mod <- (sigmasq + tausq) - covmodelCMB(u,
               cov.pars = c(sigmasq, phi),
               cov.model = cov.model,
               kappa = kappa
@@ -1441,9 +1583,8 @@ variofit1 <-
           XY$nugget <- as.vector(nugget)
           if (fix.kappa) {
             XY$kappa <- as.vector(kappa)
-            res <- nls((v - nugget) ~ matrix((
-              1 - covmodelCMB (
-                u,
+            res <- stats::nls((v - nugget) ~ matrix((
+              1 - covmodelCMB (u,
                 cov.pars = c(1, exp(Tphi)),
                 cov.model = cov.model,
                 kappa = kappa
@@ -1457,9 +1598,8 @@ variofit1 <-
           }
           else {
             if (cov.model == "powered.exponential")
-              res <- nls((v - nugget) ~ matrix((
-                1 - covmodelCMB (
-                  u,
+              res <- stats::nls((v - nugget) ~ matrix((
+                1 - covmodelCMB(u,
                   cov.pars = c(1, exp(Tphi)),
                   cov.model = cov.model,
                   kappa = (2 * exp(Tkappa) /
@@ -1474,10 +1614,9 @@ variofit1 <-
               ...
               )
             else
-              res <- nls((v - nugget) ~ matrix((
+              res <- stats::nls((v - nugget) ~ matrix((
                 1 -
-                  covmodelCMB (
-                    u,
+                  covmodelCMB(u,
                     cov.pars = c(1, exp(Tphi)),
                     cov.model = cov.model,
                     kappa = exp(Tkappa)
@@ -1490,16 +1629,16 @@ variofit1 <-
               algorithm = "plinear",
               ...
               )
-            kappa <- exp(coef(res)["Tkappa"])
+            kappa <- exp(stats::coef(res)["Tkappa"])
             names(kappa) <- NULL
           }
-          cov.pars <- coef(res)[c(".lin", "Tphi")]
+          cov.pars <- stats::coef(res)[c(".lin", "Tphi")]
           names(cov.pars) <- NULL
         }
         else {
           if (fix.kappa) {
             XY$kappa <- kappa
-            res <- nls(
+            res <- stats::nls(
               v ~ cbind(1, (
                 1 - covmodelCMB (
                   u,
@@ -1516,7 +1655,7 @@ variofit1 <-
           }
           else {
             if (cov.model == "powered.exponential")
-              res <- nls(
+              res <- stats::nls(
                 v ~ cbind(1, (
                   1 - covmodelCMB (
                     u,
@@ -1532,7 +1671,7 @@ variofit1 <-
                 ...
               )
             else
-              res <- nls(
+              res <- stats::nls(
                 v ~ cbind(1, (
                   1 - covmodelCMB (
                     u,
@@ -1547,12 +1686,12 @@ variofit1 <-
                 data = XY,
                 ...
               )
-            kappa <- exp(coef(res)["Tkappa"])
+            kappa <- exp(stats::coef(res)["Tkappa"])
             names(kappa) <- NULL
           }
-          nugget <- coef(res)[".lin1"]
+          nugget <- stats::coef(res)[".lin1"]
           names(nugget) <- NULL
-          cov.pars <- coef(res)[c(".lin2", "Tphi")]
+          cov.pars <- stats::coef(res)[c(".lin2", "Tphi")]
           names(cov.pars) <- NULL
         }
         if (cov.model == "power")
@@ -1576,7 +1715,7 @@ variofit1 <-
           )))
           return(invisible())
         }
-        value <- sum(resid(res) ^ 2)
+        value <- sum(stats::resid(res) ^ 2)
         message <- "nls does not provides convergence message"
       }
       if (minimisation.function == "nlm" | minimisation.function ==
@@ -1604,7 +1743,7 @@ variofit1 <-
           ini <- c(ini, Tkappa.ini)
         names(ini) <- NULL
         if (minimisation.function == "nlm") {
-          result <- nlm(.loss1.vario, ini, g.l = .global.list,
+          result <- stats::nlm(.loss1.vario, ini, g.l = .global.list,
                         ...)
           result$par <- result$estimate
           result$value <- result$minimum
@@ -1655,7 +1794,7 @@ variofit1 <-
               upper <- upper.l["phi.upper"]
             }
           }
-          result <- optim(
+          result <- stats::optim(
             ini,
             .loss1.vario,
             method = "L-BFGS-B",
@@ -1734,6 +1873,55 @@ variofit1 <-
     return(estimation)
   }
 
+#' Adds lines of fitted variograms to variogram plots
+#'
+#'
+#'This function adds a line with the variogram model fitted by the function
+#'\code{\link{variofitCMB}} to a current variogram plot. The function modifies
+#'\code{\link[geoR]{lines.variomodel.variofit}} from the package \strong{geoR}
+#'for additional covariance models on spheres.
+#'
+#'
+#'@param x An object of the class \code{variofit} containing information about
+#'the fitted model obtained as an output of the function \code{\link{variofitCMB}}.
+#'@param max.dist A maximum distance to draw the variogram line. The default is
+#'\code{x$max.dist}.
+#'@param scaled logical. If TRUE the sill in the plot is 1.
+#'@param ... other plotting parameters
+#'
+#'@details
+#'The function adds a line with fitted variogram model to a plot. It is used
+#'to compare empirical variograms against fitted models returned by
+#'\code{\link{variofitCMB}}. #' Available models are: "matern", "exponential",
+#'"spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
+#'
+#'@return
+#'A line with a fitted variogram model is added to a plot.
+#'
+#'@references
+#'\strong{geoR} package, \code{\link[geoR]{lines.variomodel.variofit}},
+#'\code{\link{covmodelCMB}}, \code{\link{variofitCMB}}
+#'
+#'@examples
+#' ## Plot the fitted Matern variogram versus its empirical variogram
+#' #
+#' # df <- CMBDataFrame("../CMB_map_smica1024.fits")
+#' # cmbdf <- sampleCMB(df, sample.size = 10000)
+#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30)
+#' # varcmb
+#' # ols <- variofitCMB(varcmb,  fix.nug=FALSE, wei="equal", cov.model= "matern")
+#' # plot(varcmb)
+#' # lines(ols, lty=2)
+#' #
+#' ## Plot the fitted Askey variogram versus its empirical variogram
+#' #
+#' # ols <- variofitCMB(vario1, ini.cov.pars = c(1, 0.03), fix.nug = TRUE,
+#' #     kappa = 3, wei = "equal", cov.model = "askey")
+#' # plot(varcmb, main = ols$cov.model)
+#' # linesCMB(ols, lty = 2)
+#'
+#'@export
 linesCMB <-  function (x, max.dist, scaled = FALSE, ...)
 {
   my.l <- list()
@@ -1782,15 +1970,14 @@ linesCMB <-  function (x, max.dist, scaled = FALSE, ...)
     else
       return(
         my.l$sill.total -
-          covmodelCMB (
-            x,
+          covmodelCMB(x,
             cov.model = my.l$cov.model,
             kappa = my.l$kappa,
             cov.pars = my.l$cov.pars
           )
       )
   }
-  curve(
+  graphics::curve(
     gamma.f(x, my.l = my.l),
     from = 0,
     to = my.l$max.dist,
@@ -1800,13 +1987,45 @@ linesCMB <-  function (x, max.dist, scaled = FALSE, ...)
   return(invisible())
 }
 
-practicalRangeCMB <-
-  function (cov.model,
+#' Practical range for covariance  function
+#'
+#' This function computes the practical range for covariance  functions on spheres.
+#' The function modifies \code{\link[geoR]{practicalRange}} from the
+#' package \strong{geoR} for additional covariance models on spheres.
+#'
+#'
+#'@param cov.model A type of the correlation function. Available choices are: "matern",
+#'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
+#'@param phi A correlation parameter as documented in \code{\link{covmodelCMB}}
+#'@param kappa A smoothness parameter of the correlation function.
+#'@param correlation A correlation threshold (default is 0.05)
+#'@param ... other optimisation parameters
+#'
+#'@details
+#' The practical(effective)  range for a covariance  function is the distance at which
+#' a covariance function first time reaches the specified value \code{correlation}.  For
+#' covariance functions on  spheres the practical range does not exceed \eqn{pi}, the
+#' distance beyond which a covariance function is not defined. For the covariance
+#' functions "spherical", "askey", "c2wendland", "c4wendland" their practical ranges
+#' are equal to lengths of their support.
+#'
+#'@return
+#'Value of the practical range for the covariance  function specified in \code{\link{covmodelCMB}}
+#'
+#'@references
+#'\strong{geoR} package, \code{\link[geoR]{practicalRange}}, \code{\link{covmodelCMB}}
+#'
+#'@examples
+#'
+#'practicalRangeCMB(cov.model = "sinepower", phi = 0.1,  kappa = 0.5)
+#'practicalRangeCMB(cov.model = "askey", phi = 0.1,  kappa = 0.5)
+#'
+#'@export
+practicalRangeCMB <- function (cov.model,
             phi,
             kappa = 0.5,
-            correlation = 0.05,
-            ...)
-  {
+            correlation = 0.05,...){
     cov.model <- match.arg(cov.model, choices = CMB.cov.models)
     .checkCMB.cov.model(
       cov.model = cov.model,
@@ -1827,23 +2046,20 @@ practicalRangeCMB <-
       return(pi)
     if (any(cov.model %in% c("power")))
       return(Inf)
-    findRange <- function(range, cm, p, k, cor)
+    findRange <- function(range, cm, p, k, cor){
       covmodelCMB (
         range,
         cov.model = cm,
         kappa = k,
         cov.pars = c(1, p)
       ) - cor
-    pr <-
-      uniroot(
-        findRange,
+    }
+    pr <- stats::uniroot(findRange,
         interval = c(0, 50 * phi + 1),
         cm = cov.model,
         p = phi,
         k = kappa,
-        cor = correlation,
-        ...
-      )$root
+        cor = correlation,...)$root
     return(min(pr, pi))
   }
 
@@ -1942,8 +2158,7 @@ CMB.cov.models <-
     gammaU <- tausq + sigmasq * (g.l$u ^ phi)
   else
     gammaU <-
-    sill.total - covmodelCMB (
-      g.l$u,
+    sill.total - covmodelCMB(g.l$u,
       cov.model = g.l$cov.model,
       kappa = kappa,
       cov.pars = c(sigmasq, phi)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Statistics.R
 \name{covmodelCMB}
 \alias{covmodelCMB}
-\title{Computes values of spherical covariance functions}
+\title{Computes values of covariance functions}
 \usage{
 covmodelCMB(obj, cov.model = "matern",
   cov.pars = stop("no cov.pars argument provided"), kappa = 0.5)
@@ -12,7 +12,7 @@ covmodelCMB(obj, cov.model = "matern",
 
 \item{cov.model}{A type of the correlation function. Available choices are: "matern",
 "exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
-"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".}
+"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric". Default is "matern"}
 
 \item{cov.pars}{A vector with two covariance parameters. The first parameter
 corresponds to the variance sigma^2. The second parameter corresponds
@@ -21,17 +21,45 @@ to the range phi of the correlation function.}
 \item{kappa}{A smoothness parameter of the correlation function.}
 }
 \value{
-Values of the covariances for given distances.
+Values of a covariance function for the given distances.
 }
 \description{
 This function computes the covariances given the separation distance of  locations.
-Options for different covariance functions are available. The function uses
-\code{\link[geoR]{cov.spatial}} for models from the package \strong{geoR} and
-introduces additional new models.
+Options for different covariance functions on spheres are available. The function uses
+the function \code{\link[geoR]{cov.spatial}} for covariance models from the package
+\strong{geoR} and modifies it for additional new models on spheres.
 }
 \details{
-See the section Details in \code{\link[geoR]{cov.spatial}}. Expressions for
-the correlation functions which are not included in the packege \strong{geoR}:
+The function returns the value of the covariance \code{C(h)} at the distance \code{h}.
+The covariance function has the form
+
+\deqn{C(h) = sigma^2 * rho(h/phi).}
+
+The parameters of the covariance are positive numbers \code{sigma^2}, \code{phi}
+and \code{kappa}.
+
+Expressions for the correlation functions which are not included in the packege
+\strong{geoR}:
+
+\describe{
+\item{\strong{askey}}{
+\deqn{rho(h/phi) = (1 - h/phi)^kappa, if h < phi;}
+\deqn{0, otherwise.}}
+\item{\strong{c2wendland}}{
+\deqn{rho(h/phi) =  (1 + kappa * h/phi) * (1 - h/phi)^kappa, if h < phi;}
+\deqn{0, otherwise.}}
+\item{\strong{c4wendland}}{
+\deqn{rho(h/phi) =  (1 + kappa * h/phi + (kappa^2 - 1) * (h/phi)^2 / 3) * (1 - h/phi)^kappa, if h < phi;}
+\deqn{0, otherwise.}}
+\item{\strong{sinepower}}{
+\deqn{rho(h/phi) = 1 - (sin(h/(2 phi))) ^ kappa}}
+ \item{\strong{multiquadric}}{
+ \deqn{C(h) =   (1 - phi) ^ (2 * kappa) / (1 + phi^2 - 2 * phi * cos(h))^kappa,
+ 0<phi<1}}
+ }
+
+Additional information can be found in the section Details in
+\code{\link[geoR]{cov.spatial}}.
 }
 \examples{
 

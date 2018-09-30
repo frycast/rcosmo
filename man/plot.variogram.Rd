@@ -2,8 +2,6 @@
 % Please edit documentation in R/Statistics.R
 \name{plot.variogram}
 \alias{plot.variogram}
-\alias{Plot}
-\alias{variogram}
 \title{Plot variogram}
 \arguments{
 \item{x}{An object of class variogram.}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Statistics.R
 \name{plot.CMBCorrelation}
 \alias{plot.CMBCorrelation}
-\title{Plot CMBCorrelation}
+\title{Plot sample CMBCorrelation}
 \usage{
 \method{plot}{CMBCorrelation}(x, ...)
 }

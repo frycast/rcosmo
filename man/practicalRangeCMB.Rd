@@ -11,7 +11,7 @@ practicalRangeCMB(cov.model, phi, kappa = 0.5, correlation = 0.05, ...)
 "exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
 "askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".}
 
-\item{phi}{A correlation parameter as documented in \code{\link{covmodelCMB}}}
+\item{phi}{The range parameter as documented in \code{\link{covmodelCMB}}}
 
 \item{kappa}{A smoothness parameter of the correlation function.}
 

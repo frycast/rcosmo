@@ -6,7 +6,6 @@
 \alias{rCosmo}
 \alias{Rcosmo}
 \alias{rcosmo-package}
-\alias{rcosmo-package}
 \title{rcosmo - This Documentation is a place holder.}
 \description{
 To be completed

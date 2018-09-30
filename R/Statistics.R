@@ -350,7 +350,7 @@ variogramCMB <- function(cmbdf,
   return(varCMB)
 }
 
-#'Plot variogram
+#'Plot sample variogram
 #'
 #'Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
 #'\strong{geoR} package.
@@ -376,10 +376,9 @@ variogramCMB <- function(cmbdf,
 #'
 #'@name plot.variogram
 #'
-#'
 NULL
 
-#'Plot CMBCovariance
+#'Plot sample CMBCovariance
 #'
 #'Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variogram}} from
 #'\strong{geoR} package.
@@ -403,19 +402,16 @@ NULL
 #'
 #' @export
 plot.CMBCovariance <-  function (x, ...) {
-
   if (requireNamespace("geoR", quietly = TRUE)) {
-
     x0 <- x
     attributes(x0)$class <- "variogram"
-    geoR:::plot.variogram(x0, ylab = "sample covariance", ...)
+    geoR::plot.variogram(x0, ylab = "sample covariance", ...)
   } else {
-
     stop("Package \"geoR\" needed for this function. Please install it.")
   }
 }
 
-#'Plot CMBCorrelation
+#'Plot sample CMBCorrelation
 #'
 #'Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.variogram}} from
 #'\strong{geoR} package.
@@ -440,12 +436,10 @@ plot.CMBCovariance <-  function (x, ...) {
 #' @export
 plot.CMBCorrelation <-  function (x, ...) {
   if (requireNamespace("geoR", quietly = TRUE)) {
-
     x0 <- x
     attributes(x0)$class <- "variogram"
-    geoR:::plot.variogram(x0, ylab= "sample correlation", ...)
+    geoR::plot.variogram(x0, ylab= "sample correlation", ...)
   } else {
-
     stop("Package \"geoR\" needed for this function. Please install it.")
   }
 }
@@ -1095,6 +1089,10 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 #'
 #'@examples
 #'
+#'## Compute Askey variogram at x = pi/4
+#'
+#' 1 - covmodelCMB(pi/4, cov.pars = c(1, pi), kappa = 3, cov.model = "askey" )
+#'
 #'## Plot of the Askey covariance function
 #'
 #' v1.f <- function(x, ...) {covmodelCMB (x, ...)}
@@ -1102,12 +1100,7 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 #' from = 0, to = 0.1, xlab = "distance", ylab = expression(cov(h)), lty = 2,
 #' main = "covariance")
 #'
-#'## Plot of the Askey variogram
-#' v.f <- function(x, ...) { 1 - covmodelCMB (x, ...)}
-#' curve(v.f(x,  cov.pars = c(1, 0.03), kappa = 3, cov.model = "askey" ),
-#'  from = 0, to = 0.1, xlab = "distance", ylab = expression(gamma(h)), lty = 2,
-#'  main = "variogram")
-#'
+
 #'@export
 covmodelCMB  <-  function (obj,
                            cov.model = "matern",
@@ -1347,6 +1340,7 @@ variofitCMB <- function (vario, ini.cov.pars, cov.model, fix.nugget = FALSE,
   return(variofitCMB)
 }
 
+# Helper function for variofitCMB
 variofit1 <-   function (vario,
             ini.cov.pars,
             cov.model,
@@ -1496,7 +1490,8 @@ variofit1 <-   function (vario,
         else {
           if (ncol(ini.cov.pars) != 2)
             stop(
-              "\nini.cov.pars must be a matrix or data.frame with 2 components: \ninitial values for sigmasq (partial sill) and phi (range parameter)\n"
+              "\nini.cov.pars must be a matrix or data.frame with 2 components:
+              \ninitial values for sigmasq (partial sill) and phi (range parameter)\n"
             )
         }
       }
@@ -1892,6 +1887,102 @@ variofit1 <-   function (vario,
     return(estimation)
   }
 
+#'Plot theoretical CMBCovariance
+#'
+#'Plots theoretical covariance functions from the list defined in \code{\link{covmodelCMB}}
+#'
+#'@param cov.model A type of the correlation function. Available choices are: "matern",
+#'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric". The default is "matern"
+#'@param sigmasq The variance parameter as documented in \code{\link{covmodelCMB}}.
+#'The default is 1.
+#'@param phi The range parameter as documented in \code{\link{covmodelCMB}}. The default is
+#'\code{pi}.
+#'@param kappa A smoothness parameter of the correlation function. The default is 0.5.
+#'@param from A lower range of the plotting region. The default is \code{lb =0}
+#'@param to An upper range of the plotting region. The default is \code{ub= pi}.
+#'@param ...  optional plotting parameters.
+#'
+#'
+#'@return Produces a plot with the theoretical covariance function.
+#'
+#'@references  \code{\link{covmodelCMB}}
+#'
+#'@examples
+#'
+#' plotcovmodelCMB("matern", sigmasq = 5)
+#' plotcovmodelCMB("askey", phi = pi/4, to  = pi/2, kappa = 4)
+#'
+#'
+#'@export
+plotcovmodelCMB <- function (cov.model = "matern", sigmasq=1,
+                             phi = pi,
+                             kappa = 0.5,
+                             from =0 , to = pi, ...){
+  cov.model <- match.arg(cov.model, choices = CMB.cov.models)
+  .checkCMB.cov.model(cov.model = cov.model,
+                      cov.pars = c(sigmasq, phi),
+                      kappa = kappa,
+                      output = FALSE)
+  graphics::curve(covmodelCMB(x, cov.pars = c(sigmasq, phi),
+                                         kappa = kappa, cov.model = cov.model),
+                  from = from,
+                  to = to,
+                  xlab = "distance",
+                  ylab = expression(C(h)),
+                  lty = 2,
+                  main = bquote(paste(.(cov.model)~"covariance function"))
+  )
+}
+
+#'Plot theoretical variogram
+#'
+#'Plots theoretical variogram functions from the list defined in \code{\link{covmodelCMB}}
+#'
+#'@param cov.model A type of the variogram function. Available choices are: "matern",
+#'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
+#'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric". The default is "matern"
+#'@param sigmasq The variance parameter as documented in \code{\link{covmodelCMB}}.
+#'The default is 1.
+#'@param phi The range parameter as documented in \code{\link{covmodelCMB}}. The default is
+#'\code{pi}.
+#'@param kappa A smoothness parameter of the variogram function. The default is 0.5.
+#'@param from A lower range of the plotting region. The default is \code{lb =0}
+#'@param to An upper range of the plotting region. The default is \code{ub= pi}.
+#'@param ...  optional plotting parameters.
+#'
+#'
+#'@return Produces a plot with the theoretical variogram.
+#'
+#'@references  \code{\link{covmodelCMB}}
+#'
+#'@examples
+#'
+#' plotvariogram("matern", sigmasq = 5)
+#' plotvariogram("askey", phi = pi/4, to  = pi/2, kappa = 4)
+#'
+#'
+#'@export
+plotvariogram <- function (cov.model = "matern", sigmasq=1,
+                             phi = pi,
+                             kappa = 0.5,
+                             from =0 , to = pi, ...){
+  cov.model <- match.arg(cov.model, choices = CMB.cov.models)
+  .checkCMB.cov.model(cov.model = cov.model,
+                      cov.pars = c(sigmasq, phi),
+                      kappa = kappa,
+                      output = FALSE)
+  graphics::curve(covmodelCMB(0, cov.pars = c(sigmasq, phi), kappa = kappa, cov.model = cov.model) -
+                    covmodelCMB(x, cov.pars = c(sigmasq, phi), kappa = kappa, cov.model = cov.model),
+                  from = from,
+                  to = to,
+                  xlab = "distance",
+                  ylab = expression(gamma(h)),
+                  lty = 2,
+                  main = bquote(paste(.(cov.model)~"variogram"))
+  )
+}
+
 #' Adds lines of fitted variograms to variogram plots
 #'
 #'
@@ -2015,7 +2106,7 @@ linesCMB <-  function (x, max.dist, scaled = FALSE, ...) {
 #'@param cov.model A type of the correlation function. Available choices are: "matern",
 #'"exponential","spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
 #'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
-#'@param phi A correlation parameter as documented in \code{\link{covmodelCMB}}
+#'@param phi The range parameter as documented in \code{\link{covmodelCMB}}
 #'@param kappa A smoothness parameter of the correlation function.
 #'@param correlation A correlation threshold (default is 0.05)
 #'@param ... other optimisation parameters
@@ -2097,6 +2188,7 @@ CMB.cov.models <-
     "multiquadric"
   )
 
+# Helper function for variofitCMB
 .loss1.vario <-  function (theta, g.l)
 {
   if (g.l$cov.model == "linear")
@@ -2196,7 +2288,7 @@ CMB.cov.models <-
   return(loss + penalty)
 }
 
-
+# Helper function to check validity of cov.model
 .checkCMB.cov.model <-
   function(cov.model,
            cov.pars,

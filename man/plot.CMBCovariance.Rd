@@ -2,7 +2,7 @@
 % Please edit documentation in R/Statistics.R
 \name{plot.CMBCovariance}
 \alias{plot.CMBCovariance}
-\title{Plot CMBCovariance}
+\title{Plot sample CMBCovariance}
 \usage{
 \method{plot}{CMBCovariance}(x, ...)
 }

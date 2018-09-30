@@ -4,40 +4,6 @@ lapply(paste('package:',names(sessionInfo()$otherPkgs),sep=""),
        detach,character.only=TRUE,unload=TRUE)
 
 
-library(rcosmo)
-df <- CMBDataFrame("../CMB_map_smica1024.fits")
-cmbdf <- sampleCMB(df, sample.size = 100000)
-
-library(geoR)
-
-Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
-
-# x <- c(1,1,2,2,3,3,4,4,5,5)
-#
-# sum( (x - mean(x))^2 )/length(x)
-#
-# max.dist <- 0.03
-# num.bins <- 10
-# breaks <- seq(cos(max.dist), 1, length.out = num.bins + 1)[-(num.bins + 1)]
-# coords(cmbdf) <- "cartesian"
-# covs <- rcosmo:::covCMB_internal2(cmbdf[, c("x", "y", "z", "I")], breaks)
-#
-#
-# # Reverse order since cosine is decreasing
-# covs[2:nrow(covs), 1] <- rev(covs[2:nrow(covs), 1])
-# covs[2:nrow(covs), 2] <- rev(covs[2:nrow(covs), 2])
-# covs[2:nrow(covs), 3] <- rev(covs[2:nrow(covs), 3])
-#
-# v <- c(0, rev(acos(breaks)))
-# # Drop the throw-away bin (distances greater than max.dist)
-# covs <- covs[-nrow(covs), ]
-#
-#
-# covs <- rcosmo:::covCMB_internal_sd(cmbdf[, c("x", "y", "z", "I")], breaks)
-
-
-
-
 df <- CMBDataFrame(nside = 1, I = 1:12)
 plotHPBoundaries(nside = 1, ordering = "nested")
 plotHPBoundaries(nside = 2, ordering = "nested", col = "blue")

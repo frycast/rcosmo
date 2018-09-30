@@ -7,12 +7,6 @@
 #' \code{\link{mmap}} object that points to the CMB map data table in the FITS
 #' file.
 #'
-#'\code{CMBDat} is adapted from the \code{\link{readFITS}} function in package
-#'\href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
-#'For CMB data \code{CMBDat} workss much faster than \code{\link{readFITS}}.
-#'However, \code{\link{readFITS}} is more general, i.e.,
-#'it applies to FITS files that do not contain CMB data.
-#'
 #'@param filename The path to the fits file.
 #'@param mmap A boolean indicating whether to use memory mapping.
 #'@param spix The sample pixels (rows) to read from the FITS file

@@ -31,13 +31,6 @@ intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
 \code{\link{mmap}} object that points to the CMB map data table in the FITS
 file.
 }
-\details{
-\code{CMBDat} is adapted from the \code{\link{readFITS}} function in package
-\href{https://CRAN.R-project.org/package=FITSio}{FITSio}.
-For CMB data \code{CMBDat} workss much faster than \code{\link{readFITS}}.
-However, \code{\link{readFITS}} is more general, i.e.,
-it applies to FITS files that do not contain CMB data.
-}
 \examples{
 
 ## Ensure you have a FITS file with the correct path

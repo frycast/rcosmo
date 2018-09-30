@@ -120,7 +120,7 @@ covCMB <- function(cmbdf,
   # Reverse order since cosine is decreasing
   covs[2:nrow(covs), 1] <- rev(covs[2:nrow(covs), 1])
   covs[2:nrow(covs), 2] <- rev(covs[2:nrow(covs), 2])
-  covs[3:nrow(covs), 3] <- rev(covs[2:nrow(covs), 3])
+  covs[2:nrow(covs), 3] <- rev(covs[2:nrow(covs), 3])
   v <- c(0, rev(acos(breaks)))
   # Drop the throw-away bin (distances greater than max.dist)
   covs <- covs[-nrow(covs), ]

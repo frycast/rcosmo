@@ -5,8 +5,8 @@ covCMB_internal2 <- function(cmbdf, cos_breaks) {
     .Call(`_rcosmo_covCMB_internal2`, cmbdf, cos_breaks)
 }
 
-covCMB_internal_sd <- function(cmbdf, cos_breaks) {
-    .Call(`_rcosmo_covCMB_internal_sd`, cmbdf, cos_breaks)
+covCMB_internal_var <- function(cmbdf, cos_breaks) {
+    .Call(`_rcosmo_covCMB_internal_var`, cmbdf, cos_breaks)
 }
 
 mkpix2xyC <- function(nside = 1024L) {

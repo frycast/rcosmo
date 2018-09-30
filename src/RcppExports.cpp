@@ -17,15 +17,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// covCMB_internal_sd
-NumericVector covCMB_internal_sd(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
-RcppExport SEXP _rcosmo_covCMB_internal_sd(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
+// covCMB_internal_var
+NumericVector covCMB_internal_var(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
+RcppExport SEXP _rcosmo_covCMB_internal_var(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type cmbdf(cmbdfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type cos_breaks(cos_breaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(covCMB_internal_sd(cmbdf, cos_breaks));
+    rcpp_result_gen = Rcpp::wrap(covCMB_internal_var(cmbdf, cos_breaks));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -189,7 +189,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcosmo_covCMB_internal2", (DL_FUNC) &_rcosmo_covCMB_internal2, 2},
-    {"_rcosmo_covCMB_internal_sd", (DL_FUNC) &_rcosmo_covCMB_internal_sd, 2},
+    {"_rcosmo_covCMB_internal_var", (DL_FUNC) &_rcosmo_covCMB_internal_var, 2},
     {"_rcosmo_mkpix2xyC", (DL_FUNC) &_rcosmo_mkpix2xyC, 1},
     {"_rcosmo_nest2ring", (DL_FUNC) &_rcosmo_nest2ring, 2},
     {"_rcosmo_pix2coords_internal", (DL_FUNC) &_rcosmo_pix2coords_internal, 4},

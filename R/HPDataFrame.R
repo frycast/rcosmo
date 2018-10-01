@@ -35,7 +35,14 @@
 #' or not the rows of a HPDataFrame can be assumed to belong to
 #' unique pixels.
 #'
+#' @details
+#' \code{HPDataFrame} with \code{auto.spix = TRUE} can be used to transform any
+#' spherical data (not nessesarily CMB) to the Healpix representation, see
+#' Example 3 below.
+#'
 #' @examples
+#'
+#' ##Example 1.
 #'
 #' hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
 #' pix(hp1)
@@ -43,12 +50,41 @@
 #' class(hp1)
 #' assumedUniquePix(hp1)
 #'
+#' ##Example 2.
+#'
 #' # Where nside is not specified
 #' sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
 #' sky.s <- CMBDataFrame(sky, sample.size = 100)
 #' hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
 #' class(hpdf)
 #' assumedUniquePix(hpdf)
+#'
+#' ##Example 3.
+#' #
+#' ## With earth data.
+#' ## Download World Cities Database from
+#' ## https://simplemaps.com/static/data/world-cities/basic/simplemaps_worldcities_basicv1.4.zip
+#' ## unpack the file worldcities.csv
+#' #
+#' # worldcities <- read.csv("worldcities.csv")
+#' # uscities <- worldcities[worldcities$country == "United States",]
+#' #
+#' # Prepare a data frame with cities' coordinates
+#' # usdf <- data.frame(phi = pi/180*uscities$lng, theta = pi/2 - pi/180*uscities$lat,
+#' #                  I=rep(1,length(uscities$lng)))
+#' #
+#' # Select k cities with different coordinates
+#' # k <- 1000
+#' # usdf <- usdf[sample(nrow(usdf), k), ]
+#' # plot(usdf$phi, usdf$theta)
+#' # usdf[duplicated(usdf), ]
+#' # usdf<- usdf[!duplicated(usdf), ]
+#' # usdf[duplicated(usdf), ]
+#' # usdf <- coords(usdf, new.coords = "cartesian")
+#' #
+#' # Create and plot the corresponding HPDataFrame with unique pixels
+#' # ushp <- HPDataFrame(usdf, auto.spix = TRUE)
+#' # plot(ushp, size = 2)
 #'
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",

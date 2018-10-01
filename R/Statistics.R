@@ -1097,7 +1097,7 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 #'
 #'## Plot of the Askey covariance function
 #'
-#' v1.f <- function(x, ...) {covmodelCMB (x, ...)}
+#' v1.f <- function(x, ...) {covmodelCMB(x, ...)}
 #' curve( v1.f(x, cov.pars = c(1, 0.03), kappa = 3, cov.model = "askey"),
 #' from = 0, to = 0.1, xlab = "distance", ylab = expression(cov(h)), lty = 2,
 #' main = "covariance")
@@ -1906,7 +1906,7 @@ variofit1 <-   function (vario,
 #'@param max.dist A maximum distance to draw the variogram line. The default is
 #'\code{x$max.dist}.
 #'@param scaled logical. If TRUE the sill in the plot is 1.
-#'@param ... other plotting parameters
+#'@param ... other plotting parameters passed to \code{\link[graphics]{curve}}
 #'
 #'@details
 #'The function adds a line with fitted variogram model to a plot. It is used
@@ -1996,7 +1996,7 @@ linesCMB <-  function (x, max.dist, scaled = FALSE, ...) {
       )
   }
   graphics::curve(
-    gamma.f(x, my.l = my.l),
+    function(x) {gamma.f(x, my.l = my.l)},
     from = 0,
     to = my.l$max.dist,
     add = TRUE,

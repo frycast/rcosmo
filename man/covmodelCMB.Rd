@@ -65,7 +65,7 @@ Additional information can be found in the section Details in
 
 ## Plot of the Askey covariance function
 
-v1.f <- function(x, ...) {covmodelCMB (x, ...)}
+v1.f <- function(x, ...) {covmodelCMB(x, ...)}
 curve( v1.f(x, cov.pars = c(1, 0.03), kappa = 3, cov.model = "askey"),
 from = 0, to = 0.1, xlab = "distance", ylab = expression(cov(h)), lty = 2,
 main = "covariance")

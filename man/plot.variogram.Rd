@@ -2,7 +2,7 @@
 % Please edit documentation in R/Statistics.R
 \name{plot.variogram}
 \alias{plot.variogram}
-\title{Plot variogram}
+\title{Plot sample variogram}
 \arguments{
 \item{x}{An object of class variogram.}
 

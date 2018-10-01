@@ -78,15 +78,28 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 
       df <- data.frame(args)
     }
-  }
-  else # auto.spix = TRUE. So, use nestSearch to determine pixel centers
-  {
+  } else { # auto.spix = TRUE. So, use nestSearch to determine pixel centers
 
     df <- data.frame(...)
 
     if ( missing(nside) ) {
 
       nside <- separatingNside(df)
+
+      if (is.infinite(nside)) {
+
+        stop(paste0("The resolution required to separate pixels was infinite. ",
+                    "Perhaps you need to remove duplicate rows or some locations ",
+                    "are extremely close to eachother."))
+      }
+
+      if ( nside >=  2^13) {
+
+        stop(paste0("The resolution required to seperate pixels is too large. ",
+                    "Perhaps this is unnecessary and you can remove some locations ",
+                    "that are very close to eachother."))
+      }
+
       assumedUniquePix <- TRUE
     }
 

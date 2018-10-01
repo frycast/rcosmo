@@ -934,7 +934,7 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
       }
 
       crds <- pix2coords_internal(nside = ns, nested = nest,
-                                           cartesian = cart, spix = sp)[,1:nc]
+                                  cartesian = cart, spix = sp)[,1:nc]
       crds <- as.data.frame(crds)
       names(crds) <- nam
 

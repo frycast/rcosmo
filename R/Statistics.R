@@ -1924,8 +1924,9 @@ plotcovmodelCMB <- function (cov.model = "matern", sigmasq=1,
                       cov.pars = c(sigmasq, phi),
                       kappa = kappa,
                       output = FALSE)
+    x <- NULL; rm(x) # Trick R CMD Check
     graphics::curve(covmodelCMB(x, cov.pars = c(sigmasq, phi),
-                                         kappa = kappa, cov.model = cov.model),
+                                kappa = kappa, cov.model = cov.model),
                   from = from,
                   to = to,
                   xlab = "distance",
@@ -1972,8 +1973,13 @@ plotvariogram <- function (cov.model = "matern", sigmasq=1,
                       cov.pars = c(sigmasq, phi),
                       kappa = kappa,
                       output = FALSE)
-  graphics::curve(covmodelCMB(0, cov.pars = c(sigmasq, phi), kappa = kappa, cov.model = cov.model) -
-                    covmodelCMB(x, cov.pars = c(sigmasq, phi), kappa = kappa, cov.model = cov.model),
+  x <- NULL; rm(x) # Trick R CMD Check
+  graphics::curve(covmodelCMB(0, cov.pars = c(sigmasq, phi),
+                              kappa = kappa,
+                              cov.model = cov.model)
+                  - covmodelCMB(x, cov.pars = c(sigmasq, phi),
+                                kappa = kappa,
+                                cov.model = cov.model),
                   from = from,
                   to = to,
                   xlab = "distance",
@@ -2086,8 +2092,8 @@ linesCMB <-  function (x, max.dist, scaled = FALSE, ...) {
           )
       )
   }
-  graphics::curve(
-    function(x) {gamma.f(x, my.l = my.l)},
+  x <- NULL; rm(x) #Trick R CMD Check
+  graphics::curve(gamma.f(x, my.l = my.l),
     from = 0,
     to = my.l$max.dist,
     add = TRUE,

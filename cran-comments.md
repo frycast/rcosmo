@@ -37,4 +37,6 @@ There were 2 NOTES:
 There are no downstream dependencies for this package
 
 
+## TO DO BEFORE SUBMISSION
 
+* rcosmo, Rcosmo, rCosmo are all placeholder docs

@@ -9,7 +9,8 @@ HPDataFrame(..., nside, ordering = "nested", auto.spix = FALSE, spix,
 }
 \arguments{
 \item{...}{Data. Can be named vectors or a data.frame. May
-include columns x,y and z representing Cartesian coordinates
+include columns (x,y,z) or (theta, phi) representing
+Cartesian or spherical coordinates
 of points on the unit sphere.}
 
 \item{nside}{Integer number \eqn{2^k}, the nside

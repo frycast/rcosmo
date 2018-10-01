@@ -41,29 +41,11 @@ gg(3)
 
 
 library(rcosmo)
-
-worldcities <- read.csv("../worldcities.csv")
-
-df <- data.frame(phi=worldcities$lng, theta=worldcities$lat,
-                 I=rep(1,length(worldcities$lng)))
-k <- 1000
-df1 <- df[sample(nrow(df), k), ]
-plot(df1$phi, df1$theta)
-df1 <- coords(df1, new.coords = "cartesian")
-df1[duplicated(df1), ]
-df2 <- df1[!duplicated(df1), ]
-df2[duplicated(df2), ]
-hpdf <- HPDataFrame(df2, auto.spix = TRUE)
-hpdf
-str(hpdf)
-plot(hpdf,size = 2)
-
-
-library(rcosmo)
 worldcities <- read.csv("../worldcities.csv")
 uscities <- worldcities[worldcities$country == "United States",]
 usdf <- data.frame(phi = pi/180*uscities$lng, theta = pi/2 - pi/180*uscities$lat,
                    I=rep(1,length(uscities$lng)))
+
 k <- 1000
 usdf <- usdf[sample(nrow(usdf), k), ]
 plot(usdf$phi, usdf$theta)
@@ -71,6 +53,9 @@ plot(usdf$phi, usdf$theta)
 usdf[duplicated(usdf), ]
 usdf<- usdf[!duplicated(usdf), ]
 usdf[duplicated(usdf), ]
+
+ushp <- HPDataFrame(usdf, auto.spix = TRUE)
+plot(ushp)
 
 usdf <- coords(usdf, new.coords = "cartesian")
 ushp <- HPDataFrame(usdf, auto.spix = TRUE)

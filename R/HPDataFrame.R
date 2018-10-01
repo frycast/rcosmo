@@ -12,7 +12,8 @@
 #' can be stored in different rows of any given HPDataFrame.
 #'
 #' @param ... Data. Can be named vectors or a data.frame. May
-#' include columns x,y and z representing Cartesian coordinates
+#' include columns (x,y,z) or (theta, phi) representing
+#' Cartesian or spherical coordinates
 #' of points on the unit sphere.
 #' @param nside Integer number \eqn{2^k}, the nside
 #' parameter, i.e, resolution. If \code{nside} is unspecified, then
@@ -105,11 +106,12 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 
     if (all(c("x","y","z") %in% names(df))) {
 
-      # Do nothing
+      cart <- TRUE
 
     } else if (all(c("theta","phi") %in% names(df))) {
 
-      df.xyz <- coords(df, new.coords = "cartesian")
+      df <- coords(df, new.coords = "cartesian")
+      cart <- FALSE
 
     } else {
 
@@ -120,8 +122,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     pix <- nestSearch(df[,c("x","y","z")], nside = nside,
                       index.only = TRUE)
 
-    # pix <- apply(df[,c("x","y","z")], MARGIN = 1, nestSearch,
-    #              nside = nside, index.only = TRUE)
+    if ( !cart ) coords(df) <- "spherical"
 
     if ( ordering != "nested" ) {
 

@@ -752,7 +752,7 @@ as.CMBDataFrame <- function(df, ordering, nside, spix)
                   " pix(df) or be unspecified"))
     }
 
-    if (!missing(ordering) && ordering(df) != tolower(ordering) ) {
+    if (!missing(ordering) && rcosmo::ordering(df) != tolower(ordering) ) {
       stop(gettextf("Since '%s' is a CMBDataFrame already,
                     ordering should be unspecified or match the ordering
                     attribute of '%s'",
@@ -760,7 +760,7 @@ as.CMBDataFrame <- function(df, ordering, nside, spix)
                     deparse(substitute(df))))
     }
 
-    if (!missing(nside) && nside(df) != tolower(nside) ) {
+    if (!missing(nside) && rcosmo::nside(df) != tolower(nside) ) {
       stop(gettextf("Since '%s' is a CMBDataFrame already,
                     nside should be unspecified or match the nside
                     attribute of '%s'",
@@ -919,8 +919,8 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
     {
       cart <- (new.coords == "cartesian")
       nest <- (ordering(cmbdf) == "nested")
-      ns <- nside(cmbdf)
-      sp <- pix(cmbdf)
+      ns <- rcosmo::nside(cmbdf)
+      sp <- rcosmo::pix(cmbdf)
 
       if (cart)
       {
@@ -1065,13 +1065,13 @@ plot.CMBDataFrame <- function(x, intensities = "I",
   cmbdf <- x
   if ( !missing(sample.size) ) {
 
-    spix <- sample(pix(cmbdf), sample.size)
-    cmbdf <- cmbdf[pix(cmbdf) %in% spix,]
+    spix <- sample(rcosmo::pix(cmbdf), sample.size)
+    cmbdf <- cmbdf[rcosmo::pix(cmbdf) %in% spix,]
   }
 
   if (is.null(coords(cmbdf))) {
 
-    coords(cmbdf) <- "cartesian"
+    rcosmo::coords(cmbdf) <- "cartesian"
   }
 
   if (missing(col)) {
@@ -1089,7 +1089,7 @@ plot.CMBDataFrame <- function(x, intensities = "I",
   }
 
   ## Change coordinates if necessary
-  cmbdf.xyz <- coords(cmbdf, new.coords = "cartesian")
+  cmbdf.xyz <- rcosmo::coords(cmbdf, new.coords = "cartesian")
 
   ## Do the plotting
   if ( !add ) {
@@ -1168,22 +1168,22 @@ summary.CMBDataFrame <- function(object, intensities = "I", ...)
   cmbdf <- object
   ans <- list(intensities = summary(cmbdf[,intensities, drop = TRUE]))
 
-  if ( is.null(coords(cmbdf)) )
+  if ( is.null(rcosmo::coords(cmbdf)) )
   {
     ans$coords <- "HEALPix only"
   }
   else
   {
-    ans$coords <- coords(cmbdf)
+    ans$coords <- rcosmo::coords(cmbdf)
   }
 
-  if ( is.null(window(cmbdf)) )
+  if ( is.null(rcosmo::window(cmbdf)) )
   {
     ans$window <- "full sky"
   }
   else
   {
-    ans$window <- window(cmbdf)
+    ans$window <- rcosmo::window(cmbdf)
   }
 
   if ( is.null(resolution(cmbdf)) )
@@ -1192,15 +1192,16 @@ summary.CMBDataFrame <- function(object, intensities = "I", ...)
   }
   else
   {
-    ans$resolution <- resolution(cmbdf)
+    ans$resolution <- rcosmo::resolution(cmbdf)
   }
 
-  ans$ordering <- ordering(cmbdf)
-  ans$nside <- nside(cmbdf)
-  ans$pix <- pix(cmbdf)
+  ans$ordering <- rcosmo::ordering(cmbdf)
+  ans$nside <- rcosmo::nside(cmbdf)
+  ans$pix <- rcosmo::pix(cmbdf)
   ans$n <- nrow(cmbdf)
-  ans$area <- geoArea(cmbdf)
-  ans$method <- header(cmbdf)[grepl("METHOD  =", header(cmbdf))]
+  ans$area <- rcosmo::geoArea(cmbdf)
+  ans$method <- rcosmo::header(cmbdf)[grepl("METHOD  =",
+                                            rcosmo::header(cmbdf))]
 
   class(ans) <- "summary.CMBDataFrame"
   return(ans)

@@ -15,7 +15,7 @@ the fitted model obtained as an output of the function \code{\link{variofitCMB}}
 
 \item{scaled}{logical. If TRUE the sill in the plot is 1.}
 
-\item{...}{other plotting parameters}
+\item{...}{other plotting parameters passed to \code{\link[graphics]{curve}}}
 }
 \value{
 A line with a fitted variogram model is added to a plot.

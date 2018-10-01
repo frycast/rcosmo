@@ -40,11 +40,13 @@
 #' pix(hp1)
 #' coords(hp1, new.coords = "cartesian")
 #' class(hp1)
+#' assumedUniquePix(hp1)
 #'
 #' # Where nside is not specified
 #' sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
 #' sky.s <- CMBDataFrame(sky, sample.size = 100)
 #' hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
+#' class(hpdf)
 #' assumedUniquePix(hpdf)
 #'
 #' @export
@@ -841,7 +843,7 @@ separatingNside <- function(df) {
 }
 
 
-#'assumedUniquePix
+#'Check if object's rows are assumed to correspond to unique HEALPix indices
 #'
 #'Check if an object can be assumed to have rows
 #'that correspond to unique HEALPix pixel indices.
@@ -849,9 +851,20 @@ separatingNside <- function(df) {
 #'@param obj Any object
 #'
 #'@return A boolean. This is TRUE if \code{obj}
-#'is a CMBDataFrame or a HPDataFrame whose
-#'rows can be assumed to correspond to unique
-#'HEALPix pixel indices.
+#'is a \code{\link{CMBDataFrame}} or a \code{\link{HPDataFrame}} whose
+#'rows were assumed to correspond to unique HEALPix pixel indices.
+#'
+#'@examples
+#'
+#' hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
+#' pix(hp1)
+#' coords(hp1, new.coords = "cartesian")
+#' assumedUniquePix(hp1)
+#'
+#' sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
+#' sky.s <- CMBDataFrame(sky, sample.size = 100)
+#' hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
+#' assumedUniquePix(hpdf)
 #'
 #'@export
 assumedUniquePix <- function(obj) {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/HPDataFrame.R
 \name{assumedUniquePix}
 \alias{assumedUniquePix}
-\title{assumedUniquePix}
+\title{Check if object's rows are assumed to correspond to unique HEALPix indices}
 \usage{
 assumedUniquePix(obj)
 }
@@ -11,11 +11,23 @@ assumedUniquePix(obj)
 }
 \value{
 A boolean. This is TRUE if \code{obj}
-is a CMBDataFrame or a HPDataFrame whose
-rows can be assumed to correspond to unique
-HEALPix pixel indices.
+is a \code{\link{CMBDataFrame}} or a \code{\link{HPDataFrame}} whose
+rows were assumed to correspond to unique HEALPix pixel indices.
 }
 \description{
 Check if an object can be assumed to have rows
 that correspond to unique HEALPix pixel indices.
+}
+\examples{
+
+hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
+pix(hp1)
+coords(hp1, new.coords = "cartesian")
+assumedUniquePix(hp1)
+
+sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
+sky.s <- CMBDataFrame(sky, sample.size = 100)
+hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
+assumedUniquePix(hpdf)
+
 }

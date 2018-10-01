@@ -405,7 +405,7 @@ plot.CMBCovariance <-  function (x, ...) {
   if (requireNamespace("geoR", quietly = TRUE)) {
     x0 <- x
     attributes(x0)$class <- "variogram"
-    geoR::plot.variogram(x0, ylab = "sample covariance", ...)
+    geoR:::plot.variogram(x0, ylab = "sample covariance", ...)
   } else {
     stop("Package \"geoR\" needed for this function. Please install it.")
   }
@@ -438,7 +438,7 @@ plot.CMBCorrelation <-  function (x, ...) {
   if (requireNamespace("geoR", quietly = TRUE)) {
     x0 <- x
     attributes(x0)$class <- "variogram"
-    geoR::plot.variogram(x0, ylab= "sample correlation", ...)
+    geoR:::plot.variogram(x0, ylab= "sample correlation", ...)
   } else {
     stop("Package \"geoR\" needed for this function. Please install it.")
   }
@@ -1924,7 +1924,7 @@ plotcovmodelCMB <- function (cov.model = "matern", sigmasq=1,
                       cov.pars = c(sigmasq, phi),
                       kappa = kappa,
                       output = FALSE)
-  graphics::curve(covmodelCMB(x, cov.pars = c(sigmasq, phi),
+    graphics::curve(covmodelCMB(x, cov.pars = c(sigmasq, phi),
                                          kappa = kappa, cov.model = cov.model),
                   from = from,
                   to = to,
@@ -2172,8 +2172,7 @@ practicalRangeCMB <- function (cov.model,
     return(min(pr, pi))
   }
 
-CMB.cov.models <-
-  c(
+CMB.cov.models <- c(
     "matern",
     "exponential",
     "spherical",

@@ -1,6 +1,28 @@
 
 # Parallel nestSearch ----------------------------------------------------
 
+target1 <- data.frame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1))
+target2 <- c(1,0,0)
+target3 <- matrix(c(1,0,0,0,1,0,0,0,1), byrow = TRUE, nrow = 3)
+ns <- 16
+
+
+nestSearch2(target1, nside = ns)
+nestSearch2(target2, nside = ns)
+nestSearch2(target3, nside = ns)
+
+
+
+world <- read.csv("../worldcities.csv")
+df <- data.frame(phi = pi/180*world$lng, theta = pi/2 - pi/180*world$lat,
+                   I=rep(1,length(world$lng)))
+k <- 5000
+dfs <- df[sample(nrow(df), k), ]
+separatingNside(dfs)
+a <- nestSearch2(dfs, nside = 2^12)
+
+
+
 # This version always assumes that j2 = j1 + 1
 # Takes advantage of children being resolution independent
 nestSearch_step2 <- function(target, j2, pix.j1 = 0) {
@@ -25,7 +47,7 @@ nestSearch_step2 <- function(target, j2, pix.j1 = 0) {
   for (i in 1:tlen) {
     dots <- xyz.j2[[i]] %*% target[[i]]
     minkid <- kids[[i]][max.col(t(dots), ties.method = "first")]
-    result[[i]] <- neighbours(minkid, j2)
+    result[[i]] <- rcosmo::neighbours(minkid, j2)
   }
 
 
@@ -36,63 +58,65 @@ nestSearch_step2 <- function(target, j2, pix.j1 = 0) {
 
 ## This version breaks target into a list of vectors
 # target may be a data.frame, matrix, or a single vector
-nestSearch <- function(target, nside,
+nestSearch2 <- function(target, nside,
                        index.only = FALSE) {
 
-  # Convert the target to a list where elements are the row vectors
-  if ( is.numeric(target) ) { target <- list(target)
-  } else { target <- as.list(as.data.frame(t(target))) }
+  # # Convert the target to a list where elements are the row vectors
+  # if ( is.numeric(target) && !is.matrix(target) ) { target <- list(target)
+  # } else if ( is.matrix(target) ) { target <- as.list(as.data.frame(t(target))) }
 
-  j = 0:log2(nside)
+  if ( is.matrix(target) ) {
+
+    target <- as.list(as.data.frame(t(target)))
+  } else if ( is.data.frame(target) ) {
+
+    if ( all(c("theta","phi") %in% names(target)) ) {
+
+      coords(target) <- "cartesian"
+      target <- target[,c("x","y","z")]
+    }
+    target <- as.list(as.data.frame(t(target)))
+  } else if ( is.numeric(target) ) {
+
+    target <- list(target)
+  } else {
+
+    stop("Target must be data.frame, matrix or numeric vector")
+  }
+
+  j = 0:(log2(nside)+1)
   jlen <- length(j)
+  tlen <- length(target)
+  h <- rep(list(0), tlen)
+  for ( i in 1:jlen ) {
 
-  for ( i in 1:jlen )
-  {
-    h <- rcosmo::nestSearch_step( target, j2 = j[i], pix.j1 = h)
-
-    ## FIX ME :
-    # nestSearch_step should be able to take pix.j1
-    # as a list where element k is the 7-9 pixels inside
-    # which the closest grandchild pixel to the kth
-    # element of target
-    # should be found (currently it just unlists h
-    # and searches amongst all pixels for every target).
-    ##
-    h <- unique(as.numeric(unlist(h)))
-
+    h <- nestSearch_step2( target, j2 = j[i], pix.j1 = h)
   }
 
   # Note h is now one level deeper than the target resolution.
   # Convert h to Cartesian coordinates.
-  h.xyz <- pix2coords_internal(nside = 2^(j[length(j)]),
+  h.xyz <- lapply(h, function(x) {
+  rcosmo:::pix2coords_internal(nside = 2^j[jlen],
                                nested = TRUE,
                                cartesian = TRUE,
-                               spix = h)[,1:3]
+                               spix = x) })
 
-  # Minimise sum((point - target)^2) by row
-  if ( is.matrix(target) || is.data.frame(target) ) {
-
-    dots <- h.xyz %*% t(target)
-  } else if ( is.numeric(target) ) {
-
-    dots <- h.xyz %*% target
-  } else {
-
-    stop("target point must be numeric (vector, data.frame or matrix)")
+  # Get the parent of the closest
+  result.h <- list()
+  for (i in 1:tlen) {
+    dots <- h.xyz[[i]] %*% target[[i]]
+    min.h <- h[[i]][max.col(t(dots), ties.method = "first")]
+    result.h[[i]] <- parent(min.h)
   }
-  index.min <- max.col(t(dots), ties.method = "first")
 
-
-  # Find the parent of h, which is at the target resolution
-  h <- parent(h[index.min])
+  h <- unlist(result.h)
 
   if ( !index.only ) {
-
-    h.xyz <- pix2coords_internal(nside = nside,
+    xyz <- rcosmo:::pix2coords_internal(nside = nside,
                                  nested = TRUE,
                                  cartesian = TRUE,
-                                 spix = h)[,1:3]
-    return(list(xyz = h.xyz, pix = h))
+                                 spix = h)
+    return(list(xyz = xyz, pix = h))
   }
 
   return(h)
@@ -131,7 +155,9 @@ parent <- function(p)
 #'
 children <- function(p)
 {
-  1:4 + rep((p-1)*4, each = 4)
+  if ( any(p > 0) ) {
+    1:4 + rep((p-1)*4, each = 4)
+  } else { 1:12 }
 }
 
 #' siblings

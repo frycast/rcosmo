@@ -130,14 +130,23 @@ HPDataFrame <- function(..., nside, ordering = "nested",
                     "are extremely close to eachother."))
       }
 
-      if ( nside >=  2^13) {
+      assumedUniquePix <- TRUE
 
-        stop(paste0("The resolution required to seperate pixels is too large. ",
+      if ( nside >=  2^12) {
+
+        ### FIX ME :
+        # This is to prevent numeric overflow in the pix2coords_internal
+        ##
+        warning(paste0("The resolution required to seperate pixels is too large. ",
                     "Perhaps this is unnecessary and you can remove some locations ",
-                    "that are very close to eachother."))
+                    "that are very close to eachother. The resolution was capped ",
+                    "at nside = 4096, so some indices may now be duplicates."))
+
+        assumedUniquePix <- FALSE
+        nside <- 2^12
       }
 
-      assumedUniquePix <- TRUE
+
     }
 
     if (all(c("x","y","z") %in% names(df))) {

@@ -42,12 +42,13 @@ gg(3)
 
 library(rcosmo)
 worldcities <- read.csv("../worldcities.csv")
-uscities <- worldcities[worldcities$country == "United States",]
+#uscities <- worldcities[worldcities$country == "United States",]
+uscities <- worldcities
 usdf <- data.frame(phi = pi/180*uscities$lng, theta = pi/2 - pi/180*uscities$lat,
                    I=rep(1,length(uscities$lng)))
 
-k <- 1000
-usdf <- usdf[sample(nrow(usdf), k), ]
+# k <- 1000
+# usdf <- usdf[sample(nrow(usdf), k), ]
 plot(usdf$phi, usdf$theta)
 
 usdf[duplicated(usdf), ]

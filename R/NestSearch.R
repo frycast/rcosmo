@@ -5,13 +5,12 @@
 #' algorithm. HEALPix indices are all assumed to be in the "nested"
 #' ordering scheme.
 #'
-#' @param target A vector of Cartesian coordinates (x,y,z) for the target
-#' point.
+#' @param target A data.frame, matrix or vector of
+#' Cartesian (x,y,z) coordinates for the target point. If
+#' a data.frame is used then spherical coordinates can
+#' be specified with row names theta and phi.
 #' @param nside An integer, the target resolution at which the
 #' resulting pixels are returned.
-#' @param j A vector of the resolutions to use in each
-#' \code{\link{nestSearch_step}}. This is usually best left as the default.
-#' Changing this parameter is for experienced users only.
 #' @param index.only A boolean indicating whether to return only the
 #' pixel index (TRUE), or cartesian coordinates as well (FALSE).
 #'
@@ -37,9 +36,10 @@
 #'             col="red", size = 5, add = TRUE)
 #'
 #'
-#' ## Repeat the above for 4 points in a matrix
-#' points <- matrix(c(0,0,1,0,1,0,1,0,0,0.6,0.8,0),
-#' byrow = TRUE, nrow = 4)
+#' ## Repeat the above for 4 points in a data.frame
+#' points <- data.frame(x = c(1,0,0,0.6),
+#'                      y = c(0,1,0,0.8),
+#'                      z = c(0,0,1,0))
 #' points
 #' j <- 2
 #' cpoints <- nestSearch(points, nside = 2^j)
@@ -52,59 +52,64 @@
 #'
 #' @export
 nestSearch <- function(target, nside,
-                       index.only = FALSE,
-                       j = 0:log2(nside))
-{
-  j <- c(j[1], j, j[length(j)]+1)
-  h <- 0
-  for ( i in 2:length(j) )
-  {
-    h <- rcosmo::nestSearch_step( target, j2 = j[i],
-                                   j1 = j[i-1], pix.j1 = h)
+                       index.only = FALSE) {
 
-    ## FIX ME :
-    # nestSearch_step should be able to take pix.j1
-    # as a list where element k is the 7-9 pixels inside
-    # which the closest grandchild pixel to the kth
-    # element of target
-    # should be found (currently it just unlists h
-    # and searches amongst all pixels for every target).
-    ##
-    h <- unique(as.numeric(unlist(h)))
+  # # Convert the target to a list where elements are the row vectors
+  # if ( is.numeric(target) && !is.matrix(target) ) { target <- list(target)
+  # } else if ( is.matrix(target) ) { target <- as.list(as.data.frame(t(target))) }
 
+  if ( is.matrix(target) ) {
+
+    target <- as.list(as.data.frame(t(target)))
+  } else if ( is.data.frame(target) ) {
+
+    if ( all(c("theta","phi") %in% names(target)) ) {
+
+      coords(target) <- "cartesian"
+      target <- target[,c("x","y","z")]
+    }
+    target <- as.list(as.data.frame(t(target)))
+  } else if ( is.numeric(target) ) {
+
+    target <- list(target)
+  } else {
+
+    stop("Target must be data.frame, matrix or numeric vector")
+  }
+
+  j = 0:(log2(nside)+1)
+  jlen <- length(j)
+  tlen <- length(target)
+  h <- rep(list(0), tlen)
+  for ( i in 1:jlen ) {
+
+    h <- nestSearch_step( target, j2 = j[i], pix.j1 = h)
   }
 
   # Note h is now one level deeper than the target resolution.
   # Convert h to Cartesian coordinates.
-  h.xyz <- pix2coords_internal(nside = 2^(j[length(j)]),
-                                        nested = TRUE,
-                                        cartesian = TRUE,
-                                        spix = h)[,1:3]
-
-  # Minimise sum((point - target)^2) by row
-  if ( is.matrix(target) || is.data.frame(target) ) {
-
-    dots <- h.xyz %*% t(target)
-  } else if ( is.numeric(target) ) {
-
-    dots <- h.xyz %*% target
-  } else {
-
-    stop("target point must be numeric (vector, data.frame or matrix)")
-  }
-  index.min <- max.col(t(dots), ties.method = "first")
-
-
-  # Find the parent of h, which is at the target resolution
-  h <- parent(h[index.min])
-
-  if ( !index.only ) {
-
-    h.xyz <- pix2coords_internal(nside = nside,
+  h.xyz <- lapply(h, function(x) {
+           pix2coords_internal(nside = 2^j[jlen],
                                nested = TRUE,
                                cartesian = TRUE,
-                               spix = h)[,1:3]
-    return(list(xyz = h.xyz, pix = h))
+                               spix = x) })
+
+  # Get the parent of the closest
+  result.h <- list()
+  for (i in 1:tlen) {
+    dots <- h.xyz[[i]] %*% target[[i]]
+    min.h <- h[[i]][max.col(t(dots), ties.method = "first")]
+    result.h[[i]] <- parent(min.h)
+  }
+
+  h <- unlist(result.h)
+
+  if ( !index.only ) {
+    xyz <- pix2coords_internal(nside = nside,
+                               nested = TRUE,
+                               cartesian = TRUE,
+                               spix = h)
+    return(list(xyz = xyz, pix = h))
   }
 
   return(h)
@@ -115,26 +120,12 @@ nestSearch <- function(target, nside,
 
 #' nestSearch_step
 #'
-#' Search for the closest HEALPix pixel to a \code{target} point,
-#' where the search is restricted to within HEALPix pixel,
-#' \code{pix.j1}, at resolution j1.
-#'
-#' j1 and j2 are HEALPix resolution parameters, i.e., \eqn{nside = 2^j}.
-#'
-#' \code{nestSearch_step(target, j2, j1, pix.j1)} searches within the subregion
-#' pix.j1, where pix.j1 is a HEALPix pixel index at resolution j1.
-#' The return value is the HEALPix point closest to \code{target}, at
-#' resolution j2.
-#'
-#' Setting \code{pix.j1 = 0} (the default) searches for the HEALPix point closest
-#' to \code{target} at resolution j2, among all HEALPix points at resolution j1.
+#' This function is inteded for use only with nestSearch.
 #'
 #' @param target is the target point on S^2 in spherical coordinates.
-#' @param j1 is the lower resolution, with j1 <= j2.
-#' @param j2 is the upper resolution.
-#' @param pix.j1 is the initial pix index at resolution j1,
-#' i.e., the j1-level pixel to search in. If \code{pix.j1 = 0} then
-#' all pixels will be searched (slow).
+#' @param j2 is the target resolution.
+#' @param pix.j1 is the initial pix index,
+#' i.e., the j1-level pixel to search in.
 #'
 #' @return A vector containing the HEALPix pixel index, \code{pix},
 #' of the closest HEALPix pixel center to the target point,
@@ -143,54 +134,33 @@ nestSearch <- function(target, nside,
 #'@keywords internal
 #'
 #' @export
-nestSearch_step <- function(target, j1 = j2, j2, pix.j1 = 0) {
+nestSearch_step <- function(target, j2, pix.j1) {
 
-  # nside at level j2
+
+  # Get the 4 kids
+  if (is.list(pix.j1)) { kids <-  lapply(pix.j1, children)
+    } else { kids <-  list(children(pix.j1)) }
+
+
   nside.j2 <- 2^j2
+  # Coordinates of the 4 kids
+  xyz.j2 <- lapply(kids, function(x) {
+             pix2coords_internal(nside = nside.j2,
+                                 nested = TRUE,
+                                 cartesian = TRUE,
+                                 spix = x) })
 
-  if ( j1 < j2 ) {
 
-    spix.j2 <- rcosmo::pixelWindow(j1, j2, pix.j1)
-    xyz.j2 <- pix2coords_internal(nside = nside.j2,
-                                  nested = TRUE,
-                                  cartesian = TRUE,
-                                  spix = spix.j2)[,1:3]
-  } else if ( j1 == j2 )  {
-
-    # Convert spix.j2 to Cartesian coordinates
-    xyz.j2 <- pix2coords_internal(nside = nside.j2,
-                                  nested = TRUE,
-                                  cartesian = TRUE)[,1:3]
-  } else {
-
-    stop("j1 must be less than or equal to j2")
+  tlen <- length(target)
+  result <- list()
+  for (i in 1:tlen) {
+    dots <- xyz.j2[[i]] %*% target[[i]]
+    minkid <- kids[[i]][max.col(t(dots), ties.method = "first")]
+    result[[i]] <- rcosmo::neighbours(minkid, j2)
   }
 
 
-  # Minimise sum((point - target)^2) by row
-  if ( is.matrix(target) || is.data.frame(target) ) {
-
-    dots <- xyz.j2 %*% t(target)
-  } else if ( is.numeric(target) ) {
-
-    dots <- xyz.j2 %*% target
-  } else {
-
-    stop("target point must be numeric (vector, data.frame or matrix)")
-  }
-
-  index.min <- max.col(t(dots), ties.method = "first")
-
-  # dots <- as.numeric(xyz.j2 %*% target)
-  # index.min <- which.max(dots)
-
-  if ( j1 < j2 ) {
-    result <- spix.j2[index.min]
-  } else {
-    result <- index.min
-  }
-
-  return( neighbours(result, j2) )
+  return( result )
 }
 
 
@@ -280,7 +250,9 @@ parent <- function(p)
 #'@export
 children <- function(p)
 {
-  1:4 + (p-1)*4
+  if ( any(p > 0) ) {
+    1:4 + rep((p-1)*4, each = 4)
+  } else { 1:12 }
 }
 
 #' Return siblings of pixel

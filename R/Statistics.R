@@ -402,13 +402,9 @@ NULL
 #'
 #' @export
 plot.CMBCovariance <-  function (x, ...) {
-  if (requireNamespace("geoR", quietly = TRUE)) {
     x0 <- x
     attributes(x0)$class <- "variogram"
     graphics::plot(x0, ylab = "sample covariance", ...)
-  } else {
-    stop("Package \"geoR\" needed for this function. Please install it.")
-  }
 }
 
 #'Plot sample CMBCorrelation
@@ -435,13 +431,9 @@ plot.CMBCovariance <-  function (x, ...) {
 #'
 #' @export
 plot.CMBCorrelation <-  function (x, ...) {
-  if (requireNamespace("geoR", quietly = TRUE)) {
     x0 <- x
     attributes(x0)$class <- "variogram"
     graphics::plot(x0, ylab= "sample correlation", ...)
-  } else {
-    stop("Package \"geoR\" needed for this function. Please install it.")
-  }
 }
 
 

@@ -418,11 +418,14 @@ DataFrame car2sph(DataFrame df) {
 
     theta[i] = acos(z[i]);
     double phi_i = std::atan2(y[i],x[i]);
-    if ( phi_i < 0 )
+    if ( phi_i < -1e13 )
     {
       phi[i] = 2*M_PI + phi_i;
     }
-    else
+    else if ( phi_i < 0 )
+    {
+      phi[i] = 0;
+    }
     {
       phi[i] = phi_i;
     }
@@ -463,9 +466,24 @@ DataFrame sph2car(DataFrame df) {
 
   for ( int i = 0; i < n; i++ )
   {
-    x[i] = sin(theta[i])*cos(phi[i]);
-    y[i] = sin(theta[i])*sin(phi[i]);
-    z[i] = cos(theta[i]);
+    if ( theta[i] == 0 )
+    {
+      x[i] = 0;
+      y[i] = 0;
+      z[i] = 1;
+    }
+    else if ( theta[i] == M_PI )
+    {
+      x[i] = 0;
+      y[i] = 0;
+      z[i] = -1;
+    }
+    else
+    {
+      x[i] = sin(theta[i])*cos(phi[i]);
+      y[i] = sin(theta[i])*sin(phi[i]);
+      z[i] = cos(theta[i]);
+    }
   }
 
   DataFrame xyz = DataFrame::create( Named("x") = x,

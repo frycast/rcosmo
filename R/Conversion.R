@@ -382,7 +382,7 @@ p2ibp <- function(p, j) #indexInBP
 }
 
 
-#' Reurn base pixel to which pixel belongs
+#' Return base pixel to which pixel belongs
 #'
 #' The base pixel to which pixel p belongs at resolution j
 #'

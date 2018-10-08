@@ -74,7 +74,7 @@
 #'## Create CMBDataFrame with points in the union of win1 and win2
 #'
 #'cmbdf <- CMBDataFrame(nside = 64, coords = "cartesian", ordering = "nested")
-#'cmbdf.win <- window(cmbdf, new.window = list(win1, win2), intersect = TRUE)
+#'cmbdf.win <- window(cmbdf, new.window = list(win1, win2), intersect = FALSE)
 #'plot(cmbdf.win)
 #'
 #'#' ## Example 4: intersection of windows

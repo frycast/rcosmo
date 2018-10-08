@@ -920,6 +920,104 @@ chi2CMB <- function(cmbdf, win1, win2, intensities = "I")
   entropy::chi2.empirical(y1, y2)
 }
 
+#' Sample Renyi function
+#'
+#' This function computes values of the sample Renyi function. Returns
+#' the estimated values of \eqn{T(q)}  for \eqn{q} taking values on a grid.
+#' For large data sets could be rather time consuming.
+#'
+#'
+#'@param cmbdf A \code{\link{CMBDataFrame}}.
+#'@param q.min Left endpoint of the interval to compute the Renyi function. The default
+#'value is 1.01,
+#'@param q.max Right endpoint of the interval to compute the Renyi function. The default
+#'value is 10
+#'@param N Number of points to compute the Renyi function. The default value is 20.
+#'@param k.box  A  dyadic decomposition level in computing the Renyi function,
+#'see the references in Details. The default value is \eqn{log2(nside(cmbdf)) - 3}
+#'@param intensities  A CMBDataFrame column with measured values
+#'
+#'
+#'@return Data frame which first column is the sampling grid
+#'\eqn{seq(q.min, q.max, length.out = N)} of \eqn{q} values. Another column
+#'consists of values of the sample Renyi function \eqn{T(q)} computed
+#'on the grid using the  \eqn{k.box}th level dyadic decomposition
+#' of the unit ball.
+#'
+#'
+#'@references
+#'(1) Leonenko, N., and Shieh, N. 2013. Rényi function for multifractal
+#'random fields. Fractals 21, Article No. 1350009.
+#'
+#'(2) http://mathworld.wolfram.com/RenyiEntropy.html
+#'
+#' @examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' #
+#' # cmbdf <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2), phi = c(0,0,pi/2))
+#' # cmbdf<- window(cmbdf, new.window = win)
+#' # Tq <- fRen(cmbdf)
+#' #
+#' # plot(Tq[,1], Tq[,2], ylab =expression(D[q]), xlab = "q",
+#' # main = "Sample Renyi function", pch = 20, col = "blue")
+#'
+#'
+#' @export
+fRen <- function(cmbdf,
+                 q.min = 1.01,
+                 q.max = 10,
+                 N = 20,
+                 k.box = log2(nside(cmbdf)) - 3,
+                 intensities = "I") {
+  if (!is.CMBDataFrame(cmbdf))
+  {
+    stop("Argument must be a CMBDataFrame")
+  }
+  ns1 <- nside(cmbdf)
+  pixind <- pix(cmbdf)
+  nagrpix <- setdiff(1:(12 * ns1 ^ 2), pixind)
+  field.comp <- rep(0, 12 * ns1 ^ 2)
+  field.in <- cmbdf[, intensities] - min(cmbdf[, intensities])
+  field.final <-
+    replace(field.comp, pixind, field.in[, intensities])
+
+  res.max <- log2(ns1)
+  npix <- 12 * 4 ^ k.box
+  delta <- sqrt(4 * pi / npix)
+  lev.diff <- 4 ^ (res.max - k.box)
+
+  i <- 0
+  while (i < (res.max - k.box)) {
+    nagrpix <- unique(as.integer(parent(nagrpix)))
+    i <- i + 1
+  }
+  agrpix <- setdiff((1:npix), nagrpix)
+  mu <-  vector(mode = "numeric", length = length(agrpix))
+  field.total <- 0
+  i <- 1
+  for (j in agrpix) {
+    pix <- (lev.diff * (j - 1) + 1):(lev.diff * j)
+    field.total <- field.total + sum(field.final[pix])
+    mu[i] <- sum(field.final[pix])
+    i <- i + 1
+  }
+  mu <- mu / field.total
+  Q <- seq(q.min, q.max, length.out = N)
+  Tq <-  vector(mode = "numeric", length = N)
+  ri <- 1
+  for (q in Q) {
+    Tq[ri] <- 1 / (q - 1) * log2(sum(mu ^ q)) / log2(delta)
+    ri <- ri + 1
+  }
+  Tqf <- data.frame(q = Q, tq = Tq)
+  return(Tqf)
+}
+
+
+
 #' Extreme values
 #'
 #' This function returns \code{n} largest extreme values for the specified

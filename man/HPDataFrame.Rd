@@ -5,7 +5,7 @@
 \title{HPDataFrame class}
 \usage{
 HPDataFrame(..., nside, ordering = "nested", auto.spix = FALSE, spix,
-  assumedUniquePix = FALSE)
+  assumedUniquePix = FALSE, delete.duplicates = FALSE)
 }
 \arguments{
 \item{...}{Data. Can be named vectors or a data.frame. May
@@ -36,6 +36,11 @@ if \code{auto.spix = TRUE}.}
 attribute of the HPDataFrame. This attribute indicates whether
 or not the rows of a HPDataFrame can be assumed to belong to
 unique pixels.}
+
+\item{delete.duplicates}{Boolean. If TRUE then rows
+corresponding to duplicate pixel indices will be dropped
+from the returned HPDataFrame, and assumedUniquePix will
+be set to TRUE.}
 }
 \description{
 HPDataFrames are a type of \code{data.frame} designed to carry

@@ -296,8 +296,6 @@ NumericMatrix pix2coords_internal(int nside = 0,
 
     for (int spi = 0; spi < N; ++spi) {
       if (sp[spi] > Npix || sp[spi] <= 0) {
-        std::cout << sp[spi] << "\n";
-        std::cout << Npix << "\n";
         throw std::invalid_argument("sample pixel is out of range");
       }
     }

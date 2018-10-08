@@ -4,18 +4,15 @@
 \alias{nestSearch_step}
 \title{nestSearch_step}
 \usage{
-nestSearch_step(target, j1 = j2, j2, pix.j1 = 0)
+nestSearch_step(target, j2, pix.j1)
 }
 \arguments{
 \item{target}{is the target point on S^2 in spherical coordinates.}
 
-\item{j1}{is the lower resolution, with j1 <= j2.}
+\item{j2}{is the target resolution.}
 
-\item{j2}{is the upper resolution.}
-
-\item{pix.j1}{is the initial pix index at resolution j1,
-i.e., the j1-level pixel to search in. If \code{pix.j1 = 0} then
-all pixels will be searched (slow).}
+\item{pix.j1}{is the initial pix index,
+i.e., the j1-level pixel to search in.}
 }
 \value{
 A vector containing the HEALPix pixel index, \code{pix},
@@ -23,19 +20,6 @@ of the closest HEALPix pixel center to the target point,
 \code{target}, at resolution j2, and its neighbours.
 }
 \description{
-Search for the closest HEALPix pixel to a \code{target} point,
-where the search is restricted to within HEALPix pixel,
-\code{pix.j1}, at resolution j1.
-}
-\details{
-j1 and j2 are HEALPix resolution parameters, i.e., \eqn{nside = 2^j}.
-
-\code{nestSearch_step(target, j2, j1, pix.j1)} searches within the subregion
-pix.j1, where pix.j1 is a HEALPix pixel index at resolution j1.
-The return value is the HEALPix point closest to \code{target}, at
-resolution j2.
-
-Setting \code{pix.j1 = 0} (the default) searches for the HEALPix point closest
-to \code{target} at resolution j2, among all HEALPix points at resolution j1.
+This function is inteded for use only with nestSearch.
 }
 \keyword{internal}

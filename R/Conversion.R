@@ -482,3 +482,67 @@ minDist2nside <- function(dist, factor = 3/4)
   # Round to the next power of 2
   return(2^ceiling(log2(n)))
 }
+
+
+
+
+#' geo2sph
+#'
+#' Convert latitude (lat) and longitude (lon) to spherical
+#' coordinates (theta, phi) with theta in [0,pi] and
+#' phi in [0,2*pi).
+#' All values are assumed to be in radians.
+#'
+#' @param ... A data.frame with columns lat and lon,
+#' or named vectors of lat and lon.
+#'
+#'
+#' @export
+geo2sph <- function(...) {
+
+  df <- data.frame(...)
+
+  if ( all(c("lat","lon") %in% names(df)) ) {
+
+    lat <- df$lat
+    lon <- df$lon
+
+    theta <- pi/2 - lat
+    phi <- lon
+
+    negs <- theta < -1e-13
+    theta[negs] <- -theta[negs]
+
+    high <- theta > pi+1e-13
+    theta[high] <- 2*pi - theta[high]
+
+    # These are now in e.g., [0,1e-13]
+    zeros <- theta <= 0
+    pies <- theta >= pi
+
+    theta[zeros] <- 0
+    theta[pies] <- pi
+    phi[zeros] <- 0
+    phi[pies] <- 0
+
+    negs <- phi < 0
+    while ( any(negs) ) {
+      phi[negs] <- phi[negs] + 2*pi
+      negs <- phi < 0
+    }
+
+    high <- phi > 2*pi
+    while ( any(high) ) {
+      phi[high] <- phi[high] - 2*pi
+      high <- phi > 2*pi
+    }
+
+    df$lat <- theta
+    df$lon <- phi
+    names(df)[names(df) == "lat"] <- "theta"
+    names(df)[names(df) == "lon"] <- "phi"
+
+  }
+
+  return(df)
+}

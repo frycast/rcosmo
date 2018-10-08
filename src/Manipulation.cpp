@@ -418,7 +418,13 @@ DataFrame car2sph(DataFrame df) {
 
     theta[i] = acos(z[i]);
     double phi_i = std::atan2(y[i],x[i]);
-    if ( phi_i < -1e13 )
+
+    if ( phi_i >= 2*M_PI-1e-13 )
+    {
+      phi_i = phi_i - 2*M_PI;
+    }
+
+    if ( phi_i < -1e-13 )
     {
       phi[i] = 2*M_PI + phi_i;
     }
@@ -426,6 +432,7 @@ DataFrame car2sph(DataFrame df) {
     {
       phi[i] = 0;
     }
+    else
     {
       phi[i] = phi_i;
     }

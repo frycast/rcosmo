@@ -34,6 +34,10 @@
 #' attribute of the HPDataFrame. This attribute indicates whether
 #' or not the rows of a HPDataFrame can be assumed to belong to
 #' unique pixels.
+#' @param delete.duplicates Boolean. If TRUE then rows
+#' corresponding to duplicate pixel indices will be dropped
+#' from the returned HPDataFrame, and assumedUniquePix will
+#' be set to TRUE.
 #'
 #' @details
 #' \code{HPDataFrame} with \code{auto.spix = TRUE} can be used to transform any
@@ -89,7 +93,8 @@
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix,
-                        assumedUniquePix = FALSE) {
+                        assumedUniquePix = FALSE,
+                        delete.duplicates = FALSE) {
 
   if ( !auto.spix ) {
 
@@ -132,7 +137,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 
       assumedUniquePix <- TRUE
 
-      if ( nside >=  2^12) {
+      if ( nside >  2^12) {
 
         ### FIX ME :
         # This is to prevent numeric overflow in the pix2coords_internal
@@ -183,6 +188,12 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     stop(paste0("There should be a pixel index assigned to each row. ",
                 "Perhaps use spix; perhaps specify nside correctly; ",
                 "or perhaps use auto.spix = TRUE."))
+  }
+
+  if ( delete.duplicates )
+  {
+    df <- df[!duplicated(pix),]
+    assumedUniquePix <- TRUE
   }
 
   attr(df, "pix") <- pix

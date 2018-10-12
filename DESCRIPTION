@@ -5,10 +5,11 @@ Title: R Cosmic Microwave Background Data Analysis
 Version: 1.0.0
 Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"), 
                      email = "d.fryer@latrobe.edu.au"),
-             person("Andriy", "Olenko", role = "aut"),
-             person("Yuguang", "Wang", role = "aut"),
-             person("Ming", "Li", role = "aut"))
-Description: Handling and statistical analysis of Cosmic Microwave Background 
+             person("Andriy", "Olenko", role = "aut", 
+             email = "a.olenko@latrobe.edu.au"),
+             person("Ming", "Li", role = "aut"),             
+             person("Yuguang", "Wang", role = "aut"))
+Description: Handling and Analysis of Spherical, Helpix and Cosmic Microwave Background 
     data on a HEALPix grid.
 Depends: R (>= 3.4.0)
 License: GPL-2

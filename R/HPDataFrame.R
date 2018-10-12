@@ -30,7 +30,7 @@
 #' @param spix A vector of HEALPix pixel indices indicating the
 #' pixel locations of the data. Note that \code{spix} is ignored
 #' if \code{auto.spix = TRUE}.
-#' @param assumedUniquePix A boolen. Sets the \code{assumedUniquePix}
+#' @param assumedUniquePix A boolean. Sets the \code{assumedUniquePix}
 #' attribute of the HPDataFrame. This attribute indicates whether
 #' or not the rows of a HPDataFrame can be assumed to belong to
 #' unique pixels.
@@ -41,7 +41,7 @@
 #'
 #' @details
 #' \code{HPDataFrame} with \code{auto.spix = TRUE} can be used to transform any
-#' spherical data (not nessesarily CMB) to the Healpix representation, see
+#' spherical data (not necessarily CMB) to the Healpix representation, see
 #' Example 3 below.
 #'
 #' @examples
@@ -801,7 +801,7 @@ window.HPDataFrame <- function(x, new.window, intersect = TRUE,
 #'@return
 #'A summary includes window's type and area,
 #' total area covered by observations,
-#' and main statistcs for intensity values
+#' and main statistics for intensity values
 #'
 #' @examples
 #' ns <- 2

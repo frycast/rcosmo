@@ -34,7 +34,7 @@ lying entirely within one open hemisphere on the unit sphere.
 Counter-clockwise is understood from the perspective outside the
 sphere, facing the hemisphere that contains the polygon, looking
 toward the origin. Note that there must be at least 3 rows (vertices)
-to define a polygon (we exlude bygons).
+to define a polygon (we exclude bygones).
 On the other hand,
 if \code{r} is specified then \code{...} must specify just one row, and this
 row is taken to be the center of a disc of radius \code{r}

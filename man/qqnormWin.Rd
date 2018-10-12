@@ -17,7 +17,7 @@ qqnormWin(cmbdf, win, intensities = "I")
 A list with quantile components x and y and a normal QQ plot with QQ line
 }
 \description{
-This funcion is a modification of standard \link{qqnorm} functions to work
+This function is a modification of standard \link{qqnorm} functions to work
 with \code{\link{CMBWindow}} regions.
 }
 \details{

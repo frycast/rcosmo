@@ -120,7 +120,7 @@ nestSearch <- function(target, nside,
 
 #' nestSearch_step
 #'
-#' This function is inteded for use only with nestSearch.
+#' This function is intended for use only with nestSearch.
 #'
 #' @param target is the target point on S^2 in spherical coordinates.
 #' @param j2 is the target resolution.
@@ -222,7 +222,7 @@ pixelWindow <- function(j1, j2, pix.j1)
 #' Return index of parent pixel
 #'
 #' Gives the pixel at resolution j - 1 that contains p,
-#' where p is specified at resoution j (notice it does not depend on j).
+#' where p is specified at resolution j (notice it does not depend on j).
 #'
 #' @param p A pixel index specified in nested order.
 #'

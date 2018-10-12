@@ -1144,7 +1144,7 @@ colscheme <- function(I, breaks, colmap) {
 #'@return
 #'A summary includes window's type and area,
 #' total area covered by observations,
-#' and main statistcs for intensity values
+#' and main statistics for intensity values
 #'
 #'
 #'@examples

@@ -486,16 +486,25 @@ minDist2nside <- function(dist, factor = 3/4)
 
 
 
-#' geo2sph
+#' Convert geographic to spherical coordinates
 #'
 #' Convert latitude (lat) and longitude (lon) to spherical
-#' coordinates (theta, phi) with theta in [0,pi] and
-#' phi in [0,2*pi).
-#' All values are assumed to be in radians.
+#' coordinates (theta, phi) with theta in \eqn{[0,pi]} and
+#' phi in \eqn{[0,2*pi)}. All values lat, lon, theta, phi
+#' are assumed to be in radians.
+#'
 #'
 #' @param ... A data.frame with columns lat and lon,
 #' or named vectors of lat and lon.
 #'
+#' @return A data.frame with columns theta and  phi.
+#'
+#' @examples
+#'
+#' geo <- data.frame( lat = c(0, pi/3, pi/2), lon = c(0, pi/3, pi))
+#' geo
+#' sph <- geo2sph(geo)
+#' sph
 #'
 #' @export
 geo2sph <- function(...) {

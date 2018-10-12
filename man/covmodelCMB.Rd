@@ -38,7 +38,7 @@ The covariance function has the form
 The parameters of the covariance are positive numbers \code{sigma^2}, \code{phi}
 and \code{kappa}.
 
-Expressions for the correlation functions which are not included in the packege
+Expressions for the correlation functions which are not included in the package
 \strong{geoR}:
 
 \describe{

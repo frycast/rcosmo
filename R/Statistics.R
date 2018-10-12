@@ -508,10 +508,10 @@ Cov_func <- function(mat, Dfl , l)  {
 
 
 
-#'Plot angular scaterplots and means
+#'Plot angular scatterplots and means
 #'
 #'For specified measurements from \code{\link{CMBDataFrame}} this function
-#'produces scaterplots and binned means versus theta and phi angles.
+#'produces scatterplots and binned means versus theta and phi angles.
 #'
 #'@param cmbdf A  full \code{\link{CMBDataFrame}} or a windowed
 #'\code{\link{CMBDataFrame}}
@@ -720,7 +720,7 @@ exprob <- function(cmbdf, win, alpha, intensities = "I")
 
 #' Quantile-Quantile plots for \code{\link{CMBWindow}}s
 #'
-#' This funcion is a modification of standard \link{qqplot} functions to work
+#' This function is a modification of standard \link{qqplot} functions to work
 #' with \code{\link{CMBWindow}} regions.
 #'
 #' \code{\link{qqplotWin}} produces a QQ plot of observations in two
@@ -770,7 +770,7 @@ qqplotWin <- function(cmbdf, win1, win2, intensities = "I")
 
 #' Normal QQ plot for \code{\link{CMBWindow}}
 #'
-#' This funcion is a modification of standard \link{qqnorm} functions to work
+#' This function is a modification of standard \link{qqnorm} functions to work
 #' with \code{\link{CMBWindow}} regions.
 #'
 #'\code{\link{qqnormWin}} returns a normal QQ plot of for the specified
@@ -820,7 +820,7 @@ qqnormWin <- function(cmbdf, win, intensities = "I")
 #'
 #'This function returns an estimated entropy for the specified
 #'\code{\link{CMBDataFrame}} column  \code{intensities} and \code{\link{CMBWindow}}
-#'region. The functions employes the function \link{entropy} and uses histogram
+#'region. The functions employs the function \link{entropy} and uses histogram
 #'counts of \code{intensities} for computations. All arguments of the standard
 #'\link{entropy} can be used.
 #'
@@ -865,7 +865,7 @@ entropyCMB <- function(cmbdf, win, intensities = "I", method)
 #'
 #'This function returns the empirical chi-squared statistic for \code{intensities}
 #'observations from two \code{\link{CMBWindow}}s of the specified
-#'\code{\link{CMBDataFrame}}. The functions employes the function \link{chi2.empirical} and uses histogram
+#'\code{\link{CMBDataFrame}}. The functions employs the function \link{chi2.empirical} and uses histogram
 #'counts of \code{intensities} for computations.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
@@ -876,7 +876,7 @@ entropyCMB <- function(cmbdf, win, intensities = "I", method)
 #'@return
 #'
 #'Estimated Chi-squared statistic for observations in two
-#'\code{\link{CMBWindow}}s.  For smal sample sizes and many zero counts
+#'\code{\link{CMBWindow}}s.  For small sample sizes and many zero counts
 #'Chi-squared statistic is inefficient.
 #'
 #'@references \link{chi2.empirical}
@@ -1144,7 +1144,7 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 #'The parameters of the covariance are positive numbers \code{sigma^2}, \code{phi}
 #' and \code{kappa}.
 #'
-#'Expressions for the correlation functions which are not included in the packege
+#'Expressions for the correlation functions which are not included in the package
 #'\strong{geoR}:
 #'
 #'\describe{

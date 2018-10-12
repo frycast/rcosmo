@@ -11,7 +11,7 @@ parent(p)
 }
 \description{
 Gives the pixel at resolution j - 1 that contains p,
-where p is specified at resoution j (notice it does not depend on j).
+where p is specified at resolution j (notice it does not depend on j).
 }
 \examples{
 

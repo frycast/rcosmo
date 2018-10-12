@@ -17,13 +17,13 @@ chi2CMB(cmbdf, win1, win2, intensities = "I")
 }
 \value{
 Estimated Chi-squared statistic for observations in two
-\code{\link{CMBWindow}}s.  For smal sample sizes and many zero counts
+\code{\link{CMBWindow}}s.  For small sample sizes and many zero counts
 Chi-squared statistic is inefficient.
 }
 \description{
 This function returns the empirical chi-squared statistic for \code{intensities}
 observations from two \code{\link{CMBWindow}}s of the specified
-\code{\link{CMBDataFrame}}. The functions employes the function \link{chi2.empirical} and uses histogram
+\code{\link{CMBDataFrame}}. The functions employs the function \link{chi2.empirical} and uses histogram
 counts of \code{intensities} for computations.
 }
 \examples{

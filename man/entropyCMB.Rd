@@ -21,7 +21,7 @@ Estimated Shannon entropy for observations in \code{\link{CMBWindow}}
 \description{
 This function returns an estimated entropy for the specified
 \code{\link{CMBDataFrame}} column  \code{intensities} and \code{\link{CMBWindow}}
-region. The functions employes the function \link{entropy} and uses histogram
+region. The functions employs the function \link{entropy} and uses histogram
 counts of \code{intensities} for computations. All arguments of the standard
 \link{entropy} can be used.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Conversion.R
 \name{geo2sph}
 \alias{geo2sph}
-\title{geo2sph}
+\title{Convert geographic to spherical coordinates}
 \usage{
 geo2sph(...)
 }
@@ -10,9 +10,20 @@ geo2sph(...)
 \item{...}{A data.frame with columns lat and lon,
 or named vectors of lat and lon.}
 }
+\value{
+A data.frame with columns theta and  phi.
+}
 \description{
 Convert latitude (lat) and longitude (lon) to spherical
-coordinates (theta, phi) with theta in [0,pi] and
-phi in [0,2*pi).
-All values are assumed to be in radians.
+coordinates (theta, phi) with theta in \eqn{[0,pi]} and
+phi in \eqn{[0,2*pi)}. All values lat, lon, theta, phi
+are assumed to be in radians.
+}
+\examples{
+
+geo <- data.frame( lat = c(0, pi/3, pi/2), lon = c(0, pi/3, pi))
+geo
+sph <- geo2sph(geo)
+sph
+
 }

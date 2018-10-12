@@ -32,7 +32,7 @@ If \code{auto.spix = FALSE} then \code{nside} must be specified.}
 pixel locations of the data. Note that \code{spix} is ignored
 if \code{auto.spix = TRUE}.}
 
-\item{assumedUniquePix}{A boolen. Sets the \code{assumedUniquePix}
+\item{assumedUniquePix}{A boolean. Sets the \code{assumedUniquePix}
 attribute of the HPDataFrame. This attribute indicates whether
 or not the rows of a HPDataFrame can be assumed to belong to
 unique pixels.}
@@ -56,7 +56,7 @@ can be stored in different rows of any given HPDataFrame.
 }
 \details{
 \code{HPDataFrame} with \code{auto.spix = TRUE} can be used to transform any
-spherical data (not nessesarily CMB) to the Healpix representation, see
+spherical data (not necessarily CMB) to the Healpix representation, see
 Example 3 below.
 }
 \examples{

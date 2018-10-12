@@ -19,7 +19,7 @@ qqplotWin(cmbdf, win1, win2, intensities = "I")
 A list with quantile components x and y and a QQ plot with a diagonal line
 }
 \description{
-This funcion is a modification of standard \link{qqplot} functions to work
+This function is a modification of standard \link{qqplot} functions to work
 with \code{\link{CMBWindow}} regions.
 }
 \details{

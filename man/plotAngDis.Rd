@@ -2,7 +2,7 @@
 % Please edit documentation in R/Statistics.R
 \name{plotAngDis}
 \alias{plotAngDis}
-\title{Plot angular scaterplots and means}
+\title{Plot angular scatterplots and means}
 \usage{
 plotAngDis(cmbdf, intensities = "I")
 }
@@ -19,7 +19,7 @@ corresponds to the values of theta  and the second one is for psi.
 }
 \description{
 For specified measurements from \code{\link{CMBDataFrame}} this function
-produces scaterplots and binned means versus theta and phi angles.
+produces scatterplots and binned means versus theta and phi angles.
 }
 \examples{
 ## Download the map first

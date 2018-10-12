@@ -20,6 +20,6 @@ of the closest HEALPix pixel center to the target point,
 \code{target}, at resolution j2, and its neighbours.
 }
 \description{
-This function is inteded for use only with nestSearch.
+This function is intended for use only with nestSearch.
 }
 \keyword{internal}

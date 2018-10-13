@@ -263,7 +263,7 @@ parent <- function(p)
 #' Return children of a pixel
 #'
 #' Gives four pixels at resolution j + 1 that are contained in p,
-#' where p is a pixel specified at resoution j (notice it does not depend on j).
+#' where p is a pixel specified at resolution j (notice it does not depend on j).
 #'
 #' @param p A pixel index specified in nested order.
 #'

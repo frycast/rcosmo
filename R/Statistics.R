@@ -519,7 +519,7 @@ Cov_func <- function(mat, Dfl , l)  {
 #'@param intensities  A CMBDataFrame column with measured values
 #'
 #'@return
-#' 2x2 plot. The first row shows scaterplots. The second row gives
+#' 2x2 plot. The first row shows scatterplots. The second row gives
 #' barplots of the corresponding means computed over bins. The first column
 #' corresponds to the values of theta  and the second one is for psi.
 #'

@@ -360,8 +360,7 @@ pix.CMBDataFrame <- function(x, new.pix, ...)
     row.names(x) <- new.pix
     return(x)
   }
-
-  return(as.integer( row.names(x) ))
+  return(strtoi(row.names(x)))
 }
 
 

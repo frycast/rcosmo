@@ -3,9 +3,9 @@
 \name{rcosmo-package}
 \alias{rcosmo-package}
 \alias{rcosmo}
-\title{Handling and Analysis of CMB data}
+\title{Handling and Analysing  CMB data}
 \description{
-Handling and Analysis of Spherical, Helpix and Cosmic Microwave Background
+Handling and Analysing Spherical, Helpix and Cosmic Microwave Background
 data on a HEALPix grid.
 }
 \section{Update}{

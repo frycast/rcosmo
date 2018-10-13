@@ -977,31 +977,31 @@ fRen <- function(cmbdf,
     stop("Argument must be a CMBDataFrame")
   }
   ns1 <- nside(cmbdf)
-  pixind <- pix(cmbdf)
+  pixind <- pix.CMBDataFrame(cmbdf)
   nagrpix <- setdiff(1:(12 * ns1 ^ 2), pixind)
   field.comp <- rep(0, 12 * ns1 ^ 2)
-  field.in <- cmbdf[, intensities] - min(cmbdf[, intensities])
-  field.final <-
-    replace(field.comp, pixind, field.in[, intensities])
+    field.in <- cmbdf[, intensities, drop = T]
+     minint <- min(field.in)
+    field.in <- field.in - minint
+  field.final <- replace(field.comp, pixind, field.in)
 
   res.max <- log2(ns1)
   npix <- 12 * 4 ^ k.box
   delta <- sqrt(4 * pi / npix)
   lev.diff <- 4 ^ (res.max - k.box)
 
-  i <- 0
-  while (i < (res.max - k.box)) {
-    nagrpix <- unique(as.integer(parent(nagrpix)))
-    i <- i + 1
+  if (res.max - k.box > 0) {
+    nagrpix <- unique(ancestor(nagrpix, res.max - k.box))
   }
+
   agrpix <- setdiff((1:npix), nagrpix)
   mu <-  vector(mode = "numeric", length = length(agrpix))
   field.total <- 0
   i <- 1
   for (j in agrpix) {
-    pix <- (lev.diff * (j - 1) + 1):(lev.diff * j)
-    field.total <- field.total + sum(field.final[pix])
-    mu[i] <- sum(field.final[pix])
+    pixd <- (lev.diff * (j - 1) + 1):(lev.diff * j)
+    field.total <- field.total + sum(field.final[pixd])
+    mu[i] <- sum(field.final[pixd])
     i <- i + 1
   }
   mu <- mu / field.total

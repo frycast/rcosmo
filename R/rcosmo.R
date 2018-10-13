@@ -1,7 +1,7 @@
-#' Handling and Analysis of CMB data
+#' Handling and Analysing  CMB data
 #'
 #'
-#'@description Handling and Analysis of Spherical, Helpix and Cosmic Microwave Background
+#'@description Handling and Analysing Spherical, Helpix and Cosmic Microwave Background
 #' data on a HEALPix grid.
 #'
 #'@section Update: Current updates are available through
@@ -48,10 +48,10 @@
 NULL
 
 
-#' Handling and Analysis of CMB data
+#' Handling and Analysing CMB data
 #'
 #'
-#'@description Handling and Analysis of Spherical, Helpix and Cosmic Microwave Background
+#'@description Handling and Analysing Spherical, Helpix and Cosmic Microwave Background
 #' data on a HEALPix grid.
 #'
 #'@section Update: Current updates are available through

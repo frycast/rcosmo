@@ -10,8 +10,9 @@ parent(p)
 \item{p}{A pixel index specified in nested order.}
 }
 \description{
-Gives the pixel at resolution j - 1 that contains p,
-where p is specified at resolution j (notice it does not depend on j).
+Gives the pixel at resolution \eqn{j - 1} that contains \eqn{p},
+where \eqn{p} is specified at resolution \eqn{j} (notice it does
+not depend on \eqn{j}).
 }
 \examples{
 

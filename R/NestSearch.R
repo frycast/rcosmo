@@ -219,10 +219,31 @@ pixelWindow <- function(j1, j2, pix.j1)
 #######################################################################
 
 
+#' Return index of \eqn{k}th ancestor pixel
+#'
+#' Gives the pixel at resolution \eqn{j - k} that contains \eqn{p},
+#' where \eqn{p} is specified at resolution \eqn{j} (notice
+#' it does not depend on \eqn{j}).
+#'
+#' @param p A pixel index specified in nested order.
+#' @param k A generation of an ancestor pixel.
+#'
+#' @examples
+#'
+#'  ancestor(4,2)
+#'  ancestor(17,2)
+#'
+#' @export
+ancestor <- function(p,k)
+{
+  as.integer((p-1) %/% 4^k + 1)
+}
+
 #' Return index of parent pixel
 #'
-#' Gives the pixel at resolution j - 1 that contains p,
-#' where p is specified at resolution j (notice it does not depend on j).
+#' Gives the pixel at resolution \eqn{j - 1} that contains \eqn{p},
+#' where \eqn{p} is specified at resolution \eqn{j} (notice it does
+#' not depend on \eqn{j}).
 #'
 #' @param p A pixel index specified in nested order.
 #'
@@ -234,8 +255,10 @@ pixelWindow <- function(j1, j2, pix.j1)
 #' @export
 parent <- function(p)
 {
-  (p - p %% 4 + (p %% 4 != 0)*4)/4
+  as.integer((p-1) %/% 4 + 1)
 }
+
+
 
 #' Return children of a pixel
 #'

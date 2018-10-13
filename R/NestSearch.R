@@ -274,7 +274,7 @@ parent <- function(p)
 children <- function(p)
 {
   if ( any(p > 0) ) {
-    1:4 + rep((p-1)*4, each = 4)
+    as.integer(1:4 + rep((p-1)*4, each = 4))
   } else { 1:12 }
 }
 
@@ -292,8 +292,7 @@ children <- function(p)
 #'
 #'@export
 siblings <- function(p) {
-  h <- (p - p %% 4 + (p %% 4 != 0)*4)/4
-  1:4 + (h-1)*4
+  h <- as.integer(1:4 + ((p - 1) %/% 4)*4)
 }
 
 

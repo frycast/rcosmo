@@ -2,15 +2,15 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 covCMB_internal2 <- function(cmbdf, cos_breaks) {
-    .Call('_rcosmo_covCMB_internal2', PACKAGE = 'rcosmo', cmbdf, cos_breaks)
+    .Call(`_rcosmo_covCMB_internal2`, cmbdf, cos_breaks)
 }
 
 covCMB_internal_var <- function(cmbdf, cos_breaks) {
-    .Call('_rcosmo_covCMB_internal_var', PACKAGE = 'rcosmo', cmbdf, cos_breaks)
+    .Call(`_rcosmo_covCMB_internal_var`, cmbdf, cos_breaks)
 }
 
 mkpix2xyC <- function(nside = 1024L) {
-    .Call('_rcosmo_mkpix2xyC', PACKAGE = 'rcosmo', nside)
+    .Call(`_rcosmo_mkpix2xyC`, nside)
 }
 
 #' @title Convert nest to ring ordering
@@ -39,50 +39,50 @@ mkpix2xyC <- function(nside = 1024L) {
 #' @name nest2ring
 #' @export
 nest2ring <- function(nside, pix) {
-    .Call('_rcosmo_nest2ring', PACKAGE = 'rcosmo', nside, pix)
+    .Call(`_rcosmo_nest2ring`, nside, pix)
 }
 
 pix2coords_internal <- function(nside = 0L, nested = TRUE, spix = NULL, cartesian = FALSE) {
-    .Call('_rcosmo_pix2coords_internal', PACKAGE = 'rcosmo', nside, nested, spix, cartesian)
+    .Call(`_rcosmo_pix2coords_internal`, nside, nested, spix, cartesian)
 }
 
 car2sph <- function(df) {
-    .Call('_rcosmo_car2sph', PACKAGE = 'rcosmo', df)
+    .Call(`_rcosmo_car2sph`, df)
 }
 
 sph2car <- function(df) {
-    .Call('_rcosmo_sph2car', PACKAGE = 'rcosmo', df)
+    .Call(`_rcosmo_sph2car`, df)
 }
 
 pointInConvexPolygonHP <- function(nside, nested, win, spix = NULL) {
-    .Call('_rcosmo_pointInConvexPolygonHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
+    .Call(`_rcosmo_pointInConvexPolygonHP`, nside, nested, win, spix)
 }
 
 pointInDiscHP <- function(nside, nested, win, spix = NULL) {
-    .Call('_rcosmo_pointInDiscHP', PACKAGE = 'rcosmo', nside, nested, win, spix)
+    .Call(`_rcosmo_pointInDiscHP`, nside, nested, win, spix)
 }
 
 pointInConvexPolygon <- function(df, win) {
-    .Call('_rcosmo_pointInConvexPolygon', PACKAGE = 'rcosmo', df, win)
+    .Call(`_rcosmo_pointInConvexPolygon`, df, win)
 }
 
 pointInDisc <- function(df, win) {
-    .Call('_rcosmo_pointInDisc', PACKAGE = 'rcosmo', df, win)
+    .Call(`_rcosmo_pointInDisc`, df, win)
 }
 
 minDist_internal1 <- function(cmbdf, point) {
-    .Call('_rcosmo_minDist_internal1', PACKAGE = 'rcosmo', cmbdf, point)
+    .Call(`_rcosmo_minDist_internal1`, cmbdf, point)
 }
 
 minDist_internal2 <- function(cmbdf) {
-    .Call('_rcosmo_minDist_internal2', PACKAGE = 'rcosmo', cmbdf)
+    .Call(`_rcosmo_minDist_internal2`, cmbdf)
 }
 
 maxDist_internal1 <- function(cmbdf, point) {
-    .Call('_rcosmo_maxDist_internal1', PACKAGE = 'rcosmo', cmbdf, point)
+    .Call(`_rcosmo_maxDist_internal1`, cmbdf, point)
 }
 
 maxDist_internal2 <- function(cmbdf) {
-    .Call('_rcosmo_maxDist_internal2', PACKAGE = 'rcosmo', cmbdf)
+    .Call(`_rcosmo_maxDist_internal2`, cmbdf)
 }
 

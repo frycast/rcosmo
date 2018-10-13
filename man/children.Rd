@@ -11,7 +11,7 @@ children(p)
 }
 \description{
 Gives four pixels at resolution j + 1 that are contained in p,
-where p is a pixel specified at resoution j (notice it does not depend on j).
+where p is a pixel specified at resolution j (notice it does not depend on j).
 }
 \examples{
 children(11)

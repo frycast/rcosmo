@@ -597,7 +597,7 @@ plotAngDis <- function(cmbdf, intensities = "I")
 
 #' Take a simple random sample from a \code{\link{CMBDataFrame}}
 #'
-#' This function returns a \code{\link{CMBDataFrame}} with size sample.size,
+#' This function returns a \code{\link{CMBDataFrame}} which size equals to sample.size,
 #' whose rows comprise a simple random sample of the rows
 #' from the input CMBDataFrame.
 #'
@@ -605,7 +605,7 @@ plotAngDis <- function(cmbdf, intensities = "I")
 #'@param sample.size the desired sample size.
 #'
 #'@return
-#' A \code{\link{CMBDataFrame}} with size sample.size,
+#' A \code{\link{CMBDataFrame}} which size equals to sample.size,
 #' whose rows comprise a simple random sample of the rows
 #' from the input CMBDataFrame.
 #'
@@ -723,8 +723,9 @@ exprob <- function(cmbdf, win, alpha, intensities = "I")
 #' This function is a modification of standard \link{qqplot} functions to work
 #' with \code{\link{CMBWindow}} regions.
 #'
-#' \code{\link{qqplotWin}} produces a QQ plot of observations in two
-#' \code{\link{CMBWindow}}s for the specified \code{\link{CMBDataFrame}} column
+#' \code{\link{qqplotWin}} produces a QQ plot of quantiles of observations in
+#' two \code{\link{CMBWindow}}s against each other for
+#' the specified \code{\link{CMBDataFrame}} column
 #' \code{intensities}. The function automatically adds a diagonal line.
 #'
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
@@ -1121,9 +1122,9 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 #'
 #'
 #'This function computes the covariances given the separation distance of  locations.
-#'Options for different covariance functions on spheres are available. The function uses
-#'the function \code{\link[geoR]{cov.spatial}} for covariance models from the package
-#'\strong{geoR} and modifies it for additional new models on spheres.
+#'Options for different covariance functions on spheres are available. The function
+#'extends the function \code{\link[geoR]{cov.spatial}} for additional
+#'covariance models on spheres.
 #'
 #'
 #'@param obj Vector of distances between pairs of spatial locations.
@@ -1149,18 +1150,18 @@ qstat <- function(cmbdf, listwin, intensities = "I")
 #'
 #'\describe{
 #' \item{\strong{askey}}{
-#' \deqn{rho(h/phi) = (1 - h/phi)^kappa, if h < phi;}
+#' \deqn{rho(h/phi) = (1 - h/phi)^{kappa}, if h < phi;}
 #' \deqn{0, otherwise.}}
 #' \item{\strong{c2wendland}}{
-#' \deqn{rho(h/phi) =  (1 + kappa * h/phi) * (1 - h/phi)^kappa, if h < phi;}
+#' \deqn{rho(h/phi) =  (1 + kappa * h/phi) * (1 - h/phi)^{kappa}, if h < phi;}
 #' \deqn{0, otherwise.}}
 #' \item{\strong{c4wendland}}{
-#' \deqn{rho(h/phi) =  (1 + kappa * h/phi + (kappa^2 - 1) * (h/phi)^2 / 3) * (1 - h/phi)^kappa, if h < phi;}
+#' \deqn{rho(h/phi) =  (1 + kappa * h/phi + (kappa^2 - 1) * (h/phi)^2 / 3) * (1 - h/phi)^{kappa}, if h < phi;}
 #' \deqn{0, otherwise.}}
 #' \item{\strong{sinepower}}{
-#' \deqn{rho(h/phi) = 1 - (sin(h/(2 phi))) ^ kappa}}
+#' \deqn{rho(h/phi) = 1 - (sin(h/(2 phi))) ^{kappa}}}
 #'  \item{\strong{multiquadric}}{
-#'  \deqn{C(h) =   (1 - phi) ^ (2 * kappa) / (1 + phi^2 - 2 * phi * cos(h))^kappa,
+#'  \deqn{C(h) =   (1 - phi) ^{(2 * kappa)} / (1 + phi^2 - 2 * phi * cos(h))^{kappa},
 #'  0<phi<1}}
 #'  }
 #'
@@ -1313,9 +1314,9 @@ covmodelCMB  <-  function (obj,
 #'
 #'
 #'This function estimates variogram parameters by fitting a parametric model
-#'from \code{\link{covmodelCMB}} to a sample variogram. The function modifies
+#'from \code{\link{covmodelCMB}} to a sample variogram. The function extends
 #'\code{\link[geoR]{variofit}} from the package \strong{geoR}
-#'for additional covariance models on spheres.
+#'to additional covariance models on spheres.
 #'
 #'@param vario An object of the class \code{variogram} obtained as an output of
 #'the function \code{\link{variogramCMB}}.
@@ -1355,8 +1356,8 @@ covmodelCMB  <-  function (obj,
 #'found by numerical optimization using one of the functions: \code{\link{optim}},
 #'\code{\link{nlm}} and \code{\link{nls}}.
 #'
-#'The function modifies \code{\link[geoR]{variofit}} from the package \strong{geoR}
-#'for additional variogram models on spheres.  Available models are: "matern",
+#'The function extends \code{\link[geoR]{variofit}} from the package \strong{geoR}
+#'to additional variogram models on spheres.  Available models are: "matern",
 #'"exponential", "spherical", "powered.exponential", "cauchy", "gencauchy",
 #'"pure.nugget", "askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
 #'
@@ -2098,7 +2099,9 @@ plotvariogram <- function (cov.model = "matern", sigmasq=1,
 #'@details
 #'The function adds a line with fitted variogram model to a plot. It is used
 #'to compare empirical variograms against fitted models returned by
-#'\code{\link{variofitCMB}}. #' Available models are: "matern", "exponential",
+#'\code{\link{variofitCMB}}.
+#'
+#'Available models are: "matern", "exponential",
 #'"spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
 #'"askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
 #'
@@ -2195,8 +2198,8 @@ linesCMB <-  function (x, max.dist, scaled = FALSE, ...) {
 #' Practical range for covariance  function
 #'
 #' This function computes the practical range for covariance  functions on spheres.
-#' The function modifies \code{\link[geoR]{practicalRange}} from the
-#' package \strong{geoR} for additional covariance models on spheres.
+#' The function extends \code{\link[geoR]{practicalRange}} from the
+#' package \strong{geoR} to additional covariance models on spheres.
 #'
 #'
 #'@param cov.model A type of the correlation function. Available choices are: "matern",

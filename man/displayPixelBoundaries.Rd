@@ -38,13 +38,12 @@ used if \code{ordering} is specified}
 \item{...}{arguments passed to \code{rgl::plot3d}}
 }
 \value{
-produces a plot of the HEALPix pixel boundaries
+Produces a plot of the HEALPix pixel boundaries.
 }
 \description{
 Plot the HEALPix pixel boundaries at \code{nside}
 }
 \examples{
-
 displayPixelBoundaries(1, eps = pi/90, col = "red")
 displayPixelBoundaries(2, eps = pi/90, col = "green")
 

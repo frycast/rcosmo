@@ -61,17 +61,17 @@ An object of the class \code{variomodel} and \code{variofit}, see
 }
 \description{
 This function estimates variogram parameters by fitting a parametric model
-from \code{\link{covmodelCMB}} to a sample variogram. The function modifies
+from \code{\link{covmodelCMB}} to a sample variogram. The function extends
 \code{\link[geoR]{variofit}} from the package \strong{geoR}
-for additional covariance models on spheres.
+to additional covariance models on spheres.
 }
 \details{
 The parameter values of a variogram function from \code{\link{covmodelCMB}} are
 found by numerical optimization using one of the functions: \code{\link{optim}},
 \code{\link{nlm}} and \code{\link{nls}}.
 
-The function modifies \code{\link[geoR]{variofit}} from the package \strong{geoR}
-for additional variogram models on spheres.  Available models are: "matern",
+The function extends \code{\link[geoR]{variofit}} from the package \strong{geoR}
+to additional variogram models on spheres.  Available models are: "matern",
 "exponential", "spherical", "powered.exponential", "cauchy", "gencauchy",
 "pure.nugget", "askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
 

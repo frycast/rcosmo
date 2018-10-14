@@ -12,12 +12,12 @@ sampleCMB(cmbdf, sample.size)
 \item{sample.size}{the desired sample size.}
 }
 \value{
-A \code{\link{CMBDataFrame}} with size sample.size,
+A \code{\link{CMBDataFrame}} which size equals to sample.size,
 whose rows comprise a simple random sample of the rows
 from the input CMBDataFrame.
 }
 \description{
-This function returns a \code{\link{CMBDataFrame}} with size sample.size,
+This function returns a \code{\link{CMBDataFrame}} which size equals to sample.size,
 whose rows comprise a simple random sample of the rows
 from the input CMBDataFrame.
 }

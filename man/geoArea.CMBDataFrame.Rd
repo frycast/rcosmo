@@ -24,7 +24,7 @@ that is encompassed by all pixels in \code{cmbdf}
 cmbdf <- CMBDataFrame(nside = 1, spix = c(1,2,3))
 pix(cmbdf)
 
-## The total number of Healpix points at nside=1 equals 12. As cmbdf has 3 Helpix
+## The total number of Healpix points at nside=1 equals 12. As cmbdf has 3 Healpix
 ## it occupies pi = 1/4*(surface area of unit sphere)
 
 geoArea(cmbdf)

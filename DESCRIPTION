@@ -9,7 +9,7 @@ Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"),
              email = "a.olenko@latrobe.edu.au"),
              person("Ming", "Li", role = "aut"),             
              person("Yuguang", "Wang", role = "aut"))
-Description: Handling and Analysing Spherical, Helpix and Cosmic Microwave Background 
+Description: Handling and Analysing Spherical, Healpix and Cosmic Microwave Background 
     data on a HEALPix grid.
 Depends: R (>= 3.4.0)
 License: GPL-2

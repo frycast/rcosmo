@@ -58,11 +58,9 @@ Planck BB power spectra (2 <= ell <= 29).
 #      main="CMB Angular Power Spectra",xlab=expression(l),
 #      ylab=expression(paste(D[l],"(",mu,K^2,")")))
 
+
 }
 \references{
 Planck Legacy Archive
 \url{http://pla.esac.esa.int/pla/#cosmology}
 }
-\keyword{CMB}
-\keyword{Power}
-\keyword{Spectra}

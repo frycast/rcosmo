@@ -1,5 +1,5 @@
-
 #' Plot HEALPix pixel boundaries
+#'
 #'
 #' Plot the HEALPix pixel boundaries at \code{nside}
 #'
@@ -22,22 +22,19 @@
 #' used if \code{ordering} is specified
 #' @param ... arguments passed to \code{rgl::plot3d}
 #'
-#' @return produces a plot of the HEALPix pixel boundaries
+#' @return Produces a plot of the HEALPix pixel boundaries.
 #'
 #' @examples
-#'
 #' displayPixelBoundaries(1, eps = pi/90, col = "red")
 #' displayPixelBoundaries(2, eps = pi/90, col = "green")
 #'
 #' @export
-displayPixelBoundaries <- function(nside, eps = pi/90,
-                             col = "gray",
+displayPixelBoundaries <- function(nside, eps = pi/90, col = "gray",
                              lwd = 1, ordering,
                              incl.labels = 1:(12*nside^2),
                              nums.col = col, nums.size = 1,
                              font = 2, ...)
 {
-
   ### Part I
   for (k in seq(1,nside,1)) {
 
@@ -66,7 +63,6 @@ displayPixelBoundaries <- function(nside, eps = pi/90,
                  col = col, lwd = lwd, ...)
     }
   }
-
   ### PART II
   for (k in seq(0,3,1)){
     #Northern Hemisphere
@@ -82,7 +78,6 @@ displayPixelBoundaries <- function(nside, eps = pi/90,
     S <-cbind(PHI, rep(1,length(PHI))*k*pi/2)
     plotPixel( data.frame(theta = S[,1], phi = S[,2]),
                col = col, lwd = lwd, ...)
-
   }
 
   ### Part III: Equatorial Belt Area
@@ -247,8 +242,8 @@ pbNextPolarCap <- function(n, k, prev_phi, delta_phi, flag){
 
 #' Display the pixels and grandchildren
 #'
-#' Display the pixels spix at resolution j by colouring
-#' in the grandchildren of spix at resolution plot.j
+#' Display the pixels spix at resolution \eqn{j} by colouring
+#' in the grandchildren of spix at resolution \eqn{plot.j}
 #'
 #' @param j The resolution that spix are specified at.
 #' @param boundary.j The resolution to display boundaries at. If

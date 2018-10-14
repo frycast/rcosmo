@@ -31,8 +31,8 @@ resolution j.}
 \item{size}{The size to make the grandchildren.}
 }
 \description{
-Display the pixels spix at resolution j by colouring
-in the grandchildren of spix at resolution plot.j
+Display the pixels spix at resolution \eqn{j} by colouring
+in the grandchildren of spix at resolution \eqn{plot.j}
 }
 \examples{
 

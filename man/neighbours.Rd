@@ -12,8 +12,8 @@ neighbours(p, j)
 \item{j}{The resolution parameter with nside = 2^j.}
 }
 \description{
-Return the neighbouring pixels to a given pixel p
-that is specified at resolution j, in the nested order.
+Return the neighbouring pixels to a given pixel \eqn{p}
+that is specified at resolution \eqn{j}, in the nested order.
 }
 \examples{
 ## Return the neighbouring pixels for base pixel 1

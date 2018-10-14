@@ -12,8 +12,8 @@ p2ibp(p, j)
 \item{j}{The resolution parameter nside = 2^j}
 }
 \description{
-Convert a pixel index p to its index within
-the base pixel to which p belongs
+Convert a pixel index \eqn{p} to its index within
+the base pixel to which \eqn{p} belongs
 }
 \examples{
 

@@ -56,7 +56,7 @@ rodrigues <- function(a,b,p.xyz)
 #' jacobiPol(2,-5,2,-1)
 #' jacobiPol(1,2,4,0.5)
 #'
-#' @keywords Jacobi,Orthogonal polynomials.
+#' @keywords internal
 #' @source \url{http://dlmf.nist.gov/18.9}
 #' @export
 jacobiPol <- function(a,b,L,t) {
@@ -109,7 +109,6 @@ jacobiPol <- function(a,b,L,t) {
 #' points<-data.frame(diag(3))
 #' sphericalHarmonics(5,2,points)
 #'
-#' @keywords spherical harmonic
 #' @references  See
 #' https://en.wikipedia.org/wiki/Table_of_spherical_harmonics
 #'

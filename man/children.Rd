@@ -10,8 +10,9 @@ children(p)
 \item{p}{A pixel index specified in nested order.}
 }
 \description{
-Gives four pixels at resolution j + 1 that are contained in p,
-where p is a pixel specified at resolution j (notice it does not depend on j).
+Gives four pixels at resolution \eqn{j + 1} that are contained in \eqn{p},
+where \eqn{p}is a pixel specified at resolution \eqn{j} (notice it does not
+depend on \eqn{j}).
 }
 \examples{
 children(11)

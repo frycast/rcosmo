@@ -10,8 +10,8 @@ siblings(p)
 \item{p}{Pixel index in nested order.}
 }
 \description{
-The siblings of pixel p are defined as the
-children of the parent of p. Note this is resolution independent.
+The siblings of pixel \eqn{p} are defined as the
+children of the parent of \eqn{p}. Note this is resolution independent.
 }
 \examples{
 

@@ -23,8 +23,9 @@ This function is a modification of standard \link{qqplot} functions to work
 with \code{\link{CMBWindow}} regions.
 }
 \details{
-\code{\link{qqplotWin}} produces a QQ plot of observations in two
-\code{\link{CMBWindow}}s for the specified \code{\link{CMBDataFrame}} column
+\code{\link{qqplotWin}} produces a QQ plot of quantiles of observations in
+two \code{\link{CMBWindow}}s against each other for
+the specified \code{\link{CMBDataFrame}} column
 \code{intensities}. The function automatically adds a diagonal line.
 }
 \examples{

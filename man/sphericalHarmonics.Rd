@@ -46,5 +46,3 @@ Springer Berlin Heidelberg,
 
 but instead of the order k=1,...,2L+1 in the book we use m=k-L-1.
 }
-\keyword{harmonic}
-\keyword{spherical}

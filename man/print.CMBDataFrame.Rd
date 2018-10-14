@@ -17,3 +17,10 @@ Prints contents of the CMB data frame to the console.
 \description{
 This function neatly prints the contents of a CMBDataFrame.
 }
+\examples{
+## First download the map
+# downloadCMBMap(foreground = "smica", nside = 1024)
+# df <- CMBDataFrame("CMB_map_smica1024.fits")
+# print(df)
+
+}

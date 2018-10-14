@@ -51,6 +51,7 @@ at 10 arcmin resolution.
 ## for example,
 # dest <- "CMB_map_commander1024.fits"
 # downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
+
 }
 \references{
 Planck Public Data Release 2 Maps
@@ -59,5 +60,3 @@ Planck Public Data Release 2 Maps
 Other fits maps can also be downloaded
 using the general command \code{\link{download.file}}.
 }
-\keyword{CMB}
-\keyword{Maps}

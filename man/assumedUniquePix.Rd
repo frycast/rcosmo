@@ -2,7 +2,7 @@
 % Please edit documentation in R/HPDataFrame.R
 \name{assumedUniquePix}
 \alias{assumedUniquePix}
-\title{Check if object's rows are assumed to correspond to unique HEALPix indices}
+\title{Check if object was assumed to have unique HEALPix indices}
 \usage{
 assumedUniquePix(obj)
 }
@@ -15,8 +15,9 @@ is a \code{\link{CMBDataFrame}} or a \code{\link{HPDataFrame}} whose
 rows were assumed to correspond to unique HEALPix pixel indices.
 }
 \description{
-Check if an object can be assumed to have rows
-that correspond to unique HEALPix pixel indices.
+The function checks object's attribute assumedUniquePix. The attribute is True if
+the  object was assumed to have rows that correspond to unique
+HEALPix pixel indices.
 }
 \examples{
 

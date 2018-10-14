@@ -262,8 +262,9 @@ parent <- function(p)
 
 #' Return children of a pixel
 #'
-#' Gives four pixels at resolution j + 1 that are contained in p,
-#' where p is a pixel specified at resolution j (notice it does not depend on j).
+#' Gives four pixels at resolution \eqn{j + 1} that are contained in \eqn{p},
+#' where \eqn{p}is a pixel specified at resolution \eqn{j} (notice it does not
+#' depend on \eqn{j}).
 #'
 #' @param p A pixel index specified in nested order.
 #'
@@ -280,8 +281,8 @@ children <- function(p)
 
 #' Return siblings of pixel
 #'
-#' The siblings of pixel p are defined as the
-#' children of the parent of p. Note this is resolution independent.
+#' The siblings of pixel \eqn{p} are defined as the
+#' children of the parent of \eqn{p}. Note this is resolution independent.
 #'
 #' @param p Pixel index in nested order.
 #'
@@ -428,8 +429,8 @@ borderPattern <- function(ptype)
 
 #'Return neighbouring pixels
 #'
-#'Return the neighbouring pixels to a given pixel p
-#'that is specified at resolution j, in the nested order.
+#'Return the neighbouring pixels to a given pixel \eqn{p}
+#'that is specified at resolution \eqn{j}, in the nested order.
 #'
 #'@param p Pixel index p at resolution j.
 #'@param j The resolution parameter with nside = 2^j.

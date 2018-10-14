@@ -40,7 +40,7 @@
 #' # dest <- "CMB_map_commander1024.fits"
 #' # downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
 #
-#' @keywords CMB Maps
+#'
 #' @references Planck Public Data Release 2 Maps
 #' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 #' @references Other fits maps can also be downloaded
@@ -150,7 +150,6 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
 #' #      main="CMB Angular Power Spectra",xlab=expression(l),
 #' #      ylab=expression(paste(D[l],"(",mu,K^2,")")))
 #'
-#' @keywords CMB Power Spectra
 #'
 #' @references Planck Legacy Archive
 #' \url{http://pla.esac.esa.int/pla/#cosmology}

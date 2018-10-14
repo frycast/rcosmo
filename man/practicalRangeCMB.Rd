@@ -24,8 +24,8 @@ Value of the practical range for the covariance  function specified in \code{\li
 }
 \description{
 This function computes the practical range for covariance  functions on spheres.
-The function modifies \code{\link[geoR]{practicalRange}} from the
-package \strong{geoR} for additional covariance models on spheres.
+The function extends \code{\link[geoR]{practicalRange}} from the
+package \strong{geoR} to additional covariance models on spheres.
 }
 \details{
 The practical(effective)  range for a covariance  function is the distance at which

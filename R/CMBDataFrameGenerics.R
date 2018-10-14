@@ -77,7 +77,7 @@
 #'cmbdf.win <- window(cmbdf, new.window = list(win1, win2), intersect = FALSE)
 #'plot(cmbdf.win)
 #'
-#'#' ## Example 4: intersection of windows
+#'## Example 4: intersection of windows
 #'
 #' ## Create 2 windows
 #' win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
@@ -836,7 +836,7 @@ is.CMBDataFrame <- function(cmbdf)
 #' cmbdf <- CMBDataFrame(nside = 1, spix = c(1,2,3))
 #' pix(cmbdf)
 #'
-#' ## The total number of Healpix points at nside=1 equals 12. As cmbdf has 3 Helpix
+#' ## The total number of Healpix points at nside=1 equals 12. As cmbdf has 3 Healpix
 #' ## it occupies pi = 1/4*(surface area of unit sphere)
 #'
 #' geoArea(cmbdf)
@@ -1271,6 +1271,11 @@ print.summary.CMBDataFrame <- function(x, ...)
 #'@return
 #'Prints contents of the CMB data frame to the console.
 #'
+#'@examples
+#' ## First download the map
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # print(df)
 #'
 #'@export
 print.CMBDataFrame <- function(x, ...)

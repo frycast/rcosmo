@@ -689,7 +689,7 @@ print.HPDataFrame <- function(x,...) {
 #' pix(hp1)
 #'
 #' ## The total number of Healpix points at nside=1 equals 12. As hp1 has five
-#' ## I values at 3 Helpix points, then the occupied area is
+#' ## I values at 3 Healpix points, then the occupied area is
 #' ## pi = 1/4*(surface area of unit sphere)
 #'
 #' geoArea(hp1)
@@ -913,10 +913,11 @@ separatingNside <- function(df) {
 }
 
 
-#'Check if object's rows are assumed to correspond to unique HEALPix indices
+#'Check if object was assumed to have unique HEALPix indices
 #'
-#'Check if an object can be assumed to have rows
-#'that correspond to unique HEALPix pixel indices.
+#'The function checks object's attribute assumedUniquePix. The attribute is True if
+#'the  object was assumed to have rows that correspond to unique
+#'HEALPix pixel indices.
 #'
 #'@param obj Any object
 #'

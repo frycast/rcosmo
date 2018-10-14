@@ -243,7 +243,7 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
 #'
 #' @param x A CMBWindow.
 #'
-#' @return The spherical area inside \code{x}.
+#' @return The spherical area inside the CMBWindow \code{x}.
 #'
 #'@examples
 #'

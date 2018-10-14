@@ -25,9 +25,9 @@ Values of a covariance function for the given distances.
 }
 \description{
 This function computes the covariances given the separation distance of  locations.
-Options for different covariance functions on spheres are available. The function uses
-the function \code{\link[geoR]{cov.spatial}} for covariance models from the package
-\strong{geoR} and modifies it for additional new models on spheres.
+Options for different covariance functions on spheres are available. The function
+extends the function \code{\link[geoR]{cov.spatial}} for additional
+covariance models on spheres.
 }
 \details{
 The function returns the value of the covariance \code{C(h)} at the distance \code{h}.
@@ -43,18 +43,18 @@ Expressions for the correlation functions which are not included in the package
 
 \describe{
 \item{\strong{askey}}{
-\deqn{rho(h/phi) = (1 - h/phi)^kappa, if h < phi;}
+\deqn{rho(h/phi) = (1 - h/phi)^{kappa}, if h < phi;}
 \deqn{0, otherwise.}}
 \item{\strong{c2wendland}}{
-\deqn{rho(h/phi) =  (1 + kappa * h/phi) * (1 - h/phi)^kappa, if h < phi;}
+\deqn{rho(h/phi) =  (1 + kappa * h/phi) * (1 - h/phi)^{kappa}, if h < phi;}
 \deqn{0, otherwise.}}
 \item{\strong{c4wendland}}{
-\deqn{rho(h/phi) =  (1 + kappa * h/phi + (kappa^2 - 1) * (h/phi)^2 / 3) * (1 - h/phi)^kappa, if h < phi;}
+\deqn{rho(h/phi) =  (1 + kappa * h/phi + (kappa^2 - 1) * (h/phi)^2 / 3) * (1 - h/phi)^{kappa}, if h < phi;}
 \deqn{0, otherwise.}}
 \item{\strong{sinepower}}{
-\deqn{rho(h/phi) = 1 - (sin(h/(2 phi))) ^ kappa}}
+\deqn{rho(h/phi) = 1 - (sin(h/(2 phi))) ^{kappa}}}
  \item{\strong{multiquadric}}{
- \deqn{C(h) =   (1 - phi) ^ (2 * kappa) / (1 + phi^2 - 2 * phi * cos(h))^kappa,
+ \deqn{C(h) =   (1 - phi) ^{(2 * kappa)} / (1 + phi^2 - 2 * phi * cos(h))^{kappa},
  0<phi<1}}
  }
 

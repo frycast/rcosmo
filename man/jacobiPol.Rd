@@ -29,5 +29,4 @@ jacobiPol(2,-5,2,-1)
 jacobiPol(1,2,4,0.5)
 
 }
-\keyword{Jacobi,Orthogonal}
-\keyword{polynomials.}
+\keyword{internal}

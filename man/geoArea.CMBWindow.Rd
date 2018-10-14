@@ -10,7 +10,7 @@
 \item{x}{A CMBWindow.}
 }
 \value{
-The spherical area inside \code{x}.
+The spherical area inside the CMBWindow \code{x}.
 }
 \description{
 Geodesic area of a \code{\link{CMBWindow}}

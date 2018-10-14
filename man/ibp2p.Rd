@@ -14,8 +14,8 @@ ibp2p(ibp, bp, j)
 \item{j}{The resolution parameter nside = 2^j}
 }
 \description{
-Find the pixel index p of a given pixel with
-index ibp in base pixel bp
+Find the pixel index \eqn{p} of a given pixel with
+index \code{ibp} in base pixel \code{bp}.
 }
 \examples{
 

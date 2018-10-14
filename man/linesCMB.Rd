@@ -29,7 +29,9 @@ for additional covariance models on spheres.
 \details{
 The function adds a line with fitted variogram model to a plot. It is used
 to compare empirical variograms against fitted models returned by
-\code{\link{variofitCMB}}. #' Available models are: "matern", "exponential",
+\code{\link{variofitCMB}}.
+
+Available models are: "matern", "exponential",
 "spherical", "powered.exponential", "cauchy", "gencauchy", "pure.nugget",
 "askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
 }

@@ -12,7 +12,7 @@ p2bp(p, j)
 \item{j}{The resolution parameter nside = 2^j}
 }
 \description{
-The base pixel to which pixel p belongs at resolution j
+The base pixel to which pixel \eqn{p} belongs at resolution \eqn{j}
 }
 \examples{
 

@@ -5,7 +5,7 @@
 \title{Get a sub window from a \code{\link{HPDataFrame}}}
 \usage{
 \method{window}{HPDataFrame}(x, new.window, intersect = TRUE,
-  healpix.only = FALSE, ...)
+  healpixCentered = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{\link{HPDataFrame}}.}
@@ -17,11 +17,11 @@ A single \code{\link{CMBWindow}} object or a list of them.}
 the behaviour when \code{new.window} is a list containing BOTH
 regular type and "minus" type windows together (see details).}
 
-\item{healpix.only}{A boolean. If the HPDataFrame has columns x,y,z
+\item{healpixCentered}{A boolean. If the HPDataFrame has columns x,y,z
 or theta, phi then these will be used to determine locations
 with priority over the HEALPix indices in \code{pix(x)}
-unless \code{healpix.only = TRUE} is given. Note that
-if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
+unless \code{healpixCentered = TRUE} is given. Note that
+if \code{healpixCentered = TRUE} then columns x,y,z or theta, phi
 will be discarded and replaced with pixel center locations.}
 
 \item{...}{Unused arguments.}
@@ -38,8 +38,8 @@ HPDataFrame containing the data in \code{hpdf} restricted to the
 CMBWindow \code{new.window}. If the HPDataFrame has columns x,y,z
 or theta, phi then these will be used to determine locations
 with priority over the HEALPix indices in \code{pix(hpdf)}
-unless \code{healpix.only = TRUE} is given. Note that
-if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
+unless \code{healpixCentered = TRUE} is given. Note that
+if \code{healpixCentered = TRUE} then columns x,y,z or theta, phi
 will be discarded and replaced with pixel center locations.
 }
 \details{

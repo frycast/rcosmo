@@ -4,7 +4,7 @@
 \alias{coords.HPDataFrame}
 \title{Coordinate system from a \code{\link{HPDataFrame}}}
 \usage{
-\method{coords}{HPDataFrame}(x, new.coords, healpix.only = FALSE, ...)
+\method{coords}{HPDataFrame}(x, new.coords, healpixCentered = FALSE, ...)
 }
 \arguments{
 \item{x}{a HPDataFrame, \code{hpdf}.}
@@ -12,7 +12,7 @@
 \item{new.coords}{specifies the new coordinate system
 ("spherical" or "cartesian")}
 
-\item{healpix.only}{boolean. If TRUE then columns x,y,z
+\item{healpixCentered}{boolean. If TRUE then columns x,y,z
 or theta, phi will be ignored and removed if present.
 This forces the coordinates to be found from HEALPix
 pixel indices only. Then the HEALPixCentered
@@ -57,6 +57,6 @@ hp1 <- coords(hp1, new.coords = "spherical")
 ## Instead, ignore/drop existing coordinates and use HEALPix only
 hp2 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
                    nside = 1, auto.spix = TRUE)
-hp2 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
+hp2 <- coords(hp1, new.coords = "spherical", healpixCentered = TRUE)
 
 }

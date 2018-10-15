@@ -1,3 +1,17 @@
+library(rcosmo)
+
+# coords.HPDataFrame issue ------------------------------------------------
+
+
+hpdf <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
+hpdf
+
+hpdf.xyz <- coords(hpdf, new.coords = "cartesian")
+hpdf.xyz
+
+hpdf.sph <- coords(hpdf.xyz, new.coords = "spherical", healpix.only = TRUE)
+hpdf.sph
+
 
 # Map01 DATA --------------------------------------------------------------
 

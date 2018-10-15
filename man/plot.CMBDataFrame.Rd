@@ -4,10 +4,10 @@
 \alias{plot.CMBDataFrame}
 \title{Plot CMB Data}
 \usage{
-\method{plot}{CMBDataFrame}(x, intensities = "I", add = FALSE,
-  sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
-  aspect = FALSE, col, back.col = "black", labels, hp.boundaries = 0,
-  hpb.col = "gray", ...)
+\method{plot}{CMBDataFrame}(x, intensities = "I", add = FALSE, sample.size,
+  type = "p", size = 1, box = FALSE, axes = FALSE, aspect = FALSE,
+  col, back.col = "black", labels, hp.boundaries = 0, hpb.col = "gray",
+  ...)
 }
 \arguments{
 \item{x}{A \code{\link{CMBDataFrame}}.}

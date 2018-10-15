@@ -7,10 +7,10 @@
 plotAngDis(cmbdf, intensities = "I")
 }
 \arguments{
-\item{cmbdf}{A  full \code{\link{CMBDataFrame}} or a windowed
-\code{\link{CMBDataFrame}}}
+\item{cmbdf}{A \code{\link{CMBDataFrame}} object.}
 
-\item{intensities}{A CMBDataFrame column with measured values}
+\item{intensities}{The name of a column of \code{cmbdf},
+containing measured values.}
 }
 \value{
 2x2 plot. The first row shows scatterplots. The second row gives

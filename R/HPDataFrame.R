@@ -199,7 +199,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   attr(df, "pix") <- pix
   attr(df, "nside") <- nside
   attr(df, "ordering") <- ordering
-  attr(df, "HEALPixCentered") <- FALSE
+  attr(df, "healpixCentered") <- FALSE
   attr(df, "assumedUniquePix") <- assumedUniquePix
   class(df) <- c("HPDataFrame", "data.frame")
   df
@@ -478,7 +478,7 @@ ordering.HPDataFrame <- function( x, new.ordering, ... ) {
 #'@param x a HPDataFrame, \code{hpdf}.
 #'@param new.coords specifies the new coordinate system
 #'("spherical" or "cartesian")
-#'@param healpix.only boolean. If TRUE then columns x,y,z
+#'@param healpixCentered boolean. If TRUE then columns x,y,z
 #'or theta, phi will be ignored and removed if present.
 #'This forces the coordinates to be found from HEALPix
 #'pixel indices only. Then the HEALPixCentered
@@ -506,10 +506,10 @@ ordering.HPDataFrame <- function( x, new.ordering, ... ) {
 #' ## Instead, ignore/drop existing coordinates and use HEALPix only
 #' hp2 <- HPDataFrame(x = c(1,0,0), y = c(0,1,0), z = c(0,0,1),
 #'                    nside = 1, auto.spix = TRUE)
-#' hp2 <- coords(hp1, new.coords = "spherical", healpix.only = TRUE)
+#' hp2 <- coords(hp1, new.coords = "spherical", healpixCentered = TRUE)
 #'
 #'@export
-coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
+coords.HPDataFrame <- function( x, new.coords, healpixCentered = FALSE, ... ) {
 
   hpdf <- x
 
@@ -517,7 +517,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
   od <- rcosmo::ordering(hpdf)
   pix <- rcosmo::pix(hpdf)
 
-  if ( healpix.only == TRUE ) {
+  if ( healpixCentered == TRUE ) {
 
     # Delete any coordinates so they will be created again
     # from HEALPix only
@@ -525,7 +525,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
                   c("x","y","z","theta","phi") )
     if ( length(crd.cols) > 0 ) {
 
-      hpdf <- hpdf[ , -crd.cols]
+      hpdf <- hpdf[ , -crd.cols, drop = FALSE]
     }
 
   }
@@ -547,6 +547,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
       sph <- as.data.frame(sph)
       names(sph) <- c("theta","phi")
       hpdf <- cbind(hpdf, as.data.frame(sph))
+
 
     } else {
 
@@ -578,6 +579,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
       xyz <- as.data.frame(xyz)
       names(xyz) <- c("x","y","z")
       hpdf <- cbind(hpdf, as.data.frame(xyz))
+
     } else {
 
       theta.i <- which(names(hpdf) == "theta")
@@ -594,7 +596,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
   attr(hpdf, "ordering") <- od
   attr(hpdf, "nside") <- ns
   attr(hpdf, "pix") <- pix
-  attr(hpdf, "HEALPixCentered") <- (healpix.only == TRUE)
+  attr(hpdf, "healpixCentered") <- healpixCentered
 
   return(hpdf)
 }
@@ -713,8 +715,8 @@ geoArea.HPDataFrame <- function(x) {
 #' CMBWindow \code{new.window}. If the HPDataFrame has columns x,y,z
 #' or theta, phi then these will be used to determine locations
 #' with priority over the HEALPix indices in \code{pix(hpdf)}
-#' unless \code{healpix.only = TRUE} is given. Note that
-#' if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
+#' unless \code{healpixCentered = TRUE} is given. Note that
+#' if \code{healpixCentered = TRUE} then columns x,y,z or theta, phi
 #' will be discarded and replaced with pixel center locations.
 #'
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
@@ -740,11 +742,11 @@ geoArea.HPDataFrame <- function(x) {
 #'@param intersect A boolean that determines
 #'the behaviour when \code{new.window} is a list containing BOTH
 #'regular type and "minus" type windows together (see details).
-#'@param healpix.only A boolean. If the HPDataFrame has columns x,y,z
+#'@param healpixCentered A boolean. If the HPDataFrame has columns x,y,z
 #' or theta, phi then these will be used to determine locations
 #' with priority over the HEALPix indices in \code{pix(x)}
-#' unless \code{healpix.only = TRUE} is given. Note that
-#' if \code{healpix.only = TRUE} then columns x,y,z or theta, phi
+#' unless \code{healpixCentered = TRUE} is given. Note that
+#' if \code{healpixCentered = TRUE} then columns x,y,z or theta, phi
 #' will be discarded and replaced with pixel center locations.
 #' @param ... Unused arguments.
 #'
@@ -771,17 +773,17 @@ geoArea.HPDataFrame <- function(x) {
 #'
 #'@export
 window.HPDataFrame <- function(x, new.window, intersect = TRUE,
-                               healpix.only = FALSE, ...) {
+                               healpixCentered = FALSE, ...) {
 
   if ( missing(new.window) ) {
 
     return(attr(x, "window"))
   }
 
-  if ( healpix.only ) {
+  if ( healpixCentered ) {
 
     hpdf <- rcosmo::coords(x, new.coords = "cartesian",
-                            healpix.only = TRUE)
+                            healpixCentered = TRUE)
   }
 
   return(subWindow(x, win = new.window, intersect = intersect))
@@ -944,3 +946,8 @@ assumedUniquePix <- function(obj) {
   if (is.HPDataFrame(obj)) return(attr(obj, "assumedUniquePix"))
   return(FALSE)
 }
+
+
+
+
+

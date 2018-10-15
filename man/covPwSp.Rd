@@ -7,13 +7,13 @@
 covPwSp(PowerSpectra, Ns)
 }
 \arguments{
-\item{PowerSpectra}{a data frame which first
+\item{PowerSpectra}{A data frame which first
 column lists values of multipole
 moments and the second column gives
 the corresponding values of CMB power
 spectra.}
 
-\item{Ns}{a number of points in which
+\item{Ns}{A number of points in which
 the covariance estimate is computed on
 the interval [-1,1]}
 }

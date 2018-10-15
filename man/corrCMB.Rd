@@ -37,7 +37,7 @@ either \code{max.dist} must be specified or max.dist will
 default to pi.}
 }
 \value{
-An object of the class CMBCorrelation that is a modification of \code{\link[geoR]{variog}}
+#' An object of the class CMBCorrelation that is a modification of \code{\link[geoR]{variog}}
 from the package \strong{geoR} with variogram values replaced by correlation.
 
 The attribute "breaks" contains the break points used to create bins.

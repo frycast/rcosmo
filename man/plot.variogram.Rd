@@ -17,8 +17,7 @@ Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
 }
 \examples{
 
-## Download the map first and call library(geoR)
-# library(geoR)
+## Download the map first
 # downloadCMBMap(foreground = "smica", nside = 1024)
 # df <- CMBDataFrame("CMB_map_smica1024.fits")
 # cmbdf <- sampleCMB(df, sample.size = 100000)

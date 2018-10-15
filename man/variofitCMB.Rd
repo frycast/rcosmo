@@ -93,7 +93,7 @@ of initial values of sigma^2  and phi is used.
 # lines(ols, lty=2)
 # str(ols)
 #
-# ols <- variofitCMB(vario1, fix.nug = TRUE, kappa = 3, wei = "equal",
+# ols <- variofitCMB(varcmb, fix.nug = TRUE, kappa = 3, wei = "equal",
 # cov.model = "askey")
 # plot(varcmb, main = ols$cov.model)
 # linesCMB(ols, lty = 2)

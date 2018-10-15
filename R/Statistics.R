@@ -205,8 +205,7 @@ covCMB <- function(cmbdf,
 #' default to pi.
 #'
 #' @return
-#'
-#' An object of the class CMBCorrelation that is a modification of \code{\link[geoR]{variog}}
+#'#' An object of the class CMBCorrelation that is a modification of \code{\link[geoR]{variog}}
 #' from the package \strong{geoR} with variogram values replaced by correlation.
 #'
 #' The attribute "breaks" contains the break points used to create bins.
@@ -262,6 +261,7 @@ corrCMB <- function(cmbdf,
   oldClass(corrCMB) <- "CMBCorrelation"
   return(corrCMB)
 }
+
 
 #' Sample variogram
 #'
@@ -366,13 +366,14 @@ variogramCMB <- function(cmbdf,
 #'
 #'@examples
 #'
-#' ## Download the map first and call library(geoR)
-#' # library(geoR)
+#' ## Download the map first
 #' # downloadCMBMap(foreground = "smica", nside = 1024)
 #' # df <- CMBDataFrame("CMB_map_smica1024.fits")
 #' # cmbdf <- sampleCMB(df, sample.size = 100000)
 #' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=1000)
 #' # plot(varcmb)
+#'
+#'@import geoR
 #'
 #'@name plot.variogram
 #'
@@ -388,7 +389,7 @@ NULL
 #'
 #'@return Produces a plot with the sample covariance function.
 #'
-#'@references \strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
+#'#'@references \strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link[geoR]{plot.variogram}}
 #'
 #'@examples
@@ -399,6 +400,8 @@ NULL
 #' # cmbdf <- sampleCMB(df, sample.size = 100000)
 #' # Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
 #' # plot(Cov)
+#'
+#'@import geoR
 #'
 #' @export
 plot.CMBCovariance <-  function (x, ...) {
@@ -420,6 +423,7 @@ plot.CMBCovariance <-  function (x, ...) {
 #'@references \strong{geoR} package, \code{\link{corrCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link{plot.variogram}}
 #'
+#'@import geoR
 #'@examples
 #'
 #' ## Download the map first
@@ -444,12 +448,12 @@ plot.CMBCorrelation <-  function (x, ...) {
 #'power spectra.
 #'
 #'
-#'@param PowerSpectra a data frame which first
+#'@param PowerSpectra A data frame which first
 #'column lists values of multipole
 #'moments and the second column gives
 #'the corresponding values of CMB power
 #'spectra.
-#'@param Ns a number of points in which
+#'@param Ns A number of points in which
 #'the covariance estimate is computed on
 #'the interval [-1,1]
 #'
@@ -506,7 +510,47 @@ Cov_func <- function(mat, Dfl , l)  {
     }, MARGIN = 2)
 }
 
-
+#' Power spectra estimate via correlation
+#'
+#'This function provides an angular power spectra estimate
+#'using the values of the sample correlations. The approach is based
+#'on Lawson-Hanson algorithm for non-negative least squares.
+#'
+#'
+#'@param corcmb An object of the class CMBCorrelation.
+#'@param lmax A number of angular power spectra components to estimate
+#'
+#'
+#'@return
+#' A data frame which first column is 1-d grid of l values
+#' from 0 to \code{lmax}. The second column is
+#' estimated angular power spectra components on this grid.
+#'
+#'@references Formula (2.1) in Baran A., Terdik G. Power spectrum
+#'estimation of spherical random fields based on covariances.
+#'Annales Mathematicae et Informaticae 44 (2015) pp. 15–22.
+#'
+#'
+#'@examples
+#'
+#' ## Download the map first
+#' # downloadCMBMap(foreground = "smica", nside = 1024)
+#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
+#' # Corrf <- corrCMB(df, max.dist = 0.1, num.bins = 30,
+#' # sample.size=10000)
+#' # pw <- pwSpCorr(Corrf)
+#'
+#'@export
+pwSpCorr <- function(corcmb, lmax=20*length(corcmb$u)){
+  if (requireNamespace("gsl", quietly = TRUE)) {
+    Pls <- gsl::legendre_Pl_array(lmax, x = cos(corcmb$u))
+    A <- as.matrix(t((2*(0:lmax)+1)/(4*pi)*Pls))
+    fit <- nnls::nnls(A,corcmb$v)
+    return(data.frame(L=(0:lmax),f_l=fit$x))}
+  else {
+    stop("Package \"gsl\" needed for this function. Please install it.")
+  }
+}
 
 #'Plot angular scatterplots and means
 #'
@@ -1387,7 +1431,7 @@ covmodelCMB  <-  function (obj,
 #' # lines(ols, lty=2)
 #' # str(ols)
 #' #
-#' # ols <- variofitCMB(vario1, fix.nug = TRUE, kappa = 3, wei = "equal",
+#' # ols <- variofitCMB(varcmb, fix.nug = TRUE, kappa = 3, wei = "equal",
 #' # cov.model = "askey")
 #' # plot(varcmb, main = ols$cov.model)
 #' # linesCMB(ols, lty = 2)
@@ -1853,8 +1897,8 @@ variofit1 <-   function (vario,
           result$par <- result$estimate
           result$value <- result$minimum
           result$convergence <- result$code
-          if (!is.null(get(".temp.theta", pos = 1)))
-            result$par <- get(".temp.theta", pos = 1)
+          if (!is.null(get(".temp.theta")))
+            result$par <- get(".temp.theta")
         }
         else {
           lower.l <- sapply(limits, function(x)
@@ -2295,7 +2339,7 @@ CMB.cov.models <- c(
   ## Imposing constraints for nlm
   ##
   if (g.l$m.f == "nlm") {
-    assign(".temp.theta",  NULL, pos = 1)
+    assign(".temp.theta",  NULL)
     if (!g.l$fix.kappa) {
       if (g.l$fix.nugget) {
         if (g.l$cov.model == "power")
@@ -2319,7 +2363,7 @@ CMB.cov.models <- c(
     if (!g.l$fix.kappa)
       theta <- c(theta.minimiser, Tkappa)
     if (any(theta.minimiser < 0))
-      assign(".temp.theta", theta, pos = 1)
+      assign(".temp.theta", theta)
     else
       penalty <- 0
   }

@@ -13,6 +13,9 @@
 }
 \value{
 Produces a plot with the sample covariance function.
+
+#'@references \strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
+\code{\link[geoR]{plot.variogram}}
 }
 \description{
 Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variogram}} from
@@ -27,8 +30,4 @@ Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variog
 # Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
 # plot(Cov)
 
-}
-\references{
-\strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
-\code{\link[geoR]{plot.variogram}}
 }

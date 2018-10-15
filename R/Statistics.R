@@ -513,10 +513,10 @@ Cov_func <- function(mat, Dfl , l)  {
 #'For specified measurements from \code{\link{CMBDataFrame}} this function
 #'produces scatterplots and binned means versus theta and phi angles.
 #'
-#'@param cmbdf A \code{\link{CMBDataFrame}} object or a windowed
-#'\code{\link{CMBDataFrame}}
+#'@param cmbdf A \code{\link{CMBDataFrame}} object.
 #'
-#'@param intensities  A CMBDataFrame column with measured values
+#'@param intensities The name of a column of \code{cmbdf},
+#'containing measured values.
 #'
 #'@return
 #' 2x2 plot. The first row shows scatterplots. The second row gives

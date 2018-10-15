@@ -13,7 +13,8 @@ exprob(cmbdf, win, alpha, intensities = "I")
 
 \item{alpha}{A numeric threshold level.}
 
-\item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
+\item{intensities}{The name of the column in \code{cmbdf}
+that contains the measured values.}
 }
 \value{
 Estimated threshold exceedance probability

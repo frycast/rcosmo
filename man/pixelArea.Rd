@@ -4,14 +4,16 @@
 \alias{pixelArea}
 \title{Area of a HEALPix pixel}
 \usage{
-pixelArea(cmbdf)
+pixelArea(nsideObject)
 }
 \arguments{
-\item{cmbdf}{a \code{\link{CMBDataFrame}}}
+\item{nsideObject}{\code{\link{CMBDataFrame}}, a
+\code{\link{HPDataFrame}}, or an integer
+giving the nside parameter.}
 }
 \value{
 the area of a single HEALPix pixel
-at the \code{nside} resolution of \code{cmbdf}
+at the \code{nside} resolution of \code{nsideObject}
 }
 \description{
 Get the area of a single HEALPix pixel

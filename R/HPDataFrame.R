@@ -525,7 +525,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
                   c("x","y","z","theta","phi") )
     if ( length(crd.cols) > 0 ) {
 
-      hpdf <- hpdf[ , -crd.cols]
+      hpdf <- hpdf[ , -crd.cols, drop = FALSE]
     }
 
   }
@@ -547,6 +547,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
       sph <- as.data.frame(sph)
       names(sph) <- c("theta","phi")
       hpdf <- cbind(hpdf, as.data.frame(sph))
+
 
     } else {
 
@@ -578,6 +579,7 @@ coords.HPDataFrame <- function( x, new.coords, healpix.only = FALSE, ... ) {
       xyz <- as.data.frame(xyz)
       names(xyz) <- c("x","y","z")
       hpdf <- cbind(hpdf, as.data.frame(xyz))
+
     } else {
 
       theta.i <- which(names(hpdf) == "theta")

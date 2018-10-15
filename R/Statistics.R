@@ -513,7 +513,7 @@ Cov_func <- function(mat, Dfl , l)  {
 #'For specified measurements from \code{\link{CMBDataFrame}} this function
 #'produces scatterplots and binned means versus theta and phi angles.
 #'
-#'@param cmbdf A  full \code{\link{CMBDataFrame}} or a windowed
+#'@param cmbdf A \code{\link{CMBDataFrame}} object or a windowed
 #'\code{\link{CMBDataFrame}}
 #'
 #'@param intensities  A CMBDataFrame column with measured values
@@ -682,7 +682,8 @@ fmf <- function(cmbdf, alpha, intensities = "I")
 #'@param cmbdf A \code{\link{CMBDataFrame}}.
 #'@param win A \code{\link{CMBWindow}}
 #'@param alpha A numeric threshold level.
-#'@param intensities A \code{\link{CMBDataFrame}} column with measured values.
+#'@param intensities The name of the column in \code{cmbdf}
+#'that contains the measured values.
 #'
 #'@return
 #'

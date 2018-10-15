@@ -2,10 +2,12 @@
 #'
 #' Get the area of a single HEALPix pixel
 #'
-#'@param cmbdf a \code{\link{CMBDataFrame}}
+#'@param nsideObject  \code{\link{CMBDataFrame}}, a
+#'\code{\link{HPDataFrame}}, or an integer
+#'giving the nside parameter.
 #'
 #'@return the area of a single HEALPix pixel
-#' at the \code{nside} resolution of \code{cmbdf}
+#' at the \code{nside} resolution of \code{nsideObject}
 #'
 #' @examples
 #' ## First download the map
@@ -19,9 +21,19 @@
 #' pixelArea(df1)
 #'
 #'@export
-pixelArea <- function(cmbdf)
+pixelArea <- function(nsideObject)
 {
-  nside <- nside(cmbdf)
+  if ( is.CMBDataFrame(nsideObject) || is.HPDataFrame(nsideObject) ) {
+    nside <- nside(nsideObject)
+
+  } else if ( is.numeric(nsideObject) ) {
+
+    nside <- as.integer(nsideObject)
+  } else {
+
+    stop("nsideObject must be a CMBDataFrame, HPDataFrame, or integer")
+  }
+
   if ( !is.numeric(nside) ) stop("problem with cmbdf nside parameter")
   return(pi/(3*nside^2))
 }

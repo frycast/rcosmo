@@ -4,8 +4,8 @@
 \alias{fRen}
 \title{Sample Renyi function}
 \usage{
-fRen(cmbdf, q.min = 1.01, q.max = 10, N = 20, k.box = log2(nside(cmbdf))
-  - 3, intensities = "I")
+fRen(cmbdf, q.min = 1.01, q.max = 10, N = 20,
+  k.box = log2(nside(cmbdf)) - 3, intensities = "I")
 }
 \arguments{
 \item{cmbdf}{A \code{\link{CMBDataFrame}}.}

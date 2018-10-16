@@ -4,8 +4,8 @@
 \alias{variofitCMB}
 \title{Estimates parameters of variograms}
 \usage{
-variofitCMB(vario, ini.cov.pars, cov.model, fix.nugget = FALSE, nugget = 0,
-  fix.kappa = TRUE, kappa = 0.5, simul.number = NULL,
+variofitCMB(vario, ini.cov.pars, cov.model, fix.nugget = FALSE,
+  nugget = 0, fix.kappa = TRUE, kappa = 0.5, simul.number = NULL,
   max.dist = vario$max.dist, weights, minimisation.function,
   limits = geoR::pars.limits(), messages, ...)
 }

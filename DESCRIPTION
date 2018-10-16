@@ -9,14 +9,10 @@ Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"),
              email = "a.olenko@latrobe.edu.au"),
              person("Ming", "Li", role = "aut"),             
              person("Yuguang", "Wang", role = "aut"))
-Authors: Daniel Fryer (aut, cre) email: d.fryer@latrobe.edu.au, 
-         Andriy Olenko (aut) email: a.olenko@latrobe.edu.au,
-         Ming Li (aut),             
-         Yuguang Wang (aut)
-Description: Handling and Analysing Spherical, Healpix and Cosmic Microwave Background 
+Description: Handling and Analysing Spherical, HEALPix and Cosmic Microwave Background 
     data on a HEALPix grid.
 Depends: R (>= 3.4.0)
-License: GPL-2
+License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:

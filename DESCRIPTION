@@ -9,7 +9,7 @@ Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"),
              email = "a.olenko@latrobe.edu.au"),
              person("Ming", "Li", role = "aut"),             
              person("Yuguang", "Wang", role = "aut"))
-Authors: Daniel Fryer (aut, cre) email: d.fryer@latrobe.edu.au, 
+Author:  Daniel Fryer (aut, cre) email: d.fryer@latrobe.edu.au, 
          Andriy Olenko (aut) email: a.olenko@latrobe.edu.au,
          Ming Li (aut),             
          Yuguang Wang (aut)

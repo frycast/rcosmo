@@ -4,7 +4,6 @@
 \name{rcosmo}
 \alias{rcosmo}
 \alias{rcosmo-package}
-\alias{rcosmo-package}
 \title{Handling and Analysing CMB data}
 \description{
 Handling and Analysing Spherical, Healpix and Cosmic Microwave Background

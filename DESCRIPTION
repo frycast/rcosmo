@@ -25,7 +25,7 @@ Imports:
 	  cli (>= 1.0.0),
 	  entropy (>= 1.2.1),
 	  geoR (>= 1.7-5.2.1),
-          nnls (>= 1.4)
+    nnls (>= 1.4)
 Suggests:
     knitr,
     rmarkdown,

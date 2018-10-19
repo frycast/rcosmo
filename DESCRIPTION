@@ -33,4 +33,3 @@ Suggests:
     gsl
 LinkingTo: Rcpp
 RoxygenNote: 6.1.0
-VignetteBuilder: R.rsp

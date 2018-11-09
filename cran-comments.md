@@ -32,3 +32,7 @@ Maintainer: 'Daniel Fryer <d.fryer@latrobe.edu.au>'
 ## Downstream dependencies
 There are no downstream dependencies for this package
 
+
+## Other comments
+The manuscript describing the methods in this package is under preparation
+

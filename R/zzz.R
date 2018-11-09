@@ -1,3 +1,3 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to rcosmo")
+  packageStartupMessage("Welcome to rcosmo (development version)")
 }

@@ -3,12 +3,19 @@ URL: https://github.com/VidaliLama/rcosmo
 BugReports: https://github.com/VidaliLama/rcosmo/issues
 Title: Cosmic Microwave Background Data Analysis
 Version: 1.0.0
-Authors@R: c(person("Daniel", "Fryer", role = c("aut", "cre"), 
-                     email = "d.fryer@latrobe.edu.au"),
-             person("Andriy", "Olenko", role = "aut", 
-             email = "a.olenko@latrobe.edu.au"),
-             person("Ming", "Li", role = "aut"),             
-             person("Yuguang", "Wang", role = "aut"))
+Authors@R: c(person("Daniel", "Fryer", 
+                     role = c("aut", "cre"), 
+                     email = "d.fryer@latrobe.edu.au",
+                     comment = c(ORCID = "0000-0001-6032-0522")),
+             person("Andriy", "Olenko", 
+                     role = "aut", 
+                     email = "a.olenko@latrobe.edu.au",
+                     comment = c(ORCID = "0000-0002-0917-7000")),
+             person("Ming", "Li", 
+                     role = "aut",
+                     comment = c(ORCID = "0000-0002-1218-2804")),             
+             person("Yuguang", "Wang", 
+                     role = "aut"))
 Description: Handling and Analysing Spherical, 
       HEALPix and Cosmic Microwave Background data on a HEALPix grid.
 Depends: R (>= 3.4.0)

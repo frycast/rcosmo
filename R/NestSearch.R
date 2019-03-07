@@ -187,7 +187,7 @@ nestSearch_step <- function(target, j2, pix.j1) {
 #'@export
 pixelWindow <- function(j1, j2, pix.j1)
 {
-  if ( j2 < 0 || j1 < 0 || pix.j1 < 0 )
+  if ( any(j2 < 0) || any(j1 < 0) || any(pix.j1 < 0) )
   {
     stop("j1, j2, and pix.j1 must all be non-negative")
   }

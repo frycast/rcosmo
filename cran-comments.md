@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Removed the redundant R from the DESCRIPTION title.
+
+
 ## Test environments
 
 * local Windows 10 install, R 3.5.1

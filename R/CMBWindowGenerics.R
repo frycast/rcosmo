@@ -134,7 +134,7 @@ plot.CMBWindow <- function(x, add = TRUE, type = "l",
 {
   win <- x
 
-  if ( coords(win) == "spherical" )
+  if ( rcosmo::coords(win) == "spherical" )
   {
     rcosmo::coords(win) <- "cartesian"
   } else if ( rcosmo::coords(win) == "cartesian" ) {
@@ -223,11 +223,14 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
     line <- sph2car( line )
 
     line.rotated <-  as.data.frame(rodrigues(c(0,0,1),
-                                                      as.matrix(normal)[1,],
-                                                      line))
+                                   as.matrix(normal)[1,],
+                                   line))
     names(line.rotated) <- c("x","y","z")
     boundary <- rbind(boundary, line.rotated)
   }
+
+  boundary <- rbind(boundary, vertices.xyz[1,])
+
   boundary
 }
 

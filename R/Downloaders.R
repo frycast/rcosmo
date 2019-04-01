@@ -55,7 +55,7 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
   prefix <- "COM_CMB_IQU-"
   suffix <- "full.fits"
   ns1024 <- "_1024_R2.02_"
-  ns2048 <- "_2048_R2.01_"
+  ns2048 <- "-field-Int_2048_R2.01_"
   foregrounds <- c("commander","nilc","sevem","smica")
 
   if ( nside == 1024 )

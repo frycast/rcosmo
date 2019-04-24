@@ -1,0 +1,2 @@
+# Example of a `.gitattributes` file which reclassifies `.md` files as R:
+*.md linguist-language=R

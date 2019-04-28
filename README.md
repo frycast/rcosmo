@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/frycast/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo) [![CRAN Versions](http://www.r-pkg.org/badges/version/rcosmo) [![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/last-week/rcosmo)
+[![Travis-CI Build Status](https://travis-ci.org/frycast/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo) ![CRAN Versions](http://www.r-pkg.org/badges/version/rcosmo) ![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo) ![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo) ![CRAN downloads](http://cranlogs.r-pkg.org/badges/last-week/rcosmo)
 
 # The `rcosmo` project
 

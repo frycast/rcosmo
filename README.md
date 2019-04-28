@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/frycast/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo) [![CRAN Versions](http://www.r-pkg.org/badges/version/rcosmo) [![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo)
+
 # The `rcosmo` project
 
 The Cosmic Microwave Background (CMB) is remnant electromagnetic radiation from the epoch of recombination. It is the most ancient important source of data about the early universe and the key to unlocking the mysteries of the Big Bang and the structure of time and space. Spurred on by a wealth of satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation. An advanced R programming toolkit is needed to help statisticians perform CMB data analytics. 
@@ -18,4 +20,4 @@ The current version of `rcosmo` includes the following functionality:
 + Spherical geometry tools such as shortest distance between two points, calculate spherical angles, shortest distance between a point and a region, etc
 
 
-[![Travis-CI Build Status](https://travis-ci.org/frycast/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo) [![CRAN Versions](http://www.r-pkg.org/badges/version/rcosmo) [![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo)
+

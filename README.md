@@ -18,4 +18,4 @@ The current version of `rcosmo` includes the following functionality:
 + Spherical geometry tools such as shortest distance between two points, calculate spherical angles, shortest distance between a point and a region, etc
 
 
-[![Travis-CI Build Status](https://travis-ci.org/VidaliLama/rcosmo.svg?branch=master)](https://travis-ci.org/VidaliLama/rcosmo)
+[![Travis-CI Build Status](https://travis-ci.org/VidaliLama/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo)

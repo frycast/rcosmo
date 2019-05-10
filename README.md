@@ -18,7 +18,7 @@ The current version of `rcosmo` includes the following functionality:
 +	Window subsetting tools for investigating circular, convex and non-convex polygonal sub-regions on the sphere
 +	Fast empirical covariance and variogram estimation
 +	Implementation and analysis of spherical harmonics, spherical wavelets, etc
-+	Various methods for CMB map visualization, such as interactive 3D full sky maps rendered with OpenGL, Mollweide projection and HEALPix boundary plotting
++	Various methods for CMB map visualization, such as interactive 3D full sky maps rendered with OpenGL, polygon boundary visualisation, and HEALPix pixel boundary plotting
 + Spherical geometry tools such as shortest distance between two points, calculate spherical angles, shortest distance between a point and a region, etc
 
 

@@ -7,5 +7,5 @@ This is the first release.
 * fixed a small typo bug in nestSearch function
 * updated links in rcosmo.R for Update and BugReports
 * updated link in downloadCMBMap for data source with nside = 2048
-
+* introduced check in nestSearch that log2 of nside must be integer
 

@@ -77,6 +77,10 @@ nestSearch <- function(target, nside,
     stop("Target must be data.frame, matrix or numeric vector")
   }
 
+  ln <- log2(nside)
+
+  if (!is.integer(ln)) stop("log2 of nside must be an integer")
+
   j = 0:(log2(nside)+1)
   jlen <- length(j)
   tlen <- length(target)

@@ -116,7 +116,10 @@ is.CMBWindow <- function(win)
 #'aspect ratio, or a new ratio.
 #'@param back.col specifies the background colour of
 #'the plot. This argument is passed to rgl::bg3d.
-#'@param depth_test see \code{\link[rgl]{rgl.material}}
+#'@param depth_test The depth test to be applied.
+#' This controls how resistant the plotted
+#' object is to being obscured.
+#' See \code{\link[rgl]{rgl.material}}
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@examples

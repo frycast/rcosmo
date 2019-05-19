@@ -35,7 +35,9 @@ if \code{ordering} is specified}
 \item{font}{A numeric font number from 1 to 5,
 used if \code{ordering} is specified}
 
-\item{depth_test}{see \code{\link[rgl]{rgl.material}}}
+\item{depth_test}{The depth test to be applied.
+This controls how resistant the plotted
+object is to being obscured. See \code{\link[rgl]{rgl.material}}}
 
 \item{...}{arguments passed to \code{rgl::plot3d}}
 }

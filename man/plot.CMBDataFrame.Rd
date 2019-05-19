@@ -54,7 +54,8 @@ added to the plot.}
 \item{hpb.col}{Colour for the \code{hp.boundaries}.}
 
 \item{depth_test}{The depth test to be applied to the
-plotted points. See \code{\link[rgl]{rgl.material}}}
+plotted points. This controls how resistant the plotted
+object is to being obscured. See \code{\link[rgl]{rgl.material}}}
 
 \item{lab_depth_test}{The \code{\link{rgl}} depth test
 to be applied to the labels and pixel boundaries if present.

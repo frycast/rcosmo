@@ -355,7 +355,8 @@ nside.HPDataFrame <- function( x ) {
 #'added to the plot
 #'@param hpb.col colour for the \code{hp.boundaries}
 #'@param depth_test The depth test to be applied to the
-#' plotted points. See \code{\link[rgl]{rgl.material}}
+#' plotted points. This controls how resistant the plotted
+#' object is to being obscured. This controls how resistant the plotted
 #'@param lab_depth_test The \code{\link{rgl}} depth test
 #' to be applied to the labels and pixel boundaries
 #' if present. See \code{\link[rgl]{rgl.material}}

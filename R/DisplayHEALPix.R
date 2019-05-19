@@ -20,6 +20,7 @@
 #' if \code{ordering} is specified
 #' @param font A numeric font number from 1 to 5,
 #' used if \code{ordering} is specified
+#' @param depth_test see \code{\link[rgl]{rgl.material}}
 #' @param ... arguments passed to \code{rgl::plot3d}
 #'
 #' @return Produces a plot of the HEALPix pixel boundaries.
@@ -33,7 +34,7 @@ displayPixelBoundaries <- function(nside, eps = pi/90, col = "gray",
                              lwd = 1, ordering,
                              incl.labels = 1:(12*nside^2),
                              nums.col = col, nums.size = 1,
-                             font = 2, ...)
+                             font = 2, depth_test = "always", ...)
 {
   ### Part I
   for (k in seq(1,nside,1)) {
@@ -57,10 +58,10 @@ displayPixelBoundaries <- function(nside, eps = pi/90, col = "gray",
     for ( m in seq(0,3,1) ){
       #Northern Hemisphere
       plotPixel( data.frame(theta = S[,1], phi = S[,2] + pi*m/2),
-                 col = col, lwd = lwd, ...)
+                 col = col, lwd = lwd, depth_test = depth_test, ...)
       #Southern Hemisphere
       plotPixel( data.frame(theta = S[,1] - pi, phi = S[,2] + pi*m/2),
-                 col = col, lwd = lwd, ...)
+                 col = col, lwd = lwd, depth_test = depth_test, ...)
     }
   }
   ### PART II
@@ -110,17 +111,17 @@ displayPixelBoundaries <- function(nside, eps = pi/90, col = "gray",
 
     plot.CMBDataFrame(centers, add = TRUE, col = nums.col,
                               cex = nums.size, labels = incl.labels,
-                              font = font)
+                              font = font, lab_depth_test = depth_test)
   }
 }
 
 
 ## HELPER FUNCTION 1
-plotPixel <- function(S, col = "black", lwd = 1, ...)
+plotPixel <- function(S, col = "black", lwd = 1, depth_test = "always", ...)
 {
   C <- sph2car(S)
   rgl::plot3d(C[,"x"],C[,"y"],C[,"z"],
-              type = "l", add = TRUE, col = col, lwd = lwd, ...)
+              type = "l", add = TRUE, col = col, lwd = lwd, depth_test = depth_test, ...)
 }
 
 pbEqBelt<-function(n, k, eps, start_phi,

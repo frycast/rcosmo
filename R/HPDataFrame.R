@@ -354,6 +354,11 @@ nside.HPDataFrame <- function( x ) {
 #'pixel boundaries at \code{nside = hp.boundaries} will be
 #'added to the plot
 #'@param hpb.col colour for the \code{hp.boundaries}
+#'@param depth_test The depth test to be applied to the
+#' plotted points. See \code{\link[rgl]{rgl.material}}
+#'@param lab_depth_test The \code{\link{rgl}} depth test
+#' to be applied to the labels and pixel boundaries
+#' if present. See \code{\link[rgl]{rgl.material}}
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@return
@@ -371,7 +376,9 @@ plot.HPDataFrame <- function(x, intensities = "I",
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
                               col = "blue", back.col = "black", labels,
-                              hp.boundaries = 0, hpb.col = "gray", ...) {
+                              hp.boundaries = 0, hpb.col = "gray",
+                              depth_test = "less",
+                              lab_depth_test = "always", ...) {
 
   hpdf <- x
   pix <- pix(hpdf)
@@ -407,17 +414,20 @@ plot.HPDataFrame <- function(x, intensities = "I",
 
     rgl::plot3d(hpdf.xyz$x, hpdf.xyz$y, hpdf.xyz$z,
                 col = col, type = type, size = size,
-                box = box, axes = axes, add = add, aspect = aspect, ...)
+                box = box, axes = axes, add = add, aspect = aspect,
+                depth_test = depth_test, ...)
   } else {
 
     rgl::text3d(hpdf.xyz$x, hpdf.xyz$y, hpdf.xyz$z, labels,
                 col = col, type = type, size = size,
-                box = box, axes = axes, add = add, aspect = aspect, ...)
+                box = box, axes = axes, add = add, aspect = aspect,
+                depth_test = lab_depth_test, ...)
   }
 
   if ( hp.boundaries > 0 ) {
 
-    rcosmo::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col)
+    rcosmo::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col,
+                                   depth_test = lab_depth_test)
   }
 }
 

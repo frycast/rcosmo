@@ -6,7 +6,7 @@
 \usage{
 displayPixelBoundaries(nside, eps = pi/90, col = "gray", lwd = 1,
   ordering, incl.labels = 1:(12 * nside^2), nums.col = col,
-  nums.size = 1, font = 2, ...)
+  nums.size = 1, font = 2, depth_test = "always", ...)
 }
 \arguments{
 \item{nside}{the HEALPix nside parameter (integer number \eqn{2^k})}
@@ -34,6 +34,8 @@ if \code{ordering} is specified}
 
 \item{font}{A numeric font number from 1 to 5,
 used if \code{ordering} is specified}
+
+\item{depth_test}{see \code{\link[rgl]{rgl.material}}}
 
 \item{...}{arguments passed to \code{rgl::plot3d}}
 }

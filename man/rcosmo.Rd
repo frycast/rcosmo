@@ -28,11 +28,11 @@ coordinates to the Healpix representation.
 }
 \section{Update}{
  Current updates are available through
-URL: https://github.com/VidaliLama/rcosmo
+URL: https://github.com/frycast/rcosmo
 }
 
 \section{BugReports}{
- https://github.com/VidaliLama/rcosmo/issues
+ https://github.com/frycast/rcosmo/issues
 }
 
 \author{

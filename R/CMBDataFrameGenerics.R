@@ -1041,6 +1041,11 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #'pixel boundaries at \code{nside = hp.boundaries} will be
 #'added to the plot.
 #'@param hpb.col Colour for the \code{hp.boundaries}.
+#'@param depth_test The depth test to be applied to the
+#' plotted points. See \code{\link[rgl]{rgl.material}}
+#'@param lab_depth_test The \code{\link{rgl}} depth test
+#' to be applied to the labels and pixel boundaries if present.
+#' See \code{\link[rgl]{rgl.material}}
 #'@param ... Arguments passed to rgl::plot3d.
 #'
 #'@return
@@ -1059,6 +1064,8 @@ plot.CMBDataFrame <- function(x, intensities = "I",
                               axes = FALSE, aspect = FALSE,
                               col, back.col = "black", labels,
                               hp.boundaries = 0, hpb.col = "gray",
+                              depth_test = "less",
+                              lab_depth_test = "always",
                               ...) {
 
   cmbdf <- x
@@ -1101,18 +1108,21 @@ plot.CMBDataFrame <- function(x, intensities = "I",
 
     rgl::plot3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z,
                 col = col, type = type, size = size,
-                box = box, axes = axes, add = add, aspect = aspect, ...)
+                box = box, axes = axes, add = add, aspect = aspect,
+                depth_test = depth_test, ...)
   } else {
 
     rgl::text3d(cmbdf.xyz$x, cmbdf.xyz$y, cmbdf.xyz$z, labels,
                 col = col, type = type, size = size,
-                box = box, axes = axes, add = add, aspect = aspect, ...)
+                box = box, axes = axes, add = add, aspect = aspect,
+                depth_test = lab_depth_test, ...)
   }
 
   if ( hp.boundaries > 0 ) {
 
     rcosmo::displayPixelBoundaries(nside = hp.boundaries,
-                                    col = hpb.col)
+                                    col = hpb.col,
+                                    depth_test = lab_depth_test)
   }
 }
 

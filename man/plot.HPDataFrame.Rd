@@ -7,7 +7,8 @@
 \method{plot}{HPDataFrame}(x, intensities = "I", add = FALSE,
   sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
   aspect = FALSE, col = "blue", back.col = "black", labels,
-  hp.boundaries = 0, hpb.col = "gray", ...)
+  hp.boundaries = 0, hpb.col = "gray", depth_test = "less",
+  lab_depth_test = "always", ...)
 }
 \arguments{
 \item{x}{A HPDataFrame.}
@@ -52,6 +53,13 @@ pixel boundaries at \code{nside = hp.boundaries} will be
 added to the plot}
 
 \item{hpb.col}{colour for the \code{hp.boundaries}}
+
+\item{depth_test}{The depth test to be applied to the
+plotted points. See \code{\link[rgl]{rgl.material}}}
+
+\item{lab_depth_test}{The \code{\link{rgl}} depth test
+to be applied to the labels and pixel boundaries
+if present. See \code{\link[rgl]{rgl.material}}}
 
 \item{...}{arguments passed to rgl::plot3d}
 }

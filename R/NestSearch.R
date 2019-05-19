@@ -79,7 +79,7 @@ nestSearch <- function(target, nside,
 
   ln <- log2(nside)
 
-  if (!is.integer(ln)) stop("log2 of nside must be an integer")
+  if ( !( ln %% 1 == 0 ) ) stop("log2 of nside must be an integer")
 
   j = 0:(log2(nside)+1)
   jlen <- length(j)

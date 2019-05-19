@@ -244,131 +244,131 @@ CMBDataFrame <- function(CMBData,
   ########################################################################
   if (CMBData.is.path) {
 
-    CMBData <- CMBDat(CMBData)
+    CMBData <- CMBDat(CMBData, mmap = TRUE)
 
-    data <- as.data.frame(CMBData$data)
-    names(data) <- CMBData$colnames
+    if (missing(win)) {
 
-    # Get Nside from FITS header:
-    nside <- CMBData$nside
-    # Check that nside is an integer and greater than 0:
-    if(nside %% 1 != 0 || (nside <= 0)) {
+      # Get Nside from FITS header:
+      nside <- CMBData$nside
+      if(nside %% 1 != 0 || (nside <= 0)) {
 
-      stop("Failed to obtain valid nside from FITS header")
-    }
-
-    if ( !missing(sample.size) ) {
-
-      spix <- sort(sample(seq(1,12*nside^2), sample.size))
-    }
-
-    # Get ordering from FITS header:
-    orderFITS <- CMBData$ordering
-    if(orderFITS != "ring" && orderFITS != "nested") {
-
-      stop(paste("Failed to obtain valid ordering scheme from FITS header,",
-           "instead obtained: ", orderFITS))
-    }
-
-    if (!missing(coords)) {
-
-      message("Generating coordinates from HEALPix ordering...\n")
-
-      nest <- ifelse(orderFITS == "nested", TRUE, FALSE)
-      cartesian <- ifelse(coords == "cartesian", TRUE, FALSE)
-
-      # generate the coordinates from HEALPix indices
-      coordinates <- pix2coords_internal(nside = nside, nested = nest,
-                                          spix = spix, cartesian = cartesian)
-
-      # Put the coordinates in a data.frame
-      if (coords == "spherical"){
-
-        cmbdf <- data.frame(theta = coordinates[,1], phi = coordinates[,2])
-
-      } else {
-
-        cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
+        stop("Failed to obtain valid nside from FITS header")
       }
 
+      # Get ordering from FITS header:
+      orderFITS <- CMBData$ordering
+      if(orderFITS != "ring" && orderFITS != "nested") {
 
-
-      # Add the corresponding intensities from CMBData into the data.frame
-      if ( !is.null(spix) ){
-
-        cmbdf <- data.frame(cmbdf, I = data$I_STOKES[spix])
-      } else {
-
-        cmbdf <- data.frame(cmbdf, I = data$I_STOKES)
+        stop(paste("Failed to obtain valid ordering scheme from FITS header,",
+                   "instead obtained: ", orderFITS))
       }
 
-    # Else coords are unspecified (HEALPix)
+      if ( !missing(sample.size) ) {
+
+        spix <- sort(sample(seq(1,12*nside^2), sample.size))
+      }
+
+      if (is.null(spix)) {
+        spix <- 1:(12*nside^2)
+        data <- as.data.frame(CMBData$data[spix,])
+        spix <- NULL
+      } else {
+        data <- as.data.frame(CMBData$data[spix,])
+      }
+
+      names(data) <- CMBData$colnames
+
+      if (!missing(coords)) {
+
+        message("Generating coordinates from HEALPix ordering...\n")
+
+        nest <- ifelse(orderFITS == "nested", TRUE, FALSE)
+        cartesian <- ifelse(coords == "cartesian", TRUE, FALSE)
+
+        # generate the coordinates from HEALPix indices
+        coordinates <- pix2coords_internal(nside = nside, nested = nest,
+                                            spix = spix, cartesian = cartesian)
+
+        # Put the coordinates in a data.frame
+        if (coords == "spherical"){
+
+          cmbdf <- data.frame(theta = coordinates[,1], phi = coordinates[,2])
+
+        } else {
+
+          cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
+        }
+
+      # Else coords are unspecified (HEALPix)
+      }
+
+      cmbdf <- data.frame(I = as.vector(data$I_STOKES))
+
+
+      if (include.polar == TRUE) {
+        if ( length(data$Q_STOKES) > 0 ) {
+
+          cmbdf$Q <- as.vector(data$Q_STOKES, mode = "numeric")
+        }
+        if ( length(data$U_STOKES) > 0 ) {
+
+          cmbdf$U <- as.vector(data$U_STOKES, mode = "numeric")
+        }
+      }
+
+      if (include.masks == TRUE) {
+        if ( length(data$TMASK) > 0 ) {
+
+          cmbdf$TMASK <- as.vector(data$TMASK, mode = "integer")
+        }
+        if ( length(data$PMASK) > 0 ) {
+
+          cmbdf$PMASK <- as.vector(data$PMASK, mode = "integer")
+        }
+      }
+
+      message("Adding CMB Data Frame attributes...\n")
+
+      if ( is.null(spix) ) spix <- 1:(12*nside^2)
+      attr(cmbdf, "row.names") <- spix
+      attr(cmbdf, "nside") <- nside
+      class(cmbdf) <- c("CMBDataFrame","data.frame")
+      attr(cmbdf, "ordering") <- orderFITS
+      if (missing(coords)) coords <- NULL
+      attr(cmbdf, "coords") <- coords
+      attr(cmbdf, "resolution") <- CMBData$resoln
+      attr(cmbdf, "header1") <- CMBData$header1
+      attr(cmbdf, "header2") <- CMBData$header2
+
+      if (!missing(ordering))
+      {
+        rcosmo::ordering(cmbdf) <- ordering
+      }
+
+    ## Otherwise win is specified
     } else {
 
-      if ( !is.null(spix) ){
+      CMBData <- rcosmo::window(CMBData, new.window = win)
+      CMBData.is.cmbdf <- TRUE
 
-        cmbdf <- data.frame(I = as.vector(data$I_STOKES[spix]))
-      } else {
-
-        cmbdf <- data.frame(I = as.vector(data$I_STOKES))
+      if (!include.polar) {
+        CMBData$Q <- NULL
+        CMBData$U <- NULL
       }
 
-    }
-
-    if (include.polar == TRUE) {
-      if (!is.null(spix)) {
-
-        stop(paste("(development stage) include.polar must",
-                    "be FALSE if spix is specified"))
-      }
-      if ( length(data$Q_STOKES) > 0 ) {
-
-        cmbdf$Q <- as.vector(data$Q_STOKES, mode = "numeric")
-      }
-      if ( length(data$U_STOKES) > 0 ) {
-
-        cmbdf$U <- as.vector(data$U_STOKES, mode = "numeric")
+      if (!include.masks) {
+        CMBData$PMASK <- NULL
+        CMBData$TMASK <- NULL
       }
     }
 
-    if (include.masks == TRUE) {
 
-      if (!is.null(spix)) {
-        stop(paste("(development stage) include.masks must",
-                    "be FALSE if spix is specified"))
-      }
-      if ( length(data$TMASK) > 0 ) {
-
-        cmbdf$TMASK <- as.vector(data$TMASK, mode = "integer")
-      }
-      if ( length(data$PMASK) > 0 ) {
-
-        cmbdf$PMASK <- as.vector(data$PMASK, mode = "integer")
-      }
-    }
-
-    message("Adding CMB Data Frame attributes...\n")
-
-    if ( is.null(spix) ) spix <- 1:(12*nside^2)
-    attr(cmbdf, "row.names") <- spix
-    attr(cmbdf, "nside") <- nside
-    class(cmbdf) <- c("CMBDataFrame","data.frame")
-    attr(cmbdf, "ordering") <- orderFITS
-    if (missing(coords)) coords <- NULL
-    attr(cmbdf, "coords") <- coords
-    attr(cmbdf, "resolution") <- CMBData$resoln
-    attr(cmbdf, "header1") <- CMBData$header1
-    attr(cmbdf, "header2") <- CMBData$header2
-
-    if (!missing(ordering))
-    {
-      ordering(cmbdf) <- ordering
-    }
 
   ##############################################################
   ###### CASE 2: CMBData is a CMBDataFrame             #########
   ##############################################################
-  } else if ( CMBData.is.cmbdf ) {
+  }
+  if ( CMBData.is.cmbdf ) {
 
     nside <- rcosmo::nside(CMBData)
     n <- nrow(CMBData)
@@ -458,7 +458,7 @@ CMBDataFrame <- function(CMBData,
   ################################################################
   ###### CASE 4: CMBData is a CMBDat object (maybe with mmap) ####
   ################################################################
-  } else if ( !missing(CMBData) && is.CMBDat(CMBData) ) {
+  } else if ( !missing(CMBData) && is.CMBDat(CMBData) && !CMBData.is.path ) {
 
     ns <- CMBData$nside
     if ( !missing(sample.size) ) {
@@ -487,7 +487,7 @@ CMBDataFrame <- function(CMBData,
       coords(cmbdf) <- coords
     }
 
-  } else {
+  } else if (!CMBData.is.path) {
 
     stop("CMBData must be a CMBDataFrame, a path to a FITS file, or unspecified")
 

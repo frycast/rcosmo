@@ -3,6 +3,9 @@ This is the first release.
 
 
 # rcosmo 1.0.1 (under development)
+* more effective use of memory mapping to avoid reading data into
+  memory unnecessarily, especially when using the win argument
+  of CMBDataFrame function
 * plot.CMBWindow now closes the polygon for neater visualisation
 * fixed a small typo bug in nestSearch function
 * updated links in rcosmo.R for Update and BugReports

@@ -141,7 +141,7 @@ subWindow <- function(cmbdf, win, intersect = TRUE, in.pixels,
   ## pointInside happens here
   if ( (rcosmo::is.CMBDataFrame(cmbdf)
         && (!is.null(coords(cmbdf)) && coords(cmbdf) == "cartesian"))
-       || (!rcosmo::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)))
+       || (!rcosmo::is.CMBDataFrame(cmbdf) && is.data.frame(cmbdf)) )
   { ## This might be a little quicker if coords are already cartesian
     ## Note that HPDataFrames end up in here
     #################################################################

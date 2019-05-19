@@ -299,10 +299,16 @@ CMBDataFrame <- function(CMBData,
           cmbdf <- data.frame(x = coordinates[,1], y = coordinates[,2], z = coordinates[,3])
         }
 
+        cmbdf <- data.frame(cmbdf, I = as.vector(data$I_STOKES))
+
       # Else coords are unspecified (HEALPix)
+      } else {
+
+        cmbdf <- data.frame(I = as.vector(data$I_STOKES))
+
       }
 
-      cmbdf <- data.frame(I = as.vector(data$I_STOKES))
+
 
 
       if (include.polar == TRUE) {

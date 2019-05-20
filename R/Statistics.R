@@ -1152,8 +1152,12 @@ qstat <- function(cmbdf, listwin, intensities = "I")
   {
     stop("Argument must be a CMBDataFrame")
   }
-  cmbint <- sapply(listwin,function(v1,v2){
-    window(v1, new.window = v2)},v1=cmbdf[,intensities, drop = TRUE])
+  #  cmbint <- sapply(listwin,function(v1,v2){
+  #    window(v1, new.window = v2)}, v1=cmbdf[,intensities, drop = TRUE])
+
+  cmb <- cmbdf[,intensities]
+  cmbint <- sapply(listwin,function(v){
+    window(cmb, new.window = v)})
 
   ni <- sapply(cmbint, length)
   sigmai <- sapply(cmbint, stats::var)

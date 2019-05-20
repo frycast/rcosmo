@@ -18,9 +18,9 @@
 #'
 #'
 #'@section Update: Current updates are available through
-#' URL: https://github.com/VidaliLama/rcosmo
+#' URL: https://github.com/frycast/rcosmo
 #'
-#'@section  BugReports: https://github.com/VidaliLama/rcosmo/issues
+#'@section  BugReports: https://github.com/frycast/rcosmo/issues
 #'
 #'@description Handling and Analysing Spherical, Healpix and Cosmic Microwave Background
 #' data on a HEALPix grid.

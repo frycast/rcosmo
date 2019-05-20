@@ -77,6 +77,10 @@ nestSearch <- function(target, nside,
     stop("Target must be data.frame, matrix or numeric vector")
   }
 
+  ln <- log2(nside)
+
+  if ( !( ln %% 1 == 0 ) ) stop("log2 of nside must be an integer")
+
   j = 0:(log2(nside)+1)
   jlen <- length(j)
   tlen <- length(target)
@@ -187,7 +191,7 @@ nestSearch_step <- function(target, j2, pix.j1) {
 #'@export
 pixelWindow <- function(j1, j2, pix.j1)
 {
-  if ( j2 < 0 || j1 < 0 || pix.j1 < 0 )
+  if ( any(j2 < 0) || any(j1 < 0) || any(pix.j1 < 0) )
   {
     stop("j1, j2, and pix.j1 must all be non-negative")
   }

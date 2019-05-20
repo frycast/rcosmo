@@ -116,6 +116,10 @@ is.CMBWindow <- function(win)
 #'aspect ratio, or a new ratio.
 #'@param back.col specifies the background colour of
 #'the plot. This argument is passed to rgl::bg3d.
+#'@param depth_test The depth test to be applied.
+#' This controls how resistant the plotted
+#' object is to being obscured.
+#' See \code{\link[rgl]{rgl.material}}
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@examples
@@ -130,11 +134,11 @@ plot.CMBWindow <- function(x, add = TRUE, type = "l",
                            col = "red",
                            size = 2, box = FALSE,
                            axes = FALSE, aspect = FALSE,
-                           back.col, ...)
+                           back.col, depth_test = "always", ...)
 {
   win <- x
 
-  if ( coords(win) == "spherical" )
+  if ( rcosmo::coords(win) == "spherical" )
   {
     rcosmo::coords(win) <- "cartesian"
   } else if ( rcosmo::coords(win) == "cartesian" ) {
@@ -158,7 +162,8 @@ plot.CMBWindow <- function(x, add = TRUE, type = "l",
     rgl::bg3d(back.col)
   }
   rgl::plot3d( boundary, add = add, type = type, col = col, size = size,
-               box = box, axes = axes, aspect = aspect, ... )
+               box = box, axes = axes, aspect = aspect,
+               depth_test = depth_test, ... )
 
 }
 
@@ -223,11 +228,14 @@ polygonBoundary <- function( vertices.xyz, eps = 0.01 )
     line <- sph2car( line )
 
     line.rotated <-  as.data.frame(rodrigues(c(0,0,1),
-                                                      as.matrix(normal)[1,],
-                                                      line))
+                                   as.matrix(normal)[1,],
+                                   line))
     names(line.rotated) <- c("x","y","z")
     boundary <- rbind(boundary, line.rotated)
   }
+
+  boundary <- rbind(boundary, vertices.xyz[1,])
+
   boundary
 }
 

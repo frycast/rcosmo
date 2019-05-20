@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{CMBWindow}(x, add = TRUE, type = "l", col = "red",
   size = 2, box = FALSE, axes = FALSE, aspect = FALSE, back.col,
-  ...)
+  depth_test = "always", ...)
 }
 \arguments{
 \item{x}{A CMBWindow.}
@@ -32,6 +32,11 @@ aspect ratio, or a new ratio.}
 
 \item{back.col}{specifies the background colour of
 the plot. This argument is passed to rgl::bg3d.}
+
+\item{depth_test}{The depth test to be applied.
+This controls how resistant the plotted
+object is to being obscured.
+See \code{\link[rgl]{rgl.material}}}
 
 \item{...}{arguments passed to rgl::plot3d}
 }

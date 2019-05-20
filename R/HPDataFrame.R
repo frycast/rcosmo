@@ -63,32 +63,71 @@
 #' class(hpdf)
 #' assumedUniquePix(hpdf)
 #'
-#' ##Example 3.
+#'
+#' # ## Example 3.
+#' # ## Create a HPDataFrame with NON-UNIQUE pixel indices
 #' #
-#' ## With earth data.
-#' ## Download World Cities Database from
-#' ## https://simplemaps.com/static/data/world-cities/basic/simplemaps_worldcities_basicv1.4.zip
-#' ## unpack the file worldcities.csv
+#' # ## With earth data.
+#' # ## Download World Cities Database from
+#' # ## https://simplemaps.com/static/data/world-cities/basic/simplemaps_worldcities_basicv1.4.zip
+#' # ## unpack the file worldcities.csv
+#' #
+#' # worldcities <- read.csv("worldcities.csv")
+#' #
+#' # ## Prepare a data frame with cities' coordinates
+#' # sph <- geo2sph(data.frame(lon = pi/180*worldcities$lng,
+#' #                           lat = pi/180*worldcities$lat))
+#' # df <- data.frame(phi = sph$phi,
+#' #                  theta = sph$theta,
+#' #                  I = rep(1,nrow(sph)))
+#' #
+#' # ## Create and plot the corresponding HPDataFrame with
+#' # ## pixel indices that are not necessarily unique
+#' # ## by choosing your desired resolution (nside)
+#' # hp <- HPDataFrame(usdf, auto.spix = TRUE, nside = 1024)
+#' # plot(hp, size = 3, col = "darkgreen", back.col = "white")
+#' # ## Add some pixels to visualise the sphere
+#' # plot(CMBDataFrame(nside = 64), add = TRUE, col = "gray")
+#'
+#' # ## Example 4.
+#' # ## Create a HPDataFrame with UNIQUE pixel indices.
+#' #
+#' # ## With earth data.
+#' # ## Download World Cities Database from
+#' # ## https://simplemaps.com/static/data/world-cities/basic/simplemaps_worldcities_basicv1.4.zip
+#' # ## unpack the file worldcities.csv
 #' #
 #' # worldcities <- read.csv("worldcities.csv")
 #' # uscities <- worldcities[worldcities$country == "United States",]
 #' #
-#' # Prepare a data frame with cities' coordinates
-#' # usdf <- data.frame(phi = pi/180*uscities$lng, theta = pi/2 - pi/180*uscities$lat,
-#' #                  I=rep(1,length(uscities$lng)))
+#' # ## Prepare a data frame with cities' coordinates
+#' # sph <- geo2sph(data.frame(lon = pi/180*uscities$lng,
+#' #                           lat = pi/180*uscities$lat))
+#' # usdf <- data.frame(phi = sph$phi,
+#' #                    theta = sph$theta,
+#' #                    I = rep(1,nrow(sph)))
 #' #
-#' # Select k cities with different coordinates
+#' # ## Select k cities with unique coordinates. The
+#' # ## coordinates must be unique otherwise the
+#' # ## automatically chosen separating nside
+#' # ## will be infinite.
 #' # k <- 1000
 #' # usdf <- usdf[sample(nrow(usdf), k), ]
 #' # plot(usdf$phi, usdf$theta)
 #' # usdf[duplicated(usdf), ]
-#' # usdf<- usdf[!duplicated(usdf), ]
+#' # usdf <- usdf[!duplicated(usdf), ]
 #' # usdf[duplicated(usdf), ]
 #' # usdf <- coords(usdf, new.coords = "cartesian")
 #' #
-#' # Create and plot the corresponding HPDataFrame with unique pixels
+#' # ## Create and plot the corresponding HPDataFrame . To make
+#' # ## sure the pixels are unique, do not select a resolution
+#' # ## resolution (nside), since it will be chosen automatically.
 #' # ushp <- HPDataFrame(usdf, auto.spix = TRUE)
-#' # plot(ushp, size = 2)
+#' # nside(ushp)
+#' # assumedUniquePix(ushp)
+#' # plot(ushp, size = 3, col = "darkgreen", back.col = "white")
+#' # ## Add some pixels to visualise the sphere
+#' # plot(CMBDataFrame(nside = 64), add = TRUE, col = "gray")
 #'
 #' @export
 HPDataFrame <- function(..., nside, ordering = "nested",
@@ -315,6 +354,12 @@ nside.HPDataFrame <- function( x ) {
 #'pixel boundaries at \code{nside = hp.boundaries} will be
 #'added to the plot
 #'@param hpb.col colour for the \code{hp.boundaries}
+#'@param depth_test The depth test to be applied to the
+#' plotted points. This controls how resistant the plotted
+#' object is to being obscured. This controls how resistant the plotted
+#'@param lab_depth_test The \code{\link{rgl}} depth test
+#' to be applied to the labels and pixel boundaries
+#' if present. See \code{\link[rgl]{rgl.material}}
 #'@param ... arguments passed to rgl::plot3d
 #'
 #'@return
@@ -332,7 +377,9 @@ plot.HPDataFrame <- function(x, intensities = "I",
                               type = "p", size = 1, box = FALSE,
                               axes = FALSE, aspect = FALSE,
                               col = "blue", back.col = "black", labels,
-                              hp.boundaries = 0, hpb.col = "gray", ...) {
+                              hp.boundaries = 0, hpb.col = "gray",
+                              depth_test = "less",
+                              lab_depth_test = "always", ...) {
 
   hpdf <- x
   pix <- pix(hpdf)
@@ -368,17 +415,20 @@ plot.HPDataFrame <- function(x, intensities = "I",
 
     rgl::plot3d(hpdf.xyz$x, hpdf.xyz$y, hpdf.xyz$z,
                 col = col, type = type, size = size,
-                box = box, axes = axes, add = add, aspect = aspect, ...)
+                box = box, axes = axes, add = add, aspect = aspect,
+                depth_test = depth_test, ...)
   } else {
 
     rgl::text3d(hpdf.xyz$x, hpdf.xyz$y, hpdf.xyz$z, labels,
                 col = col, type = type, size = size,
-                box = box, axes = axes, add = add, aspect = aspect, ...)
+                box = box, axes = axes, add = add, aspect = aspect,
+                depth_test = lab_depth_test, ...)
   }
 
   if ( hp.boundaries > 0 ) {
 
-    rcosmo::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col)
+    rcosmo::displayPixelBoundaries(nside = hp.boundaries, col = hpb.col,
+                                   depth_test = lab_depth_test)
   }
 }
 

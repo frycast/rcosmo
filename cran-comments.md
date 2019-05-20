@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Removed the redundant R from the DESCRIPTION title.
+
+
 ## Test environments
 
 * local Windows 10 install, R 3.5.1
@@ -31,4 +36,8 @@ Maintainer: 'Daniel Fryer <d.fryer@latrobe.edu.au>'
 
 ## Downstream dependencies
 There are no downstream dependencies for this package
+
+
+## Other comments
+The manuscript describing the methods in this package is under preparation
 

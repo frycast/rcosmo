@@ -1,0 +1,3 @@
+# Mark the file types as generated to be ignored in language stats
+*.md linguist-generated=true
+*.Rd linguist-generated=true

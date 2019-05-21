@@ -203,5 +203,42 @@ maxDist <- function(df, point)
 }
 
 
-# NEXT: geoAngle
+#' Angle between two spherical directions
+#'
+#' Get an angle between two directions defined by arcs on the unit sphere
+#'
+#'@param p1 A \code{\link{data.frame}} with rows
+#'specifying numeric points located on the unit sphere.
+#'It should have columns labelled x,y,z
+#'for Cartesian or theta, phi for spherical colatitude and
+#'longitude respectively.
+#'
+#'@return Let \eqn{p1[1,], p1[2,],} and \eqn{p1[3,]} denote the rows of \code{p1}.
+#'Then the returned object is an angle in radians  beween two arcs determined by #'the pairs  #'of spherical points (p1[1,], p1[2,]) and (p1[2,], p1[3,])
+#'respectively.
+#'
+#'@examples
+#'
+#'   p1 <- data.frame(diag(3))
+#'   p1
+#'   colnames(p1) <- c("x", "y", "z")
+#'   geoAngle(p1)
+#'
+#'   geo <- data.frame( lat = c(30, 0, 20), lon = c(30, 60, 10))*(pi/180)
+#'   geo
+#'   p2 <- geo2sph(geo)
+#'   p2
+#'   geoAngle(p2)
+#'
+#'@export
+geoAngle <- function(p1) {
+  p1 <- rcosmo::coords(p1, new.coords = "cartesian")
+
+  b <- geoDist(p1[1,], p1[2,], include.names = FALSE)
+  c<- geoDist(p1[2,], p1[3,], include.names = FALSE)
+  a <- geoDist(p1[3,], p1[1,], include.names = FALSE)
+  s <- (a+b+c)/2
+
+  return(as.numeric(2*acos(sqrt(sin(s)*sin(s-a)/(sin(b)*sin(c))))))
+}
 

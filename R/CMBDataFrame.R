@@ -5,7 +5,8 @@
 #' about, e.g., the HEALPix ordering scheme, coordinate system, and nside parameter.
 #'
 #'@param CMBData Can be a string location of FITS file,
-#'another \code{CMBDataFrame}, a \code{CMBDat} object, or unspecified.
+#'another \code{CMBDataFrame}, a \code{CMBDat} object,
+#'a \code{\link{HPDataFrame}} or unspecified.
 #'@param coords Can be "spherical," "cartesian", or unspecified (HEALPix only).
 #'@param win optional \code{\link{CMBWindow}} object that specifies a
 #'spherical polygon within which to subset the full sky CMB data.
@@ -164,7 +165,8 @@ CMBDataFrame <- function(CMBData,
 
   ## CASE 2: CMBData is a CMBDataFrame
   CMBData.is.cmbdf <- FALSE
-  if ( !missing(CMBData) && is.CMBDataFrame(CMBData) ) {
+  if ( !missing(CMBData) &&
+       ( is.CMBDataFrame(CMBData) || is.HPDataFrame(CMBData) )) {
 
     CMBData.is.cmbdf <- TRUE
 
@@ -176,6 +178,13 @@ CMBDataFrame <- function(CMBData,
     if ( !missing(I) ) {
 
       stop("I must be unspecified when 'CMBData' is specified")
+    }
+
+    if ( is.HPDataFrame(CMBDat) ) {
+      if (!assumedUniquePix(CMBDat)) {
+        stop(paste0("If a CMBDat is a HPDataFrame then its assumedUniquePix ",
+                    "attribute must be TRUE."))
+      }
     }
 
     if ( include.polar != FALSE || include.masks != FALSE ) {
@@ -371,7 +380,7 @@ CMBDataFrame <- function(CMBData,
 
 
   ##############################################################
-  ###### CASE 2: CMBData is a CMBDataFrame             #########
+  ###### CASE 2: CMBData is a CMBDataFrame or HPDataFrame ######
   ##############################################################
   }
   if ( CMBData.is.cmbdf ) {

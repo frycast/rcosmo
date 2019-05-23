@@ -4,7 +4,7 @@ library(R.matlab)
 # INTERNAL DATA -----------------------------------------------------------
 
 # CMBcolmap.mat was provided by Yu Guang to suit nside 2048
-# mat <- readMat("data-raw/CMBcolmap.mat")
+# mat <- R.matlab::readMat("data-raw/CMBcolmap.mat")
 # colmap <- rgb(mat$map[,1], mat$map[,2], mat$map[,3])
 
 # CMBcolmap.txt was intended for nside = 2048, found here:

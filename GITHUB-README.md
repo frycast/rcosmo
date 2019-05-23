@@ -30,9 +30,9 @@ install.packages("devtools")
 Then, if using Microsoft Windows, install the latest RTools from CRAN at this link [here](https://cran.r-project.org/bin/windows/Rtools/) if it is not already installed on your device.
 Then use devtools to install rcosmo:
 ```
-devtools::install_github("VidaliLama/rcosmo")
+devtools::install_github("frycast/rcosmo")
 ```
-If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::install_github("VidaliLama/rcosmo")` again.
+If you did not install RTools and are using RStudio then you will be prompted to install RTools. After installing RTools you should run `devtools::install_github("frycast/rcosmo")` again.
 
 ## Installation (Linux)
 
@@ -41,7 +41,7 @@ install.packages("devtools")
 library(devtools)
 find_rtools()
 source("https://raw.githubusercontent.com/r-lib/remotes/master/install-github.R")$value("r-lib/remotes")
-remotes::install_github("VidaliLama/rcosmo")
+remotes::install_github("frycast/rcosmo")
 ```
 
 ## Next steps

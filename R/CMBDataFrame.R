@@ -72,7 +72,7 @@ CMBDataFrame <- function(CMBData,
                          spix,
                          sample.size,
                          nside,
-                         ordering,
+                         ordering = "nested",
                          I,
                          ...) {
 
@@ -94,10 +94,8 @@ CMBDataFrame <- function(CMBData,
     }
   }
 
-  if ( !missing(ordering) ) {
 
-    ordering <- tolower(ordering)
-  }
+  ordering <- tolower(ordering)
 
   if ( !missing(spix) && !missing(sample.size) ) {
 
@@ -165,8 +163,7 @@ CMBDataFrame <- function(CMBData,
 
   ## CASE 2: CMBData is a CMBDataFrame
   CMBData.is.cmbdf <- FALSE
-  if ( !missing(CMBData) &&
-       ( is.CMBDataFrame(CMBData) || is.HPDataFrame(CMBData) )) {
+  if ( !missing(CMBData) && is.CMBDataFrame(CMBdata) ) {
 
     CMBData.is.cmbdf <- TRUE
 
@@ -178,13 +175,6 @@ CMBDataFrame <- function(CMBData,
     if ( !missing(I) ) {
 
       stop("I must be unspecified when 'CMBData' is specified")
-    }
-
-    if ( is.HPDataFrame(CMBDat) ) {
-      if (!assumedUniquePix(CMBDat)) {
-        stop(paste0("If a CMBDat is a HPDataFrame then its assumedUniquePix ",
-                    "attribute must be TRUE."))
-      }
     }
 
     if ( include.polar != FALSE || include.masks != FALSE ) {
@@ -203,11 +193,7 @@ CMBDataFrame <- function(CMBData,
       stop(paste("If 'CMBData' is unspecified then 'nside'",
                  "must be specified"))
     }
-    if ( missing(ordering) ) {
 
-      ordering <- "nested"
-      warning("ordering parameter missing, ordering set to 'nested'")
-    }
 
     if ( !missing(I) ) {
 
@@ -355,10 +341,8 @@ CMBDataFrame <- function(CMBData,
       attr(cmbdf, "header1") <- CMBData$header1
       attr(cmbdf, "header2") <- CMBData$header2
 
-      if (!missing(ordering))
-      {
-        rcosmo::ordering(cmbdf) <- ordering
-      }
+
+      rcosmo::ordering(cmbdf) <- ordering
 
     ## Otherwise win is specified
     } else {
@@ -380,7 +364,7 @@ CMBDataFrame <- function(CMBData,
 
 
   ##############################################################
-  ###### CASE 2: CMBData is a CMBDataFrame or HPDataFrame ######
+  ###### CASE 2: CMBData is a CMBDataFrame                ######
   ##############################################################
   }
   if ( CMBData.is.cmbdf ) {
@@ -409,15 +393,14 @@ CMBDataFrame <- function(CMBData,
       cmbdf <- CMBData
     }
 
-    if (!missing(ordering)) {
-
-      ordering(cmbdf) <- ordering
-    }
+    ordering(cmbdf) <- ordering
 
     if (!missing(coords)) {
 
       coords(cmbdf) <- coords
     }
+
+
 
 
   ################################################################

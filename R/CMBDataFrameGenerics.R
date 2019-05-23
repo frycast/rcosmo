@@ -699,13 +699,31 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #' @export
 as.CMBDataFrame <- function(df, ordering, nside, spix)
 {
+
   if ( !is.data.frame(df) ) {
 
-    stop(gettextf("'%s' is not a data.frame", deparse(substitute(df))))
+    stop(paste0("df is not a data.frame"))
 
   }
 
-  if ( !is.CMBDataFrame(df) ) {
+  ################ df IS A HPDataFrame ####################
+  if ( is.HPDataFrame(df) ) {
+
+    if (!assumedUniquePix(df) || !attr(df, "healpixCentered") ) {
+      stop(paste0("If df is a HPDataFrame then its assumedUniquePix ",
+                  "and healpixCentered attributes ",
+                  "must both be TRUE."))
+    }
+    if (!missing(ordering) || !missing(nside) || !missing(spix)) {
+
+      stop(paste0("If df is a HPDataFrame then the ordering, ",
+                  "nside, and spix arguments must be unspecified"))
+    }
+
+    attr(df, "assumedUniquePix") <- NULL
+    attr(df, "healpixCentered") <- NULL
+
+  } else if ( !is.CMBDataFrame(df) ) {
     ################ df IS NOT A CMBDataFrame ####################
 
     if(missing(nside) || missing(ordering))

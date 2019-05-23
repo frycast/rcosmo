@@ -135,6 +135,20 @@ HPDataFrame <- function(..., nside, ordering = "nested",
                         assumedUniquePix = FALSE,
                         delete.duplicates = FALSE) {
 
+  if ( !is.logical(auto.spix) ) {
+    stop("auto.spix must be logical")
+  }
+
+  if ( !is.logical(assumedUniquePix) ) {
+    stop("assumedUniquePix must be logical")
+  }
+
+  if ( !is.logical(delete.duplicates) ) {
+    stop("delete.duplicates must be logical")
+  }
+
+  healpixCentered <- FALSE
+
   if ( !auto.spix ) {
 
     if ( missing(nside) ) {
@@ -155,9 +169,18 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     if ( nargs == 0 ) {
 
       df <- data.frame(I = rep(NA, length(pix)))
+      healpixCentered <- TRUE
+      assumedUniquePix <- TRUE
     } else {
 
       df <- data.frame(args)
+
+      if ( !(all(c("x","y","z") %in% names(df)))
+           && !(all(c("theta","phi") %in% names(df)))) {
+
+        healpixCentered <- TRUE
+        assumedUniquePix <- TRUE
+      }
     }
   } else { # auto.spix = TRUE. So, use nestSearch to determine pixel centers
 
@@ -222,6 +245,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     }
   }
 
+
   if ( length(pix) != nrow(df) ) {
 
     stop(paste0("There should be a pixel index assigned to each row. ",
@@ -238,7 +262,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   attr(df, "pix") <- pix
   attr(df, "nside") <- nside
   attr(df, "ordering") <- ordering
-  attr(df, "healpixCentered") <- FALSE
+  attr(df, "healpixCentered") <- healpixCentered
   attr(df, "assumedUniquePix") <- assumedUniquePix
   class(df) <- c("HPDataFrame", "data.frame")
   df

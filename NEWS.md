@@ -2,7 +2,7 @@
 This is the first release.
 
 
-# rcosmo 1.0.1 (under development)
+# rcosmo 1.1.0
 * introduced depth_test to plot functions so that objects such
   as window boundaries and plot labels are not easily obscured
 * more effective use of memory mapping to avoid reading data into

@@ -9,7 +9,7 @@
 #'Windows that are tagged with \code{set.minus} (see \code{\link{CMBWindow}})
 #'are treated differently from other windows.
 #'
-#'If the argument is a list of CMBWindows, then interious of all windows whose
+#'If the argument is a list of CMBWindows, then interiors of all windows whose
 #'winType does not include "minus" are united (let \eqn{A} be their union) and
 #'exteriors of all windows whose winType does include "minus" are intersected,
 #'(let \eqn{B} be their intersection). Then, provided that

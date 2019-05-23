@@ -1,13 +1,12 @@
-## Resubmission
-This is a resubmission. In this version I have:
-* Removed the redundant R from the DESCRIPTION title.
+## Update
+This is an update from version 1.0.0 to 1.01.0. See NEWS.md for 
+the list of changes.
 
 
 ## Test environments
 
-* local Windows 10 install, R 3.5.1
-* local macOS "High Sierra" version 10.13.6, R 3.4.4
-* Ubuntu 14.04 (on travis-ci) (devel, release and old release)
+* local Windows 10 install, R 3.5.3
+* Ubuntu 16.04.6 LTS (on travis-ci) (R devel, 3.6.0 and 3.5.3)
 * winbuilder (devel and release)
 
 ## R CMD Check results

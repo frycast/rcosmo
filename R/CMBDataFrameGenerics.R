@@ -645,7 +645,7 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 
 
 
-#' Convert dataframes to CMBDataFrames
+#' Convert objects to \code{CMBDataFrame}
 #'
 #'
 #' Safely converts a \code{\link{data.frame}} to a CMBDataFrame. The
@@ -654,8 +654,13 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #' by \code{nside}. Coordinates, if present,  are assumed to correspond to
 #' HEALPix pixel centers. The coordinates must be named either x,y,z
 #' (cartesian) or theta, phi (spherical colatitude and longitude respectively).
+#' If \code{df} is a \code{HPDataFrame} then
+#' it is possible that \code{df} has attribute \code{healpixCentered = TRUE},
+#' in which case \code{as.CMBDataFrame} will perform HEALPix centering of
+#' coordinates.
 #'
-#' @param df Any \code{data.frame} whose rows are in HEALPix order
+#' @param df Any \code{data.frame} or \code{HPDataFrame} whose rows are
+#' in HEALPix order
 #' @param ordering character string that specifies the ordering scheme
 #' ("ring" or "nested")
 #' @param nside an integer \eqn{2^k} that specifies the Nside (resolution)
@@ -669,6 +674,15 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #' However, if \code{spix} is left blank and \code{df}
 #' is a \code{CMBDataFrame},
 #' then \code{spix} is set equal to \code{pix(df)}
+#' @param drop.coords A logical. If \code{df} is a \code{HPDataFrame} then
+#' it is possible that \code{df} has attribute \code{healpixCentered = TRUE},
+#' in which case \code{as.CMBDataFrame} will perform HEALPix centering of
+#' coordinates. If \code{drop.coords = TRUE} then this will be done by
+#' dropping existing coordinates entirely (quicker) to rely only on
+#' HEALPix pixel indices.
+#' Otherwise if \code{drop.coords = FALSE} this will be done
+#' by replacing existing coordinates with locations of HEALPix pixel
+#' centers.
 #'
 #' @return A CMBDataFrame
 #'
@@ -697,7 +711,7 @@ areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 #' pix(cmbdf)
 #'
 #' @export
-as.CMBDataFrame <- function(df, ordering, nside, spix)
+as.CMBDataFrame <- function(df, ordering, nside, spix, drop.coords = FALSE)
 {
 
   if ( !is.data.frame(df) ) {
@@ -709,11 +723,37 @@ as.CMBDataFrame <- function(df, ordering, nside, spix)
   ################ df IS A HPDataFrame ####################
   if ( is.HPDataFrame(df) ) {
 
-    if (!assumedUniquePix(df) || !attr(df, "healpixCentered") ) {
+    if (!assumedUniquePix(df) ) {
       stop(paste0("If df is a HPDataFrame then its assumedUniquePix ",
-                  "and healpixCentered attributes ",
-                  "must both be TRUE."))
+                  "attribute ",
+                  "must be TRUE."))
     }
+
+    if ( !attr(df, "healpixCentered") ) {
+
+
+
+      if (!drop.coords) {
+
+        if ( coords(df) == "spherical" ) {
+          df <- coords(df, new.coords = "spherical", healpixCentered = TRUE)
+        } else if ( coords(df) == "cartesian") {
+          df <- coords(df, new.coords = "cartesian", healpixCentered = TRUE)
+        }
+
+      } else {
+
+        df$theta <- NULL
+        df$phi <- NULL
+        df$x <- NULL
+        df$y <- NULL
+        df$z <- NULL
+        attr(df, "coords") <- NULL
+      }
+
+
+    }
+
     if (!missing(ordering) || !missing(nside) || !missing(spix)) {
 
       stop(paste0("If df is a HPDataFrame then the ordering, ",
@@ -749,14 +789,24 @@ as.CMBDataFrame <- function(df, ordering, nside, spix)
     attr(df, "row.names") <- spix
 
 
+    war <- FALSE
     if ( ("theta" %in% names(df) && "phi" %in% names(df)) ) {
+      warn <- TRUE
       attr(df, "coords") <- "spherical"
     } else if ( ("x" %in% names(df) && "y" %in% names(df)
           && "z" %in% names(df) ) ) {
+      warn <- TRUE
       attr(df, "coords") <- "cartesian"
     } else {
       attr(df, "coords") <- NULL
     }
+
+    if (warn)
+      warning(paste0("The provided coordinates in df are assumed to be ",
+                     "HEALPix centered. If this is not the case, then ",
+                     "construct a HPDataFrame from df instead. A ",
+                     "HPDataFrame hp can be used to conduct HEALPix centering ",
+                     "with as.CMBDataFrame(hp)"))
 
   } else {
     ################ df IS  A CMBDataFrame #######################

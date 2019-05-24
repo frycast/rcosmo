@@ -5,7 +5,8 @@
 \title{CMBDataFrame class}
 \usage{
 CMBDataFrame(CMBData, coords, win, include.polar = FALSE,
-  include.masks = FALSE, spix, sample.size, nside, ordering, I, ...)
+  include.masks = FALSE, spix, sample.size, nside, ordering = "nested",
+  I, ...)
 }
 \arguments{
 \item{CMBData}{Can be a string location of FITS file,

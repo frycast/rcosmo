@@ -257,6 +257,13 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   {
     df <- df[!duplicated(pix),]
     assumedUniquePix <- TRUE
+    pix <- unique(pix)
+  }
+
+  if (all(c("x","y","z") %in% names(df))) {
+    attr(df, "coords") <- "cartesian"
+  } else if (all(c("theta","phi") %in% names(df))) {
+    attr(df, "coords") <- "spherical"
   }
 
   attr(df, "pix") <- pix
@@ -265,7 +272,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   attr(df, "healpixCentered") <- healpixCentered
   attr(df, "assumedUniquePix") <- assumedUniquePix
   class(df) <- c("HPDataFrame", "data.frame")
-  df
+  return(df)
 }
 
 #'@export
@@ -585,22 +592,23 @@ ordering.HPDataFrame <- function( x, new.ordering, ... ) {
 #'@export
 coords.HPDataFrame <- function( x, new.coords, healpixCentered = FALSE, ... ) {
 
+  if (missing(new.coords)) return(attr(x, "coords"))
+
   hpdf <- x
 
   ns <- rcosmo::nside(hpdf)
   od <- rcosmo::ordering(hpdf)
   pix <- rcosmo::pix(hpdf)
 
-  if ( healpixCentered == TRUE ) {
+  if ( healpixCentered ) {
 
     # Delete any coordinates so they will be created again
     # from HEALPix only
-    crd.cols <- which( names(hpdf) %in%
-                  c("x","y","z","theta","phi") )
-    if ( length(crd.cols) > 0 ) {
-
-      hpdf <- hpdf[ , -crd.cols, drop = FALSE]
-    }
+    hpdf$x <- NULL
+    hpdf$y <- NULL
+    hpdf$z <- NULL
+    hpdf$theta <- NULL
+    hpdf$phi <- NULL
 
   }
 
@@ -608,6 +616,7 @@ coords.HPDataFrame <- function( x, new.coords, healpixCentered = FALSE, ... ) {
 
     if ( all(c("theta","phi") %in% names(hpdf)) ) {
 
+      attr(hpdf, "coords") <- "spherical"
       return(hpdf)
     }
 
@@ -636,10 +645,13 @@ coords.HPDataFrame <- function( x, new.coords, healpixCentered = FALSE, ... ) {
 
     }
 
+    attr(hpdf, "coords") <- "spherical"
+
   } else if ( new.coords == "cartesian" ) {
 
     if ( all(c("x","y","z") %in% names(hpdf)) ) {
 
+      attr(hpdf, "coords") <- "cartesian"
       return(hpdf)
     }
 
@@ -664,6 +676,8 @@ coords.HPDataFrame <- function( x, new.coords, healpixCentered = FALSE, ... ) {
       other <- hpdf[,-c(theta.i, phi.i), drop = FALSE]
       hpdf <- cbind(crds, other)
     }
+
+    attr(hpdf, "coords") <- "cartesian"
   }
 
   class(hpdf) <- unique(c("HPDataFrame", class(hpdf)))

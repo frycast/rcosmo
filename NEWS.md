@@ -18,4 +18,11 @@ This is the first release.
 * explicit default (nested) for coords parameter in CMBDataFrame
 * improved HPDataFrame inferral of assumedUniquePix 
   and healpixCentered attributes
+* extends as.CMBDataFrame to work on HPDataFrame and 
+  adds drop.coords parameter to as.CMBDataFrame
+* coords.HPDataFrame now behaves more like coords.CMBDataFrame,
+  where leaving new.coords missing will return only the
+  value of the attribute named coords
+* bug fix HPDataFrame producing unique pixel indices when 
+  delete.duplicates = TRUE
 

@@ -2,12 +2,13 @@
 % Please edit documentation in R/CMBDataFrameGenerics.R
 \name{as.CMBDataFrame}
 \alias{as.CMBDataFrame}
-\title{Convert dataframes to CMBDataFrames}
+\title{Convert objects to \code{CMBDataFrame}}
 \usage{
-as.CMBDataFrame(df, ordering, nside, spix)
+as.CMBDataFrame(df, ordering, nside, spix, drop.coords = FALSE)
 }
 \arguments{
-\item{df}{Any \code{data.frame} whose rows are in HEALPix order}
+\item{df}{Any \code{data.frame} or \code{HPDataFrame} whose rows are
+in HEALPix order}
 
 \item{ordering}{character string that specifies the ordering scheme
 ("ring" or "nested")}
@@ -24,6 +25,16 @@ in this case, the number of rows of \code{df} must be equal to 12*nside^2.
 However, if \code{spix} is left blank and \code{df}
 is a \code{CMBDataFrame},
 then \code{spix} is set equal to \code{pix(df)}}
+
+\item{drop.coords}{A logical. If \code{df} is a \code{HPDataFrame} then
+it is possible that \code{df} has attribute \code{healpixCentered = TRUE},
+in which case \code{as.CMBDataFrame} will perform HEALPix centering of
+coordinates. If \code{drop.coords = TRUE} then this will be done by
+dropping existing coordinates entirely (quicker) to rely only on
+HEALPix pixel indices.
+Otherwise if \code{drop.coords = FALSE} this will be done
+by replacing existing coordinates with locations of HEALPix pixel
+centers.}
 }
 \value{
 A CMBDataFrame
@@ -35,6 +46,10 @@ given by \code{ordering}, and at the HEALPix resolution given
 by \code{nside}. Coordinates, if present,  are assumed to correspond to
 HEALPix pixel centers. The coordinates must be named either x,y,z
 (cartesian) or theta, phi (spherical colatitude and longitude respectively).
+If \code{df} is a \code{HPDataFrame} then
+it is possible that \code{df} has attribute \code{healpixCentered = TRUE},
+in which case \code{as.CMBDataFrame} will perform HEALPix centering of
+coordinates.
 }
 \examples{
 

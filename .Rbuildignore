@@ -1,12 +1,7 @@
 ^CRAN-RELEASE$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^cmbstatLearn$
-^LearnToMakePackages$
-^PackagesForSphericalDataAnalysis$
-^exploration$
 ^data-raw$
-^LearnToDoDocumentation$
 ^packrat/
 ^\.Rprofile$
 ^rcosmo\.pdf$

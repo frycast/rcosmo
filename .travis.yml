@@ -24,6 +24,11 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 #  - if [ "$TRAVIS_OS_NAME" = "os" ]; then brew update          ; fi
 
+# Build it like on CRAN
+script:
+  - R CMD build .
+  - R CMD check *tar.gz --as-cran
+
 r_packages:
   - covr
 

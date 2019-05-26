@@ -789,7 +789,7 @@ as.CMBDataFrame <- function(df, ordering, nside, spix, drop.coords = FALSE)
     attr(df, "row.names") <- spix
 
 
-    war <- FALSE
+    warn <- FALSE
     if ( ("theta" %in% names(df) && "phi" %in% names(df)) ) {
       warn <- TRUE
       attr(df, "coords") <- "spherical"

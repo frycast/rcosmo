@@ -408,6 +408,9 @@ CMBDataFrame <- function(CMBData,
   ################################################################
   } else if ( missing(CMBData) ) {
 
+    if (missing(ordering))
+      ordering <- "nested"
+
     if ( !missing(sample.size) ) {
 
       spix <- sort(sample(seq(1,12*nside^2), sample.size))

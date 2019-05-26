@@ -1,32 +1,34 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+# and this guide: https://towardsdatascience.com/travis-ci-for-r-advanced-guide-719cb2d9e0e5
 #
 language: R
-sudo: false
+#sudo: false
 cache: packages
 latex: false
 fortran: false
-dist: trusty
+#dist: trusty
 
-#matrix:
-#  include:
-#    - os: linux
-#      dist: trusty
-#      before_install:
-#      - export DISPLAY=:99.0
-#      - sh -e /etc/init.d/xvfb start
-#      r_packages:
-#      - covr
-#      after_success:
-#      - tar -C .. -xf $PKG_TARBALL
-#      - Rscript -e 'covr::codecov()'
-#    - os: osx
-#      osx_image: xcode7.3
-#      before_install:
-#      - brew update
-#      - brew cask reinstall xquartz
-#      - brew install tcl-tk --with-tk
-#      - brew link --overwrite --force tcl-tk; brew unlink tcl-tk
-#      - sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      before_install:
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
+      r_packages:
+      - covr
+      after_success:
+      - tar -C .. -xf $PKG_TARBALL
+      - Rscript -e 'covr::codecov()'
+    - os: osx
+      osx_image: xcode7.3
+      before_install:
+      - brew update
+      - brew cask reinstall xquartz
+      - brew install tcl-tk --with-tk
+      - brew link --overwrite --force tcl-tk; brew unlink tcl-tk
+      - export DISPLAY=:99.0
+      - sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok
 
 r:
   - oldrel
@@ -36,15 +38,15 @@ r:
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
 
-before_install:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+# before_install:
+#   - export DISPLAY=:99.0
+#   - sh -e /etc/init.d/xvfb start
 #  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok ) & fi
 #  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then sh -e /etc/init.d/xvfb start          ; fi
 
-r_packages:
-  - covr
-
-after_success:
-  - tar -C .. -xf $PKG_TARBALL
-  - Rscript -e 'covr::codecov()'
+# r_packages:
+#   - covr
+#
+# after_success:
+#   - tar -C .. -xf $PKG_TARBALL
+#   - Rscript -e 'covr::codecov()'

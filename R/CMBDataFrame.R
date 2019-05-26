@@ -163,7 +163,7 @@ CMBDataFrame <- function(CMBData,
 
   ## CASE 2: CMBData is a CMBDataFrame
   CMBData.is.cmbdf <- FALSE
-  if ( !missing(CMBData) && is.CMBDataFrame(CMBdata) ) {
+  if ( !missing(CMBData) && is.CMBDataFrame(CMBData) ) {
 
     CMBData.is.cmbdf <- TRUE
 

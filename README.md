@@ -39,12 +39,6 @@ From CRAN:
 install.packages('rcosmo')
 ```
 
-Alternatively, from GitHub:
-
-```r
-install_github('frycast/rcosmo')
-```
-
 # Usage
 
 ```r
@@ -57,7 +51,8 @@ View the `CMBDataFrame` help file:
 ?CMBDataFrame
 ```
 
-Download and plot a CMB map from NASA archives (takes some time to download):
+Download a CMB map from NASA archives (takes some time to download)
+then take an approximately uniform random sample and plot:
 
 ```r
 downloadCMBMap()

@@ -12,10 +12,8 @@ the list of changes.
 ## R CMD Check results
 There were no ERRORS or WARNINGS or NOTES.  
 
-
 ## Downstream dependencies
 There are no downstream dependencies for this package
-
 
 ## Other comments
 The manuscript describing the methods in this package is under preparation

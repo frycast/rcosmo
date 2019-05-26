@@ -31,3 +31,61 @@ The current version of `rcosmo` includes the following functionality:
 
 
 
+# Installation
+
+From CRAN:
+
+```r
+install.packages('rcosmo')
+```
+
+Alternatively, from GitHub:
+
+```r
+install_github('frycast/rcosmo')
+```
+
+# Usage
+
+```r
+library(rcosmo)
+```
+
+View the `CMBDataFrame` help file:
+
+```r
+?CMBDataFrame
+```
+
+Download and plot a CMB map from NASA archives (takes some time to download):
+
+```r
+downloadCMBMap()
+sky <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 1e6)
+plot(sky)
+```
+
+Produce a summary of the map:
+
+```r
+summary(sky)
+```
+
+Extract a region of the sky:
+
+```r
+win <- CMBWindow(theta = c(pi/2,pi/2,pi/3, pi/3), phi = c(0,pi/3,pi/3,0))
+sky_win <- window(sky, new.window = win)
+plot(sky_win); plot(win)
+```
+
+Summarise the region of the sky:
+
+```r
+summary(sky_win)
+```
+More documentation on the way, for now view examples in the help files. There are many functions, see:
+
+```r
+lsf.str("package:rcosmo")
+```

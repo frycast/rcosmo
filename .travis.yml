@@ -3,13 +3,16 @@
 language: R
 sudo: false
 cache: packages
+dist: trusty
 r:
   - oldrel
   - release
   - devel
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
-script: xvfb-run make test
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 r_packages:
   - covr
 

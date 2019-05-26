@@ -10,7 +10,14 @@ fortran: false
 
 matrix:
   include:
-    - os: linux
+    - r: oldrel
+      os: linux
+      dist: trusty
+      before_install:
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
+    - r: release
+      os: linux
       dist: trusty
       before_install:
       - export DISPLAY=:99.0
@@ -20,20 +27,28 @@ matrix:
       after_success:
       - tar -C .. -xf $PKG_TARBALL
       - Rscript -e 'covr::codecov()'
-    - os: osx
+    - r: devel
+      os: linux
+      dist: trusty
+      before_install:
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
+    - r: release
+      os: osx
       osx_image: xcode7.3
       before_install:
       - brew update
-      - brew cask reinstall xquartz
-      - brew install tcl-tk --with-tk
-      - brew link --overwrite --force tcl-tk; brew unlink tcl-tk
-      - export DISPLAY=:99.0
-      - sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok
+#      - brew upgrade
+#      - brew cask reinstall xquartz
+#      - brew install tcl-tk --with-tk
+#      - brew link --overwrite --force tcl-tk; brew unlink tcl-tk
+#      - export DISPLAY=:99.0
+#      - ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok )&
 
-r:
-  - oldrel
-  - release
-  - devel
+#r:
+#  - oldrel
+#  - release
+#  - devel
 
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false

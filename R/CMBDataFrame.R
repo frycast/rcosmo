@@ -25,8 +25,8 @@
 #'@param ordering Specifies the desired HEALPix ordering scheme
 #'("ring" or "nested") for the output CMBDataFrame.
 #'If \code{ordering} is unspecified then the ordering
-#'scheme will be taken from the CMBData object, which must then be
-#'either a CMBDataFrame or a path to a FITS file. This parameter also specifies
+#'scheme will be taken from the CMBData object. If ordering information
+#'cannot be found the default will be "nested". This parameter also specifies
 #'the ordering scheme of \code{spix}.
 #'@param I A vector of intensities to be included
 #'if \code{CMBData} is unspecified. Note that \code{length(I)}
@@ -72,7 +72,7 @@ CMBDataFrame <- function(CMBData,
                          spix,
                          sample.size,
                          nside,
-                         ordering = "nested",
+                         ordering,
                          I,
                          ...) {
 
@@ -94,8 +94,7 @@ CMBDataFrame <- function(CMBData,
     }
   }
 
-
-  ordering <- tolower(ordering)
+  if (!missing(ordering)) ordering <- tolower(ordering)
 
   if ( !missing(spix) && !missing(sample.size) ) {
 
@@ -342,12 +341,14 @@ CMBDataFrame <- function(CMBData,
       attr(cmbdf, "header2") <- CMBData$header2
 
 
-      rcosmo::ordering(cmbdf) <- ordering
+      if (!missing(ordering))
+        rcosmo::ordering(cmbdf) <- ordering
 
     ## Otherwise win is specified
     } else {
 
       CMBData <- rcosmo::window(CMBData, new.window = win)
+      # We now pass it to "CASE 2: CMBData is a CMBDataFrame" below
       CMBData.is.cmbdf <- TRUE
 
       if (!include.polar) {
@@ -393,12 +394,11 @@ CMBDataFrame <- function(CMBData,
       cmbdf <- CMBData
     }
 
-    ordering(cmbdf) <- ordering
+    if (!missing(ordering))
+      ordering(cmbdf) <- ordering
 
-    if (!missing(coords)) {
-
+    if (!missing(coords))
       coords(cmbdf) <- coords
-    }
 
 
 
@@ -480,10 +480,9 @@ CMBDataFrame <- function(CMBData,
     attr(cmbdf, "header1") <- CMBData$header1
     attr(cmbdf, "header2") <- CMBData$header2
 
-    if ( !missing(coords) ) {
-
+    if ( !missing(coords) )
       coords(cmbdf) <- coords
-    }
+
 
   } else if (!CMBData.is.path) {
 
@@ -491,15 +490,11 @@ CMBDataFrame <- function(CMBData,
 
   }
 
-  if ( !missing(...) ) {
-
+  if ( !missing(...) )
     cmbdf <- cbind(cmbdf, ...)
-  }
 
-  if ( !missing(win) ) {
-
+  if ( !missing(win) )
     window(cmbdf) <- win
-  }
 
   return(cmbdf)
 }

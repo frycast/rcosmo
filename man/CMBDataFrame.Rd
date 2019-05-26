@@ -5,8 +5,7 @@
 \title{CMBDataFrame class}
 \usage{
 CMBDataFrame(CMBData, coords, win, include.polar = FALSE,
-  include.masks = FALSE, spix, sample.size, nside, ordering = "nested",
-  I, ...)
+  include.masks = FALSE, spix, sample.size, nside, ordering, I, ...)
 }
 \arguments{
 \item{CMBData}{Can be a string location of FITS file,
@@ -38,8 +37,8 @@ spix is specified then \code{sample.size} must be unspecified.}
 \item{ordering}{Specifies the desired HEALPix ordering scheme
 ("ring" or "nested") for the output CMBDataFrame.
 If \code{ordering} is unspecified then the ordering
-scheme will be taken from the CMBData object, which must then be
-either a CMBDataFrame or a path to a FITS file. This parameter also specifies
+scheme will be taken from the CMBData object. If ordering information
+cannot be found the default will be "nested". This parameter also specifies
 the ordering scheme of \code{spix}.}
 
 \item{I}{A vector of intensities to be included

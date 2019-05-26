@@ -2,11 +2,10 @@
 This is an update from version 1.0.0 to 1.01.0. See NEWS.md for 
 the list of changes.
 
-
 ## Test environments
 
 * local Windows 10 install, R 3.5.3
-* Ubuntu 16.04.6 LTS (on travis-ci) (R devel, 3.6.0 and 3.5.3)
+* Ubuntu 14.04 Trusty (on travis-ci) (R devel, 3.6.0 and 3.5.3)
 * winbuilder (devel and release)
 
 ## R CMD Check results

@@ -4,7 +4,7 @@
 \alias{nestSearch}
 \title{Finds the closest pixel center to a point}
 \usage{
-nestSearch(target, nside, index.only = FALSE)
+nestSearch(target, nside, index.only = FALSE, save.dots = FALSE)
 }
 \arguments{
 \item{target}{A data.frame, matrix or vector of
@@ -17,6 +17,14 @@ resulting pixels are returned.}
 
 \item{index.only}{A boolean indicating whether to return only the
 pixel index (TRUE), or cartesian coordinates as well (FALSE).}
+
+\item{save.dots}{A logical. A If \code{TRUE} then the
+dot product of each observation with the nearest
+child HEALPix pixel center will be returned as an attribute
+called "dot". Note that a 'child' pixel is any one of the
+four pixels contained in the current pixel in the nested
+scheme, at the next highest resolution.
+See \code{\link[rcosmo]{children}}.}
 }
 \value{
 if \code{index.only = TRUE} then the output will be a HEALPix index.

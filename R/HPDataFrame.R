@@ -38,6 +38,15 @@
 #' corresponding to duplicate pixel indices will be dropped
 #' from the returned HPDataFrame, and assumedUniquePix will
 #' be set to TRUE.
+#' @param save.dots A logical. If \code{TRUE} then the
+#' dot product of each observation with the nearest
+#' child HEALPix pixel
+#' center will be stored as a column called "distance" in the returned
+#' \code{HPDataFrame}, provided that \code{auto.spix = TRUE}.
+#' Note that a 'child' pixel is any one of the
+#' four pixels contained in the current pixel, in the nested
+#' scheme, at the next highest resolution.
+#' See \code{\link[rcosmo]{children}}.
 #'
 #' @details
 #' \code{HPDataFrame} with \code{auto.spix = TRUE} can be used to transform any
@@ -133,7 +142,8 @@
 HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix,
                         assumedUniquePix = FALSE,
-                        delete.duplicates = FALSE) {
+                        delete.duplicates = FALSE,
+                        save.dots = FALSE) {
 
   if ( !is.logical(auto.spix) ) {
     stop("auto.spix must be logical")
@@ -155,6 +165,9 @@ HPDataFrame <- function(..., nside, ordering = "nested",
 
       stop("If auto.spix = FALSE, then nside must be specified")
     }
+
+    if (save.dots)
+      warning("Dot products will not be saved unless auto.spix = TRUE")
 
     if ( missing(spix) ) {
 
@@ -232,7 +245,8 @@ HPDataFrame <- function(..., nside, ordering = "nested",
     }
 
     pix <- nestSearch(df[,c("x","y","z")], nside = nside,
-                      index.only = TRUE)
+                      index.only = TRUE,
+                      save.dots = save.dots)
 
     if ( !cart ) coords(df) <- "spherical"
 
@@ -243,6 +257,9 @@ HPDataFrame <- function(..., nside, ordering = "nested",
                      "nested ordering. The ordering was changed to nested."))
       ordering <- "nested"
     }
+
+    if (save.dots) df$dot <- attr(pix, "dot")
+
   }
 
 

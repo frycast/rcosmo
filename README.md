@@ -65,6 +65,10 @@ sky <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 1e6)
 plot(sky)
 ```
 
+
+![](man/figures/sky.png)
+
+
 Produce a summary of the map:
 
 ```r

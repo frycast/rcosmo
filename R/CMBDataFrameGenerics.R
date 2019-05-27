@@ -735,7 +735,9 @@ as.CMBDataFrame <- function(df, ordering, nside, spix, drop.coords = FALSE)
 
       if (!drop.coords) {
 
-        if ( coords(df) == "spherical" ) {
+        if ( is.null(coords(df)) ) {
+          df <- coords(df, new.coords = "cartesian", healpixCentered = TRUE)
+        } else if ( coords(df) == "spherical" ) {
           df <- coords(df, new.coords = "spherical", healpixCentered = TRUE)
         } else if ( coords(df) == "cartesian") {
           df <- coords(df, new.coords = "cartesian", healpixCentered = TRUE)
@@ -961,20 +963,25 @@ geoArea.CMBDataFrame <- function(x)
 #' coords(df) <- "spherical"
 #' coords(df)
 #'
-#'
-#'
 #'@export
 coords.CMBDataFrame <- function( x, new.coords, ... )
 {
   cmbdf <- x
 
   # If new.coords argument is missing then return the coordinate type
-  if ( missing(new.coords) )
-  {
+  if ( missing(new.coords) ) {
+
     return(attr(cmbdf, "coords"))
-  }
-  else
-  {
+
+  } else if (is.null(new.coords)) {
+
+    cmbdf$x <- NULL
+    cmbdf$y <- NULL
+    cmbdf$z <- NULL
+    cmbdf$theta <- NULL
+    cmbdf$phi <- NULL
+
+  } else {
     new.coords <- as.character(tolower(new.coords))
 
     if ( new.coords != "spherical" && new.coords != "cartesian" )
@@ -1038,10 +1045,10 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
       cmbdf <- cbind.CMBDataFrame(crds, other)
       attr(cmbdf, "coords") <- "cartesian"
     }
-
-    attr(cmbdf, "coords") <- new.coords
-    return(cmbdf)
   }
+
+  attr(cmbdf, "coords") <- new.coords
+  return(cmbdf)
 }
 
 

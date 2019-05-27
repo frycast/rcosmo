@@ -273,8 +273,7 @@ HPDataFrame <- function(..., nside, ordering = "nested",
                 "or perhaps use auto.spix = TRUE."))
   }
 
-  if ( delete.duplicates )
-  {
+  if ( delete.duplicates ) {
     df <- df[!duplicated(pix),]
     assumedUniquePix <- TRUE
     pix <- unique(pix)
@@ -632,7 +631,17 @@ coords.HPDataFrame <- function( x, new.coords, healpixCentered = FALSE, ... ) {
 
   }
 
-  if ( new.coords == "spherical" ) {
+  if ( is.null(new.coords) ) {
+
+    hpdf$x <- NULL
+    hpdf$y <- NULL
+    hpdf$z <- NULL
+    hpdf$theta <- NULL
+    hpdf$phi <- NULL
+    attr(hpdf, "coords") <- NULL
+
+
+  } else if ( new.coords == "spherical" ) {
 
     if ( all(c("theta","phi") %in% names(hpdf)) ) {
 

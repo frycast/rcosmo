@@ -33,5 +33,7 @@ This is the first release.
  * introduces check in nestSearch that log2 of nside must be integer,
  * fixes a small typo bug in qstat function,
  * bug fix HPDataFrame producing unique pixel indices when,
-   delete.duplicates = TRUE.
+   delete.duplicates = TRUE,
+ * coords(x) <- NULL now sets coordinates to NULL rather than
+   producing an error.
 

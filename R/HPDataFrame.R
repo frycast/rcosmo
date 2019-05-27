@@ -258,7 +258,10 @@ HPDataFrame <- function(..., nside, ordering = "nested",
       ordering <- "nested"
     }
 
-    if (save.dots) df$dot <- attr(pix, "dot")
+    if (save.dots) {
+      df$dot <- attr(pix, "dot")
+      attr(pix, "dot") <- NULL
+    }
 
   }
 

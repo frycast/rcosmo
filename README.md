@@ -57,7 +57,7 @@ View the `CMBDataFrame` help file:
 ```
 
 Download a CMB map from NASA archives (which may take some time to download).
-Then, take an approximately uniform random sample and plot:
+Then, take an approximately uniform random sample and create an interactive 3D plot:
 
 ```r
 downloadCMBMap()

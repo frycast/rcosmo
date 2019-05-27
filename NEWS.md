@@ -35,5 +35,6 @@ This is the first release.
  * bug fix HPDataFrame producing unique pixel indices when,
    delete.duplicates = TRUE,
  * coords(x) <- NULL now sets coordinates to NULL rather than
-   producing an error.
+   producing an error,
+ * introduces healpixCentered attribute getter function.
 

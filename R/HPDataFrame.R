@@ -1038,9 +1038,9 @@ separatingNside <- function(df) {
 #'the  object was assumed to have rows that correspond to unique
 #'HEALPix pixel indices.
 #'
-#'@param obj Any object
+#'@param obj Any object.
 #'
-#'@return A boolean. This is TRUE if \code{obj}
+#'@return A boolean. This is \code{TRUE} if \code{obj}
 #'is a \code{\link{CMBDataFrame}} or a \code{\link{HPDataFrame}} whose
 #'rows were assumed to correspond to unique HEALPix pixel indices.
 #'
@@ -1064,6 +1064,40 @@ assumedUniquePix <- function(obj) {
   return(FALSE)
 }
 
+
+
+#'Check if object is assumed to have HEALPix centered coordinates
+#'
+#'The function checks object's attribute healpixCentered. The attribute is
+#'\code{TRUE} if the  object was assumed to have rows that correspond to
+#'unique HEALPix pixel indices.
+#'
+#'@param obj Any object.
+#'
+#'@return A boolean. This is \code{TRUE} if \code{obj}
+#'is a \code{\link{CMBDataFrame}} or a \code{\link{HPDataFrame}} whose
+#'coordinates were assumed to correspond to HEALPix pixel center
+#'locations.
+#'
+#'@examples
+#'
+#' hp1 <- HPDataFrame(I=rnorm(5), nside = 1, spix = c(1,1,2,2,3))
+#' pix(hp1)
+#' coords(hp1, new.coords = "cartesian")
+#' healpixCentered(hp1)
+#'
+#' sky <- CMBDataFrame(nside = 32, coords = "cartesian", ordering = "nested")
+#' sky.s <- CMBDataFrame(sky, sample.size = 100)
+#' hpdf <- HPDataFrame(sky.s, auto.spix = TRUE)
+#' healpixCentered(hpdf)
+#'
+#'@export
+healpixCentered <- function(obj) {
+
+  if (is.CMBDataFrame(obj)) return(TRUE)
+  if (is.HPDataFrame(obj)) return(attr(obj, "healpixCentered"))
+  return(FALSE)
+}
 
 
 

@@ -16,7 +16,7 @@
 <!-- [![Code coverage](https://codecov.io/gh/frycast/rcosmo/branch/master/graph/badge.svg)](https://codecov.io/github/frycast/rcosmo?branch=master) -->
 
 
-Use this R package as an advanced toolkit for performing Cosmic Microwave Background (CMB) data analytics. The CMB is remnant electromagnetic radiation from the epoch of recombination. As an ancient source of data on the early universe, the CMB is helping us unlock the mysteries of the Big Bang and the structure of time and space. Spurred on by a wealth of satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation.  
+Use this R package as an advanced toolkit for performing Cosmic Microwave Background (CMB) data analytics. The CMB is remnant electromagnetic radiation from the epoch of recombination. As an ancient source of data on the early universe, the CMB is helping us unlock the mysteries of the Big Bang and the structure of time and space. With increasingly high resolution satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation.  
 
 ## Features
 

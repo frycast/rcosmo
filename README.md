@@ -66,7 +66,7 @@ plot(sky)
 ```
 
 
-![](man/figures/sky.png)
+![](man/figures/sky.PNG)
 
 
 Produce a summary of the map:

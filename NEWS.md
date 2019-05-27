@@ -16,7 +16,11 @@ This is the first release.
    of CMBDataFrame function,
  * coords.HPDataFrame now behaves more like coords.CMBDataFrame,
    where leaving new.coords missing will return only the
-   value of the attribute named coords.
+   value of the attribute named coords,
+ * HPDataFrame and nestSearch have the option to save dot products 
+   for each observation with the nearest HEALPix pixel center,
+ * Added function numeric2col to allow easy conversion of numeric
+   vectors to colour schemes.
   
 ### Minor changes and bug fixes
 

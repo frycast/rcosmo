@@ -36,5 +36,8 @@ This is the first release.
    delete.duplicates = TRUE,
  * coords(x) <- NULL now sets coordinates to NULL rather than
    producing an error,
- * introduces healpixCentered attribute getter function.
+ * introduces healpixCentered attribute getter function,
+ * introduces option to save row indices of duplicated 
+   pixel indices for HPDataFrame when delete.duplicates
+   is set to TRUE.
 

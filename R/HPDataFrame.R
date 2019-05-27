@@ -47,6 +47,13 @@
 #' four pixels contained in the current pixel, in the nested
 #' scheme, at the next highest resolution.
 #' See \code{\link[rcosmo]{children}}.
+#' @param save.duplicate.indices A logical. If \code{TRUE} and
+#' \code{delete.duplicates} is also \code{TRUE}, then the
+#' row indices of duplicated pixels will be retained
+#' as an attribute called "duplicates". Note
+#' that row index refers to the row position of the
+#' duplicated pixel in the original \code{HPDataFrame},
+#' and not the actual pixel index itself.
 #'
 #' @details
 #' \code{HPDataFrame} with \code{auto.spix = TRUE} can be used to transform any
@@ -143,7 +150,8 @@ HPDataFrame <- function(..., nside, ordering = "nested",
                         auto.spix = FALSE, spix,
                         assumedUniquePix = FALSE,
                         delete.duplicates = FALSE,
-                        save.dots = FALSE) {
+                        save.dots = FALSE,
+                        save.duplicate.indices = FALSE) {
 
   if ( !is.logical(auto.spix) ) {
     stop("auto.spix must be logical")
@@ -274,9 +282,12 @@ HPDataFrame <- function(..., nside, ordering = "nested",
   }
 
   if ( delete.duplicates ) {
+    duplicates <- duplicated(pix)
     df <- df[!duplicated(pix),]
     assumedUniquePix <- TRUE
     pix <- unique(pix)
+    if (save.duplicate.indices)
+      attr(df, "duplicates") <- which(duplicates)
   }
 
   if (all(c("x","y","z") %in% names(df))) {

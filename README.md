@@ -56,8 +56,8 @@ View the `CMBDataFrame` help file:
 ?CMBDataFrame
 ```
 
-Download a CMB map from NASA archives (takes some time to download)
-then take an approximately uniform random sample and plot:
+Download a CMB map from NASA archives (which may take some time to download).
+Then, take an approximately uniform random sample and plot:
 
 ```r
 downloadCMBMap()

@@ -1,3 +1,35 @@
+#' numeric2col
+#'
+#' Map numeric values to a colour map
+#'
+#' @param num A numeric vector. The numbers which will
+#' be mapped to colours.
+#' @param colmap A colour map. See \code{\link[grDevices]{palette}}.
+#' @param breaks.length A single integer. Controls the number of
+#' breaks in the discretisation of \code{num}.
+#'
+#' @examples
+#' ns <- 16
+#' sky <- CMBDataFrame(I = rnorm(12*ns^2), nside = ns)
+#' plot(sky, col = numeric2col(sky$I))
+#'
+#'@export
+numeric2col <- function(num, colmap = grDevices::terrain.colors(100),
+                        breaks.length = length(colmap)) {
+
+  rx <- range(num, na.rm = TRUE)
+  breaks <- seq.int(rx[1L], rx[2L], length.out = breaks.length)
+  intervals<- findInterval(
+    num, breaks[2:(breaks.length-1)], rightmost.closed = FALSE,
+    all.inside = FALSE, left.open = TRUE)
+  cols <- colmap[intervals+1]
+  return(cols)
+}
+
+
+
+
+
 #' Convert pixel indices to cartesian/spherical coordinates
 #'
 #' Convert HEALPix pixel indices to cartesian or spherical coordinates

@@ -109,9 +109,10 @@ nestSearch <- function(target, nside,
   # Get the parent of the closest
   result.h <- list()
   max.dot.index <- list()
+  dots <- list()
   for (i in 1:tlen) {
-    dots <- h.xyz[[i]] %*% target[[i]]
-    max.dot.index[[i]] <- max.col(t(dots), ties.method = "first")
+    dots[[i]] <- h.xyz[[i]] %*% target[[i]]
+    max.dot.index[[i]] <- max.col(t(dots[[i]]), ties.method = "first")
     min.h <- h[[i]][max.dot.index[[i]]]
     result.h[[i]] <- parent(min.h)
   }
@@ -129,7 +130,10 @@ nestSearch <- function(target, nside,
   }
 
   if ( save.dots ) {
-    max.dots <- dots[unlist(max.dot.index)]
+    max.dots <- vector(mode = "numeric", length = tlen)
+    for (i in 1:tlen) {
+      max.dots[i] <- dots[[i]][max.dot.index[[i]]]
+    }
     attr(res, "dot") <- max.dots
   }
 

@@ -41,7 +41,8 @@ The current version of `rcosmo` includes the following functionality:
 From CRAN:
 
 ```r
-install.packages('rcosmo')
+## Uncomment to install
+#install.packages('rcosmo')
 ```
 
 ## Usage

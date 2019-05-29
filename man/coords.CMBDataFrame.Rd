@@ -47,6 +47,4 @@ coords(df2)
 coords(df) <- "spherical"
 coords(df)
 
-
-
 }

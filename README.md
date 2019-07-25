@@ -1,7 +1,7 @@
 
 # rcosmo: Handle and Analyse Spherical, HEALPix and Cosmic Microwave Background data on a HEALPix grid.
 
-<!-- <img src="man/figures/logo.jpg" align="right" alt="" width="120" /> -->
+<img src="man/figures/logo.jpg" align="right" alt="" width="120" />
 
 
 <!-- Badges Start -->

@@ -27,9 +27,9 @@ double minDist_internal1(Rcpp::DataFrame cmbdf, NumericVector point) {
   NumericVector x = cmbdf["x"];
   NumericVector y = cmbdf["y"];
   NumericVector z = cmbdf["z"];
-  double px = point[1];
-  double py = point[2];
-  double pz = point[3];
+  double px = point(0L);
+  double py = point(1L);
+  double pz = point(2L);
 
   // Find the minimum distance
   double mindot = -1;
@@ -104,9 +104,9 @@ double maxDist_internal1(Rcpp::DataFrame cmbdf, NumericVector point) {
   NumericVector x = cmbdf["x"];
   NumericVector y = cmbdf["y"];
   NumericVector z = cmbdf["z"];
-  double px = point[1];
-  double py = point[2];
-  double pz = point[3];
+  double px = point(0L);
+  double py = point(1L);
+  double pz = point(2L);
 
   // Find the minimum distance
   double maxdot = 1;

@@ -1,5 +1,8 @@
-# rcosmo 1.0.0
-This is the first release.
+# rcosmo 1.1.1
+
+### Featured changes
+
+ * Out-of-bounds array index bug fixed in minDist_internal1 and maxDist_internal1
 
 
 # rcosmo 1.1.0
@@ -40,4 +43,15 @@ This is the first release.
  * introduces option to save row indices of duplicated 
    pixel indices for HPDataFrame when delete.duplicates
    is set to TRUE.
+
+
+
+# rcosmo 1.0.0
+This is the first release.
+
+
+
+   
+   
+
 

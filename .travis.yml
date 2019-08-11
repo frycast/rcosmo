@@ -15,12 +15,14 @@ matrix:
       before_install:
       - export DISPLAY=:99.0
       - sh -e /etc/init.d/xvfb start
+      - sudo apt-get install r-base-dev
     - r: release
       os: linux
       dist: trusty
       before_install:
       - export DISPLAY=:99.0
       - sh -e /etc/init.d/xvfb start
+      - sudo apt-get install r-base-dev
       r_packages:
       - covr
       after_success:
@@ -32,6 +34,7 @@ matrix:
       before_install:
       - export DISPLAY=:99.0
       - sh -e /etc/init.d/xvfb start
+      - sudo apt-get install r-base-dev
     - r: release
       os: osx
       r_packages:

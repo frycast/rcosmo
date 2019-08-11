@@ -45,10 +45,10 @@ matrix:
 
 r_packages:
       - geoR
-      - nnls
       - splancs
       - RandomFields
       - RandomFieldsUtils
+      - nnls
 
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false

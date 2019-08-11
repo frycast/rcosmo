@@ -43,6 +43,13 @@ matrix:
       - ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok )&
 
 
+r_packages:
+      - geoR
+      - nnls
+      - splancs
+      - RandomFields
+      - RandomFieldsUtils
+
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
 

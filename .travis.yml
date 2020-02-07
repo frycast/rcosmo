@@ -43,21 +43,6 @@ matrix:
       before_install:
       - brew update
       - brew install gsl
-      - brew install llvm
-      - brew install boost
-      - brew install homebrew/science/hdf5 --enable-cxx
-      - mkdir -p ~/.R
-      - cat <<- EOF > ~/.R/Makevars
-	        # The following statements are required to use the clang4 binary
-	        CC=/usr/local/clang4/bin/clang
-	        CXX=/usr/local/clang4/bin/clang++
-	        CXX11=/usr/local/clang4/bin/clang++
-	        CXX14=/usr/local/clang4/bin/clang++
-	        CXX17=/usr/local/clang4/bin/clang++
-	        CXX1X=/usr/local/clang4/bin/clang++
-	        LDFLAGS=-L/usr/local/clang4/lib
-	        # End clang4 inclusion statements
-	        EOF
       - export DISPLAY=:99.0
       - ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok )&
 

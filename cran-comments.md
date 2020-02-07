@@ -1,6 +1,5 @@
-## Update
-This is an update from version 1.1.0 to 1.1.1. The only change is
-to fix an issue reported by valgrind. See NEWS.md.
+## Resubmission
+This resubmission takes place after rcosmo was archived by CRAN with no warning, perhaps by mistake.
 
 ## Test environments
 

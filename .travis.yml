@@ -41,6 +41,7 @@ matrix:
       - Rcpp
       - RcppArmadillo
       before_install:
+      - brew install gsl
       - brew update
       - export DISPLAY=:99.0
       - ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok )&

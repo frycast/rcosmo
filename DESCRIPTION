@@ -2,7 +2,7 @@ Package: rcosmo
 URL: https://github.com/frycast/rcosmo
 BugReports: https://github.com/frycast/rcosmo/issues
 Title: Cosmic Microwave Background Data Analysis
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: c(person("Daniel", "Fryer", 
                      role = c("aut", "cre"), 
                      email = "d.fryer@latrobe.edu.au",

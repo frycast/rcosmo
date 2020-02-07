@@ -63,6 +63,7 @@ matrix:
 
 
 r_packages:
+      - gsl
       - geoR
       - splancs
       - RandomFields

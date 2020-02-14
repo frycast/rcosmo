@@ -1,8 +1,7 @@
 ## Version 1.1.2
 
 ## Resubmission
-This resubmission takes place after rcosmo was archived by CRAN with no warning, perhaps by mistake. Nothing is changed, but the version number is incremented to deal with CRAN
-"insufficient version number" complaint.
+This resubmission takes place after rcosmo was archived by CRAN while awaiting the return of the geoR maintainer. Nothing is changed, but the version number is incremented to deal with CRAN "insufficient version number" complaint.
 
 ## Test environments
 

@@ -1,3 +1,8 @@
+# Archived by CRAN
+
+This package was recently archived by CRAN due to a temporary difficulty contacting the maintainer of geoR. The maintainer of geoR has now responded, so rcosmo will be back on CRAN soon.
+
+
 
 # rcosmo: Handle and Analyse Spherical, HEALPix and Cosmic Microwave Background data on a HEALPix grid.
 

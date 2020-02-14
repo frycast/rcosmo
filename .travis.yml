@@ -41,6 +41,7 @@ matrix:
     - r: release
       os: osx
       r_packages:
+      - ps
       - digest
       - Rcpp
       - RcppArmadillo

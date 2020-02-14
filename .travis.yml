@@ -11,20 +11,18 @@ matrix:
   include:
     - r: oldrel
       os: linux
-      dist: bionic
+      dist: trusty
       before_install:
-#      - export DISPLAY=:99.0
-#      - sh -e /etc/init.d/xvfb start
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
       - sudo apt-get install r-base-dev
-      - sudo apt-get install mesa-common-dev
     - r: release
       os: linux
-      dist: bionic
+      dist: trusty
       before_install:
-#      - export DISPLAY=:99.0
-#      - sh -e /etc/init.d/xvfb start
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
       - sudo apt-get install r-base-dev
-      - sudo apt-get install mesa-common-dev
       r_packages:
       - covr
       after_success:
@@ -32,13 +30,12 @@ matrix:
       - Rscript -e 'covr::codecov()'
     - r: devel
       os: linux
-      dist: bionic
+      dist: trusty
       before_install:
-#      - export DISPLAY=:99.0
-#      - sh -e /etc/init.d/xvfb start
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
       - sudo apt-get install r-base-dev
       - sudo apt install libgsl-dev
-      - sudo apt-get install mesa-common-dev
       r_packages:
       - gsl
     - r: release

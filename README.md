@@ -17,6 +17,10 @@
 
 Use this R package as an advanced toolkit for performing Cosmic Microwave Background (CMB) data analytics. The CMB is remnant electromagnetic radiation from the epoch of recombination. As an ancient source of data on the early universe, the CMB is helping us unlock the mysteries of the Big Bang and the structure of time and space. With increasingly high resolution satellite data, intensive investigations in the past few years have resulted in many physical and mathematical results to characterize CMB radiation.  
 
+## Publication
+
+Daniel Fryer, Ming Li and Andriy Olenko, [rcosmo: R Package for Analysis of Spherical, HEALPix and Cosmological Data](https://rjournal.github.io/archive/2020/RJ-2020-012/index.html), The R Journal (2020) 12:1, pages 206-225.
+
 ## Features
 
 `rcosmo` addresses various data processing and statistical analysis needs for the present generation of CMB experiments. These needs fall into the following broad categories:

@@ -1,4 +1,5 @@
 //Includes/namespaces
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -339,7 +340,7 @@ NumericMatrix pix2coords_internal(int nside = 0,
       i = floor(sqrt(ph-sqrt(floor(ph)))) + 1;
       j = p + 1 - 2*i*(i-1);
       z = 1 - i*i/fact2;
-      phi = (j - 0.5)*PI/(2.0*i);
+      phi = (j - 0.5)*M_PI/(2.0*i);
 
     } else if (p <= bpiRingSE){
 
@@ -349,7 +350,7 @@ NumericMatrix pix2coords_internal(int nside = 0,
 
       double s = 0.5*(1 + ((i + nside) % 2));
       z =  (nl2 - i)/fact1;
-      phi = (j - s)*PI/(2.0*nside);
+      phi = (j - s)*M_PI/(2.0*nside);
 
     } else { // South Polar pixel
 
@@ -358,7 +359,7 @@ NumericMatrix pix2coords_internal(int nside = 0,
       i = floor(sqrt(ph-sqrt(floor(ph)))) + 1;
       j = 4*i + 1 - (ps - 2*i*(i-1));
       z = i*i/fact2 - 1;
-      phi = (j - 0.5)*PI/(2*i);
+      phi = (j - 0.5)*M_PI/(2*i);
 
     }
 

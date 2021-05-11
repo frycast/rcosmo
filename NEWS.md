@@ -1,3 +1,11 @@
+# rcosmo 1.1.3 (under development)
+
+* Change to STRICT_R_HEADERS to maintain Rcpp compatibility.
+
+# rcosmo 1.1.2
+
+* No changes were made. The resubmission was due to archiving by CRAN.
+
 # rcosmo 1.1.1
 
 ### Featured changes

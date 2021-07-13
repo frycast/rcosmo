@@ -100,7 +100,7 @@
 #' # ## Create and plot the corresponding HPDataFrame with
 #' # ## pixel indices that are not necessarily unique
 #' # ## by choosing your desired resolution (nside)
-#' # hp <- HPDataFrame(usdf, auto.spix = TRUE, nside = 1024)
+#' # hp <- HPDataFrame(df, auto.spix = TRUE, nside = 1024)
 #' # plot(hp, size = 3, col = "darkgreen", back.col = "white")
 #' # ## Add some pixels to visualise the sphere
 #' # plot(CMBDataFrame(nside = 64), add = TRUE, col = "gray")

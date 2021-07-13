@@ -4,9 +4,19 @@
 \alias{displayPixelBoundaries}
 \title{Plot HEALPix pixel boundaries}
 \usage{
-displayPixelBoundaries(nside, eps = pi/90, col = "gray", lwd = 1,
-  ordering, incl.labels = 1:(12 * nside^2), nums.col = col,
-  nums.size = 1, font = 2, depth_test = "always", ...)
+displayPixelBoundaries(
+  nside,
+  eps = pi/90,
+  col = "gray",
+  lwd = 1,
+  ordering,
+  incl.labels = 1:(12 * nside^2),
+  nums.col = col,
+  nums.size = 1,
+  font = 2,
+  depth_test = "always",
+  ...
+)
 }
 \arguments{
 \item{nside}{the HEALPix nside parameter (integer number \eqn{2^k})}

@@ -4,8 +4,15 @@
 \alias{corrCMB}
 \title{Sample correlation function}
 \usage{
-corrCMB(cmbdf, num.bins = 10, sample.size, max.dist = pi, breaks,
-  equiareal = TRUE, calc.max.dist = FALSE)
+corrCMB(
+  cmbdf,
+  num.bins = 10,
+  sample.size,
+  max.dist = pi,
+  breaks,
+  equiareal = TRUE,
+  calc.max.dist = FALSE
+)
 }
 \arguments{
 \item{cmbdf}{is a \code{\link{CMBDataFrame}} or \code{\link{data.frame}}}

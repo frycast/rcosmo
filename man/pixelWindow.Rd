@@ -7,7 +7,8 @@
 pixelWindow(j1, j2, pix.j1)
 }
 \arguments{
-\item{j1}{An integer. The lower resolution, with j1 =< j2.}
+\item{j1}{An integer. The lower resolution, with j1 =< j2.
+Note that \code{resolution = log2(nside)}.}
 
 \item{j2}{An integer. The upper resolution.}
 

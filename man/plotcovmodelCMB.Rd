@@ -4,8 +4,15 @@
 \alias{plotcovmodelCMB}
 \title{Plot theoretical CMBCovariance}
 \usage{
-plotcovmodelCMB(cov.model = "matern", sigmasq = 1, phi = pi,
-  kappa = 0.5, from = 0, to = pi, ...)
+plotcovmodelCMB(
+  cov.model = "matern",
+  sigmasq = 1,
+  phi = pi,
+  kappa = 0.5,
+  from = 0,
+  to = pi,
+  ...
+)
 }
 \arguments{
 \item{cov.model}{A type of the correlation function. Available choices are: "matern",

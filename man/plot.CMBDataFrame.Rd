@@ -4,11 +4,25 @@
 \alias{plot.CMBDataFrame}
 \title{Plot CMB Data}
 \usage{
-\method{plot}{CMBDataFrame}(x, intensities = "I", add = FALSE,
-  sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
-  aspect = FALSE, col, back.col = "black", labels, hp.boundaries = 0,
-  hpb.col = "gray", depth_test = "less", lab_depth_test = "always",
-  ...)
+\method{plot}{CMBDataFrame}(
+  x,
+  intensities = "I",
+  add = FALSE,
+  sample.size,
+  type = "p",
+  size = 1,
+  box = FALSE,
+  axes = FALSE,
+  aspect = FALSE,
+  col,
+  back.col = "black",
+  labels,
+  hp.boundaries = 0,
+  hpb.col = "gray",
+  depth_test = "less",
+  lab_depth_test = "always",
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{\link{CMBDataFrame}}.}

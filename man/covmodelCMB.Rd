@@ -4,8 +4,12 @@
 \alias{covmodelCMB}
 \title{Computes values of covariance functions}
 \usage{
-covmodelCMB(obj, cov.model = "matern",
-  cov.pars = stop("no cov.pars argument provided"), kappa = 0.5)
+covmodelCMB(
+  obj,
+  cov.model = "matern",
+  cov.pars = stop("no cov.pars argument provided"),
+  kappa = 0.5
+)
 }
 \arguments{
 \item{obj}{Vector of distances between pairs of spatial locations.}

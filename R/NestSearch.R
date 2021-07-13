@@ -195,6 +195,7 @@ nestSearch_step <- function(target, j2, pix.j1) {
 #' area at a lower resolution. All pixels are assumed to be in nested ordering.
 #'
 #'@param j1 An integer. The lower resolution, with j1 =< j2.
+#'Note that \code{resolution = log2(nside)}.
 #'@param j2 An integer. The upper resolution.
 #'@param pix.j1 An integer. The pixel index at resolution j1 within which
 #'all pixels from resolution j2 will be returned. \code{pix.j1} can

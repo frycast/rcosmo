@@ -4,8 +4,7 @@
 \alias{window.HPDataFrame}
 \title{Get a sub window from a \code{\link{HPDataFrame}}}
 \usage{
-\method{window}{HPDataFrame}(x, new.window, intersect = TRUE,
-  healpixCentered = FALSE, ...)
+\method{window}{HPDataFrame}(x, new.window, intersect = TRUE, healpixCentered = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{\link{HPDataFrame}}.}

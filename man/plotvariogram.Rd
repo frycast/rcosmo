@@ -4,8 +4,15 @@
 \alias{plotvariogram}
 \title{Plot theoretical variogram}
 \usage{
-plotvariogram(cov.model = "matern", sigmasq = 1, phi = pi,
-  kappa = 0.5, from = 0, to = pi, ...)
+plotvariogram(
+  cov.model = "matern",
+  sigmasq = 1,
+  phi = pi,
+  kappa = 0.5,
+  from = 0,
+  to = pi,
+  ...
+)
 }
 \arguments{
 \item{cov.model}{A type of the variogram function. Available choices are: "matern",

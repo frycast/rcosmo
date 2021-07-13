@@ -1,7 +1,8 @@
 # rcosmo 1.1.3 (under development)
 
 * Change to STRICT_R_HEADERS to maintain Rcpp compatibility.
-* Fix typo in HPDataFrame documentation
+* Fix typo in HPDataFrame documentation 
+* Add clarity to pixelWindow documentation
 
 # rcosmo 1.1.2
 

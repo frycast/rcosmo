@@ -4,8 +4,7 @@
 \alias{window.CMBDataFrame}
 \title{Get a sub window from \code{\link{CMBDataFrame}}}
 \usage{
-\method{window}{CMBDataFrame}(x, new.window, intersect = TRUE, in.pixels,
-  in.pixels.res = 0, ...)
+\method{window}{CMBDataFrame}(x, new.window, intersect = TRUE, in.pixels, in.pixels.res = 0, ...)
 }
 \arguments{
 \item{x}{A \code{\link{CMBDataFrame}}.}

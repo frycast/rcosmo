@@ -36,7 +36,7 @@ For each pipeline, the intensity maps are provided at Nside = 2048, at
 at 10 arcmin resolution.
 }
 \examples{
-## Download SMICA with \\code{nside = 1024}
+## Download SMICA with \code{nside = 1024}
 ## and save in working directory
 ## as "CMB_map_smica1024.fits"
 # downloadCMBMap(foreground = "smica", nside = 1024)

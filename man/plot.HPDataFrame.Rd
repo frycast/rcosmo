@@ -4,11 +4,25 @@
 \alias{plot.HPDataFrame}
 \title{Plot HPDataFrame}
 \usage{
-\method{plot}{HPDataFrame}(x, intensities = "I", add = FALSE,
-  sample.size, type = "p", size = 1, box = FALSE, axes = FALSE,
-  aspect = FALSE, col = "blue", back.col = "black", labels,
-  hp.boundaries = 0, hpb.col = "gray", depth_test = "less",
-  lab_depth_test = "always", ...)
+\method{plot}{HPDataFrame}(
+  x,
+  intensities = "I",
+  add = FALSE,
+  sample.size,
+  type = "p",
+  size = 1,
+  box = FALSE,
+  axes = FALSE,
+  aspect = FALSE,
+  col = "blue",
+  back.col = "black",
+  labels,
+  hp.boundaries = 0,
+  hpb.col = "gray",
+  depth_test = "less",
+  lab_depth_test = "always",
+  ...
+)
 }
 \arguments{
 \item{x}{A HPDataFrame.}

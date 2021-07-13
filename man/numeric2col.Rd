@@ -4,8 +4,11 @@
 \alias{numeric2col}
 \title{numeric2col}
 \usage{
-numeric2col(num, colmap = grDevices::terrain.colors(100),
-  breaks.length = length(colmap))
+numeric2col(
+  num,
+  colmap = grDevices::terrain.colors(100),
+  breaks.length = length(colmap)
+)
 }
 \arguments{
 \item{num}{A numeric vector. The numbers which will

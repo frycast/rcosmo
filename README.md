@@ -8,7 +8,7 @@
 [![CRAN Versions](http://www.r-pkg.org/badges/version/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
 [![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
-[![CRAN downloads](http://cranlogs.r-pkg.org/badges/last-week/rcosmo)](https://CRAN.R-project.org/package=rcosmo) [![Lifecycle Status](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/)
+[![CRAN downloads](http://cranlogs.r-pkg.org/badges/last-week/rcosmo)](https://CRAN.R-project.org/package=rcosmo) [![Lifecycle Status](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- Badges End -->
 
 

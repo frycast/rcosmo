@@ -4,7 +4,7 @@
 \alias{jacobiPol}
 \title{Calculate Jacobi polynomial values}
 \source{
-\url{http://dlmf.nist.gov/18.9}
+\url{https://dlmf.nist.gov/18.9}
 }
 \usage{
 jacobiPol(a, b, L, t)

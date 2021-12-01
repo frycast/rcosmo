@@ -4,7 +4,7 @@
 \alias{downloadCMBMap}
 \title{Download CMB Maps from Planck Public Data Release.}
 \usage{
-downloadCMBMap(foreground = "smica", nside = 1024, destfile)
+downloadCMBMap(foreground = "smica", nside = 1024, destfile, release = 2)
 }
 \arguments{
 \item{foreground}{A string naming the foreground separation method pipeline.
@@ -17,6 +17,9 @@ The available options are \code{1024} or \code{2048}.}
 \item{destfile}{An optional character string with the path and file
 name for the downloaded file to be saved. Defaults to the working
 directory. Tilde-expansion is performed.}
+
+\item{release}{An integer. Indicates the Planck map release
+to download. Currently only 2 and 3 are supported.}
 }
 \value{
 CMB Map FITS File (Flexible Image Transport System). The
@@ -25,7 +28,7 @@ the \code{\link{CMBDataFrame}} function (see examples).
 }
 \description{
 The function \code{downloadCMBMap} downloads CMB maps from
-\url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
+\url{https://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
 }
 \details{
 CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA
@@ -55,7 +58,7 @@ at 10 arcmin resolution.
 }
 \references{
 Planck Public Data Release 2 Maps
-\url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
+\url{https://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 
 Other fits maps can also be downloaded
 using the general command \code{\link{download.file}}.

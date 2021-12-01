@@ -1,7 +1,7 @@
 #' Download CMB Maps from Planck Public Data Release.
 #'
 #' The function \code{downloadCMBMap} downloads CMB maps from
-#' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
+#' \url{https://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}.
 #'
 #' CMB maps have been produced by the COMMANDER, NILC, SEVEM, and SMICA
 #' pipelines, respectively.
@@ -15,9 +15,11 @@
 #' (not case sensitive).
 #' @param nside An integer. The nside parameter (resolution) required.
 #' The available options are \code{1024} or \code{2048}.
-#' @param destfile  An optional character string with the path and file
+#' @param destfile An optional character string with the path and file
 #' name for the downloaded file to be saved. Defaults to the working
 #' directory. Tilde-expansion is performed.
+#' @param release An integer. Indicates the Planck map release
+#' to download. Currently only 2 and 3 are supported.
 #'
 #' @return CMB Map FITS File (Flexible Image Transport System). The
 #' FITS file can be loaded into a \code{\link{CMBDataFrame}} using
@@ -42,21 +44,31 @@
 #
 #'
 #' @references Planck Public Data Release 2 Maps
-#' \url{http://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
+#' \url{https://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
 #' @references Other fits maps can also be downloaded
 #' using the general command \code{\link{download.file}}.
 #'
 #' @export
-downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
+downloadCMBMap <- function(
+  foreground = "smica", nside = 1024, destfile, release = 2){
 
   webpath <- paste0("http://irsa.ipac.caltech.edu/",
-                    "data/Planck/release_2/all-sky-maps/",
+                    "data/Planck/release_",release,
+                    "/all-sky-maps/",
                     "maps/component-maps/cmb/")
   prefix <- "COM_CMB_IQU-"
   suffix <- "full.fits"
   ns1024 <- "_1024_R2.02_"
-  ns2048 <- "-field-Int_2048_R2.01_"
+  ns2048r2 <- "-field-Int_2048_R2.01_"
+  ns2048r3 <- "_2048_R3.00_"
   foregrounds <- c("commander","nilc","sevem","smica")
+
+  if (! release %in% c(2,3) ) {
+    stop("downloadCMBMap only supports release=2 or release=3")
+  }
+  if (release == 3 & nside != 2048) {
+    stop("when release=3, downloadCMBMap only supports nside=2048")
+  }
 
   if ( nside == 1024 )
   {
@@ -64,7 +76,12 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
   }
   else if ( nside == 2048 )
   {
-    ns <- ns2048
+    if (release == 2) {
+      ns <- ns2048r2
+    }
+    else if (release == 3) {
+      ns <- ns2048r3
+    }
   }
   else
   {
@@ -105,7 +122,7 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
 #'
 #' The function \code{downloadCMBPS} downloads
 #' CMB power spectra components from
-#'  \url{http://pla.esac.esa.int/pla/#cosmology}.
+#'  \url{https://pla.esac.esa.int/pla/#cosmology}.
 #'
 #'
 #' \code{link = 1}: Best-fit LCDM CMB power spectra
@@ -152,7 +169,7 @@ downloadCMBMap <- function(foreground = "smica", nside = 1024, destfile){
 #'
 #'
 #' @references Planck Legacy Archive
-#' \url{http://pla.esac.esa.int/pla/#cosmology}
+#' \url{https://pla.esac.esa.int/pla/#cosmology}
 #'
 #' @export
 downloadCMBPS <- function(link = 1, destfile, save = TRUE) {

@@ -3,6 +3,9 @@
 * Change to STRICT_R_HEADERS to maintain Rcpp compatibility.
 * Fix typo in HPDataFrame documentation 
 * Add clarity to pixelWindow documentation
+* Add Planck map release 3 to downloadCMBMap
+* replace deprecated as.tibble with as_tibble
+* update CMBDat to handle Planck map release 3 (TFORMn 1E compatibility)
 
 # rcosmo 1.1.2
 

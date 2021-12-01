@@ -57,7 +57,7 @@ rodrigues <- function(a,b,p.xyz)
 #' jacobiPol(1,2,4,0.5)
 #'
 #' @keywords internal
-#' @source \url{http://dlmf.nist.gov/18.9}
+#' @source \url{https://dlmf.nist.gov/18.9}
 #' @export
 jacobiPol <- function(a,b,L,t) {
 

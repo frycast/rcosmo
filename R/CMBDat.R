@@ -105,6 +105,9 @@ CMBDat <- function(filename, mmap = FALSE, spix) {
            e = {
              btype[i] <- 2
              },
+           "1e" = {
+             btype[i] <- 2
+             },
            stop("Unknown TFORMn, contact rcosmo package developers"))
   }
 

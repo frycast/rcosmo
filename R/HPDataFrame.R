@@ -797,7 +797,7 @@ is.HPDataFrame <- function(hpdf) {
 print.HPDataFrame <- function(x,...) {
 
   cat("A HPDataFrame\n")
-  print(tibble::as.tibble(x), ...)
+  print(tibble::as_tibble(x), ...)
 }
 
 

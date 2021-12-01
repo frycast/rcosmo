@@ -11,3 +11,4 @@
 ^GITHUB-README\.md$
 ^benchmarks$
 ^man/figures$
+^tests/build-testing.R

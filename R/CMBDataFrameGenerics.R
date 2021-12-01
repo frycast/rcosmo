@@ -1367,7 +1367,7 @@ print.summary.CMBDataFrame <- function(x, ...)
 print.CMBDataFrame <- function(x, ...)
 {
   cat("A CMBDataFrame\n")
-  print(tibble::as.tibble(x), ...)
+  print(tibble::as_tibble(x), ...)
 }
 
 

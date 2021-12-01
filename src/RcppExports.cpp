@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // covCMB_internal2
 NumericVector covCMB_internal2(Rcpp::DataFrame cmbdf, NumericVector cos_breaks);
 RcppExport SEXP _rcosmo_covCMB_internal2(SEXP cmbdfSEXP, SEXP cos_breaksSEXP) {

@@ -1,14 +1,15 @@
-## Version 1.1.2
+## Version 1.1.3
 
 ## Resubmission
-This resubmission takes place after rcosmo was archived by CRAN while awaiting the return of the geoR maintainer. Nothing is changed, but the version number is incremented to deal with CRAN "insufficient version number" complaint.
+This resubmission changes to STRICT_R_HEADERS to maintain Rcpp compatibility. 
+We also fixed minor typo/clarity issues in the documentation and added compatibility with Planck maps release 3.
 
 ## Test environments
 
-* Local Windows 10 install (R 3.5.3)
-* Ubuntu 14.04 Trusty (on Travis-CI) (R devel, 3.6.2 and 3.5.3)
-* Mac OS X 10.13.3 High Sierra (on Travis-CI) (R 3.6.1)
-* winbuilder (R devel and 3.6.2)
+* Local Windows 10 install (R 4.1.1)
+* Ubuntu Linux 20.04.1 LTS, R-release, GCC
+* Platform:	Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+* Debian Linux, R-devel, GCC ASAN/UBSAN
 
 ## R CMD Check results
 There were no ERRORS or WARNINGS or NOTES.  

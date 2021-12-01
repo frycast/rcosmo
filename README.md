@@ -4,7 +4,7 @@
 
 
 <!-- Badges Start -->
-[![Travis-CI Build Status](https://travis-ci.org/frycast/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo) 
+<!-- [![Travis-CI Build Status](https://travis-ci.org/frycast/rcosmo.svg?branch=master)](https://travis-ci.org/frycast/rcosmo) -->
 [![CRAN Versions](http://www.r-pkg.org/badges/version/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
 [![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 

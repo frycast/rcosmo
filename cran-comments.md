@@ -9,7 +9,6 @@ This resubmission has been tested to have no dependency on archived packages.
 * Local Windows 11 install (R 4.2.1)
 * Windows Server 2022, R-devel, 64 bit
 * Ubuntu Linux 20.04.1 LTS, R-release, GCC
-* Fedora Linux, R-devel, clang, gfortran
 * Debian Linux, R-devel, GCC ASAN/UBSAN
 
 ## R CMD Check results

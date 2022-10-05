@@ -12,3 +12,4 @@
 ^benchmarks$
 ^man/figures$
 ^tests/build-testing.R
+^CRAN-SUBMISSION$

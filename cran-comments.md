@@ -1,12 +1,12 @@
-## Version 1.1.3
+## Version 1.1.4
 
 ## Resubmission
-This resubmission changes to STRICT_R_HEADERS to maintain Rcpp compatibility. 
-We also fixed minor typo/clarity issues in the documentation and added compatibility with Planck maps release 3.
+The geoR dependency has returned to CRAN.
+This resubmission has been tested to have no dependency on archived packages.
 
 ## Test environments
 
-* Local Windows 10 install (R 4.1.1)
+* Local Windows 11 install (R 4.2.1)
 * Ubuntu Linux 20.04.1 LTS, R-release, GCC
 * Platform:	Windows Server 2008 R2 SP1, R-devel, 32/64 bit
 * Debian Linux, R-devel, GCC ASAN/UBSAN

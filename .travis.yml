@@ -55,8 +55,6 @@ matrix:
 r_packages:
       - geoR
       - splancs
-      - RandomFields
-      - RandomFieldsUtils
       - nnls
 
 env:

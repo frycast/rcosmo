@@ -1,4 +1,8 @@
-# rcosmo 1.1.3 (under development)
+# rcosmo 1.1.4
+
+* Repair geoR dependency issues that caused rcosmo to be archived by CRAN
+
+# rcosmo 1.1.3
 
 * Change to STRICT_R_HEADERS to maintain Rcpp compatibility.
 * Fix typo in HPDataFrame documentation 

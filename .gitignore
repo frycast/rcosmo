@@ -7,6 +7,7 @@ inst/doc
 
 #exploratory
 exploration
+scratch.R
 
 #Rcpp files
 src/*.o

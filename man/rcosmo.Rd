@@ -35,6 +35,14 @@ URL: https://github.com/frycast/rcosmo
  https://github.com/frycast/rcosmo/issues
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/frycast/rcosmo}
+  \item Report bugs at \url{https://github.com/frycast/rcosmo/issues}
+}
+
+}
 \author{
 Daniel Fryer \email{d.fryer@latrobe.edu.au},
 Andriy Olenko \email{a.olenko@latrobe.edu.au}, Ming Li \email{Ming.Li@latrobe.edu.au},

@@ -39,4 +39,4 @@ Suggests:
     R.rsp,
     gsl
 LinkingTo: Rcpp
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2

@@ -28,10 +28,9 @@
 #'@author Daniel Fryer \email{d.fryer@latrobe.edu.au},
 #'Andriy Olenko \email{a.olenko@latrobe.edu.au}, Ming Li \email{Ming.Li@latrobe.edu.au},
 #'Yuguang Wang.
-#'@docType package
 #'@name rcosmo
 #'@importFrom Rcpp evalCpp
 #'@useDynLib rcosmo, .registration = TRUE
 #'@aliases rcosmo-package
-NULL
+"_PACKAGE"
 

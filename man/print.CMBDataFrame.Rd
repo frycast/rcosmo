@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{A \code{\link{CMBDataFrame}}.}
 
-\item{...}{arguments passed to \code{\link{print.tbl_df}}}
+\item{...}{arguments passed to \code{\link[tibble:print.tbl_df]{print.tbl_df}}}
 }
 \value{
 Prints contents of the CMB data frame to the console.

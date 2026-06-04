@@ -23,7 +23,7 @@ Chi-squared statistic is inefficient.
 \description{
 This function returns the empirical chi-squared statistic for \code{intensities}
 observations from two \code{\link{CMBWindow}}s of the specified
-\code{\link{CMBDataFrame}}. The functions employs the function \link{chi2.empirical} and uses histogram
+\code{\link{CMBDataFrame}}. The functions employs the function \link[entropy:chi2.empirical]{chi2.empirical} and uses histogram
 counts of \code{intensities} for computations.
 }
 \examples{
@@ -41,5 +41,5 @@ counts of \code{intensities} for computations.
 
 }
 \references{
-\link{chi2.empirical}
+\link[entropy:chi2.empirical]{chi2.empirical}
 }

@@ -7,7 +7,7 @@
 borderPattern(ptype)
 }
 \arguments{
-\item{pype}{is the output of onBPBoundary}
+\item{ptype}{is the output of onBPBoundary}
 }
 \value{
 the output is useful as an index

@@ -1119,7 +1119,7 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #'@param depth_test The depth test to be applied to the
 #' plotted points. This controls how resistant the plotted
 #' object is to being obscured. See \code{\link[rgl]{rgl.material}}
-#'@param lab_depth_test The \code{\link{rgl}} depth test
+#'@param lab_depth_test The \code{\link[rgl:rgl.material]{rgl}} depth test
 #' to be applied to the labels and pixel boundaries if present.
 #' See \code{\link[rgl]{rgl.material}}
 #'@param ... Arguments passed to rgl::plot3d.
@@ -1352,7 +1352,7 @@ print.summary.CMBDataFrame <- function(x, ...)
 #' This function neatly prints the contents of a CMBDataFrame.
 #'
 #'@param x A \code{\link{CMBDataFrame}}.
-#'@param ... arguments passed to \code{\link{print.tbl_df}}
+#'@param ... arguments passed to \code{\link[tibble:print.tbl_df]{print.tbl_df}}
 #'
 #'@return
 #'Prints contents of the CMB data frame to the console.

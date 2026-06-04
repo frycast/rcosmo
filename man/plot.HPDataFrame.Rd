@@ -72,7 +72,7 @@ added to the plot}
 plotted points. This controls how resistant the plotted
 object is to being obscured. This controls how resistant the plotted}
 
-\item{lab_depth_test}{The \code{\link{rgl}} depth test
+\item{lab_depth_test}{The \code{\link[rgl:rgl.material]{rgl}} depth test
 to be applied to the labels and pixel boundaries
 if present. See \code{\link[rgl]{rgl.material}}}
 

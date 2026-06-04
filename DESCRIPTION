@@ -18,7 +18,7 @@ Authors@R: c(person("Daniel", "Fryer",
                      role = "aut"))
 Description: Handling and Analysing Spherical, 
       HEALPix and Cosmic Microwave Background data on a HEALPix grid.
-Depends: R (>= 3.4.0)
+Depends: R (>= 4.5.0)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -33,10 +33,7 @@ Imports:
 	  geoR (>= 1.7-5.2.1),
     nnls (>= 1.4)
 Suggests:
-    knitr,
-    rmarkdown,
     testthat,
-    R.rsp,
     gsl
 LinkingTo: Rcpp
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0

@@ -28,6 +28,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      RGL_USE_NULL: true
 
     steps:
       - uses: actions/checkout@v6
@@ -38,6 +39,13 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - name: Start a virtual display for Tcl/Tk
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1280x1024x24 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

@@ -29,6 +29,8 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
       RGL_USE_NULL: true
+      _R_CHECK_FORCE_SUGGESTS_: true
+      _R_CHECK_CRAN_INCOMING_: ${{ matrix.config.r == 'devel' && 'true' || 'false' }}
 
     steps:
       - uses: actions/checkout@v6
@@ -47,12 +49,25 @@ jobs:
           Xvfb :99 -screen 0 1280x1024x24 &
           echo "DISPLAY=:99" >> "$GITHUB_ENV"
 
+      - name: Install XQuartz and start a virtual display
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask xquartz
+          /opt/X11/bin/Xvfb :99 -screen 0 1280x1024x24 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
+      - uses: r-lib/actions/setup-tinytex@v2
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
+        env:
+          NOT_CRAN: false
         with:
           upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+          args: '"--as-cran"'
+          build_args: 'character()'
+          upload-results: true

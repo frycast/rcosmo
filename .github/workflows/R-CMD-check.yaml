@@ -45,7 +45,7 @@ jobs:
       - name: Start a virtual display for Tcl/Tk
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get install -y xvfb
+          sudo apt-get install -y xvfb tidy
           Xvfb :99 -screen 0 1280x1024x24 &
           echo "DISPLAY=:99" >> "$GITHUB_ENV"
 
@@ -58,9 +58,12 @@ jobs:
 
       - uses: r-lib/actions/setup-tinytex@v2
 
+      - name: Install the Courier font used in the PDF manual
+        run: tlmgr install courier
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: any::rcmdcheck, any::V8
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2

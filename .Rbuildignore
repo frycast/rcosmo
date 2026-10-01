@@ -13,3 +13,5 @@
 ^man/figures$
 ^tests/build-testing.R
 ^CRAN-SUBMISSION$
+^dev$
+^\.github$

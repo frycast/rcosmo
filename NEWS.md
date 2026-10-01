@@ -1,3 +1,9 @@
+# rcosmo 1.1.5
+
+* Update `CMBDat` test reference data to exclude COMMENT fields that are no longer parsed by `FITSio::parseHdr`
+* Update package-level roxygen documentation to use the current `"_PACKAGE"` sentinel instead of deprecated `@docType package`
+* Fix Rd documentation notes by adding package anchors for external links and correcting the documented `borderPattern()` argument from `pype` to `ptype`
+
 # rcosmo 1.1.4
 
 * Repair geoR dependency issues that caused rcosmo to be archived by CRAN

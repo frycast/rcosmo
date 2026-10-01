@@ -418,7 +418,7 @@ nside.HPDataFrame <- function( x ) {
 #'@param depth_test The depth test to be applied to the
 #' plotted points. This controls how resistant the plotted
 #' object is to being obscured. This controls how resistant the plotted
-#'@param lab_depth_test The \code{\link{rgl}} depth test
+#'@param lab_depth_test The \code{\link[rgl:rgl.material]{rgl}} depth test
 #' to be applied to the labels and pixel boundaries
 #' if present. See \code{\link[rgl]{rgl.material}}
 #'@param ... arguments passed to rgl::plot3d
@@ -783,7 +783,7 @@ is.HPDataFrame <- function(hpdf) {
 #' This function neatly prints the contents of a HPDataFrame.
 #'
 #'@param x A HPDataFrame.
-#'@param ... arguments passed to \code{\link{print.tbl_df}}
+#'@param ... arguments passed to \code{\link[tibble:print.tbl_df]{print.tbl_df}}
 #'
 #'@return
 #'Prints contents of the HPDataFrame to the console.

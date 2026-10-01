@@ -20,7 +20,7 @@ as well as an element called \code{data} where:
 If \code{mmap = FALSE} then a \code{data.frame} is
 included, named \code{data}, whose columns may include, for
 example, the intensity (I), polarisation (Q, U), PMASK and TMASK.
-If \code{mmap = TRUE} then a \code{\link{mmap}} object is returned
+If \code{mmap = TRUE} then a \code{\link[mmap:mmap]{mmap}} object is returned
 that points to the CMB map data table in the FITS file.
 }
 \description{
@@ -28,7 +28,7 @@ The function \code{CMBDat} creates objects of class \code{CMBDat}.
 These are lists containing header information and other metadata as well
 as an element called data, whose columns may include, for example, the
 intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
-\code{\link{mmap}} object that points to the CMB map data table in the FITS
+\code{\link[mmap:mmap]{mmap}} object that points to the CMB map data table in the FITS
 file.
 }
 \examples{

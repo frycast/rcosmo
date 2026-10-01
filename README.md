@@ -9,6 +9,8 @@
 [![CRAN release dates](http://www.r-pkg.org/badges/version-ago/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/rcosmo)](https://CRAN.R-project.org/package=rcosmo) 
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/last-week/rcosmo)](https://CRAN.R-project.org/package=rcosmo) [![Lifecycle Status](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![R-CMD-check](https://github.com/frycast/rcosmo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/frycast/rcosmo/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/frycast/rcosmo/graph/badge.svg)](https://app.codecov.io/gh/frycast/rcosmo)
 <!-- Badges End -->
 
 

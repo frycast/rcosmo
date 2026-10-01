@@ -1,0 +1,82 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+name: R-CMD-check.yaml
+
+permissions: read-all
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'oldrel-1'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      RGL_USE_NULL: true
+      _R_CHECK_FORCE_SUGGESTS_: true
+      _R_CHECK_CRAN_INCOMING_: ${{ matrix.config.r == 'devel' && 'true' || 'false' }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - name: Start a virtual display for Tcl/Tk
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y xvfb tidy
+          Xvfb :99 -screen 0 1280x1024x24 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
+      - name: Install XQuartz and start a virtual display
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask xquartz
+          /opt/X11/bin/Xvfb :99 -screen 0 1280x1024x24 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
+      - uses: r-lib/actions/setup-tinytex@v2
+
+      - name: Install the Courier font used in the PDF manual
+        run: tlmgr install courier makeindex
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck, any::V8
+          needs: check
+
+      - name: Use R's LaTeX emulation on Windows
+        if: runner.os == 'Windows'
+        run: |
+          cat('options(texi2dvi = "emulation")\n', file = "~/.Rprofile", append = TRUE)
+        shell: Rscript {0}
+
+      - uses: r-lib/actions/check-r-package@v2
+        env:
+          NOT_CRAN: false
+        with:
+          upload-snapshots: true
+          args: '"--as-cran"'
+          build_args: 'character()'
+          upload-results: true

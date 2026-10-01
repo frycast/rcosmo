@@ -13,7 +13,7 @@ entropyCMB(cmbdf, win, intensities = "I", method)
 
 \item{intensities}{A \code{\link{CMBDataFrame}} column with measured values.}
 
-\item{method}{A method to estimate entropy, see \link{entropy}}
+\item{method}{A method to estimate entropy, see \link[entropy:entropy]{entropy}}
 }
 \value{
 Estimated Shannon entropy for observations in \code{\link{CMBWindow}}
@@ -21,9 +21,9 @@ Estimated Shannon entropy for observations in \code{\link{CMBWindow}}
 \description{
 This function returns an estimated entropy for the specified
 \code{\link{CMBDataFrame}} column  \code{intensities} and \code{\link{CMBWindow}}
-region. The functions employs the function \link{entropy} and uses histogram
+region. The functions employs the function \link[entropy:entropy]{entropy} and uses histogram
 counts of \code{intensities} for computations. All arguments of the standard
-\link{entropy} can be used.
+\link[entropy:entropy]{entropy} can be used.
 }
 \examples{
 ## Download the map first
@@ -35,5 +35,5 @@ counts of \code{intensities} for computations. All arguments of the standard
 
 }
 \references{
-\link{entropy}
+\link[entropy:entropy]{entropy}
 }

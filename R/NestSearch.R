@@ -424,7 +424,7 @@ onBPBoundary <- function(se, so, j)
 
 #' Border pattern is resolution independent
 #'
-#' @param pype is the output of onBPBoundary
+#' @param ptype is the output of onBPBoundary
 #'
 #' @return the output is useful as an index
 #' to the output of baseNeighbours. It will

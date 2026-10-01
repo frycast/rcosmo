@@ -3,17 +3,13 @@
 \name{plot.variogram}
 \alias{plot.variogram}
 \title{Plot sample variogram}
-\arguments{
-\item{x}{An object of class variogram.}
-
-\item{...}{Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.}
-}
 \value{
 Produces a plot with the sample variogram.
 }
 \description{
 Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
 \strong{geoR} package.
+See \code{\link[geoR]{plot.variogram}} for usage and arguments.
 }
 \examples{
 

@@ -24,7 +24,7 @@ if \code{save = TRUE} a txt file is saved in \code{destfile}
 \description{
 The function \code{downloadCMBPS} downloads
 CMB power spectra components from
- \url{https://pla.esac.esa.int/pla/#cosmology}.
+ \url{https://www.cosmos.esa.int/web/planck/pla}.
 }
 \details{
 \code{link = 1}: Best-fit LCDM CMB power spectra
@@ -62,5 +62,5 @@ Planck BB power spectra (2 <= ell <= 29).
 }
 \references{
 Planck Legacy Archive
-\url{https://pla.esac.esa.int/pla/#cosmology}
+\url{https://www.cosmos.esa.int/web/planck/pla}
 }

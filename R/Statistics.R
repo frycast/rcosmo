@@ -354,10 +354,7 @@ variogramCMB <- function(cmbdf,
 #'
 #'Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
 #'\strong{geoR} package.
-#'
-#'@param x An object of class variogram.
-#'@param ... Extra arguments as in \code{\link[geoR]{plot.variogram}} passed to plot.default.
-#'
+#'See \code{\link[geoR]{plot.variogram}} for usage and arguments.
 #'
 #'@return Produces a plot with the sample variogram.
 #'
@@ -468,7 +465,7 @@ plot.CMBCorrelation <-  function (x, ...) {
 #' Informaticae 44 (2015) pp. 15–22.
 #'
 #' Power Spectra data are from Planck Legacy Archive
-#' \url{http://pla.esac.esa.int/pla/#cosmology}
+#' \url{https://www.cosmos.esa.int/web/planck/pla}
 #'
 #'
 #'@examples

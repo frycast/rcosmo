@@ -122,7 +122,7 @@ downloadCMBMap <- function(
 #'
 #' The function \code{downloadCMBPS} downloads
 #' CMB power spectra components from
-#'  \url{https://pla.esac.esa.int/pla/#cosmology}.
+#'  \url{https://www.cosmos.esa.int/web/planck/pla}.
 #'
 #'
 #' \code{link = 1}: Best-fit LCDM CMB power spectra
@@ -169,7 +169,7 @@ downloadCMBMap <- function(
 #'
 #'
 #' @references Planck Legacy Archive
-#' \url{https://pla.esac.esa.int/pla/#cosmology}
+#' \url{https://www.cosmos.esa.int/web/planck/pla}
 #'
 #' @export
 downloadCMBPS <- function(link = 1, destfile, save = TRUE) {

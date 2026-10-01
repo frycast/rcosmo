@@ -47,5 +47,5 @@ of spherical random fields based on covariances. Annales Mathematicae et
 Informaticae 44 (2015) pp. 15–22.
 
 Power Spectra data are from Planck Legacy Archive
-\url{http://pla.esac.esa.int/pla/#cosmology}
+\url{https://www.cosmos.esa.int/web/planck/pla}
 }

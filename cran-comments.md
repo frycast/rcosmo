@@ -7,17 +7,18 @@ geoR is available on CRAN again.
 
 GitHub Actions, 2026-10-01 (UTC):
 
-* Ubuntu 24.04.5 LTS, R 4.6.1 and R 4.5.3
+* Ubuntu 24.04.5 LTS, R-devel (2026-09-30 r90605), R 4.6.1 and R 4.5.3
 * Windows Server 2022, R 4.6.1
 * macOS Tahoe 26.6.2 (arm64), R 4.6.1
 
 ## R CMD check results
 
-Full --as-cran checks report no errors or warnings. Linux and Windows
-report Status: OK. macOS reports one NOTE because the runner's system
-HTML Tidy is too old for HTML validation; PDF generation passes.
+Full --as-cran checks report no errors or warnings. Linux release/oldrel
+and Windows report Status: OK.
 
-## Incoming comments
+R-devel reports one incoming NOTE identifying this as a new submission
+of an archived package. HEALPix is the correct name of the spherical
+pixelisation scheme, not a misspelling.
 
-This is a resubmission of an archived package. HEALPix is the correct name
-of the spherical pixelisation scheme, not a misspelling.
+macOS reports one NOTE because the runner's system HTML Tidy is too old
+for HTML validation; PDF generation passes.

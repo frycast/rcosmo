@@ -21,7 +21,7 @@ Use this R package as an advanced toolkit for performing Cosmic Microwave Backgr
 
 ## Publication
 
-Daniel Fryer, Ming Li and Andriy Olenko, [rcosmo: R Package for Analysis of Spherical, HEALPix and Cosmological Data](https://rjournal.github.io/archive/2020/RJ-2020-012/index.html), The R Journal (2020) 12:1, pages 206-225.
+Daniel Fryer, Ming Li and Andriy Olenko, [rcosmo: R Package for Analysis of Spherical, HEALPix and Cosmological Data](https://journal.r-project.org/articles/RJ-2020-012/), The R Journal (2020) 12:1, pages 206-225.
 
 ## Features
 

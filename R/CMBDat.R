@@ -202,7 +202,7 @@ CTypeExpression <- function(TTYPEn, btype) {
 #'
 #' @examples
 #' filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
-#' cmbdat <- CMBDat(filename, spix = 1:10)
+#' cmbdat <- CMBDat(filename)
 #' win <- CMBWindow(x = 0, y = 0, z = 1, r = pi/2)
 #' cmbdat.win <- window(cmbdat, new.window = win)
 #' class(cmbdat.win)

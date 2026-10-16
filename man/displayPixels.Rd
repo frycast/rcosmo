@@ -38,6 +38,9 @@ resolution j.}
 
 \item{size}{The size to make the grandchildren.}
 }
+\value{
+No meaningful return value; called for its side effect of drawing pixels and optional boundaries in the current rgl scene.
+}
 \description{
 Display the pixels spix at resolution \eqn{j} by colouring
 in the grandchildren of spix at resolution \eqn{plot.j}

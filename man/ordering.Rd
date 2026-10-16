@@ -11,6 +11,9 @@ ordering(x, ...)
 
 \item{...}{Extra arguments.}
 }
+\value{
+A character string, \code{"nested"} or \code{"ring"}, when queried, or an object of the input class reordered to the requested scheme.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 ordering functions \code{\link{ordering.CMBDataFrame}}, \code{\link{ordering.HPDataFrame}}

@@ -6,6 +6,16 @@
 \usage{
 \method{coords}{CMBWindow}(x, ...) <- value
 }
+\arguments{
+\item{x}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+A \code{CMBWindow} with coordinates converted to the system specified by \code{value}.
+}
 \description{
 Assign new coordinate system to CMBWindow
 }

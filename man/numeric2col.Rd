@@ -19,6 +19,9 @@ be mapped to colours.}
 \item{breaks.length}{A single integer. Controls the number of
 breaks in the discretisation of \code{num}.}
 }
+\value{
+A character vector of colours, one for each element of \code{num}, selected from \code{colmap} according to the discretised numeric values.
+}
 \description{
 Map numeric values to a colour map
 }

@@ -6,6 +6,16 @@
 \usage{
 winType(win, ...) <- value
 }
+\arguments{
+\item{win}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+A \code{CMBWindow} with its window type set to \code{value}.
+}
 \description{
 Assign new \code{\link{winType}} to a \code{\link{CMBWindow}}
 }

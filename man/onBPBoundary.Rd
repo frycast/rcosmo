@@ -13,6 +13,9 @@ onBPBoundary(se, so, j)
 
 \item{j}{The resolution parameter nside = 2^j}
 }
+\value{
+An integer boundary code: 0 for an interior pixel, or 1 to 8 for S, SE, E, NE, N, NW, W and SW respectively.
+}
 \description{
 a version of onBPBoundary to use with neighbours
 }

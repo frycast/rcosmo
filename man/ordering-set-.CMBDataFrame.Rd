@@ -6,6 +6,16 @@
 \usage{
 \method{ordering}{CMBDataFrame}(x, ...) <- value
 }
+\arguments{
+\item{x}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+A \code{CMBDataFrame} with rows and pixel indices reordered according to \code{value}.
+}
 \description{
 Assign a new ordering scheme to a \code{\link{CMBDataFrame}}
 }

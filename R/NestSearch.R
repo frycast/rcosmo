@@ -260,6 +260,8 @@ pixelWindow <- function(j1, j2, pix.j1)
 #'  ancestor(17,2)
 #'
 #' @export
+#'
+#' @return A numeric vector of nested pixel indices at resolution \eqn{j-k}, identifying the ancestors containing the input pixels.
 ancestor <- function(p,k)
 {
   as.integer((p-1) %/% 4^k + 1)
@@ -279,6 +281,8 @@ ancestor <- function(p,k)
 #'  parent(5)
 #'
 #' @export
+#'
+#' @return A numeric vector of nested pixel indices at resolution \eqn{j-1}, identifying the parent containing each input pixel.
 parent <- function(p)
 {
   as.integer((p-1) %/% 4 + 1)
@@ -298,6 +302,8 @@ parent <- function(p)
 #'children(11)
 #'
 #'@export
+#'
+#' @return A numeric vector of four nested pixel indices at resolution \eqn{j+1}, identifying the children of pixel \code{p}.
 children <- function(p)
 {
   if ( any(p > 0) ) {
@@ -318,6 +324,8 @@ children <- function(p)
 #' siblings(12)
 #'
 #'@export
+#'
+#' @return An integer vector of four nested pixel indices sharing the same parent as \code{p}, including \code{p} itself.
 siblings <- function(p) {
   h <- as.integer(1:4 + ((p - 1) %/% 4)*4)
 }
@@ -342,6 +350,8 @@ siblings <- function(p) {
 #'baseNeighbours(14)
 #'
 #'@export
+#'
+#' @return A numeric vector of eight neighbouring base pixel indices in the order S, SE, E, NE, N, NW, W, SW. Missing neighbours are coded as -1. Returns \code{NULL} for an index outside 1 to 12.
 baseNeighbours <- function(bp)
 {
   # order: S,SE,E,NE,N,NW,W,SW
@@ -374,6 +384,8 @@ baseNeighbours <- function(bp)
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return An integer boundary code: 0 for an interior pixel, or 1 to 8 for S, SE, E, NE, N, NW, W and SW respectively.
 onBPBoundary <- function(se, so, j)
 {
   b <- 0L
@@ -482,6 +494,8 @@ borderPattern <- function(ptype)
 #' demoNeighbours(1,0)
 #'
 #' @export
+#'
+#' @return A numeric vector of neighbouring pixel indices in nested order at resolution \code{j}; directions without a neighbour are omitted. For \code{j > 0}, the vector also includes \code{p} itself. For a vector of input pixels, a list of these vectors is returned.
 neighbours <- function(p, j) {
 
   # Handle case that p is a vector recursively

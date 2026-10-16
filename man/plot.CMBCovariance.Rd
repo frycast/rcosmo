@@ -22,12 +22,9 @@ Plots sample (empirical) covariance function. Uses \code{\link[geoR]{plot.variog
 \strong{geoR} package.
 }
 \examples{
-
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# cmbdf <- sampleCMB(df, sample.size = 100000)
-# Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
-# plot(Cov)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+Cov <- covCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+plot(Cov)
 
 }

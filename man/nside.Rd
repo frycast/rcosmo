@@ -9,6 +9,9 @@ nside(x)
 \arguments{
 \item{x}{An object.}
 }
+\value{
+A numeric scalar giving the HEALPix nside parameter. The corresponding full-sky grid contains \code{12*nside^2} pixels.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 nside functions \code{\link{nside.CMBDataFrame}}, \code{\link{nside.HPDataFrame}}

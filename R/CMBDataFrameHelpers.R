@@ -10,10 +10,6 @@
 #' at the \code{nside} resolution of \code{nsideObject}
 #'
 #' @examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # pixelArea(df)
 #'
 #' df1 <- CMBDataFrame(nside = 64,
 #'                     coords = "cartesian",
@@ -58,12 +54,10 @@ pixelArea <- function(nsideObject)
 #' data was imported
 #'
 #'
-#'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # df.sample <- CMBDataFrame(df, sample.size = 10000)
-#' # header(df.sample)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' header(cmbdf)
 #'
 #'@export
 header <- function( cmbdf )
@@ -89,11 +83,9 @@ header <- function( cmbdf )
 #' data was sourced
 #'
 #' @examples
-#'
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # resolution(df)
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' resolution(cmbdf)
 #'
 #'@export
 resolution <- function( cmbdf )

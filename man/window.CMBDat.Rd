@@ -45,14 +45,10 @@ Note that if \eqn{A} (resp. \eqn{B}) is empty then the returned data.frame
 will be the points of \code{x} in \eqn{B} (resp. \eqn{A}).
 }
 \examples{
-
-win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-
-## Ensure you have a FITS file with correct path
-## before uncommenting and running the rest of the example:
-# cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-# class(cmbdat)
-# cmbdat.win <- window(cmbdat, new.window = win1)
-# class(cmbdat.win)
+filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
+cmbdat <- CMBDat(filename)
+win <- CMBWindow(x = 0, y = 0, z = 1, r = pi/2)
+cmbdat.win <- window(cmbdat, new.window = win)
+class(cmbdat.win)
 
 }

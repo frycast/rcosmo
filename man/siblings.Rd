@@ -9,6 +9,9 @@ siblings(p)
 \arguments{
 \item{p}{Pixel index in nested order.}
 }
+\value{
+An integer vector of four nested pixel indices sharing the same parent as \code{p}, including \code{p} itself.
+}
 \description{
 The siblings of pixel \eqn{p} are defined as the
 children of the parent of \eqn{p}. Note this is resolution independent.

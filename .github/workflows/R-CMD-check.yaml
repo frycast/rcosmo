@@ -59,7 +59,9 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install the Courier font used in the PDF manual
-        run: tlmgr install courier makeindex
+        run: |
+          tlmgr update --self
+          tlmgr install courier makeindex
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

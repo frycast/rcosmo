@@ -293,6 +293,8 @@ pbNextPolarCap <- function(n, k, prev_phi, delta_phi, flag){
 #'demoNeighbours(1,2)
 #'
 #'@export
+#'
+#' @return No meaningful return value; called for its side effect of drawing pixels and optional boundaries in the current rgl scene.
 displayPixels <- function(boundary.j, j, plot.j = 5, spix,
                           boundary.col = "gray",
                           boundary.lwd = 1,

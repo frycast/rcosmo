@@ -9,6 +9,11 @@
 \arguments{
 \item{x}{a \code{summary.HPDataFrame} object, i.e.,
 the output of \code{\link{summary.HPDataFrame}}}
+
+\item{...}{Unused arguments.}
+}
+\value{
+The input \code{summary.HPDataFrame} object, returned invisibly. Called for its side effect of printing the summary.
 }
 \description{
 Print a summary of a HPDataFrame

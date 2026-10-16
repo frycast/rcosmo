@@ -84,9 +84,8 @@ A plot of the CMB data
 This function produces a plot from a \code{\link{CMBDataFrame}}.
 }
 \examples{
-## First download the map
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# sky <- CMBDataFrame("CMB_map_smica1024.fits")
-# plot(sky, sample.size = 800000)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+plot(cmbdf)
 
 }

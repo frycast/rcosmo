@@ -12,13 +12,10 @@ Plots sample (empirical) variogram. Uses \code{\link[geoR]{plot.variogram}} from
 See \code{\link[geoR]{plot.variogram}} for usage and arguments.
 }
 \examples{
-
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# cmbdf <- sampleCMB(df, sample.size = 100000)
-# varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=1000)
-# plot(varcmb)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+varcmb <- variogramCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+plot(varcmb)
 
 }
 \references{

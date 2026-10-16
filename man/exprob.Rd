@@ -25,16 +25,9 @@ This function returns an estimated exceedance probability for the specified
 \eqn{alpha} and \code{\link{CMBWindow}} region.
 }
 \examples{
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# cmbdf <- sampleCMB(df, sample.size = 1000)
-
-# intensities <- "I"
-# alpha <- mean(cmbdf[,intensities, drop = TRUE])
-# alpha
-
-# win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-# exprob(cmbdf, win1, alpha)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+exprob(cmbdf, win1, alpha = mean(cmbdf$I))
 
 }

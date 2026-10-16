@@ -16,10 +16,8 @@ TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
 Check if an object is of class CMBDat
 }
 \examples{
-## First download the map
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-# class(cmbdat)
-# is.CMBDat(cmbdat)
+filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
+cmbdat <- CMBDat(filename, spix = 1:10)
+is.CMBDat(cmbdat)
 
 }

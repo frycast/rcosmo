@@ -11,6 +11,9 @@ pix(x, ...)
 
 \item{...}{Extra arguments.}
 }
+\value{
+A numeric vector of HEALPix pixel indices when queried, or an object of the input class with updated pixel indices when new indices are supplied.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 pix functions \code{\link{pix.CMBDataFrame}}, \code{\link{pix.HPDataFrame}}

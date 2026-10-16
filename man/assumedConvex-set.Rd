@@ -6,6 +6,16 @@
 \usage{
 assumedConvex(win, ...) <- value
 }
+\arguments{
+\item{win}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{A logical value giving the new convexity assumption.}
+}
+\value{
+A \code{CMBWindow} with its convexity assumption set to \code{value}.
+}
 \description{
 Change the \code{\link{assumedConvex}} boolean of a \code{\link{CMBWindow}}
 }

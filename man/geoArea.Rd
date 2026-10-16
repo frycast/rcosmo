@@ -9,6 +9,9 @@ geoArea(x)
 \arguments{
 \item{x}{An object.}
 }
+\value{
+A numeric scalar giving the area covered by the object on the unit sphere, in steradians.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 geoArea functions \code{\link{geoArea.CMBDataFrame}}, \code{\link{geoArea.HPDataFrame}},

@@ -42,18 +42,10 @@ the estimated values of \eqn{T(q)}  for \eqn{q} taking values on a grid.
 For large data sets could be rather time consuming.
 }
 \examples{
-
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-#
-# cmbdf <- CMBDataFrame("CMB_map_smica1024.fits")
-# win <- CMBWindow(theta = c(pi/4,pi/2,pi/2), phi = c(0,0,pi/2))
-# cmbdf<- window(cmbdf, new.window = win)
-# Tq <- fRen(cmbdf)
-#
-# plot(Tq[,1], Tq[,2], ylab =expression(D[q]), xlab = "q",
-# main = "Sample Renyi function", pch = 20, col = "blue")
-
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+Tq <- fRen(cmbdf, N = 5, k.box = 1)
+plot(Tq$q, Tq$tq, xlab = "q", ylab = "Renyi function")
 
 }
 \references{

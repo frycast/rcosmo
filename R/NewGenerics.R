@@ -15,6 +15,8 @@
 #'
 #'
 #'@export
+#'
+#' @return A character string naming the coordinate system when it is queried, or an object of the input class with converted coordinates when a new system is supplied. See the individual methods for supported classes.
 coords <- function(x, ...) UseMethod("coords", x)
 
 #' Coordinate conversion generic
@@ -26,6 +28,11 @@ coords <- function(x, ...) UseMethod("coords", x)
 #' @keywords internal
 #'
 #'@export
+#'
+#' @return An object of the same class as \code{x}, with coordinates converted to the requested system.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `coords<-` <- function(x, ..., value) UseMethod("coords<-", x)
 
 #'geoArea generic
@@ -42,6 +49,8 @@ coords <- function(x, ...) UseMethod("coords", x)
 #'\code{\link{geoArea.CMBWindow}}
 #'
 #'@export
+#'
+#' @return A numeric scalar giving the area covered by the object on the unit sphere, in steradians.
 geoArea <- function(x) UseMethod("geoArea", x)
 
 
@@ -59,6 +68,8 @@ geoArea <- function(x) UseMethod("geoArea", x)
 #'
 #'
 #'@export
+#'
+#' @return A numeric vector of HEALPix pixel indices when queried, or an object of the input class with updated pixel indices when new indices are supplied.
 pix <- function(x, ...) UseMethod("pix", x)
 
 #'pix generic
@@ -74,6 +85,11 @@ pix <- function(x, ...) UseMethod("pix", x)
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return An object of the same class as \code{x}, with updated HEALPix pixel indices.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `pix<-` <- function(x, ..., value) UseMethod("pix<-", x)
 
 #'nside generic
@@ -89,6 +105,8 @@ pix <- function(x, ...) UseMethod("pix", x)
 #'
 #'
 #'@export
+#'
+#' @return A numeric scalar giving the HEALPix nside parameter. The corresponding full-sky grid contains \code{12*nside^2} pixels.
 nside <- function(x) UseMethod("nside", x)
 
 #'ordering generic
@@ -105,6 +123,8 @@ nside <- function(x) UseMethod("nside", x)
 #'
 #'
 #'@export
+#'
+#' @return A character string, \code{"nested"} or \code{"ring"}, when queried, or an object of the input class reordered to the requested scheme.
 ordering <- function(x, ...) UseMethod("ordering", x)
 
 #'ordering generic
@@ -120,6 +140,11 @@ ordering <- function(x, ...) UseMethod("ordering", x)
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return An object of the same class as \code{x}, with rows reordered to the requested HEALPix ordering.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `ordering<-` <- function(x, ..., value) UseMethod("ordering<-", x)
 
 
@@ -139,6 +164,8 @@ ordering <- function(x, ...) UseMethod("ordering", x)
 #'
 #'
 #'@export
+#'
+#' @return The stored window (a \code{CMBWindow}, a list of windows, or \code{NULL} for full sky) when queried, or an object of the input class restricted to the requested sky region. See the individual methods.
 window <- function(x, ...) UseMethod("window", x)
 
 
@@ -156,6 +183,11 @@ window <- function(x, ...) UseMethod("window", x)
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return An object of the same class as \code{x}, with observations restricted to the specified window.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `window<-` <- function(x, ..., value) UseMethod("window<-", x)
 
 

@@ -208,6 +208,11 @@ window.CMBDataFrame <- function(x, new.window, intersect = TRUE,
 #'
 #'@export
 #'
+#'
+#' @return A \code{CMBDataFrame} restricted to the window specified by \code{value}.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `window<-.CMBDataFrame` <- function(x, ..., value)
 {
   return(rcosmo::window(x, new.window = value))
@@ -295,6 +300,11 @@ ordering.CMBDataFrame <- function( x, new.ordering, ... )
 #' ordering(cmbdf)
 #'
 #' @export
+#'
+#' @return A \code{CMBDataFrame} with rows and pixel indices reordered according to \code{value}.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `ordering<-.CMBDataFrame` <- function(x,...,value) {
   rcosmo::ordering(x, new.ordering = value)
 }
@@ -343,10 +353,6 @@ nside.CMBDataFrame <- function( x )
 #' a new CMBDataFrame.
 #'
 #'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits", sample.size = 800000)
-#' # pix(df)
 #'
 #' df <- CMBDataFrame(nside = 16, sample.size = 10, ordering = "nested")
 #' pix(df)
@@ -370,6 +376,11 @@ pix.CMBDataFrame <- function(x, new.pix, ...)
 #' @keywords internal
 #'
 #' @export
+#'
+#' @return A \code{CMBDataFrame} with its HEALPix pixel indices replaced by \code{value}.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `pix<-.CMBDataFrame` <- function(x,...,value) {
   row.names(x) <- value
   x
@@ -425,6 +436,8 @@ pix.CMBDataFrame <- function(x, new.pix, ...)
 #'
 #'
 #'@export
+#'
+#' @return A \code{CMBDataFrame} containing the combined columns, with HEALPix metadata retained from the first input. Inputs must have matching nside, ordering and pixel indices.
 cbind.CMBDataFrame <- function(..., deparse.level = 1)
 {
   args <- list(...)
@@ -502,6 +515,8 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 #' pix(df.123234)
 #'
 #'@export
+#'
+#' @return A \code{CMBDataFrame} containing the combined rows, with pixel indices and window metadata combined. Inputs must have matching nside and ordering unless \code{unsafe = TRUE}.
 rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 {
   args <- list(...)
@@ -600,6 +615,8 @@ rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 #' suppressMessages(areCompatibleCMBDFs(a,b))
 #'
 #' @export
+#'
+#' @return A single logical value, \code{TRUE} if both objects have the same nside and ordering, and also the same pixel indices when \code{compare.pix = TRUE}; otherwise \code{FALSE}. Incompatibilities are reported with a suppressible message.
 areCompatibleCMBDFs <- function(cmbdf1, cmbdf2, compare.pix = FALSE)
 {
   if ( !is.CMBDataFrame(cmbdf1) || !is.CMBDataFrame(cmbdf1) )
@@ -1074,6 +1091,11 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #' df
 #'
 #' @export
+#'
+#' @return A \code{CMBDataFrame} with coordinates converted to the system specified by \code{value}.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `coords<-.CMBDataFrame` <- function(x, ..., value) {
   return(coords(x, new.coords = value))
 }
@@ -1127,11 +1149,10 @@ coords.CMBDataFrame <- function( x, new.coords, ... )
 #'@return
 #'A plot of the CMB data
 #'
-#'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # sky <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # plot(sky, sample.size = 800000)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' plot(cmbdf)
 #'
 #'@export
 plot.CMBDataFrame <- function(x, intensities = "I",
@@ -1233,11 +1254,6 @@ colscheme <- function(I, breaks, colmap) {
 #'
 #'
 #'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # df.sample <- CMBDataFrame(df, sample.size = 800000)
-#' # summary(df.sample)
 #'
 #' ns <- 16
 #' df <- CMBDataFrame(I = rnorm(12*ns^2), nside = ns,
@@ -1304,6 +1320,9 @@ summary.CMBDataFrame <- function(object, intensities = "I", ...)
 #'@export
 #'
 #'
+#'
+#' @return The input \code{summary.CMBDataFrame} object, returned invisibly. Called for its side effect of printing the summary.
+#' @param ... Unused arguments.
 print.summary.CMBDataFrame <- function(x, ...)
 {
   cat(
@@ -1344,6 +1363,7 @@ print.summary.CMBDataFrame <- function(x, ...)
     cli::rule(line = "="),
     sep = ""
   )
+  invisible(x)
 }
 
 
@@ -1357,11 +1377,10 @@ print.summary.CMBDataFrame <- function(x, ...)
 #'@return
 #'Prints contents of the CMB data frame to the console.
 #'
-#'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # print(df)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' print(cmbdf)
 #'
 #'@export
 print.CMBDataFrame <- function(x, ...)

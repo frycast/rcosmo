@@ -19,6 +19,9 @@ deleted unless \code{unsafe = TRUE}. If \code{unsafe = TRUE}
 then a \code{\link{HPDataFrame}} will be returned instead
 of a \code{\link{CMBDataFrame}}.}
 }
+\value{
+A \code{CMBDataFrame} containing the combined rows, with pixel indices and window metadata combined. Inputs must have matching nside and ordering unless \code{unsafe = TRUE}.
+}
 \description{
 Add a new row or rows to a \code{\link{CMBDataFrame}}.
 All arguments passed to \code{...} must be CMBDataFrames.

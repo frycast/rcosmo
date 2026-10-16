@@ -16,10 +16,15 @@ Authors@R: c(person("Daniel", "Fryer",
                      comment = c(ORCID = "0000-0002-1218-2804")),             
              person("Yuguang", "Wang", 
                      role = "aut"))
-Description: Handling and Analysing Spherical, 
-      HEALPix and Cosmic Microwave Background data on a HEALPix grid.
+Description: Tools for handling and analysing spherical data on a HEALPix grid,
+    with applications to cosmic microwave background maps. Supports reading FITS
+    files, converting between spherical and Cartesian coordinates and HEALPix
+    ordering schemes, selecting sky regions, sampling pixels, and visualising
+    maps. Implements empirical covariance, correlation and variogram estimation,
+    covariance model fitting, angular power spectrum estimation, and
+    distributional and entropy-based comparisons of spherical data.
 Depends: R (>= 4.5.0)
-License: GPL-3 | file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:

@@ -65,6 +65,9 @@ summary.CMBWindow <- function(object, ...)
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return The input \code{summary.CMBWindow} object, returned invisibly. Called for its side effect of printing the summary.
+#' @param ... Unused arguments.
 print.summary.CMBWindow <- function(x, ...)
 {
   cat(
@@ -73,6 +76,7 @@ print.summary.CMBWindow <- function(x, ...)
     ),
     sep = ""
   )
+  invisible(x)
 }
 
 
@@ -130,6 +134,8 @@ is.CMBWindow <- function(win)
 #' plot(win2)
 #'
 #'@export
+#'
+#' @return No meaningful return value; called for its side effect of drawing the window in the current rgl scene.
 plot.CMBWindow <- function(x, add = TRUE, type = "l",
                            col = "red",
                            size = 2, box = FALSE,
@@ -438,6 +444,11 @@ coords.CMBWindow <- function( x, new.coords, ... )
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return A \code{CMBWindow} with coordinates converted to the system specified by \code{value}.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `coords<-.CMBWindow` <- function(x,...,value) {
   value <- tolower(value)
   if (rcosmo::coords(x) == value)

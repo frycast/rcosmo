@@ -6,6 +6,16 @@
 \usage{
 pix(x, ...) <- value
 }
+\arguments{
+\item{x}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+An object of the same class as \code{x}, with updated HEALPix pixel indices.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 pix functions \code{\link{pix.CMBDataFrame}}, \code{\link{pix.HPDataFrame}}

@@ -18,9 +18,8 @@ Prints contents of the CMB data frame to the console.
 This function neatly prints the contents of a CMBDataFrame.
 }
 \examples{
-## First download the map
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# print(df)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+print(cmbdf)
 
 }

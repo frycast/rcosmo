@@ -19,10 +19,6 @@ at the \code{nside} resolution of \code{nsideObject}
 Get the area of a single HEALPix pixel
 }
 \examples{
-## First download the map
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# pixelArea(df)
 
 df1 <- CMBDataFrame(nside = 64,
                     coords = "cartesian",

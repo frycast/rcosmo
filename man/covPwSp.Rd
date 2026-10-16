@@ -28,17 +28,12 @@ using the values of the estimated
 power spectra.
 }
 \examples{
-
-## Download the power spectrum first
-# N <- 20000
-# COM_PowerSpectra <- downloadCMBPS(link=1)
-#
-# Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
-# plot(Cov_est, type="l")
-
-## Plot the covariance estimate as a function of angular distances
-# plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
-#      xlab ="angular distance", ylab ="Estimated Covariance")
+if (requireNamespace("gsl", quietly = TRUE)) {
+  spectrum <- data.frame(l = 1:5, power = exp(-(1:5)))
+  Cov_est <- covPwSp(spectrum, Ns = 100)
+  plot(acos(Cov_est$t), Cov_est$Estimated_Cov, type = "l",
+       xlab = "Angular distance", ylab = "Estimated covariance")
+}
 
 }
 \references{

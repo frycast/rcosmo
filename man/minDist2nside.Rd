@@ -14,6 +14,9 @@ of points that lie on S^2}
 \item{factor}{Allows changing the shrinkage factor
 for the circlular pixels (radius = dist*factor).}
 }
+\value{
+A numeric value (a power of two) giving the HEALPix nside selected by the circular-pixel approximation described above.
+}
 \description{
 Get an nside such that all points belong
 to different pixels, when the minimum

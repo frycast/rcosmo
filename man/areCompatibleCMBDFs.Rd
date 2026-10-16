@@ -15,6 +15,9 @@ areCompatibleCMBDFs(cmbdf1, cmbdf2, compare.pix = FALSE)
 cmbdf2 must share the same pixel indices to be considered
 compatible}
 }
+\value{
+A single logical value, \code{TRUE} if both objects have the same nside and ordering, and also the same pixel indices when \code{compare.pix = TRUE}; otherwise \code{FALSE}. Incompatibilities are reported with a suppressible message.
+}
 \description{
 Compare attributes to decide if two CMBDataFrames are compatible
 }

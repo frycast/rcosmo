@@ -6,6 +6,16 @@
 \usage{
 window(x, ...) <- value
 }
+\arguments{
+\item{x}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+An object of the same class as \code{x}, with observations restricted to the specified window.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 window functions \code{\link{window.CMBDataFrame}}, \code{\link{window.HPDataFrame}},

@@ -6,6 +6,16 @@
 \usage{
 ordering(x, ...) <- value
 }
+\arguments{
+\item{x}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+An object of the same class as \code{x}, with rows reordered to the requested HEALPix ordering.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 ordering functions \code{\link{ordering.CMBDataFrame}}, \code{\link{ordering.HPDataFrame}}

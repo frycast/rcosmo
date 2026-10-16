@@ -42,6 +42,8 @@
 #' window(cmbdf) <- CMBWindow(x=0,y=3/5,z=4/5,r=0.8, set.minus =TRUE)
 #' plot(cmbdf)
 #'@export
+#'
+#' @return A data frame of class \code{CMBWindow} containing vertex coordinates for a polygon, or centre coordinates and radius \code{r} for a disc. Attributes record the coordinate system, window type and convexity assumption.
 CMBWindow <- function(..., r, set.minus = FALSE, assume.convex = FALSE) {
 
   args <- list(...)

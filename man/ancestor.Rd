@@ -11,6 +11,9 @@ ancestor(p, k)
 
 \item{k}{A generation of an ancestor pixel.}
 }
+\value{
+A numeric vector of nested pixel indices at resolution \eqn{j-k}, identifying the ancestors containing the input pixels.
+}
 \description{
 Gives the pixel at resolution \eqn{j - k} that contains \eqn{p},
 where \eqn{p} is specified at resolution \eqn{j} (notice

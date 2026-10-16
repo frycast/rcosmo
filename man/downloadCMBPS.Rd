@@ -10,16 +10,18 @@ downloadCMBPS(link = 1, destfile, save = TRUE)
 \item{link}{The link code (an integer from 1 to 6) for the URL to
 download the file. See code details in this help file.}
 
-\item{destfile}{A character string with the file name for the downloaded
-file  to be saved. Tilde-expansion is performed.}
+\item{destfile}{A character string with an explicit path and file name.
+Required when \code{save = TRUE}; unused when \code{save = FALSE}.
+No default destination is used. Tilde-expansion is performed.}
 
 \item{save}{A boolean indicating whether to save or not
 (since the downloaded
 data is returned anyway).}
 }
 \value{
-The Data Frame with CMB Power Spectra and,
-if \code{save = TRUE} a txt file is saved in \code{destfile}
+A data frame returned invisibly, containing multipoles in column
+\code{L} and the selected power spectrum and uncertainty columns described
+above. When \code{save = TRUE}, it is also written to \code{destfile}.
 }
 \description{
 The function \code{downloadCMBPS} downloads
@@ -47,17 +49,14 @@ Planck EB power spectra (2 <= ell <= 29).
 Planck BB power spectra (2 <= ell <= 29).
 }
 \examples{
-## Download the Low-ell Planck BB power spectra (2 <= ell <= 29) and
-## save it to C:/PW.txt
-# downloadCMBPS(link=6, destfile="C:/PW.txt")
-
-## Download the Best-fit LCDM CMB power spectra
-## and plot it
-# CMBPS <- downloadCMBPS(link=1, save = FALSE)
-# plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
-#      main="CMB Angular Power Spectra",xlab=expression(l),
-#      ylab=expression(paste(D[l],"(",mu,K^2,")")))
-
+## Requires internet access.
+if (interactive()) {
+  dest <- tempfile(fileext = ".txt")
+  spectrum <- downloadCMBPS(link = 6, destfile = dest)
+  unlink(dest)
+  spectrum <- downloadCMBPS(link = 1, save = FALSE)
+  plot(spectrum$L, spectrum$TT, type = "l")
+}
 
 }
 \references{

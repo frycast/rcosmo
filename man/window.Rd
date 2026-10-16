@@ -11,6 +11,9 @@ window(x, ...)
 
 \item{...}{Extra arguments.}
 }
+\value{
+The stored window (a \code{CMBWindow}, a list of windows, or \code{NULL} for full sky) when queried, or an object of the input class restricted to the requested sky region. See the individual methods.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 window functions \code{\link{window.CMBDataFrame}}, \code{\link{window.HPDataFrame}},

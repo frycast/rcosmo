@@ -11,6 +11,9 @@ p2bp(p, j)
 
 \item{j}{The resolution parameter nside = 2^j}
 }
+\value{
+A numeric vector of base pixel indices from 1 to 12, identifying the base pixel containing each input pixel.
+}
 \description{
 The base pixel to which pixel \eqn{p} belongs at resolution \eqn{j}
 }

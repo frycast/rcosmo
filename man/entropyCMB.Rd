@@ -26,12 +26,10 @@ counts of \code{intensities} for computations. All arguments of the standard
 \link[entropy:entropy]{entropy} can be used.
 }
 \examples{
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# cmbdf <- sampleCMB(df, sample.size = 10000)
-# win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-# entropyCMB(cmbdf, win1)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+entropyCMB(cmbdf, win1)
 
 }
 \references{

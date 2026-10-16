@@ -23,11 +23,6 @@ and main statistics for intensity values
 This function produces a summary from a CMBDataFrame.
 }
 \examples{
-## First download the map
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# df.sample <- CMBDataFrame(df, sample.size = 800000)
-# summary(df.sample)
 
 ns <- 16
 df <- CMBDataFrame(I = rnorm(12*ns^2), nside = ns,

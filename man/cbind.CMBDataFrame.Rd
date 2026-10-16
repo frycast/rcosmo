@@ -13,7 +13,7 @@
 in the case of non-matrix-like arguments.}
 }
 \value{
-A \code{CMBDataFrame} containing the combined columns, with HEALPix metadata retained from the first input. Inputs must have matching nside, ordering and pixel indices.
+A \code{CMBDataFrame} containing the combined columns, with HEALPix metadata and pixel indices retained from the single CMBDataFrame input.
 }
 \description{
 Add a new column or columns (vector, matrix or data.frame)

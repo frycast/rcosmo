@@ -437,7 +437,7 @@ pix.CMBDataFrame <- function(x, new.pix, ...)
 #'
 #'@export
 #'
-#' @return A \code{CMBDataFrame} containing the combined columns, with HEALPix metadata retained from the first input. Inputs must have matching nside, ordering and pixel indices.
+#' @return A \code{CMBDataFrame} containing the combined columns, with HEALPix metadata and pixel indices retained from the single CMBDataFrame input.
 cbind.CMBDataFrame <- function(..., deparse.level = 1)
 {
   args <- list(...)
@@ -516,7 +516,7 @@ cbind.CMBDataFrame <- function(..., deparse.level = 1)
 #'
 #'@export
 #'
-#' @return A \code{CMBDataFrame} containing the combined rows, with pixel indices and window metadata combined. Inputs must have matching nside and ordering unless \code{unsafe = TRUE}.
+#' @return A \code{CMBDataFrame} containing the combined rows and windows, with overlapping pixel indices deduplicated. If \code{unsafe = TRUE}, returns an \code{HPDataFrame} retaining duplicate pixels instead. All inputs must have matching nside and ordering.
 rbind.CMBDataFrame <- function(..., deparse.level = 1, unsafe = FALSE)
 {
   args <- list(...)

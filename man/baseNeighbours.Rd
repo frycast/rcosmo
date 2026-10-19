@@ -9,6 +9,9 @@ baseNeighbours(bp)
 \arguments{
 \item{bp}{The base pixel index}
 }
+\value{
+A numeric vector of eight neighbouring base pixel indices in the order S, SE, E, NE, N, NW, W, SW. Missing neighbours are coded as -1. Returns \code{NULL} for an index outside 1 to 12.
+}
 \description{
 The base-resolution comprises twelve pixels. \code{baseNeighbours} returns
 a map from the base pixel index bp to the vector of base pixels

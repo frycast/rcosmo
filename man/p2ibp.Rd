@@ -11,6 +11,9 @@ p2ibp(p, j)
 
 \item{j}{The resolution parameter nside = 2^j}
 }
+\value{
+A numeric vector giving the nested index of each input pixel within its base pixel at resolution \code{j}.
+}
 \description{
 Convert a pixel index \eqn{p} to its index within
 the base pixel to which \eqn{p} belongs

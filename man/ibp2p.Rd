@@ -13,6 +13,9 @@ ibp2p(ibp, bp, j)
 
 \item{j}{The resolution parameter nside = 2^j}
 }
+\value{
+A numeric vector of full-sky nested pixel indices at resolution \code{j}, combining the within-base indices and base pixel indices.
+}
 \description{
 Find the pixel index \eqn{p} of a given pixel with
 index \code{ibp} in base pixel \code{bp}.

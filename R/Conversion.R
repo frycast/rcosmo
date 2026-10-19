@@ -14,6 +14,8 @@
 #' plot(sky, col = numeric2col(sky$I))
 #'
 #'@export
+#'
+#' @return A character vector of colours, one for each element of \code{num}, selected from \code{colmap} according to the discretised numeric values.
 numeric2col <- function(num, colmap = grDevices::terrain.colors(100),
                         breaks.length = length(colmap)) {
 
@@ -109,7 +111,7 @@ ring2nest <- function(nside, pix) {
   # number of pix at nside
   PixNum <- 12*nside^2
   if (!(all(ipring>=0) && all(ipring<PixNum))) {
-    print("Error in input pix index!")
+    stop("pix must contain HEALPix indices between 1 and 12*nside^2")
   }
 
   jrll <- c(2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4)
@@ -385,6 +387,11 @@ coords.data.frame <- function(x, new.coords, ...)
 #' df
 #'
 #' @export
+#'
+#' @return A \code{data.frame} with coordinates converted to the system specified by \code{value}.
+#' @param x The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `coords<-.data.frame` <- function(x,...,value) {
   return(coords(x, new.coords = value))
 }
@@ -408,6 +415,8 @@ coords.data.frame <- function(x, new.coords, ...)
 #'p2ibp(6, 1)
 #'
 #'@export
+#'
+#' @return A numeric vector giving the nested index of each input pixel within its base pixel at resolution \code{j}.
 p2ibp <- function(p, j) #indexInBP
 {
   (p-1) %% 4^j + 1
@@ -427,6 +436,8 @@ p2ibp <- function(p, j) #indexInBP
 #'p2bp(5, 1)
 #'
 #'@export
+#'
+#' @return A numeric vector of base pixel indices from 1 to 12, identifying the base pixel containing each input pixel.
 p2bp <- function(p, j)
 {
   floor((p-1) / (4^j)) + 1
@@ -448,6 +459,8 @@ p2bp <- function(p, j)
 #'ibp2p(1, 2, 2)
 #'
 #'@export
+#'
+#' @return A numeric vector of full-sky nested pixel indices at resolution \code{j}, combining the within-base indices and base pixel indices.
 ibp2p <- function(ibp, bp, j)
 {
   (bp - 1)*4^j + ibp
@@ -507,6 +520,8 @@ f2bin <- function(f, j)
 #'@keywords internal
 #'
 #'@export
+#'
+#' @return A numeric value (a power of two) giving the HEALPix nside selected by the circular-pixel approximation described above.
 minDist2nside <- function(dist, factor = 3/4)
 {
   n <- 1/(dist*sqrt(3))/factor

@@ -32,22 +32,11 @@ intensity (I), polarisation (Q, U), PMASK and TMASK. It also may contain an
 file.
 }
 \examples{
-
-## Ensure you have a FITS file with the correct path
-## before running the example:
-## download a FITS file and use real data
-# downloadCMBMap()
-# cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-# class(cmbdat)
-# str(cmbdat)
-
-## View metadata
-# cmbdat$header1
-# cmbdat$header2
-# cmbdat$resoln
-# cmbdat$method
-# cmbdat$coordsys
-# cmbdat$nside
-# cmbdat$hdr
+filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
+cmbdat <- CMBDat(filename, spix = 1:10)
+class(cmbdat)
+cmbdat$nside
+cmbdat$ordering
+head(cmbdat$data)
 
 }

@@ -165,6 +165,8 @@ triangulate <- function(win)
 #'assumedConvex(win1)
 #'
 #'@export
+#'
+#' @return A logical value giving the convexity assumption when \code{assume.convex} is omitted; otherwise the \code{CMBWindow} with its convexity attribute updated.
 assumedConvex <- function(win, assume.convex)
 {
   if ( !is.CMBWindow(win) ) stop("Argument 'win' must be a CMBWindow")
@@ -198,6 +200,11 @@ assumedConvex <- function(win, assume.convex)
 #' @keywords internal
 #'
 #' @export
+#'
+#' @return A \code{CMBWindow} with its convexity assumption set to \code{value}.
+#' @param win The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value A logical value giving the new convexity assumption.
 `assumedConvex<-` <- function(win, ..., value)
 {
   return(assumedConvex(win, assume.convex = value))
@@ -317,6 +324,11 @@ winType <- function(win, new.type)
 #' winType(win)
 #'
 #' @export
+#'
+#' @return A \code{CMBWindow} with its window type set to \code{value}.
+#' @param win The object to update.
+#' @param ... Extra arguments passed to the corresponding method.
+#' @param value The replacement value; see the corresponding accessor method.
 `winType<-` <- function(win, ..., value)
 {
   return(winType(win, new.type = value))

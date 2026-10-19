@@ -15,33 +15,24 @@
 #' (not case sensitive).
 #' @param nside An integer. The nside parameter (resolution) required.
 #' The available options are \code{1024} or \code{2048}.
-#' @param destfile An optional character string with the path and file
-#' name for the downloaded file to be saved. Defaults to the working
-#' directory. Tilde-expansion is performed.
+#' @param destfile A required character string with an explicit path and file
+#' name for the downloaded file. No default destination is used.
+#' Tilde-expansion is performed.
 #' @param release An integer. Indicates the Planck map release
 #' to download. Currently only 2 and 3 are supported.
 #'
-#' @return CMB Map FITS File (Flexible Image Transport System). The
-#' FITS file can be loaded into a \code{\link{CMBDataFrame}} using
-#' the \code{\link{CMBDataFrame}} function (see examples).
+#' @return The integer status code from \code{utils::download.file},
+#' returned invisibly (0 indicates success). The FITS map is saved to
+#' \code{destfile} and can be read with \code{CMBDataFrame}.
 #'
 #' @examples
-#' ## Download SMICA with \code{nside = 1024}
-#' ## and save in working directory
-#' ## as "CMB_map_smica1024.fits"
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' ## Load the downloaded map into a CMBDataFrame
-#' # sky <- CMBDataFrame("CMB_map_smica1024.fits")
-#'
-#' ## Download SMICA with Nside=2048 and save in the working directory
-#' ## as "CMB_map_smica2048.fits"
-#' # downloadCMBMap(foreground = "smica", nside = 2048)
-#'
-#' ## Download COMMANDER with Nside=1024 and save in a specified folder,
-#' ## for example,
-#' # dest <- "CMB_map_commander1024.fits"
-#' # downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
-#
+#' ## Requires internet access and downloads a large FITS file.
+#' if (interactive()) {
+#'   dest <- tempfile(fileext = ".fits")
+#'   downloadCMBMap(foreground = "smica", nside = 1024, destfile = dest)
+#'   sky <- CMBDataFrame(dest, spix = 1:10)
+#'   unlink(dest)
+#' }
 #'
 #' @references Planck Public Data Release 2 Maps
 #' \url{https://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/matrix_cmb.html}
@@ -51,6 +42,11 @@
 #' @export
 downloadCMBMap <- function(
   foreground = "smica", nside = 1024, destfile, release = 2){
+
+  if (missing(destfile) || !is.character(destfile) ||
+      length(destfile) != 1L || is.na(destfile) || !nzchar(destfile)) {
+    stop("destfile must be an explicit, non-empty file path")
+  }
 
   webpath <- paste0("http://irsa.ipac.caltech.edu/",
                     "data/Planck/release_",release,
@@ -98,9 +94,6 @@ downloadCMBMap <- function(
 
   url <- paste0(webpath, prefix, foreground, ns, suffix)
 
-  if ( missing(destfile) ) {
-    destfile <- paste0("CMB_map_", foreground, nside, ".fits")
-  }
 
   utils::download.file(url, destfile, mode = "wb")
 }
@@ -149,30 +142,36 @@ downloadCMBMap <- function(
 #' @param save A boolean indicating whether to save or not
 #' (since the downloaded
 #' data is returned anyway).
-#' @param destfile  A character string with the file name for the downloaded
-#' file  to be saved. Tilde-expansion is performed.
+#' @param destfile A character string with an explicit path and file name.
+#' Required when \code{save = TRUE}; unused when \code{save = FALSE}.
+#' No default destination is used. Tilde-expansion is performed.
 #'
-#' @return The Data Frame with CMB Power Spectra and,
-#' if \code{save = TRUE} a txt file is saved in \code{destfile}
+#' @return A data frame returned invisibly, containing multipoles in column
+#' \code{L} and the selected power spectrum and uncertainty columns described
+#' above. When \code{save = TRUE}, it is also written to \code{destfile}.
 #'
 #' @examples
-#' ## Download the Low-ell Planck BB power spectra (2 <= ell <= 29) and
-#' ## save it to C:/PW.txt
-#' # downloadCMBPS(link=6, destfile="C:/PW.txt")
-#'
-#' ## Download the Best-fit LCDM CMB power spectra
-#' ## and plot it
-#' # CMBPS <- downloadCMBPS(link=1, save = FALSE)
-#' # plot(CMBPS$L,CMBPS$TT, type="o",col="red",cex=0.3,
-#' #      main="CMB Angular Power Spectra",xlab=expression(l),
-#' #      ylab=expression(paste(D[l],"(",mu,K^2,")")))
-#'
+#' ## Requires internet access.
+#' if (interactive()) {
+#'   dest <- tempfile(fileext = ".txt")
+#'   spectrum <- downloadCMBPS(link = 6, destfile = dest)
+#'   unlink(dest)
+#'   spectrum <- downloadCMBPS(link = 1, save = FALSE)
+#'   plot(spectrum$L, spectrum$TT, type = "l")
+#' }
 #'
 #' @references Planck Legacy Archive
 #' \url{https://www.cosmos.esa.int/web/planck/pla}
 #'
 #' @export
 downloadCMBPS <- function(link = 1, destfile, save = TRUE) {
+
+  if (save) {
+    if (missing(destfile) || !is.character(destfile) ||
+        length(destfile) != 1L || is.na(destfile) || !nzchar(destfile)) {
+      stop("destfile must be an explicit, non-empty file path")
+    }
+  }
 
   webpath <- "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID="
   prefix <- "COM_PowerSpect_CMB"
@@ -188,9 +187,6 @@ downloadCMBPS <- function(link = 1, destfile, save = TRUE) {
 
   target <- paste0(webpath, prefix, type, suffix)
 
-  if (missing(destfile)) {
-    destfile <- paste0(prefix, type, suffix)
-  }
 
   i <- switch(link, 1, 2, 2, 2, 3, 3)
   CMB_PowerSpectra <- utils::read.table(target, quote = "\"",

@@ -19,13 +19,10 @@ Plots sample (empirical) correlation function. Uses \code{\link[geoR]{plot.vario
 \strong{geoR} package.
 }
 \examples{
-
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# cmbdf <- sampleCMB(df, sample.size = 100000)
-# corcmb <- corrCMB(cmbdf, max.dist = 0.03, num.bins = 10, sample.size=1000)
-# plot(corcmb)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+corcmb <- corrCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+plot(corcmb)
 
 }
 \references{

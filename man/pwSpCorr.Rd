@@ -22,13 +22,11 @@ using the values of the sample correlations. The approach is based
 on Lawson-Hanson algorithm for non-negative least squares.
 }
 \examples{
-
-## Download the map first
-# downloadCMBMap(foreground = "smica", nside = 1024)
-# df <- CMBDataFrame("CMB_map_smica1024.fits")
-# Corrf <- corrCMB(df, max.dist = 0.1, num.bins = 30,
-# sample.size=10000)
-# pw <- pwSpCorr(Corrf)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+corcmb <- corrCMB(cmbdf, max.dist = pi, num.bins = 8)
+pw <- pwSpCorr(corcmb, lmax = 10)
+pw
 
 }
 \references{

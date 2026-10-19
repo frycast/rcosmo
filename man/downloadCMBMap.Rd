@@ -14,17 +14,17 @@ Please choose one of "COMMANDER", "NILC", "SEVEM" or "SMICA"
 \item{nside}{An integer. The nside parameter (resolution) required.
 The available options are \code{1024} or \code{2048}.}
 
-\item{destfile}{An optional character string with the path and file
-name for the downloaded file to be saved. Defaults to the working
-directory. Tilde-expansion is performed.}
+\item{destfile}{A required character string with an explicit path and file
+name for the downloaded file. No default destination is used.
+Tilde-expansion is performed.}
 
 \item{release}{An integer. Indicates the Planck map release
 to download. Currently only 2 and 3 are supported.}
 }
 \value{
-CMB Map FITS File (Flexible Image Transport System). The
-FITS file can be loaded into a \code{\link{CMBDataFrame}} using
-the \code{\link{CMBDataFrame}} function (see examples).
+The integer status code from \code{utils::download.file},
+returned invisibly (0 indicates success). The FITS map is saved to
+\code{destfile} and can be read with \code{CMBDataFrame}.
 }
 \description{
 The function \code{downloadCMBMap} downloads CMB maps from
@@ -39,21 +39,13 @@ For each pipeline, the intensity maps are provided at Nside = 2048, at
 at 10 arcmin resolution.
 }
 \examples{
-## Download SMICA with \code{nside = 1024}
-## and save in working directory
-## as "CMB_map_smica1024.fits"
-# downloadCMBMap(foreground = "smica", nside = 1024)
-## Load the downloaded map into a CMBDataFrame
-# sky <- CMBDataFrame("CMB_map_smica1024.fits")
-
-## Download SMICA with Nside=2048 and save in the working directory
-## as "CMB_map_smica2048.fits"
-# downloadCMBMap(foreground = "smica", nside = 2048)
-
-## Download COMMANDER with Nside=1024 and save in a specified folder,
-## for example,
-# dest <- "CMB_map_commander1024.fits"
-# downloadCMBMap(foreground = "commander", nside = 1024, destfile = dest)
+## Requires internet access and downloads a large FITS file.
+if (interactive()) {
+  dest <- tempfile(fileext = ".fits")
+  downloadCMBMap(foreground = "smica", nside = 1024, destfile = dest)
+  sky <- CMBDataFrame(dest, spix = 1:10)
+  unlink(dest)
+}
 
 }
 \references{

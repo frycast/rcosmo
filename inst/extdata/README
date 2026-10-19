@@ -1,0 +1,3 @@
+CMB_testmap.fits is a synthetic full-sky HEALPix map with nside = 1,
+nested ordering and 12 pixels. Columns I, Q and U contain artificial
+values; TMASK and PMASK are set to 1. It contains no observed sky data.

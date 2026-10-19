@@ -9,6 +9,11 @@
 \arguments{
 \item{x}{a \code{summary.CMBDataFrame} object, i.e.,
 the output of \code{\link{summary.CMBDataFrame}}}
+
+\item{...}{Unused arguments.}
+}
+\value{
+The input \code{summary.CMBDataFrame} object, returned invisibly. Called for its side effect of printing the summary.
 }
 \description{
 Print a summary of a CMBDataFrame

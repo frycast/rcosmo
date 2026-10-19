@@ -23,6 +23,9 @@ resulting in a faster computation time when the window is used with functions
 such as \code{\link{subWindow}}. This argument is irrelevant when the window
 is not a polygon}
 }
+\value{
+A data frame of class \code{CMBWindow} containing vertex coordinates for a polygon, or centre coordinates and radius \code{r} for a disc. Attributes record the coordinate system, window type and convexity assumption.
+}
 \description{
 The function \code{CMBWindow} creates objects of class \code{CMBWindow}.
 It is either a polygon or a disc type.

@@ -6,6 +6,16 @@
 \usage{
 \method{ordering}{HPDataFrame}(x, ...) <- value
 }
+\arguments{
+\item{x}{The object to update.}
+
+\item{...}{Extra arguments passed to the corresponding method.}
+
+\item{value}{The replacement value; see the corresponding accessor method.}
+}
+\value{
+A \code{HPDataFrame} with rows and pixel indices reordered according to \code{value}.
+}
 \description{
 Assign new ordering scheme to HPDataFrame
 }

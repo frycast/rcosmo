@@ -19,24 +19,13 @@
 #'If \code{mmap = TRUE} then a \code{\link[mmap:mmap]{mmap}} object is returned
 #'that points to the CMB map data table in the FITS file.
 #'
-#'@examples
-#'
-#' ## Ensure you have a FITS file with the correct path
-#' ## before running the example:
-#' ## download a FITS file and use real data
-#' # downloadCMBMap()
-#' # cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-#' # class(cmbdat)
-#' # str(cmbdat)
-#'
-#'## View metadata
-#'# cmbdat$header1
-#'# cmbdat$header2
-#'# cmbdat$resoln
-#'# cmbdat$method
-#'# cmbdat$coordsys
-#'# cmbdat$nside
-#'# cmbdat$hdr
+#' @examples
+#' filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
+#' cmbdat <- CMBDat(filename, spix = 1:10)
+#' class(cmbdat)
+#' cmbdat$nside
+#' cmbdat$ordering
+#' head(cmbdat$data)
 #'
 #'@export
 CMBDat <- function(filename, mmap = FALSE, spix) {
@@ -211,16 +200,12 @@ CTypeExpression <- function(TTYPEn, btype) {
 #' A CMBDataFrame containing the data in \code{x} restricted to the
 #' CMBWindow \code{new.window}
 #'
-#'@examples
-#'
-#'win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#'
-#'## Ensure you have a FITS file with correct path
-#'## before uncommenting and running the rest of the example:
-#'# cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-#'# class(cmbdat)
-#'# cmbdat.win <- window(cmbdat, new.window = win1)
-#'# class(cmbdat.win)
+#' @examples
+#' filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
+#' cmbdat <- CMBDat(filename)
+#' win <- CMBWindow(x = 0, y = 0, z = 1, r = pi/2)
+#' cmbdat.win <- window(cmbdat, new.window = win)
+#' class(cmbdat.win)
 #'
 #'@export
 window.CMBDat <- function(x, new.window, intersect = TRUE, ...) {
@@ -237,12 +222,10 @@ window.CMBDat <- function(x, new.window, intersect = TRUE, ...) {
 #'
 #' @return TRUE if \code{cmbdf} is a CMBDat object, otherwise FALSE
 #'
-#'@examples
-#' ## First download the map
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # cmbdat <- CMBDat("CMB_map_smica1024.fits", mmap = TRUE)
-#' # class(cmbdat)
-#' # is.CMBDat(cmbdat)
+#' @examples
+#' filename <- system.file("extdata", "CMB_testmap.fits", package = "rcosmo")
+#' cmbdat <- CMBDat(filename, spix = 1:10)
+#' is.CMBDat(cmbdat)
 #'
 #' @export
 is.CMBDat <- function(cmbdf)

@@ -9,6 +9,9 @@ parent(p)
 \arguments{
 \item{p}{A pixel index specified in nested order.}
 }
+\value{
+A numeric vector of nested pixel indices at resolution \eqn{j-1}, identifying the parent containing each input pixel.
+}
 \description{
 Gives the pixel at resolution \eqn{j - 1} that contains \eqn{p},
 where \eqn{p} is specified at resolution \eqn{j} (notice it does

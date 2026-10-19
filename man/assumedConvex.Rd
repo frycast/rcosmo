@@ -12,6 +12,9 @@ assumedConvex(win, assume.convex)
 \item{assume.convex}{optionally change the assumedConvex
 attribute to TRUE or FALSE}
 }
+\value{
+A logical value giving the convexity assumption when \code{assume.convex} is omitted; otherwise the \code{CMBWindow} with its convexity attribute updated.
+}
 \description{
 Initially any \code{\link{CMBWindow}} is not assumed convex.
 The assumedConvex

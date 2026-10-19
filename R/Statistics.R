@@ -58,13 +58,11 @@
 #'
 #'@references \strong{geoR} package, \code{\link[geoR]{variog}}, \code{\link{variogramCMB}}, \code{\link{corrCMB}}
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
-#' # Cov
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' Cov <- covCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' Cov
 #'
 #' @export
 covCMB <- function(cmbdf,
@@ -233,14 +231,11 @@ covCMB <- function(cmbdf,
 #'
 #'@references \strong{geoR} package,\code{\link[geoR]{variog}},  \code{\link{variogramCMB}}, \code{\link{covCMB}}
 #'
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # corcmb <- corrCMB(cmbdf, max.dist = 0.03, num.bins = 10, sample.size=1000)
-#' # corcmb
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' corcmb <- corrCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' corcmb
 #'
 #' @export
 corrCMB <- function(cmbdf,
@@ -321,14 +316,11 @@ corrCMB <- function(cmbdf,
 #'
 #'@references \strong{geoR} package, \code{\link[geoR]{variog}},  \code{\link{covCMB}}, \code{\link{corrCMB}}
 #'
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=100)
-#' # varcmb
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' varcmb <- variogramCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' varcmb
 #'
 #' @export
 variogramCMB <- function(cmbdf,
@@ -361,14 +353,11 @@ variogramCMB <- function(cmbdf,
 #'@references \strong{geoR} package, \code{\link{variogramCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link[geoR]{plot.variogram}}
 #'
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30, sample.size=1000)
-#' # plot(varcmb)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' varcmb <- variogramCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' plot(varcmb)
 #'
 #'@import geoR
 #'
@@ -389,14 +378,11 @@ NULL
 #'#'@references \strong{geoR} package, \code{\link{covCMB}}, \code{\link[geoR]{variog}},
 #'\code{\link[geoR]{plot.variogram}}
 #'
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # Cov <- covCMB(cmbdf, max.dist = 0.03, num.bins = 10)
-#' # plot(Cov)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' Cov <- covCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' plot(Cov)
 #'
 #'@import geoR
 #'
@@ -421,14 +407,11 @@ plot.CMBCovariance <-  function (x, ...) {
 #'\code{\link{plot.variogram}}
 #'
 #'@import geoR
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 100000)
-#' # corcmb <- corrCMB(cmbdf, max.dist = 0.03, num.bins = 10, sample.size=1000)
-#' # plot(corcmb)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' corcmb <- corrCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' plot(corcmb)
 #'
 #' @export
 plot.CMBCorrelation <-  function (x, ...) {
@@ -468,18 +451,13 @@ plot.CMBCorrelation <-  function (x, ...) {
 #' \url{https://www.cosmos.esa.int/web/planck/pla}
 #'
 #'
-#'@examples
-#'
-#' ## Download the power spectrum first
-#' # N <- 20000
-#' # COM_PowerSpectra <- downloadCMBPS(link=1)
-#' #
-#' # Cov_est <- covPwSp(COM_PowerSpectra[,1:2], N)
-#' # plot(Cov_est, type="l")
-#'
-#' ## Plot the covariance estimate as a function of angular distances
-#' # plot(acos(Cov_est[,1]), Cov_est[,2], type ="l",
-#' #      xlab ="angular distance", ylab ="Estimated Covariance")
+#' @examples
+#' if (requireNamespace("gsl", quietly = TRUE)) {
+#'   spectrum <- data.frame(l = 1:5, power = exp(-(1:5)))
+#'   Cov_est <- covPwSp(spectrum, Ns = 100)
+#'   plot(acos(Cov_est$t), Cov_est$Estimated_Cov, type = "l",
+#'        xlab = "Angular distance", ylab = "Estimated covariance")
+#' }
 #'
 #'@export
 covPwSp <- function(PowerSpectra, Ns)
@@ -528,14 +506,12 @@ Cov_func <- function(mat, Dfl , l)  {
 #'Annales Mathematicae et Informaticae 44 (2015) pp. 15–22.
 #'
 #'
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # Corrf <- corrCMB(df, max.dist = 0.1, num.bins = 30,
-#' # sample.size=10000)
-#' # pw <- pwSpCorr(Corrf)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' corcmb <- corrCMB(cmbdf, max.dist = pi, num.bins = 8)
+#' pw <- pwSpCorr(corcmb, lmax = 10)
+#' pw
 #'
 #'@export
 pwSpCorr <- function(corcmb, lmax=20*length(corcmb$u)){
@@ -565,16 +541,10 @@ pwSpCorr <- function(corcmb, lmax=20*length(corcmb$u)){
 #' corresponds to the values of theta  and the second one is for psi.
 #'
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # df.sample <- CMBDataFrame(df, sample.size = 80000)
-#' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2,pi/4), phi = c(0,0,pi/2,pi/2))
-#' # cmbdf.win <- window(df.sample, new.window = win)
-#' #
-#' # intensities <- "I"
-#' # plotAngDis(cmbdf.win, intensities)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' plotAngDis(cmbdf)
 #'
 #'@export
 plotAngDis <- function(cmbdf, intensities = "I")
@@ -599,6 +569,8 @@ plotAngDis <- function(cmbdf, intensities = "I")
     t(tapply(as.data.frame(cmbdf)[, intensities], phibreaks, mean,
              na.rm = TRUE))
 
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
   graphics::par(mfrow = c(2, 2), mar = c(1, 4, 1, 1) + 0.5)
   graphics::plot(as.data.frame(cmbdf[, c("theta", intensities)]), type = "p", col = "red")
   graphics::plot(
@@ -651,10 +623,6 @@ plotAngDis <- function(cmbdf, intensities = "I")
 #' from the input CMBDataFrame.
 #'
 #'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # plot(sampleCMB(df, sample.size = 800000))
 #'
 #' df <- CMBDataFrame(nside = 16, I = rnorm(12 * 16 ^ 2), ordering = "nested")
 #' df.sample <- sampleCMB(df, sample.size = 100)
@@ -730,18 +698,11 @@ fmf <- function(cmbdf, alpha, intensities = "I")
 #'
 #'Estimated threshold exceedance probability
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-#' # intensities <- "I"
-#' # alpha <- mean(cmbdf[,intensities, drop = TRUE])
-#' # alpha
-#'
-#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # exprob(cmbdf, win1, alpha)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' exprob(cmbdf, win1, alpha = mean(cmbdf$I))
 #'
 #'@export
 exprob <- function(cmbdf, win, alpha, intensities = "I")
@@ -781,17 +742,12 @@ exprob <- function(cmbdf, win, alpha, intensities = "I")
 #'
 #'@references \link{qqnormWin}, \link{qqnorm}, \link{qqplot}
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 10000)
-#'
-#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # win2 <- CMBWindow(theta = c(2*pi/3,3*pi/4,3*pi/4, 2*pi/3),
-#' #                   phi = c(pi/4,pi/4,pi/3,pi/3))
-#'
-#' # qqplotWin(cmbdf, win1, win2)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' win2 <- CMBWindow(theta = c(pi/2, pi, pi/2), phi = c(0, 0, pi/2))
+#' qqplotWin(cmbdf, win1, win2)
 #'
 #'@export
 qqplotWin <- function(cmbdf, win1, win2, intensities = "I")
@@ -832,14 +788,11 @@ qqplotWin <- function(cmbdf, win1, win2, intensities = "I")
 #'
 #'@references \link{qqnorm}, \link{qqplot}, \link{qqplotWin}
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#'
-#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # qqnormWin(cmbdf, win1)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' qqnormWin(cmbdf, win1)
 #'
 #'@export
 qqnormWin <- function(cmbdf, win, intensities = "I")
@@ -878,13 +831,11 @@ qqnormWin <- function(cmbdf, win, intensities = "I")
 #'
 #'@references \link[entropy:entropy]{entropy}
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 10000)
-#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # entropyCMB(cmbdf, win1)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' entropyCMB(cmbdf, win1)
 #'
 #'@export
 entropyCMB <- function(cmbdf, win, intensities = "I", method)
@@ -924,18 +875,12 @@ entropyCMB <- function(cmbdf, win, intensities = "I", method)
 #'
 #'@references \link[entropy:chi2.empirical]{chi2.empirical}
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#' #
-#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
-#' # plot(win1)
-#' # plot(win2,col="green")
-#' #
-#' # chi2CMB(cmbdf, win1, win2)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' win2 <- CMBWindow(theta = c(pi/2, pi, pi/2), phi = c(0, 0, pi/2))
+#' chi2CMB(cmbdf, win1, win2)
 #'
 #'@export
 chi2CMB <- function(cmbdf, win1, win2, intensities = "I")
@@ -995,18 +940,10 @@ chi2CMB <- function(cmbdf, win1, win2, intensities = "I")
 #'(2) http://mathworld.wolfram.com/RenyiEntropy.html
 #'
 #' @examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' #
-#' # cmbdf <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # win <- CMBWindow(theta = c(pi/4,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # cmbdf<- window(cmbdf, new.window = win)
-#' # Tq <- fRen(cmbdf)
-#' #
-#' # plot(Tq[,1], Tq[,2], ylab =expression(D[q]), xlab = "q",
-#' # main = "Sample Renyi function", pch = 20, col = "blue")
-#'
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' Tq <- fRen(cmbdf, N = 5, k.box = 1)
+#' plot(Tq$q, Tq$tq, xlab = "q", ylab = "Renyi function")
 #'
 #' @export
 fRen <- function(cmbdf,
@@ -1076,18 +1013,12 @@ fRen <- function(cmbdf,
 #'
 #'A \code{\link{CMBDataFrame}} with \code{n} largest extreme values
 #'
-#'@examples
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#' #
-#' # win1 <- CMBWindow(theta = c(pi/2,pi,pi/2), phi = c(0,0,pi/2))
-#' # extrCMB(cmbdf, win1,5)
-#' #
-#' ## Ploting the window and 5 top extreme values
-#' # plot(win1)
-#' # plot(extrCMB(cmbdf, win1,5), col ="blue", size = 4,add = TRUE)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' extremes <- extrCMB(cmbdf, win1, 5)
+#' extremes
 #'
 #'@export
 extrCMB <- function(cmbdf, win, n, intensities = "I")
@@ -1130,17 +1061,12 @@ extrCMB <- function(cmbdf, win, n, intensities = "I")
 #'Wang, J.F, Zhang, T.L, Fu, B.J. (2016). A measure of spatial
 #'stratified heterogeneity. Ecological Indicators. 67: 250–256.
 #'
-#'@examples
-#'
-#' ## Download the map first
-#' # downloadCMBMap(foreground = "smica", nside = 1024)
-#' # df <- CMBDataFrame("CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 1000)
-#' # win1 <- CMBWindow(theta = c(0,pi/2,pi/2), phi = c(0,0,pi/2))
-#' # win2 <- CMBWindow(theta = c(pi/2,pi,pi/2),  phi = c(0,0,pi/2))
-#' #
-#' # lw <- list(win1, win2)
-#' # qstat(cmbdf, lw)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' win1 <- CMBWindow(theta = c(0, pi/2, pi/2), phi = c(0, 0, pi/2))
+#' win2 <- CMBWindow(theta = c(pi/2, pi, pi/2), phi = c(0, 0, pi/2))
+#' qstat(cmbdf, list(win1, win2))
 #'
 #'@export
 qstat <- function(cmbdf, listwin, intensities = "I")
@@ -1421,23 +1347,13 @@ covmodelCMB  <-  function (obj,
 #'@references
 #'\strong{geoR} package, \code{\link[geoR]{variofit}}, \code{\link{covmodelCMB}}
 #'
-#'@examples
-#' #
-#' # df <- CMBDataFrame("../CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 10000)
-#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30)
-#' # varcmb
-#' #
-#' # ols <- variofitCMB(varcmb,  fix.nug=FALSE, wei="equal", cov.model= "matern")
-#' # plot(varcmb)
-#' # lines(ols, lty=2)
-#' # str(ols)
-#' #
-#' # ols <- variofitCMB(varcmb, fix.nug = TRUE, kappa = 3, wei = "equal",
-#' # cov.model = "askey")
-#' # plot(varcmb, main = ols$cov.model)
-#' # linesCMB(ols, lty = 2)
-#' # str(ols)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' varcmb <- variogramCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' ols <- variofitCMB(varcmb, ini.cov.pars = c(1, 0.5),
+#'                    cov.model = "matern", weights = "equal", messages = FALSE)
+#' ols
 #'
 #'@export
 variofitCMB <- function (vario, ini.cov.pars, cov.model, fix.nugget = FALSE,
@@ -1535,8 +1451,8 @@ variofit1 <-   function (vario,
     if (any(cov.model == c("linear", "power")) &
         minimisation.function ==
         "nls") {
-      cat(
-        "warning: minimisation function nls can not be used with given cov.model.\n          changing for \"optim\".\n"
+      warning(
+        "minimisation function nls cannot be used with this cov.model; using optim"
       )
       minimisation.function <- "optim"
     }
@@ -1851,19 +1767,20 @@ variofit1 <-   function (vario,
         else
           cov.pars[2] <- exp(cov.pars[2])
         if (nugget < 0 | cov.pars[1] < 0) {
-          warning(
-            "\nvariofit: negative variance parameter found using the default option \"nls\".\n        Try another minimisation function and/or fix some of the parameters.\n"
-          )
           temp <- c(
             sigmasq = cov.pars[1],
             phi = cov.pars[2],
             tausq = nugget,
             kappa = kappa
           )
-          print(rbind(round(temp, digits = 4), status = ifelse(
-            c(FALSE,
-              FALSE, fix.nugget, fix.kappa), "fix", "est"
-          )))
+          warning(
+            "variofit: negative variance parameter found using nls. ",
+            "Try another minimisation function or fix some parameters.\n",
+            paste(utils::capture.output(print(rbind(
+              round(temp, digits = 4),
+              status = ifelse(c(FALSE, FALSE, fix.nugget, fix.kappa), "fix", "est")
+            ))), collapse = "\n")
+          )
           return(invisible())
         }
         value <- sum(stats::resid(res) ^ 2)
@@ -2158,23 +2075,14 @@ plotvariogram <- function (cov.model = "matern", sigmasq=1,
 #'\strong{geoR} package, \code{\link[geoR]{lines.variomodel.variofit}},
 #'\code{\link{covmodelCMB}}, \code{\link{variofitCMB}}
 #'
-#'@examples
-#' ## Plot the fitted Matern variogram versus its empirical variogram
-#' #
-#' # df <- CMBDataFrame("../CMB_map_smica1024.fits")
-#' # cmbdf <- sampleCMB(df, sample.size = 10000)
-#' # varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30)
-#' # varcmb
-#' # ols <- variofitCMB(varcmb,  fix.nug=FALSE, wei="equal", cov.model= "matern")
-#' # plot(varcmb)
-#' # lines(ols, lty=2)
-#' #
-#' ## Plot the fitted Askey variogram versus its empirical variogram
-#' #
-#' # ols <- variofitCMB(vario1, ini.cov.pars = c(1, 0.03), fix.nug = TRUE,
-#' #     kappa = 3, wei = "equal", cov.model = "askey")
-#' # plot(varcmb, main = ols$cov.model)
-#' # linesCMB(ols, lty = 2)
+#' @examples
+#' set.seed(1)
+#' cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+#' varcmb <- variogramCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+#' ols <- variofitCMB(varcmb, ini.cov.pars = c(1, 0.5),
+#'                    cov.model = "matern", weights = "equal", messages = FALSE)
+#' plot(varcmb)
+#' linesCMB(ols, lty = 2)
 #'
 #'@export
 linesCMB <-  function (x, max.dist, scaled = FALSE, ...) {

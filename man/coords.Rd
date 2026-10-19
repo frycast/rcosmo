@@ -11,6 +11,9 @@ coords(x, ...)
 
 \item{...}{Unused arguments.}
 }
+\value{
+A character string naming the coordinate system when it is queried, or an object of the input class with converted coordinates when a new system is supplied. See the individual methods for supported classes.
+}
 \description{
 Detailed descriptions and and examples can be found in documentation for specific
 coords functions \code{\link{coords.CMBDataFrame}}, \code{\link{coords.CMBWindow}},

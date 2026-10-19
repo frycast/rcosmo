@@ -12,6 +12,9 @@
 \item{deparse.level}{Integer controlling the construction of labels
 in the case of non-matrix-like arguments.}
 }
+\value{
+A \code{CMBDataFrame} containing the combined columns, with HEALPix metadata and pixel indices retained from the single CMBDataFrame input.
+}
 \description{
 Add a new column or columns (vector, matrix or data.frame)
 to a \code{\link{CMBDataFrame}}. Note that method dispatch

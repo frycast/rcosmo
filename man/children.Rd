@@ -9,6 +9,9 @@ children(p)
 \arguments{
 \item{p}{A pixel index specified in nested order.}
 }
+\value{
+A numeric vector of four nested pixel indices at resolution \eqn{j+1}, identifying the children of pixel \code{p}.
+}
 \description{
 Gives four pixels at resolution \eqn{j + 1} that are contained in \eqn{p},
 where \eqn{p}is a pixel specified at resolution \eqn{j} (notice it does not

@@ -50,6 +50,9 @@ See \code{\link[rgl]{rgl.material}}}
 
 \item{...}{arguments passed to rgl::plot3d}
 }
+\value{
+No meaningful return value; called for its side effect of drawing the window in the current rgl scene.
+}
 \description{
 Visualise a \code{\link{CMBWindow}}
 }

@@ -36,22 +36,13 @@ Available models are: "matern", "exponential",
 "askey", "c2wendland", "c4wendland", "sinepower", "multiquadric".
 }
 \examples{
-## Plot the fitted Matern variogram versus its empirical variogram
-#
-# df <- CMBDataFrame("../CMB_map_smica1024.fits")
-# cmbdf <- sampleCMB(df, sample.size = 10000)
-# varcmb <- variogramCMB(cmbdf, max.dist = 0.1, num.bins = 30)
-# varcmb
-# ols <- variofitCMB(varcmb,  fix.nug=FALSE, wei="equal", cov.model= "matern")
-# plot(varcmb)
-# lines(ols, lty=2)
-#
-## Plot the fitted Askey variogram versus its empirical variogram
-#
-# ols <- variofitCMB(vario1, ini.cov.pars = c(1, 0.03), fix.nug = TRUE,
-#     kappa = 3, wei = "equal", cov.model = "askey")
-# plot(varcmb, main = ols$cov.model)
-# linesCMB(ols, lty = 2)
+set.seed(1)
+cmbdf <- CMBDataFrame(nside = 8, I = rnorm(12 * 8^2), ordering = "nested")
+varcmb <- variogramCMB(cmbdf, max.dist = pi/2, num.bins = 6)
+ols <- variofitCMB(varcmb, ini.cov.pars = c(1, 0.5),
+                   cov.model = "matern", weights = "equal", messages = FALSE)
+plot(varcmb)
+linesCMB(ols, lty = 2)
 
 }
 \references{

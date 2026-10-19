@@ -11,6 +11,9 @@ neighbours(p, j)
 
 \item{j}{The resolution parameter with nside = 2^j.}
 }
+\value{
+A numeric vector of neighbouring pixel indices in nested order at resolution \code{j}; directions without a neighbour are omitted. For \code{j > 0}, the vector also includes \code{p} itself. For a vector of input pixels, a list of these vectors is returned.
+}
 \description{
 Return the neighbouring pixels to a given pixel \eqn{p}
 that is specified at resolution \eqn{j}, in the nested order.

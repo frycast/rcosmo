@@ -24,8 +24,8 @@ Thank you for reviewing the previous submission.
 * plotAngDis saves graphics settings and immediately registers on.exit()
   restoration, including when an error occurs.
 
-References have not yet been added to DESCRIPTION; this review item remains
-pending the maintainer's decision.
+Added the package paper reference to DESCRIPTION in author-year/DOI format:
+Fryer, Li and Olenko (2020) <doi:10.32614/RJ-2020-012>.
 
 ## Check results
 

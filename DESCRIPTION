@@ -22,7 +22,9 @@ Description: Tools for handling and analysing spherical data on a HEALPix grid,
     ordering schemes, selecting sky regions, sampling pixels, and visualising
     maps. Implements empirical covariance, correlation and variogram estimation,
     covariance model fitting, angular power spectrum estimation, and
-    distributional and entropy-based comparisons of spherical data.
+    distributional and entropy-based comparisons of spherical data. The package
+    and its methods are described by Fryer, Li and Olenko (2020)
+    <doi:10.32614/RJ-2020-012>.
 Depends: R (>= 4.5.0)
 License: GPL-3
 Encoding: UTF-8

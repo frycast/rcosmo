@@ -1,3 +1,8 @@
+# rcosmo 1.1.6
+
+* Open FITS memory mappings with read-only protection. `CMBDat()` and
+  `CMBDataFrame()` can now read FITS files in a read-only library on Debian.
+
 # rcosmo 1.1.5
 
 * Update `CMBDat` test reference data to exclude COMMENT fields that are no longer parsed by `FITSio::parseHdr`

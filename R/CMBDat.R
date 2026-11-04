@@ -103,6 +103,7 @@ CMBDat <- function(filename, mmap = FALSE, spix) {
   mystruct <- do.call(mmap::struct, CTypeExpression(TTYPEn, btype))
   map <- mmap::mmap(file = filename,
                     mode = mystruct,
+                    prot = mmap::mmapFlags("PROT_READ"),
                     off = blocks * bytes,
                     endian = "big")
   mmap::extractFUN(map) <- function(X) do.call(data.frame, X)

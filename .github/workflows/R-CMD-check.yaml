@@ -59,6 +59,10 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install the Courier font used in the PDF manual
+        timeout-minutes: 10
+        env:
+          # Avoid incompatible Rtools utilities on the Windows PATH.
+          TEXLIVE_PREFER_OWN: '1'
         run: |
           tlmgr update --self
           tlmgr install courier makeindex
